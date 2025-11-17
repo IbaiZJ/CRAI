@@ -1,0 +1,24 @@
+services:
+  # MySQL database
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: car
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "6901:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db/scripts:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+ 
