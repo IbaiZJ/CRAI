@@ -6,7 +6,7 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: car
+      MYSQL_DATABASE: CRAI_DB
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     ports:
