@@ -1,0 +1,47 @@
+name: Sonar Run
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  sonar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Cargar .env
+        run: |
+          echo "Cargando variables del .env..."
+          set -o allexport
+          source .env
+          set +o allexport
+        shell: bash
+
+      - name: Ver variables cargadas
+        run: |
+          echo "SONAR_HOST_URL = $SONAR_HOST_URL"
+          echo "SONAR_PROJECT_KEY = $SONAR_PROJECT_KEY"
+        shell: bash
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build
+        run: mvn -B clean verify
+
+      - name: Sonar Scan
+        run: |
+          mvn -B sonar:sonar \
+            -Dsonar.host.url=$SONAR_HOST_URL \
+            -Dsonar.login=$SONAR_TOKEN \
+            -Dsonar.projectKey=$SONAR_PROJECT_KEY \
+            -Dsonar.organization=$SONAR_ORG
