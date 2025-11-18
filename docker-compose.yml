@@ -31,6 +31,24 @@ services:
     networks:
       - app-network
 
+  # AI service
+  ai:
+    build:
+      context: ./ai
+      dockerfile: Dockerfile
+    container_name: ai_service
+    volumes:
+      - ./ai:/app
+    ports:
+      - "6902:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - ENV=local
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
