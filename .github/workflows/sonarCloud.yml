@@ -2,10 +2,8 @@ name: Sonar Run
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
+    branches:
+      - '**'
 
 jobs:
   sonar:
@@ -17,29 +15,55 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Cargar .env
+      # 🔍 DIAGNÓSTICO COMPLETO PARA SABER SI .env EXISTE
+      - name: Diagnóstico .env
         run: |
-          echo "Cargando variables del .env..."
+          echo "📌 Ruta actual:"
+          pwd
+
+          echo "📌 Contenido del directorio actual:"
+          ls -la
+
+          echo "📌 Buscando archivo .env en todo el repo..."
+          find . -name ".env" -print || echo "❌ NO se encontró .env"
+
+          echo "📌 ¿Existe .env en la raíz esperada?"
+          if [ -f "./.env" ]; then
+            echo "✔️ .env encontrado!"
+          else
+            echo "❌ ERROR: .env NO está en la raíz del repositorio."
+            echo "   Debe estar en: / (raíz), no dentro de carpetas."
+            exit 1
+          fi
+
+      # 📥 Cargar las variables del .env
+      - name: Cargar variables del .env
+        run: |
+          echo "Cargando variables del archivo .env..."
           set -o allexport
           source .env
           set +o allexport
-        shell: bash
 
+      # 👀 Mostrar variables para confirmar que cargaron bien
       - name: Ver variables cargadas
         run: |
-          echo "SONAR_HOST_URL = $SONAR_HOST_URL"
-          echo "SONAR_PROJECT_KEY = $SONAR_PROJECT_KEY"
-        shell: bash
+          echo "SONAR_HOST_URL = '$SONAR_HOST_URL'"
+          echo "SONAR_PROJECT_KEY = '$SONAR_PROJECT_KEY'"
+          echo "SONAR_ORG = '$SONAR_ORG'"
+          echo "SONAR_TOKEN = '${SONAR_TOKEN:0:4}******'" # Oculta el token
 
+      # 🧱 JDK
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
+      # 🏗️ Build
       - name: Build
         run: mvn -B clean verify
 
+      # 🧪 Sonar Analysis
       - name: Sonar Scan
         run: |
           mvn -B sonar:sonar \
