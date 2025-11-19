@@ -2,8 +2,10 @@ name: Sonar Run
 
 on:
   push:
-    branches:
-      - '**'
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
 
 jobs:
   sonar:
