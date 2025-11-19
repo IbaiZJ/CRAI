@@ -24,7 +24,6 @@ dist/
 docker-compose.override.yml
 
 # Database
-data/
 *.db
 
 # Logs
