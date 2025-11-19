@@ -6,30 +6,21 @@ on:
   pull_request:
     branches: [ "main" ]
 
-
 jobs:
   sonar:
     runs-on: ubuntu-latest
+
+    env:
+      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+      SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Load .env
-        run: |
-          echo "Loading variables from .env..."
-          set -o allexport
-          source .env
-          set +o allexport
-        shell: bash
-
-      - name: Show loaded variables
-        run: |
-          echo "SONAR_HOST_URL = $SONAR_HOST_URL"
-          echo "SONAR_PROJECT_KEY = $SONAR_PROJECT_KEY"
-        shell: bash
 
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -46,4 +37,4 @@ jobs:
             -Dsonar.host.url=$SONAR_HOST_URL \
             -Dsonar.login=$SONAR_TOKEN \
             -Dsonar.projectKey=$SONAR_PROJECT_KEY \
-            -Dsonar.organization=$SONAR_ORG
+            -Dsonar.organization=$SONAR_ORGANIZATION
