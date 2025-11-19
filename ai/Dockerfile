@@ -1,17 +1,20 @@
-# Usa una imagen base de Python
-FROM python:3.9-slim
+# Use an image base de Python 3.13 slim
+FROM python:3.13-slim
 
-# Establece el directorio de trabajo dentro del contenedor
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copia los archivos necesarios para instalar dependencias
-COPY requirements.txt pyproject.toml ./
+# Set PYTHONPATH to include the working directory
+ENV PYTHONPATH=/app
 
-# Instala las dependencias
+# Copy the files needed to install dependencies
+COPY requirements.txt ./
+
+# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia el resto del código de la carpeta `ai`
+# Copy the rest of the code from the `ai` folder
 COPY . .
 
-# Establece el comando por defecto
-CMD ["python", "-m", "your_main_module"]
+# Set the default command
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
