@@ -13,7 +13,6 @@ services:
       - "6900:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./db/scripts:/docker-entrypoint-initdb.d
     networks:
       - app-network
 
@@ -48,6 +47,7 @@ services:
       - mysql
     networks:
       - app-network
+    restart: unless-stopped
 
 networks:
   app-network:
