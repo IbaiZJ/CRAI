@@ -17,15 +17,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Cargar .env
+      - name: Load .env
         run: |
-          echo "Cargando variables del .env..."
+          echo "Loading variables from .env..."
           set -o allexport
           source .env
           set +o allexport
         shell: bash
 
-      - name: Ver variables cargadas
+      - name: Show loaded variables
         run: |
           echo "SONAR_HOST_URL = $SONAR_HOST_URL"
           echo "SONAR_PROJECT_KEY = $SONAR_PROJECT_KEY"
