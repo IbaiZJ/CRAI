@@ -1,7 +1,12 @@
 fastapi
 uvicorn[standard]
+pydantic-settings
 numpy
 pandas
 scikit-learn
+pytest
+pytest-cov
+pytest-asyncio
+httpx
 # tensorflow
 # torch

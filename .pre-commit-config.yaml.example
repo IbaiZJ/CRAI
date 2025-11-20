@@ -1,0 +1,60 @@
+# Ejemplo de configuración de pre-commit hooks
+# Para usar: pip install pre-commit && pre-commit install
+
+repos:
+  # Hooks generales
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: mixed-line-ending
+
+  # Python - Black (formateo de código)
+  - repo: https://github.com/psf/black
+    rev: 23.12.1
+    hooks:
+      - id: black
+        files: ^ai/
+        language_version: python3.13
+
+  # Python - isort (ordenar imports)
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        files: ^ai/
+        args: ["--profile", "black"]
+
+  # Python - flake8 (linting)
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+      - id: flake8
+        files: ^ai/
+        args: ['--max-line-length=127', '--extend-ignore=E203,W503']
+
+  # Python - pytest (ejecutar tests)
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest
+        entry: bash -c 'cd ai && pytest -v'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [push]
+
+# Para instalar:
+# 1. pip install pre-commit
+# 2. pre-commit install
+# 3. (Opcional) pre-commit install --hook-type pre-push
+
+# Para ejecutar manualmente:
+# pre-commit run --all-files

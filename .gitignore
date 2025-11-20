@@ -36,3 +36,23 @@ Thumbs.db
 
 # Python
 __pycache__/
+.pytest_cache/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+*.cover
+.mypy_cache/
+.dmypy.json
+dmypy.json
