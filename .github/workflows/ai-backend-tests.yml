@@ -2,12 +2,12 @@ name: AI Backend Tests
 
 on:
   push:
-    branches: [ "main", "ai" ]
+    branches: [ "main" ]
     paths:
       - 'ai/**'
       - '.github/workflows/ai-backend-tests.yml'
   pull_request:
-    branches: [ "main", "ai" ]
+    branches: [ "main" ]
     paths:
       - 'ai/**'
       - '.github/workflows/ai-backend-tests.yml'
