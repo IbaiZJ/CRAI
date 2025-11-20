@@ -1,4 +1,4 @@
-name: Sonar Run
+name: SonarCloud Analysis
 
 on:
   push:
@@ -7,34 +7,87 @@ on:
     branches: [ "main" ]
 
 jobs:
-  sonar:
+  # Job para Python/Backend
+  python-analysis:
+    name: Python Backend Analysis
     runs-on: ubuntu-latest
-
-    env:
-      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
-      SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Shallow clones should be disabled for better analysis
 
-      - name: Set up JDK
-        uses: actions/setup-java@v4
+      # Configure Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          python-version: '3.13'
+          cache: 'pip'
+          cache-dependency-path: ai/requirements.txt
 
-      - name: Build
-        run: mvn -B clean verify
-
-      - name: Sonar Scan
+      # Install Python Dependencies
+      - name: Install Python Dependencies
+        working-directory: ./ai
         run: |
-          mvn -B sonar:sonar \
-            -Dsonar.host.url=$SONAR_HOST_URL \
-            -Dsonar.login=$SONAR_TOKEN \
-            -Dsonar.projectKey=$SONAR_PROJECT_KEY \
-            -Dsonar.organization=$SONAR_ORGANIZATION
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Run tests and generate coverage report
+      - name: Run Python Tests with Coverage
+        working-directory: ./ai
+        run: |
+          pytest -v --cov=api --cov-report=xml --cov-report=term-missing
+        continue-on-error: false
+
+      # SonarCloud Scan for Python
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
+            -Dsonar.sources=ai/api
+            -Dsonar.tests=ai/tests
+            -Dsonar.python.coverage.reportPaths=ai/coverage.xml
+            -Dsonar.python.version=3.13
+            -Dsonar.sourceEncoding=UTF-8
+
+  # Job for Java/Maven (if needed)
+  # java-analysis:
+  #   name: Java Analysis
+  #   runs-on: ubuntu-latest
+  #   # Comment out or remove this job if you don't have Java code
+  #   if: false  # Disabled for now
+
+  #   env:
+  #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+  #     SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+  #     SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
+  #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+
+  #     - name: Set up JDK
+  #       uses: actions/setup-java@v4
+  #       with:
+  #         distribution: 'temurin'
+  #         java-version: '17'
+
+  #     - name: Build
+  #       run: mvn -B clean verify
+
+  #     - name: Sonar Scan
+  #       run: |
+  #         mvn -B sonar:sonar \
+  #           -Dsonar.host.url=$SONAR_HOST_URL \
+  #           -Dsonar.login=$SONAR_TOKEN \
+  #           -Dsonar.projectKey=$SONAR_PROJECT_KEY \
+  #           -Dsonar.organization=$SONAR_ORGANIZATION
