@@ -1,0 +1,12 @@
+target/
+.mvn/
+*.class
+*.jar
+*.war
+*.ear
+.idea/
+*.iml
+.vscode/
+.git/
+.gitignore
+*.log
