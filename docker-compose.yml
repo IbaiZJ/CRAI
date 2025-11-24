@@ -49,6 +49,18 @@ services:
       - app-network
     restart: unless-stopped
 
+  # Documentation service
+  docs:
+    build:
+      context: ./docs
+      dockerfile: Dockerfile
+    container_name: docs_service
+    ports:
+      - "6910:4321"
+    networks:
+      - app-network
+    restart: unless-stopped
+
 networks:
   app-network:
     driver: bridge
