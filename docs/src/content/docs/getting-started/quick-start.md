@@ -84,7 +84,7 @@ For a different documentation style, visit http://localhost:6902/redoc
 
 ## Using the Frontend
 
-1. Open http://localhost:5173 in your browser
+1. Open http://localhost:6901 in your browser (or http://localhost:5173 if running without Docker)
 2. You'll see the CRAI interface
 3. Navigate through the available features
 
@@ -124,7 +124,7 @@ CRAI/
 2. **Frontend Changes:**
    - Edit files in `frontend/src/`
    - Vite hot-reloads automatically
-   - See changes instantly at http://localhost:5173
+   - See changes at http://localhost:6901 (Docker) or http://localhost:5173 (manual)
 
 ### Running Tests
 

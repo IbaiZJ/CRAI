@@ -33,8 +33,10 @@ docker-compose up -d
 
 That's it! The application will be available at:
 - Backend API: http://localhost:6902
-- Frontend UI: http://localhost:5173
+- Frontend UI: http://localhost:6901
 - API Docs: http://localhost:6902/docs
+- Documentation: http://localhost:6910
+- MySQL: localhost:6900
 
 ## Manual Installation
 
