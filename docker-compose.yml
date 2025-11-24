@@ -49,6 +49,20 @@ services:
       - app-network
     restart: unless-stopped
 
+      # Operating System service (Java)
+  os:
+    build:
+      context: ./os
+      dockerfile: Dockerfile
+    container_name: os_service
+    ports:
+      - "6903:8080"
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+    restart: unless-stopped
+
   # Documentation service
   docs:
     build:
