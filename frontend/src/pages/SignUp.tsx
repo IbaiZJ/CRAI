@@ -1,11 +1,11 @@
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
-export default function Login() {
+export default function SignUp() {
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // Aquí harías la autenticación real
+  const handleSignUp = () => {
+    // Aquí harías el registro real
     localStorage.setItem("authToken", "your-token-here");
     navigate("/dashboard");
   };
@@ -14,19 +14,19 @@ export default function Login() {
     <div className="flex min-h-screen flex-col items-center justify-center gap-6">
       <div className="w-full max-w-sm space-y-6">
         <div className="space-y-2 text-center">
-          <h1 className="text-3xl font-bold">Iniciar Sesión</h1>
+          <h1 className="text-3xl font-bold">Crear Cuenta</h1>
           <p className="text-muted-foreground">
-            Ingresa tus credenciales para continuar
+            Completa el formulario para registrarte
           </p>
         </div>
         <div className="space-y-4">
-          <Button onClick={handleLogin} className="w-full">
-            Iniciar Sesión
+          <Button onClick={handleSignUp} className="w-full">
+            Registrarse
           </Button>
           <p className="text-center text-sm text-muted-foreground">
-            ¿No tienes cuenta?{" "}
-            <Link to="/signup" className="text-primary hover:underline">
-              Regístrate
+            ¿Ya tienes cuenta?{" "}
+            <Link to="/login" className="text-primary hover:underline">
+              Inicia sesión
             </Link>
           </p>
           <Link
