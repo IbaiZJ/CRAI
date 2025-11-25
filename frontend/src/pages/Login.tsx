@@ -1,42 +1,60 @@
-import { useNavigate, Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../database/config/firebase";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const navigate = useNavigate();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // Aquí harías la autenticación real
-    localStorage.setItem("authToken", "your-token-here");
-    navigate("/dashboard");
-  };
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+        setError("");
 
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-6">
-      <div className="w-full max-w-sm space-y-6">
-        <div className="space-y-2 text-center">
-          <h1 className="text-3xl font-bold">Iniciar Sesión</h1>
-          <p className="text-muted-foreground">
-            Ingresa tus credenciales para continuar
-          </p>
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            console.log("Usuário logado:", user);
+            sessionStorage.setItem("email", email);
+            navigate("/adm");
+        } catch (err) {
+            console.error(err);
+            setError("Email ou senha inválidos.");
+        }
+    };
+
+    return (
+        <div className="login-container">
+            <form onSubmit={handleSubmit} className="login-form">
+                <main>
+                    <div className="title-and-logo"> 
+                        <h1>Log In</h1>
+                    </div>
+                    {error && <p className="error-msg">{error}</p>}
+
+                    <label htmlFor="email">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+
+                    <label htmlFor="password">Senha</label>
+                    <input
+                        type="password"
+                        id="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+
+                    <button type="submit">Entrar</button>
+                </main>
+            </form>
         </div>
-        <div className="space-y-4">
-          <Button onClick={handleLogin} className="w-full">
-            Iniciar Sesión
-          </Button>
-          <p className="text-center text-sm text-muted-foreground">
-            ¿No tienes cuenta?{" "}
-            <Link to="/signup" className="text-primary hover:underline">
-              Regístrate
-            </Link>
-          </p>
-          <Link
-            to="/"
-            className="block text-center text-sm text-primary hover:underline"
-          >
-            Volver al inicio
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
+    );
 }
