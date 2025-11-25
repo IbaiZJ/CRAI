@@ -11,6 +11,11 @@ import {
 
 // --- Components ---
 
+// Set page title
+if (typeof document !== 'undefined') {
+  document.title = 'CRAI - Home';
+}
+
 const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => {
   const [isVisible, setIsVisible] = useState(false);
 

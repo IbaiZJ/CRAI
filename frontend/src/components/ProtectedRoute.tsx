@@ -2,6 +2,7 @@ import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../database/config/firebase";
+import { SpinnerCustom } from "@/components/Spinner";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -18,11 +19,10 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     return () => unsubscribe();
   }, []);
 
-  // Mientras carga, muestra nada (o podrías mostrar un spinner)
   if (isAuthenticated === null) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <p>Cargando...</p>
+        <SpinnerCustom />
       </div>
     );
   }

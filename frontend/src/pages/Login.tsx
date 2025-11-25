@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../../database/config/firebase";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 export default function Login() {
+  useEffect(() => {
+    document.title = 'CRAI - Login';
+  }, []);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

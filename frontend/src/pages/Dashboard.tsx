@@ -1,9 +1,13 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { signOut } from "firebase/auth";
 import { auth } from "../../database/config/firebase";
 
 export default function Dashboard() {
+  useEffect(() => {
+    document.title = 'CRAI - Dashboard';
+  }, []);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
