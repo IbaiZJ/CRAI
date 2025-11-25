@@ -18,7 +18,7 @@ export default function Login() {
             const user = userCredential.user;
             console.log("Usuário logado:", user);
             sessionStorage.setItem("email", email);
-            navigate("/adm");
+            navigate("/dashboard");
         } catch (err) {
             console.error(err);
             setError("Email ou senha inválidos.");
