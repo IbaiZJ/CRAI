@@ -5,7 +5,6 @@ import {
   Bell, 
   BarChart3, 
   ChevronRight, 
-  ArrowRight, 
   ShieldCheck, 
   Activity
 } from 'lucide-react';
@@ -118,7 +117,7 @@ const HeroIllustration = () => (
 const Hero = () => (
   <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden bg-slate-50">
     {/* Background Elements */}
-    <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-b from-blue-50 to-transparent opacity-60 rounded-bl-[100px] -z-10"></div>
+    <div className="absolute top-0 right-0 w-1/2 h-full bg-linear-to-b from-blue-50 to-transparent opacity-60 rounded-bl-[100px] -z-10"></div>
     <div className="absolute top-1/3 left-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
     <div className="absolute top-1/3 right-10 w-72 h-72 bg-cyan-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
 
@@ -134,7 +133,7 @@ const Hero = () => (
               Next Gen ANPR Technology
             </div>
             <h1 className="text-5xl lg:text-7xl font-bold text-slate-900 leading-[1.1] mb-6 tracking-tight">
-              Smarter cities start with <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">intelligent vision.</span>
+              Smarter cities start with <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-cyan-500">intelligent vision.</span>
             </h1>
             <p className="text-lg text-slate-600 mb-8 leading-relaxed max-w-lg">
               Real-time license plate recognition and vehicle analytics powered by advanced AI. Centralize your city's monitoring infrastructure in one beautiful cloud dashboard.
@@ -263,7 +262,7 @@ const DashboardPreview = () => (
             
             <div className="relative mx-auto max-w-5xl">
                 {/* Decorative Glow */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-2xl blur opacity-20"></div>
+                <div className="absolute -inset-1 bg-linear-to-r from-blue-400 to-cyan-400 rounded-2xl blur opacity-20"></div>
                 
                 {/* Browser Window Mockup */}
                 <div className="relative bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden">
@@ -324,92 +323,92 @@ const DashboardPreview = () => (
     </section>
 )
 
-const CTA = () => (
-  <section className="py-24 bg-white">
-    <div className="container mx-auto px-8">
-      <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl p-12 md:p-20 text-center text-white relative overflow-hidden shadow-2xl shadow-blue-900/20">
-        <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-            <svg width="100%" height="100%">
-                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="1"/>
-                </pattern>
-                <rect width="100%" height="100%" fill="url(#grid)" />
-            </svg>
-        </div>
+// const CTA = () => (
+//   <section className="py-24 bg-white">
+//     <div className="container mx-auto px-8">
+//       <div className="bg-linear-to-br from-blue-600 to-blue-800 rounded-3xl p-12 md:p-20 text-center text-white relative overflow-hidden shadow-2xl shadow-blue-900/20">
+//         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+//             <svg width="100%" height="100%">
+//                 <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+//                     <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="1"/>
+//                 </pattern>
+//                 <rect width="100%" height="100%" fill="url(#grid)" />
+//             </svg>
+//         </div>
         
-        <div className="relative z-10 max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">Ready to modernize your infrastructure?</h2>
-          <p className="text-blue-100 text-lg mb-10">Join forward-thinking cities and private campuses using CRAI for safer, smarter monitoring.</p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button className="px-8 py-4 bg-white text-blue-600 rounded-full font-bold hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all transform hover:-translate-y-1">
-                Get Started Now
-            </button>
-            <button className="px-8 py-4 border border-blue-400 bg-blue-700/30 text-white rounded-full font-semibold hover:bg-blue-700 transition-colors">
-                Contact Sales
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-);
+//         <div className="relative z-10 max-w-3xl mx-auto">
+//           <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">Ready to modernize your infrastructure?</h2>
+//           <p className="text-blue-100 text-lg mb-10">Join forward-thinking cities and private campuses using CRAI for safer, smarter monitoring.</p>
+//           <div className="flex flex-col sm:flex-row justify-center gap-4">
+//             <button className="px-8 py-4 bg-white text-blue-600 rounded-full font-bold hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all transform hover:-translate-y-1">
+//                 Get Started Now
+//             </button>
+//             <button className="px-8 py-4 border border-blue-400 bg-blue-700/30 text-white rounded-full font-semibold hover:bg-blue-700 transition-colors">
+//                 Contact Sales
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   </section>
+// );
 
-const Footer = () => (
-  <footer className="bg-slate-50 border-t border-slate-200 py-12">
-    <div className="container mx-auto px-8">
-      <div className="grid md:grid-cols-4 gap-8 mb-8">
-        <div className="col-span-1 md:col-span-1">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-6 h-6 bg-blue-600 rounded flex items-center justify-center text-white font-bold text-xs">C</div>
-            <span className="text-lg font-bold text-slate-900">CRAI</span>
-          </div>
-          <p className="text-slate-500 text-sm">
-            AI-powered intelligence for the physical world.
-          </p>
-        </div>
+// const Footer = () => (
+//   <footer className="bg-slate-50 border-t border-slate-200 py-12">
+//     <div className="container mx-auto px-8">
+//       <div className="grid md:grid-cols-4 gap-8 mb-8">
+//         <div className="col-span-1 md:col-span-1">
+//           <div className="flex items-center gap-2 mb-4">
+//             <div className="w-6 h-6 bg-blue-600 rounded flex items-center justify-center text-white font-bold text-xs">C</div>
+//             <span className="text-lg font-bold text-slate-900">CRAI</span>
+//           </div>
+//           <p className="text-slate-500 text-sm">
+//             AI-powered intelligence for the physical world.
+//           </p>
+//         </div>
         
-        <div>
-          <h4 className="font-semibold text-slate-900 mb-4">Product</h4>
-          <ul className="space-y-2 text-sm text-slate-500">
-            <li><a href="#" className="hover:text-blue-600">Features</a></li>
-            <li><a href="#" className="hover:text-blue-600">Integrations</a></li>
-            <li><a href="#" className="hover:text-blue-600">Hardware</a></li>
-            <li><a href="#" className="hover:text-blue-600">Pricing</a></li>
-          </ul>
-        </div>
+//         <div>
+//           <h4 className="font-semibold text-slate-900 mb-4">Product</h4>
+//           <ul className="space-y-2 text-sm text-slate-500">
+//             <li><a href="#" className="hover:text-blue-600">Features</a></li>
+//             <li><a href="#" className="hover:text-blue-600">Integrations</a></li>
+//             <li><a href="#" className="hover:text-blue-600">Hardware</a></li>
+//             <li><a href="#" className="hover:text-blue-600">Pricing</a></li>
+//           </ul>
+//         </div>
         
-        <div>
-          <h4 className="font-semibold text-slate-900 mb-4">Resources</h4>
-          <ul className="space-y-2 text-sm text-slate-500">
-            <li><a href="#" className="hover:text-blue-600">Documentation</a></li>
-            <li><a href="#" className="hover:text-blue-600">API Reference</a></li>
-            <li><a href="#" className="hover:text-blue-600">Community</a></li>
-            <li><a href="#" className="hover:text-blue-600">Blog</a></li>
-          </ul>
-        </div>
+//         <div>
+//           <h4 className="font-semibold text-slate-900 mb-4">Resources</h4>
+//           <ul className="space-y-2 text-sm text-slate-500">
+//             <li><a href="#" className="hover:text-blue-600">Documentation</a></li>
+//             <li><a href="#" className="hover:text-blue-600">API Reference</a></li>
+//             <li><a href="#" className="hover:text-blue-600">Community</a></li>
+//             <li><a href="#" className="hover:text-blue-600">Blog</a></li>
+//           </ul>
+//         </div>
         
-        <div>
-          <h4 className="font-semibold text-slate-900 mb-4">Legal</h4>
-          <ul className="space-y-2 text-sm text-slate-500">
-            <li><a href="#" className="hover:text-blue-600">Privacy Policy</a></li>
-            <li><a href="#" className="hover:text-blue-600">Terms of Service</a></li>
-            <li><a href="#" className="hover:text-blue-600">Security</a></li>
-          </ul>
-        </div>
-      </div>
+//         <div>
+//           <h4 className="font-semibold text-slate-900 mb-4">Legal</h4>
+//           <ul className="space-y-2 text-sm text-slate-500">
+//             <li><a href="#" className="hover:text-blue-600">Privacy Policy</a></li>
+//             <li><a href="#" className="hover:text-blue-600">Terms of Service</a></li>
+//             <li><a href="#" className="hover:text-blue-600">Security</a></li>
+//           </ul>
+//         </div>
+//       </div>
       
-      <div className="border-t border-slate-200 pt-8 flex flex-col md:flex-row justify-between items-center">
-        <p className="text-slate-400 text-sm">© 2024 CRAI Systems Inc. All rights reserved.</p>
-        <div className="flex gap-4 mt-4 md:mt-0">
-            {/* Social placeholders */}
-            <div className="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 cursor-pointer"></div>
-            <div className="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 cursor-pointer"></div>
-            <div className="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 cursor-pointer"></div>
-        </div>
-      </div>
-    </div>
-  </footer>
-);
+//       <div className="border-t border-slate-200 pt-8 flex flex-col md:flex-row justify-between items-center">
+//         <p className="text-slate-400 text-sm">© 2024 CRAI Systems Inc. All rights reserved.</p>
+//         <div className="flex gap-4 mt-4 md:mt-0">
+//             {/* Social placeholders */}
+//             <div className="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 cursor-pointer"></div>
+//             <div className="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 cursor-pointer"></div>
+//             <div className="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 cursor-pointer"></div>
+//         </div>
+//       </div>
+//     </div>
+//   </footer>
+// );
 
 const App = () => {
   return (
