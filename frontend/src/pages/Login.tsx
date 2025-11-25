@@ -23,16 +23,17 @@ export default function Login() {
       console.log("User logged in:", user);
       sessionStorage.setItem("email", email);
       navigate("/dashboard");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error in login:", err);
-      if (err.code === "auth/invalid-credential") {
+      const error = err as { code?: string; message?: string };
+      if (error.code === "auth/invalid-credential") {
         setError("Email or password invalid.");
-      } else if (err.code === "auth/user-not-found") {
+      } else if (error.code === "auth/user-not-found") {
         setError("User not found.");
-      } else if (err.code === "auth/wrong-password") {
+      } else if (error.code === "auth/wrong-password") {
         setError("Incorrect password.");
       } else {
-        setError("Error logging in: " + err.message);
+        setError("Error logging in: " + (error.message || "Unknown error"));
       }
     }
   };
@@ -47,12 +48,13 @@ export default function Login() {
       console.log("User logged in with Google:", user);
       sessionStorage.setItem("email", user.email || "");
       navigate("/dashboard");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error in login with Google:", err);
-      if (err.code === "auth/popup-closed-by-user") {
+      const error = err as { code?: string; message?: string };
+      if (error.code === "auth/popup-closed-by-user") {
         setError("Google login window closed.");
       } else {
-        setError("Error logging in with Google: " + err.message);
+        setError("Error logging in with Google: " + (error.message || "Unknown error"));
       }
     }
   };

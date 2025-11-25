@@ -42,14 +42,15 @@ export default function SignUp() {
       
       // Navigate immediately without waiting
       navigate("/dashboard");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error in registration:", err);
-      if (err.code === "auth/email-already-in-use") {
+      const error = err as { code?: string; message?: string };
+      if (error.code === "auth/email-already-in-use") {
         setError("This email is already registered.");
-      } else if (err.code === "auth/weak-password") {
+      } else if (error.code === "auth/weak-password") {
         setError("Password must be at least 6 characters.");
       } else {
-        setError("Error creating account: " + err.message);
+        setError("Error creating account: " + (error.message || "Unknown error"));
       }
     }
   };
@@ -72,12 +73,13 @@ export default function SignUp() {
       
       // Navigate immediately without waiting
       navigate("/dashboard");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error in registration with Google:", err);
-      if (err.code === "auth/popup-closed-by-user") {
+      const error = err as { code?: string; message?: string };
+      if (error.code === "auth/popup-closed-by-user") {
         setError("Google registration window closed.");
       } else {
-        setError("Error registering with Google: " + err.message);
+        setError("Error registering with Google: " + (error.message || "Unknown error"));
       }
     }
   };
