@@ -1,6 +1,8 @@
 import re
 from util.get_badge_from_plates import get_badge_from_plate
 
+data_file_path = "data/environmentalBadge.txt"
+
 class EnvironmentalBadgeService:
     """Service for processing environmental badges based on car plates"""
     
@@ -10,7 +12,7 @@ class EnvironmentalBadgeService:
         if plate is None:
             return {"error": "Invalid plate format"}
         
-        badge = get_badge_from_plate(plate, "data/environmentalBadge.txt")
+        badge = get_badge_from_plate(plate, data_file_path)
         if badge is None:
             return {"error": "Badge not found"}
         
