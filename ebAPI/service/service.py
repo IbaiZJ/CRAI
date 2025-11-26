@@ -31,7 +31,7 @@ class EnvironmentalBadgeService:
     def convert_badge_code_to_name(self, badge_code: str) -> dict:
         """Convert badge code to structured badge information"""
         
-        # Casos especiales
+        # Especial cases
         if badge_code == "TIPO DE ETIQUETA" or badge_code == "SIN DISTINTIVO":
             return {
                 "vehicleType": None,
