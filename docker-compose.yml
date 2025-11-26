@@ -59,6 +59,24 @@ services:
       - node_red_data:/data
     environment:
       - TZ=Europe/Madrid
+    depends_on:
+      - ebapi
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # Environmental Badge API service
+  ebapi:
+    build:
+      context: ./ebAPI
+      dockerfile: Dockerfile
+    container_name: ebapi_service
+    ports:
+      - "6904:8000"
+    volumes:
+      - ./ebAPI:/app
+    environment:
+      - PYTHONUNBUFFERED=1
     networks:
       - app-network
     restart: unless-stopped
