@@ -2,8 +2,10 @@ import argparse
 import signal
 import sys
 
+file_path = "../data/environmentalBadge.txt"
+
 parser = argparse.ArgumentParser()
-parser.add_argument("-f", "--file", type=str, default="../data/environmentalBadge.txt", help="file to read", required=False)
+parser.add_argument("-f", "--file", type=str, default=file_path, help="file to read", required=False)
 args = parser.parse_args()
 
 # Ctrl + C

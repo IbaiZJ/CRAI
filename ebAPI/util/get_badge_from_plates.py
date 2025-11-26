@@ -3,6 +3,8 @@ import pandas as pd
 import signal
 import sys
 
+file_path = "../data/environmentalBadge.txt"
+
 def get_badge_from_plate(carPlate: str, file_path: str) -> str | None:
     """Returns the environmental badge associated with the given car plate"""
     
@@ -34,7 +36,7 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--plate", type=str, help="plate to read", required=True)
-    parser.add_argument("-f", "--file", type=str, default="../data/environmentalBadge.txt", help="file to read", required=False)
+    parser.add_argument("-f", "--file", type=str, default=file_path, help="file to read", required=False)
     args = parser.parse_args()
     
     get_badge_from_plate(args.plate, args.file)
