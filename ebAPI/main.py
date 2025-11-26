@@ -5,7 +5,7 @@ from conf.config import settings
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--unzipData", action="store_true", help="Unzip and process data files")
-args = parser.parse_args()
+args, unknown = parser.parse_known_args()
 
 if args.unzipData:
     print("Unzipping data files...")
