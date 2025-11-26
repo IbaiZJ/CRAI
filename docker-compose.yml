@@ -56,7 +56,7 @@ services:
     ports:
       - "6903:1880"
     volumes:
-      - node_red_data:/data
+      - ./backend/node_red_data:/data
     environment:
       - TZ=Europe/Madrid
     depends_on:
@@ -99,7 +99,5 @@ networks:
 
 volumes:
   mysql_data:
-    driver: local
-  node_red_data:
     driver: local
 
