@@ -1,0 +1,869 @@
+[
+    {
+        "id": "b8eced2c956132a8",
+        "type": "tab",
+        "label": "CRUD Vehículos Firebase",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "b1a1c4d12e8e0147",
+        "type": "tab",
+        "label": "Telegram Sender",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "e1beeaeef516db51",
+        "type": "tab",
+        "label": "Leer API python",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "9121735248a37744",
+        "type": "subflow",
+        "name": "Subflow 1",
+        "info": "",
+        "in": [],
+        "out": []
+    },
+    {
+        "id": "71b07188f663df6d",
+        "type": "telegram bot",
+        "botname": "craai_bot",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "testenvironment": false,
+        "updatemode": "polling",
+        "pollinterval": 300,
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": 6667,
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbothost": "0.0.0.0",
+        "localbotport": 8443,
+        "publicbotport": 8443,
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    },
+    {
+        "id": "61e2a167b6f43ff4",
+        "type": "http in",
+        "z": "b8eced2c956132a8",
+        "name": "GET /api/vehiculos",
+        "url": "/api/vehiculos",
+        "method": "get",
+        "upload": false,
+        "x": 130,
+        "y": 200,
+        "wires": [
+            [
+                "56ecb0624431eaac"
+            ]
+        ]
+    },
+    {
+        "id": "56ecb0624431eaac",
+        "type": "function",
+        "z": "b8eced2c956132a8",
+        "name": "Build GET ALL",
+        "func": "msg.method = \"GET\";\nmsg.url = \"https://crai-efbc3-default-rtdb.europe-west1.firebasedatabase.app/vehiculos.json\";\nreturn msg;",
+        "outputs": 1,
+        "x": 420,
+        "y": 200,
+        "wires": [
+            [
+                "f31a97ef397ced76"
+            ]
+        ]
+    },
+    {
+        "id": "f31a97ef397ced76",
+        "type": "http request",
+        "z": "b8eced2c956132a8",
+        "name": "GET → Firebase",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 700,
+        "y": 200,
+        "wires": [
+            [
+                "608a80fd26cffb62"
+            ]
+        ]
+    },
+    {
+        "id": "608a80fd26cffb62",
+        "type": "http response",
+        "z": "b8eced2c956132a8",
+        "name": "",
+        "x": 950,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "41523f368ec94844",
+        "type": "http in",
+        "z": "b8eced2c956132a8",
+        "name": "GET /api/vehiculos/:id",
+        "url": "/api/vehiculos/:id",
+        "method": "get",
+        "upload": false,
+        "x": 140,
+        "y": 300,
+        "wires": [
+            [
+                "8cc8b02c35bc8bb4"
+            ]
+        ]
+    },
+    {
+        "id": "8cc8b02c35bc8bb4",
+        "type": "function",
+        "z": "b8eced2c956132a8",
+        "name": "Build GET ID",
+        "func": "const id = msg.req.params.id;\nmsg.method = \"GET\";\nmsg.url = `https://crai-efbc3-default-rtdb.europe-west1.firebasedatabase.app/vehiculos/${id}.json`;\nreturn msg;",
+        "outputs": 1,
+        "x": 450,
+        "y": 300,
+        "wires": [
+            [
+                "d1941a1d1802e0ba"
+            ]
+        ]
+    },
+    {
+        "id": "d1941a1d1802e0ba",
+        "type": "http request",
+        "z": "b8eced2c956132a8",
+        "name": "GET → Firebase",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 720,
+        "y": 300,
+        "wires": [
+            [
+                "191a58033c169229"
+            ]
+        ]
+    },
+    {
+        "id": "191a58033c169229",
+        "type": "http response",
+        "z": "b8eced2c956132a8",
+        "name": "",
+        "x": 960,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "213560ae5405e794",
+        "type": "http in",
+        "z": "b8eced2c956132a8",
+        "name": "PUT /api/vehiculos/:id",
+        "url": "/api/vehiculos/:id",
+        "method": "put",
+        "upload": false,
+        "x": 170,
+        "y": 400,
+        "wires": [
+            [
+                "ad2056838a786431"
+            ]
+        ]
+    },
+    {
+        "id": "ad2056838a786431",
+        "type": "function",
+        "z": "b8eced2c956132a8",
+        "name": "Validar vehículo (PUT)",
+        "func": "const { matricula, impactoAmbiental, autorizado } = msg.payload;\n\nif (!matricula || matricula.trim() === \"\") {\n    msg.statusCode = 400;\n    msg.payload = { error: \"El campo 'matricula' es obligatorio.\" };\n    msg.route = \"error\";\n    return msg;\n}\n\nconst etiquetasValidas = [\"A\", \"B\", \"C\", \"0\", \"ECO\"];\n\nif (!etiquetasValidas.includes(impactoAmbiental)) {\n    msg.statusCode = 400;\n    msg.payload = { error: \"impactoAmbiental debe ser A, B, C, 0 o ECO.\" };\n    msg.route = \"error\";\n    return msg;\n}\n\nif (typeof autorizado !== \"boolean\") {\n    msg.statusCode = 400;\n    msg.payload = { error: \"El campo 'autorizado' debe ser true o false.\" };\n    msg.route = \"error\";\n    return msg;\n}\n\nmsg.route = \"ok\";\nreturn msg;",
+        "outputs": 1,
+        "x": 520,
+        "y": 400,
+        "wires": [
+            [
+                "7fdccf1afd97fdcc"
+            ]
+        ]
+    },
+    {
+        "id": "7fdccf1afd97fdcc",
+        "type": "switch",
+        "z": "b8eced2c956132a8",
+        "name": "¿OK o ERROR?",
+        "property": "route",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "ok",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "error",
+                "vt": "str"
+            }
+        ],
+        "outputs": 2,
+        "x": 840,
+        "y": 400,
+        "wires": [
+            [
+                "d29a4d0577cea494"
+            ],
+            [
+                "72b959f7e599eeff"
+            ]
+        ]
+    },
+    {
+        "id": "72b959f7e599eeff",
+        "type": "http response",
+        "z": "b8eced2c956132a8",
+        "name": "HTTP 400 ERROR",
+        "statusCode": "",
+        "headers": {},
+        "x": 1070,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "d29a4d0577cea494",
+        "type": "function",
+        "z": "b8eced2c956132a8",
+        "name": "Build PUT",
+        "func": "const id = msg.req.params.id;\nmsg.method = \"PUT\";\nmsg.headers = { \"Content-Type\": \"application/json\" };\nmsg.url = `https://crai-efbc3-default-rtdb.europe-west1.firebasedatabase.app/vehiculos/${id}.json`;\nmsg.payload = JSON.stringify(msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "x": 1040,
+        "y": 380,
+        "wires": [
+            [
+                "f98d1ef4aca93b70"
+            ]
+        ]
+    },
+    {
+        "id": "f98d1ef4aca93b70",
+        "type": "http request",
+        "z": "b8eced2c956132a8",
+        "name": "PUT → Firebase",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1250,
+        "y": 380,
+        "wires": [
+            [
+                "feb1f15835cb8101"
+            ]
+        ]
+    },
+    {
+        "id": "feb1f15835cb8101",
+        "type": "http response",
+        "z": "b8eced2c956132a8",
+        "name": "",
+        "x": 1450,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "cbed35555e2f50c7",
+        "type": "http in",
+        "z": "b8eced2c956132a8",
+        "name": "DELETE /api/vehiculos/:id",
+        "url": "/api/vehiculos/:id",
+        "method": "delete",
+        "upload": false,
+        "x": 180,
+        "y": 500,
+        "wires": [
+            [
+                "3ad66f1530c80885"
+            ]
+        ]
+    },
+    {
+        "id": "3ad66f1530c80885",
+        "type": "function",
+        "z": "b8eced2c956132a8",
+        "name": "Build DELETE",
+        "func": "const id = msg.req.params.id;\nmsg.method = \"DELETE\";\nmsg.url = `https://crai-efbc3-default-rtdb.europe-west1.firebasedatabase.app/vehiculos/${id}.json`;\nreturn msg;",
+        "outputs": 1,
+        "x": 460,
+        "y": 500,
+        "wires": [
+            [
+                "ddcd6dcd68146665"
+            ]
+        ]
+    },
+    {
+        "id": "ddcd6dcd68146665",
+        "type": "http request",
+        "z": "b8eced2c956132a8",
+        "name": "DELETE → Firebase",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 710,
+        "y": 500,
+        "wires": [
+            [
+                "c14211b49443487e"
+            ]
+        ]
+    },
+    {
+        "id": "c14211b49443487e",
+        "type": "http response",
+        "z": "b8eced2c956132a8",
+        "name": "",
+        "x": 1000,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "post_api_vehiculos",
+        "type": "http in",
+        "z": "b8eced2c956132a8",
+        "name": "POST /api/vehiculos",
+        "url": "/api/vehiculos",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 120,
+        "wires": [
+            [
+                "validate_post"
+            ]
+        ]
+    },
+    {
+        "id": "validate_post",
+        "type": "function",
+        "z": "b8eced2c956132a8",
+        "name": "Validar vehículo (POST)",
+        "func": "const { matricula, impactoAmbiental, autorizado } = msg.payload;\n\n// VALIDAR MATRÍCULA\nif (matricula.trim() === \"\") {\n    msg.statusCode = 400;\n    msg.payload = { error: \"El campo 'matricula' es obligatorio.\" };\n    msg.route = \"error\";\n    return msg;\n}\n\n// VALIDAR ETIQUETA\nconst etiquetasValidas = [\"A\", \"B\", \"C\", \"0\", \"ECO\"];\nif (!etiquetasValidas.includes(impactoAmbiental)) {\n    msg.statusCode = 400;\n    msg.payload = { error: \"impactoAmbiental debe ser A, B, C, 0 o ECO.\" };\n    msg.route = \"error\";\n    return msg;\n}\n\n// VALIDAR AUTORIZADO\nif (typeof autorizado !== \"boolean\") {\n    msg.statusCode = 400;\n    msg.payload = { error: \"El campo 'autorizado' debe ser true o false.\" };\n    msg.route = \"error\";\n    return msg;\n}\n\nmsg.route = \"ok\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 120,
+        "wires": [
+            [
+                "switch_ok_error"
+            ]
+        ]
+    },
+    {
+        "id": "switch_ok_error",
+        "type": "switch",
+        "z": "b8eced2c956132a8",
+        "name": "¿OK o ERROR?",
+        "property": "route",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "ok",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "error",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 760,
+        "y": 120,
+        "wires": [
+            [
+                "build_firebase_post"
+            ],
+            [
+                "response_error"
+            ]
+        ]
+    },
+    {
+        "id": "build_firebase_post",
+        "type": "function",
+        "z": "b8eced2c956132a8",
+        "name": "Build Firebase POST",
+        "func": "msg.method = \"POST\";\nmsg.headers = {\"Content-Type\": \"application/json\"};\nmsg.url = \"https://crai-efbc3-default-rtdb.europe-west1.firebasedatabase.app/vehiculos.json\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1080,
+        "y": 80,
+        "wires": [
+            [
+                "post_firebase"
+            ]
+        ]
+    },
+    {
+        "id": "post_firebase",
+        "type": "http request",
+        "z": "b8eced2c956132a8",
+        "name": "POST → Firebase",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1290,
+        "y": 80,
+        "wires": [
+            [
+                "response_ok"
+            ]
+        ]
+    },
+    {
+        "id": "response_ok",
+        "type": "http response",
+        "z": "b8eced2c956132a8",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1470,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "response_error",
+        "type": "http response",
+        "z": "b8eced2c956132a8",
+        "name": "HTTP 400 ERROR",
+        "statusCode": "",
+        "headers": {},
+        "x": 1070,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "inject",
+        "type": "inject",
+        "z": "b8eced2c956132a8",
+        "name": "Consulta etiqueta",
+        "props": [],
+        "repeat": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 660,
+        "wires": [
+            [
+                "function_build_url"
+            ]
+        ]
+    },
+    {
+        "id": "function_build_url",
+        "type": "function",
+        "z": "b8eced2c956132a8",
+        "name": "Construir URL API",
+        "func": "let matricula = \"1234ABC\";   // <<< CAMBIA ESTO\n\nmsg.url = \"http://localhost:5000/api?carplate=\" + matricula;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 660,
+        "wires": [
+            [
+                "http_request"
+            ]
+        ]
+    },
+    {
+        "id": "http_request",
+        "type": "http request",
+        "z": "b8eced2c956132a8",
+        "name": "GET etiqueta",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 580,
+        "y": 660,
+        "wires": [
+            [
+                "json_parse"
+            ]
+        ]
+    },
+    {
+        "id": "json_parse",
+        "type": "json",
+        "z": "b8eced2c956132a8",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "x": 770,
+        "y": 660,
+        "wires": [
+            [
+                "debug_node"
+            ]
+        ]
+    },
+    {
+        "id": "debug_node",
+        "type": "debug",
+        "z": "b8eced2c956132a8",
+        "name": "Resultado API",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 970,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "c6ff6a7b33b39a7b",
+        "type": "inject",
+        "z": "b1a1c4d12e8e0147",
+        "name": "Enviar mensaje",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 160,
+        "wires": [
+            [
+                "1d0f4cf95cb0a21d"
+            ]
+        ]
+    },
+    {
+        "id": "1d0f4cf95cb0a21d",
+        "type": "function",
+        "z": "b1a1c4d12e8e0147",
+        "name": "Crear mensaje",
+        "func": "msg.payload = {\n    chatId: 1143392395,\n    type: 'message',\n    content: 'Mensaje enviado desde Node-RED 🚀'\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 160,
+        "wires": [
+            [
+                "b5e4b254d305f871"
+            ]
+        ]
+    },
+    {
+        "id": "debug_id",
+        "type": "debug",
+        "z": "b1a1c4d12e8e0147",
+        "name": "Chat ID",
+        "active": true,
+        "console": false,
+        "complete": "payload",
+        "x": 520,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "telegram_receiver",
+        "type": "telegram receiver",
+        "z": "b1a1c4d12e8e0147",
+        "name": "Receptor Chat ID",
+        "bot": "71b07188f663df6d",
+        "saveDataDir": "",
+        "filterCommands": false,
+        "hasinput": false,
+        "inputs": 0,
+        "handleallupdates": false,
+        "x": 160,
+        "y": 240,
+        "wires": [
+            [
+                "debug_id"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "b5e4b254d305f871",
+        "type": "telegram sender",
+        "z": "b1a1c4d12e8e0147",
+        "name": "Bot Telegram",
+        "bot": "71b07188f663df6d",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 600,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "extract_plate",
+        "type": "function",
+        "z": "e1beeaeef516db51",
+        "name": "Leer matrícula",
+        "func": "let plate = msg.payload.carplate;\n\nnode.warn(\"Matrícula recibida: \" + plate);\n\nmsg.matricula = plate;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "python_in",
+        "type": "http in",
+        "z": "e1beeaeef516db51",
+        "name": "Python → Node-RED (recibir matrícula)",
+        "url": "/api",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 410,
+        "y": 160,
+        "wires": [
+            [
+                "extract_plate",
+                "b62331e4d69acb6e"
+            ]
+        ]
+    },
+    {
+        "id": "b62331e4d69acb6e",
+        "type": "debug",
+        "z": "e1beeaeef516db51",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "3b87d2761e1d077f",
+        "type": "inject",
+        "z": "e1beeaeef516db51",
+        "name": "Test matrícula",
+        "props": [
+            {
+                "p": "matricula",
+                "v": "6425KWR",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "x": 230,
+        "y": 380,
+        "wires": [
+            [
+                "3a4d06a87cc82990"
+            ]
+        ]
+    },
+    {
+        "id": "3a4d06a87cc82990",
+        "type": "function",
+        "z": "e1beeaeef516db51",
+        "name": "Crear URL API ambiental",
+        "func": "let plate = msg.matricula;\nmsg.url = `http://host.docker.internal:6904/api?carPlate=${plate}`;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 380,
+        "wires": [
+            [
+                "e4bb86b83a4da591",
+                "6c89e95df8356f7a"
+            ]
+        ]
+    },
+    {
+        "id": "6c89e95df8356f7a",
+        "type": "debug",
+        "z": "e1beeaeef516db51",
+        "name": "Ver URL",
+        "active": true,
+        "tosidebar": true,
+        "complete": "url",
+        "x": 870,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "e4bb86b83a4da591",
+        "type": "http request",
+        "z": "e1beeaeef516db51",
+        "name": "GET etiqueta ambiental",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "x": 810,
+        "y": 380,
+        "wires": [
+            [
+                "a463273bb5333922",
+                "e424dc0192ef0e41"
+            ]
+        ]
+    },
+    {
+        "id": "e424dc0192ef0e41",
+        "type": "debug",
+        "z": "e1beeaeef516db51",
+        "name": "Respuesta API",
+        "active": true,
+        "tosidebar": true,
+        "complete": "payload",
+        "x": 1110,
+        "y": 330,
+        "wires": []
+    },
+    {
+        "id": "a463273bb5333922",
+        "type": "function",
+        "z": "e1beeaeef516db51",
+        "name": "Comprobar si permitido",
+        "func": "let label = msg.payload.badge;\nlet plate = msg.matricula;\n\nconst validas = [\"0\", \"ECO\", \"C\"];\nmsg.ok = validas.includes(label);\n\nif (!msg.ok) {\n    msg.alert = `⚠️ Vehículo NO permitido\\nMatrícula: ${plate}\\nEtiqueta: ${label}`;\n}\nreturn msg;",
+        "outputs": 1,
+        "x": 1110,
+        "y": 420,
+        "wires": [
+            [
+                "c4828e0fb8cf254c",
+                "13617621462be547"
+            ]
+        ]
+    },
+    {
+        "id": "c4828e0fb8cf254c",
+        "type": "telegram sender",
+        "z": "e1beeaeef516db51",
+        "name": "Enviar alerta Telegram",
+        "bot": "71b07188f663df6d",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1380,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "13617621462be547",
+        "type": "http response",
+        "z": "e1beeaeef516db51",
+        "name": "Responder a Python",
+        "statusCode": "",
+        "x": 1380,
+        "y": 360,
+        "wires": []
+    }
+]

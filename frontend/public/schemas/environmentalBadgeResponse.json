@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Environmental Badge API Response",
+  "description": "Schema for the response returned by the CRAI Environmental Badge Service",
+
+  "type": "object",
+
+  "properties": {
+    "carPlate": {
+      "type": "string",
+      "description": "Spanish license plate (NNNNLLL format)",
+      "pattern": "^[0-9]{4}[A-Z]{3}$",
+      "example": "6425KWR"
+    },
+
+    "badge": {
+      "type": "object",
+      "description": "Environmental badge information",
+      "properties": {
+        "vehicleType": {
+          "type": "string",
+          "description": "Type of vehicle",
+          "enum": ["turism", "van", "motorcycle", "truck", "bus", "unknown"],
+          "example": "turism"
+        },
+
+        "badge": {
+          "type": "string",
+          "description": "Environmental label",
+          "enum": ["0", "ECO", "C", "B", "NONE", "UNKNOWN"],
+          "example": "C"
+        }
+      },
+      "required": ["vehicleType", "badge"]
+    }
+  },
+
+  "required": ["carPlate", "badge"]
+}
