@@ -22,6 +22,14 @@
         "env": []
     },
     {
+        "id": "30166d647a534d35",
+        "type": "tab",
+        "label": "Simulacion OS",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "9121735248a37744",
         "type": "subflow",
         "name": "Subflow 1",
@@ -864,6 +872,66 @@
         "statusCode": "",
         "x": 1380,
         "y": 360,
+        "wires": []
+    },
+    {
+        "id": "inject_sim",
+        "type": "inject",
+        "z": "30166d647a534d35",
+        "name": "Run Simulation",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "once": false,
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 180,
+        "y": 120,
+        "wires": [
+            [
+                "http_sim"
+            ]
+        ]
+    },
+    {
+        "id": "http_sim",
+        "type": "http request",
+        "z": "30166d647a534d35",
+        "name": "POST → Java /simulate",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://localhost:8080/simulate",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 410,
+        "y": 120,
+        "wires": [
+            [
+                "json_output"
+            ]
+        ]
+    },
+    {
+        "id": "json_output",
+        "type": "debug",
+        "z": "30166d647a534d35",
+        "name": "Simulation JSON",
+        "active": true,
+        "tosidebar": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 660,
+        "y": 120,
         "wires": []
     }
 ]

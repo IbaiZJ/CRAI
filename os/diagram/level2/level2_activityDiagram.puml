@@ -1,0 +1,28 @@
+@startuml
+title Activity Diagram - Vehicle Access Simulation
+
+start
+
+:Vehicle arrives;
+if (priority vehicle?) then (yes)
+  :Place at top of queue;
+else (no)
+  :Place in normal queue;
+endif
+
+:CameraPool captures plate;
+
+:OCRPool processes plate;
+
+:ClassifierPool assigns label;
+
+if (label == C or ECO?) then (allowed)
+  :Allow access;
+else (denied)
+  :Deny access;
+endif
+
+:Update stats;
+stop
+
+@enduml
