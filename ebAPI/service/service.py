@@ -1,20 +1,30 @@
 import re
-from util.get_badge_from_plates import get_badge_from_plate
+import pandas as pd
+from termcolor import colored
 
-data_file_path = "data/environmentalBadge.txt"
+data_file_path = "data/environmentalBadge.csv"
 
 class EnvironmentalBadgeService:
     """Service for processing environmental badges based on car plates"""
     
-    def get_badge_by_plate(self, plate: str) -> dict:
+    def __init__(self):
+        print(colored("Initializing EnvironmentalBadgeService...", "green"))
+        print(colored("Loading data from:", "yellow"), data_file_path)
+        self.df = pd.read_csv(data_file_path, header=None, dtype=str)
+        self.df.columns = ['plate', 'badge']
+        self.plate_to_badge = dict(zip(self.df['plate'], self.df['badge']))
+        print(colored(f"Loaded {len(self.df)} records from the dataset.", "green"))
+
+    
+    def get_badge_by_plate(self, plate: str) -> dict | str:
         """Get the environmental badge for a given car plate"""
         plate = self.validate_plate(plate)
         if plate is None:
             return {"error": "Invalid plate format"}
         
-        badge = get_badge_from_plate(plate, data_file_path)
+        badge = self.get_badge_from_plate(plate)
         if badge is None:
-            return {"error": "Badge not found"}
+            return "none"
         
         badge = self.convert_badge_code_to_name(badge)
         
@@ -25,25 +35,17 @@ class EnvironmentalBadgeService:
         
         formatted_plate = plate.upper().replace(" ", "").replace("-", "")
         
-        if re.match(r"^\d{4}[B-DF-HJ-NP-TV-Z]{3}$", formatted_plate):
+        if re.match(r"^\d{4}[BCDGHJKLMNPQRSTVWXYZ]{3}$", formatted_plate):
             return formatted_plate
         
         return None
     
+    def get_badge_from_plate(self, plate: str) -> dict:
+        """Public method to get badge information by plate"""
+        return self.plate_to_badge.get(plate, None)
+    
     def convert_badge_code_to_name(self, badge_code: str) -> dict:
         """Convert badge code to structured badge information"""
-        
-        # Especial cases
-        if badge_code == "TIPO DE ETIQUETA" or badge_code == "SIN DISTINTIVO":
-            return {
-                "vehicleType": None,
-                "badge": None,
-                "badgeName": "No Badge"
-            }
-        
-        # Remove prefix "16" if present
-        if badge_code.startswith("16"):
-            badge_code = badge_code[2:]
         
         # Extract vehicle type (first character)
         vehicle_type = None
@@ -62,13 +64,11 @@ class EnvironmentalBadgeService:
             "C": "C",
             "E": "ECO"
         }
-        
         badge_name = badge_names.get(badge_char, "Unknown")
         
         return {
             "vehicleType": vehicle_type,
             "badge": badge_name,
-            # "badgeName": f"{badge_name} Badge" if badge_name != "Unknown" else "Unknown Badge"
         }
 
 

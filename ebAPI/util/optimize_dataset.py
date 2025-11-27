@@ -1,4 +1,5 @@
 import pandas as pd
+import re
 
 dataset_file_path = "../data/environmentalBadge.txt"
 
@@ -20,11 +21,22 @@ try:
     # remove 16 from badge codes
     df['BADGE'] = df['BADGE'].apply(lambda x: x[2:] if isinstance(x, str) and x.startswith("16") else x)
     
-    # replace SIN DISTINTIVO with 'n'
-    df['BADGE'] = df['BADGE'].apply(lambda x: 'n' if isinstance(x, str) and x == 'SIN DISTINTIVO' else x)
+    # remove rows with 'SIN DISTINTIVO' in BADGE (case/whitespace insensitive)
+    df = df.loc[~df['BADGE'].astype(str).str.strip().str.upper().eq('SIN DISTINTIVO')]
     
-    # add STOLEN column with empty values
-    df['STOLEN'] = ''
+    def _normalize_plate(p):
+        if not isinstance(p, str):
+            return ''
+        s = p.strip().upper()
+        s = re.sub(r'[\s-]+', '', s)  # eliminar espacios y guiones
+        return s
+
+    df['PLATE'] = df['PLATE'].apply(_normalize_plate)
+
+    allowed = "BCDFGHJKLMNPRSTVWXYZ"
+    pattern = re.compile(r'^\d{4}[' + allowed + r']{3}$')
+
+    df = df[df['PLATE'].astype(str).str.match(pattern)]
     
     # change NaN to empty string
     df = df.fillna('')

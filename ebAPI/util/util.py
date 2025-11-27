@@ -3,12 +3,11 @@ import os
 import sys
 from termcolor import colored
 
-txt_file = "data/environmentalBadge.txt"
+txt_file = "data/environmentalBadge.csv"
 zip_file = "data/environmentalBadge.7z"
 
 def unzip_environmental_badge_file():
-    print(colored("[INFO] Checking if environmentalBadge.txt exists...", "cyan"))
-
+    print(colored("[INFO] Checking if environmentalBadge.csv exists...", "cyan"))
     if not os.path.exists(txt_file):
         print(colored(f"[WARNING] {txt_file} not found. Extracting from {zip_file}...", "yellow"))
         if os.path.exists(zip_file):
