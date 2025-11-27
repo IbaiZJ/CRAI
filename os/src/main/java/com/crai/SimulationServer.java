@@ -1,12 +1,16 @@
 package com.crai;
 
 import com.sun.net.httpserver.*;
+import org.json.JSONObject;
+
 import java.io.*;
 import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
 
 public class SimulationServer {
 
     public static void start(int port, SimulationEngine engine) throws IOException {
+
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
 
         server.createContext("/simulate", exchange -> {
@@ -15,16 +19,22 @@ public class SimulationServer {
                 return;
             }
 
-            String json = engine.runSimulation();
-            exchange.getResponseHeaders().add("Content-Type", "application/json");
-            exchange.sendResponseHeaders(200, json.length());
+            // Leer JSON de entrada
+            InputStream is = exchange.getRequestBody();
+            String body = new String(is.readAllBytes(), StandardCharsets.UTF_8);
 
-            try (OutputStream os = exchange.getResponseBody()) {
-                os.write(json.getBytes());
-            }
+            JSONObject input = body.isEmpty() ? new JSONObject() : new JSONObject(body);
+
+            String resultJson = engine.runSimulation(input);
+
+            exchange.getResponseHeaders().add("Content-Type", "application/json");
+            exchange.sendResponseHeaders(200, resultJson.length());
+            OutputStream os = exchange.getResponseBody();
+            os.write(resultJson.getBytes());
+            os.close();
         });
 
         server.start();
-        System.out.println("🌐 Simulation HTTP server running at http://localhost:" + port + "/simulate");
+        System.out.println("🌐 Java Simulation Server running at http://localhost:" + port + "/simulate");
     }
 }
