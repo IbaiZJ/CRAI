@@ -1,4 +1,4 @@
-name: ebAPI Tests
+name: ebAPI CI
 
 on:
   push:
