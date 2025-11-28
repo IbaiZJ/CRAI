@@ -1,9 +1,9 @@
 ---
 title: CRAI - Car Registration AI System
-description: Complete documentation for the CRAI Automatic Number Plate Recognition system
+description: Complete documentation for the CRAI Automatic Number Plate Recognition and Environmental Badge system
 template: splash
 hero:
-  tagline: AI-powered automatic license plate recognition system built with FastAPI, React, and modern web technologies
+  tagline: AI-powered license plate recognition and environmental badge lookup system built with FastAPI, React, Node-RED, and modern web technologies
   image:
     file: ../../assets/houston.webp
   actions:
@@ -20,50 +20,75 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 
 ## What is CRAI?
 
-CRAI (Car Registration AI) is a complete automatic number plate recognition (ANPR) system that uses artificial intelligence to detect and recognize vehicle license plates from images and video streams.
+CRAI (Car Registration AI) is a comprehensive microservices platform that combines automatic number plate recognition (ANPR) with Spanish environmental badge lookup, automation workflows, and real-time data processing capabilities.
 
 <CardGrid stagger>
-  <Card title="🤖 AI-Powered Backend" icon="seti:python">
-    FastAPI-based REST API with Python for image processing and plate recognition using computer vision.
+  <Card title="🤖 AI-Powered ANPR" icon="seti:python">
+    FastAPI-based REST API with Python for image processing and license plate recognition using OpenCV and computer vision.
+  </Card>
+  <Card title="🏷️ Environmental Badge Lookup" icon="seti:python">
+    Dedicated FastAPI microservice for Spanish environmental badge validation and lookup from comprehensive dataset.
+  </Card>
+  <Card title="🔄 Automation Engine" icon="seti:node">
+    Node-RED integration for workflow automation, data processing, and system orchestration.
   </Card>
   <Card title="🎨 Modern Frontend" icon="seti:react">
-    React with TypeScript and TailwindCSS for a responsive and beautiful user interface.
+    React with TypeScript, Vite, and TailwindCSS for a responsive and beautiful user interface with Firebase authentication.
   </Card>
-  <Card title="🐳 Docker Ready" icon="seti:docker">
-    Fully containerized application ready for development and production deployments.
+  <Card title="🐳 Microservices Architecture" icon="seti:docker">
+    Fully containerized 5-service architecture ready for development and production deployments.
   </Card>
-  <Card title="🧪 100% Test Coverage" icon="approve-check">
-    Comprehensive test suite with pytest ensuring code quality and reliability.
+  <Card title="🧪 Comprehensive Testing" icon="approve-check">
+    Complete test suite with pytest for backend and Vitest for frontend ensuring code quality.
   </Card>
 </CardGrid>
 
 ## Key Features
 
-- **Real-time Detection**: Process images and video streams in real-time
-- **High Accuracy**: Advanced AI models for accurate plate recognition
-- **RESTful API**: Well-documented API endpoints for easy integration
-- **Modern UI**: Intuitive interface built with React and TailwindCSS
-- **Scalable**: Designed to handle multiple concurrent requests
-- **Well-tested**: 100% code coverage with automated testing
+- **Real-time ANPR**: Process images and video streams for license plate recognition
+- **Environmental Badge Lookup**: Spanish vehicle environmental classification (C, ECO, B, 0) with 4M+ plates
+- **Spanish Plate Validation**: Automatic format validation for Spanish license plates (NNNNLLL)
+- **Workflow Automation**: Node-RED integration for custom automation scenarios
+- **Dataset Management**: Auto-extraction and optimization tools for environmental badge data
+- **RESTful APIs**: Well-documented API endpoints for easy integration
+- **Modern UI**: Intuitive interface with Firebase authentication
+- **Scalable**: Microservices architecture designed to handle multiple concurrent requests
+- **Well-tested**: Comprehensive automated testing with CI/CD pipelines
+
+## System Architecture
+
+CRAI consists of 5 independent microservices:
+
+- **Frontend** (Port 6901): React + TypeScript + TailwindCSS interface
+- **AI Service** (Port 6902): Python FastAPI for ANPR processing
+- **Node-RED** (Port 6903): Workflow automation and orchestration
+- **ebAPI Service** (Port 6904): Python FastAPI for environmental badge lookup
+- **Documentation** (Port 6910): Astro Starlight documentation site
 
 ## Technology Stack
 
-### Backend
+### Backend Services
 - **FastAPI**: Modern, fast web framework for building APIs
 - **Python 3.11+**: Latest Python features and performance
-- **OpenCV**: Computer vision library for image processing
-- **pytest**: Testing framework with excellent coverage tools
+- **OpenCV**: Computer vision library for ANPR image processing
+- **pandas**: Data manipulation for environmental badge dataset
+- **py7zr**: Dataset extraction and compression handling
+- **pytest**: Backend testing framework with excellent coverage
 
 ### Frontend
-- **React 18**: Latest React with hooks and modern features
-- **TypeScript**: Type-safe JavaScript for better development
-- **Vite**: Lightning-fast build tool
-- **TailwindCSS**: Utility-first CSS framework
+- **React 19**: Latest React with modern features and hooks
+- **TypeScript 5.9**: Type-safe JavaScript for better development
+- **Vite 7**: Lightning-fast build tool and dev server
+- **TailwindCSS 4**: Utility-first CSS framework
+- **React Router 7**: Client-side routing
+- **Firebase**: Authentication and user management
+- **Vitest 4**: Frontend testing framework with React Testing Library
 
-### Infrastructure
-- **Docker**: Containerization for consistent environments
+### Automation & Infrastructure
+- **Node-RED**: Visual workflow automation
+- **Docker Compose**: Multi-container orchestration
 - **GitHub Actions**: Automated CI/CD pipelines
-- **SonarCloud**: Code quality and security analysis
+- **Astro 5 + Starlight**: Documentation generation
 
 ## Quick Links
 
@@ -71,11 +96,17 @@ CRAI (Car Registration AI) is a complete automatic number plate recognition (ANP
   <Card title="Installation Guide" icon="rocket">
     [Get started](/getting-started/installation/) with CRAI in minutes
   </Card>
+  <Card title="Architecture Overview" icon="seti:config">
+    [Learn about](/architecture/overview/) the 5-service microservices architecture
+  </Card>
   <Card title="API Reference" icon="open-book">
-    [Explore the API](/api/overview/) endpoints and schemas
+    [Explore the APIs](/api/overview/) for ANPR and environmental badge lookup
   </Card>
   <Card title="Testing Guide" icon="approve-check-circle">
-    [Learn about testing](/testing/overview/) strategies and tools
+    [Learn about testing](/testing/overview/) with pytest and Vitest
+  </Card>
+  <Card title="Dataset Management" icon="seti:db">
+    [Manage](/guides/dataset-management/) the environmental badge dataset
   </Card>
   <Card title="Contributing" icon="github">
     [Contribute](/guides/contributing/) to the project
@@ -87,11 +118,15 @@ CRAI (Car Registration AI) is a complete automatic number plate recognition (ANP
 [![AI Backend Tests](https://github.com/IbaiZJ/CRAI/actions/workflows/ai-backend-tests.yml/badge.svg)](https://github.com/IbaiZJ/CRAI/actions/workflows/ai-backend-tests.yml)
 [![Frontend CI](https://github.com/IbaiZJ/CRAI/actions/workflows/frontend-ci.yml/badge.svg)](https://github.com/IbaiZJ/CRAI/actions/workflows/frontend-ci.yml)
 
-- ✅ Backend API: Operational
-- ✅ Frontend UI: Operational
-- ✅ Docker Setup: Configured
-- ✅ CI/CD: Active
-- 🚧 AI Model: In Development
+- ✅ AI Service (ANPR): Operational on port 6902
+- ✅ ebAPI Service: Operational on port 6904
+- ✅ Frontend UI: Operational on port 6901
+- ✅ Node-RED: Operational on port 6903
+- ✅ Docker Setup: 5 services configured
+- ✅ CI/CD: Active with automated testing
+- ✅ Frontend Tests: 6 passing with Vitest
+- ✅ Backend Tests: 17 passing with pytest (100% coverage)
+- 🚧 ANPR Model: In Development
 - 🚧 Production Deployment: Coming Soon
 
 ## Next Steps

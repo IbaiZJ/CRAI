@@ -3,26 +3,45 @@ title: Backend Architecture
 description: Deep dive into CRAI's FastAPI backend architecture
 ---
 
-The CRAI backend is built with FastAPI, providing a high-performance, modern Python API with automatic documentation.
+The CRAI backend consists of two independent FastAPI microservices: the **AI Service** for automatic number plate recognition (ANPR) and the **ebAPI Service** for Spanish environmental badge lookup.
 
 ## Architecture Overview
 
 ```
-┌─────────────────────────────────────────────┐
-│              FastAPI Application             │
-├─────────────────────────────────────────────┤
-│  ┌───────────┐  ┌──────────┐  ┌──────────┐ │
-│  │  Routers  │  │  Models  │  │ Services │ │
-│  └─────┬─────┘  └────┬─────┘  └────┬─────┘ │
-│        │             │              │       │
-│  ┌─────▼─────────────▼──────────────▼─────┐ │
-│  │          Core Configuration           │ │
-│  └───────────────────────────────────────┘ │
-└─────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│                        Backend Services                          │
+├────────────────────────────┬─────────────────────────────────────┤
+│    AI Service (6902)       │       ebAPI Service (6904)          │
+│    ANPR Processing         │       Badge Lookup                   │
+├────────────────────────────┼─────────────────────────────────────┤
+│  FastAPI Application       │      FastAPI Application            │
+│  ┌─────────────────────┐  │  ┌──────────────────────────────┐   │
+│  │  /api/recognize     │  │  │  /api?carPlate=X             │   │
+│  │  /api/health        │  │  │  /docs                        │   │
+│  │  /docs              │  │  └──────────────────────────────┘   │
+│  └─────────────────────┘  │                                      │
+│                            │  ┌──────────────────────────────┐   │
+│  ┌─────────────────────┐  │  │  Service Layer               │   │
+│  │  Recognition        │  │  │  • validate_plate()          │   │
+│  │  Service            │  │  │  • get_badge_by_plate()      │   │
+│  │  • OpenCV           │  │  │  • convert_badge_code()      │   │
+│  │  • pytesseract      │  │  └──────────────────────────────┘   │
+│  └─────────────────────┘  │                                      │
+│                            │  ┌──────────────────────────────┐   │
+│  Python 3.11+              │  │  Utilities                   │   │
+│  opencv-python             │  │  • get_badge_from_plates     │   │
+│  scikit-image              │  │  • optimize_dataset.py       │   │
+│  imutils                   │  │  • generate_dataset.py       │   │
+│                            │  └──────────────────────────────┘   │
+│                            │                                      │
+│                            │  Python 3.11-slim                    │
+│                            │  pandas, py7zr, termcolor            │
+└────────────────────────────┴─────────────────────────────────────┘
 ```
 
 ## Project Structure
 
+### AI Service Structure
 ```
 ai/
 ├── api/
@@ -40,9 +59,11 @@ ai/
 │   ├── services/
 │   │   ├── __init__.py
 │   │   └── recognition.py      # Business logic
-│   └── utils/
-│       ├── __init__.py
-│       └── image.py            # Utility functions
+│   └── interface/
+│       └── # Interface definitions
+├── data/
+│   ├── models/                 # AI models
+│   └── raw/                    # Sample images
 ├── tests/
 │   ├── __init__.py
 │   ├── conftest.py             # Test configuration
@@ -50,10 +71,369 @@ ai/
 │       ├── test_main.py
 │       └── test_router.py
 ├── requirements.txt
-└── pytest.ini
+├── pytest.ini
+└── Dockerfile
 ```
 
-## Core Components
+### ebAPI Service Structure
+```
+ebAPI/
+├── __init__.py
+├── main.py                      # FastAPI app + auto-extraction
+├── conf/
+│   ├── __init__.py
+│   └── config.py               # Pydantic settings
+├── routers/
+│   ├── __init__.py
+│   └── router.py               # GET /api endpoint
+├── service/
+│   ├── __init__.py
+│   └── service.py              # EnvironmentalBadgeService
+├── util/
+│   ├── __init__.py
+│   ├── get_badge_from_plates.py    # CSV lookup
+│   ├── optimize_dataset.py         # Dataset cleaning
+│   ├── generate_complete_dataset.py # Generate missing plates
+│   └── util.py                      # Helper functions
+├── data/
+│   ├── environmentalBadge.7z        # Compressed dataset (40MB)
+│   └── environmentalBadge.txt       # Extracted dataset (592MB)
+├── requirements.txt
+├── Dockerfile
+└── README.md
+```
+
+## ebAPI Service - Environmental Badge Lookup
+
+### Purpose
+The ebAPI microservice provides Spanish vehicle environmental badge classification lookup for over 4 million license plates. It validates plate format, looks up badge data from a comprehensive dataset, and returns structured classification information.
+
+### Key Features
+- **Spanish Plate Validation**: Validates format NNNNLLL (4 digits + 3 consonants, excluding A,E,I,O,U)
+- **Comprehensive Dataset**: 4M+ Spanish vehicle records with environmental classifications
+- **Auto-Extraction**: Automatically extracts 40MB compressed .7z file to 592MB text file on startup
+- **Fast Lookup**: Uses pandas for efficient CSV/pipe-delimited file processing
+- **Badge Parsing**: Converts raw badge codes (e.g., "16TB") to structured format
+
+### Badge Classification System
+
+Spanish environmental badges:
+- **0 (Cero emisiones)**: Zero emissions - electric and hydrogen vehicles
+- **ECO**: Efficient hybrid and alternative fuel vehicles
+- **C**: Vehicles meeting Euro 4/5/6 standards
+- **B**: Older vehicles meeting Euro 3/4 standards
+- **n** (SIN DISTINTIVO): No badge - high-emission vehicles
+
+### API Endpoint
+
+**GET /api?carPlate={plate}**
+
+Validates and looks up environmental badge for Spanish license plate.
+
+**Request:**
+```bash
+curl "http://localhost:6904/api?carPlate=1234ABC"
+```
+
+**Response:**
+```json
+{
+  "carPlate": "1234ABC",
+  "badge": {
+    "vehicleType": "turism",
+    "badge": "B",
+    "STOL": ""
+  }
+}
+```
+
+**Validation Rules:**
+- Must be exactly 7 characters
+- Format: 4 digits followed by 3 consonants
+- Consonants: B,C,D,F,G,H,J,K,L,M,N,P,Q,R,S,T,V,W,X,Y,Z
+- Automatically uppercased and sanitized
+
+**Error Response (Invalid Plate):**
+```json
+{
+  "carPlate": null,
+  "badge": null
+}
+```
+
+### Configuration
+
+**File:** `conf/config.py`
+
+```python
+from pydantic_settings import BaseSettings
+
+class Settings(BaseSettings):
+    API_TITLE: str = "Environmental Badge API"
+    API_VERSION: str = "1.0.0"
+    API_PREFIX: str = "/api"
+    API_TAGS: List[str] = ["EB API"]
+    
+    class Config:
+        env_file = ".env"
+
+settings = Settings()
+```
+
+### Service Layer
+
+**File:** `service/service.py`
+
+```python
+class EnvironmentalBadgeService:
+    def validate_plate(self, carPlate: str) -> str | None:
+        """
+        Validate Spanish plate format: NNNNLLL
+        
+        Args:
+            carPlate: License plate to validate
+            
+        Returns:
+            Formatted plate or None if invalid
+        """
+        pattern = r"^\d{4}[B-DF-HJ-NP-TV-Z]{3}$"
+        formatted = carPlate.upper().strip()
+        
+        if re.match(pattern, formatted):
+            return formatted
+        return None
+    
+    def get_badge_by_plate(self, carPlate: str) -> dict:
+        """
+        Get environmental badge for license plate
+        
+        Returns:
+            {carPlate, badge: {vehicleType, badge, STOL}}
+        """
+        validated = self.validate_plate(carPlate)
+        if not validated:
+            return {"carPlate": None, "badge": None}
+        
+        badge_code = get_badge_from_plate(validated, file_path)
+        if not badge_code:
+            return {"carPlate": validated, "badge": None}
+        
+        badge_data = self.convert_badge_code_to_name(badge_code)
+        return {"carPlate": validated, "badge": badge_data}
+    
+    def convert_badge_code_to_name(self, badge_code: str) -> dict:
+        """
+        Parse badge code: "16TB" → {vehicleType: "turism", badge: "B"}
+        
+        Formats:
+        - 16TB: vehicle type 16 (turism), badge B
+        - SIN DISTINTIVO: no badge (returns 'n')
+        """
+        if badge_code == "SIN DISTINTIVO":
+            return {"vehicleType": None, "badge": "n", "STOL": ""}
+        
+        # Parse "16TB" format
+        vehicle_type = badge_code[:2]  # "16"
+        badge = badge_code[2:]         # "TB" → "B"
+        
+        type_map = {
+            "16": "turism",
+            "17": "commercial",
+            # ... more mappings
+        }
+        
+        return {
+            "vehicleType": type_map.get(vehicle_type, "unknown"),
+            "badge": badge[-1] if badge else "n",
+            "STOL": ""
+        }
+```
+
+### Dataset Management
+
+#### Auto-Extraction on Startup
+
+**File:** `main.py`
+
+```python
+import py7zr
+import os
+from pathlib import Path
+
+# Auto-extract dataset if not present
+DATA_DIR = Path(__file__).parent / "data"
+ARCHIVE_PATH = DATA_DIR / "environmentalBadge.7z"
+EXTRACTED_PATH = DATA_DIR / "environmentalBadge.txt"
+
+if not EXTRACTED_PATH.exists() and ARCHIVE_PATH.exists():
+    print("Extracting environmental badge dataset...")
+    with py7zr.SevenZipFile(ARCHIVE_PATH, mode='r') as archive:
+        archive.extractall(path=DATA_DIR)
+    print("Dataset extracted successfully!")
+
+# FastAPI app initialization
+app = FastAPI(title=settings.API_TITLE, version=settings.API_VERSION)
+```
+
+#### Dataset Optimization
+
+**File:** `util/optimize_dataset.py`
+
+Cleans and optimizes the raw dataset:
+
+```python
+import pandas as pd
+
+def optimize_dataset(input_file, output_file):
+    """
+    Optimize environmental badge dataset:
+    1. Read pipe-delimited file
+    2. Rename columns to PLATE, BADGE
+    3. Remove duplicates
+    4. Sort by plate
+    5. Remove "16" prefix from badges
+    6. Replace "SIN DISTINTIVO" → "n"
+    7. Add STOL column
+    8. Save as CSV with headers
+    """
+    df = pd.read_csv(input_file, sep='|', header=None)
+    df.columns = ['PLATE', 'BADGE']  # Rename immediately
+    
+    df = df.drop_duplicates(subset=['PLATE'])
+    df = df.sort_values('PLATE')
+    df['BADGE'] = df['BADGE'].str.replace('^16', '', regex=True)
+    df['BADGE'] = df['BADGE'].replace('SIN DISTINTIVO', 'n')
+    df['STOL'] = ''
+    
+    df.to_csv(output_file, sep='|', header=True, index=False)
+```
+
+#### Missing Plate Generation
+
+**File:** `util/generate_complete_dataset.py`
+
+Generates missing Spanish license plates:
+
+```python
+import itertools
+
+CONSONANTS = "BCDFGHJKLMNPQRSTVWXYZ"
+
+def generate_missing_plates(existing_df, start="0000BBB", end="0000PPP"):
+    """
+    Generate all possible Spanish plates in range:
+    - Format: NNNNLLL (4 digits, 3 consonants)
+    - Start: 0000BBB
+    - End: 0000PPP
+    - Missing plates assigned badge='n'
+    """
+    all_plates = []
+    
+    for c1, c2, c3 in itertools.product(CONSONANTS, repeat=3):
+        plate = f"0000{c1}{c2}{c3}"
+        if plate > end:
+            break
+        if plate >= start:
+            all_plates.append(plate)
+    
+    existing_plates = set(existing_df['PLATE'])
+    missing_plates = [p for p in all_plates if p not in existing_plates]
+    
+    # Add missing with badge='n'
+    missing_df = pd.DataFrame({
+        'PLATE': missing_plates,
+        'BADGE': 'n',
+        'STOL': ''
+    })
+    
+    return pd.concat([existing_df, missing_df]).sort_values('PLATE')
+```
+
+### CSV Lookup Utility
+
+**File:** `util/get_badge_from_plates.py`
+
+```python
+import pandas as pd
+
+def get_badge_from_plate(carPlate: str, file_path: str) -> str | None:
+    """
+    Lookup badge from CSV file
+    
+    Args:
+        carPlate: Formatted Spanish license plate
+        file_path: Path to environmentalBadge.txt
+        
+    Returns:
+        Badge code string or None if not found
+    """
+    df = pd.read_csv(file_path, sep='|')
+    formatted_plate = carPlate.upper().strip()
+    
+    result = df[df['PLATE'] == formatted_plate]
+    
+    if not result.empty:
+        return result.iloc[0]['BADGE']
+    return None
+```
+
+### Docker Configuration
+
+**File:** `ebAPI/Dockerfile`
+
+```dockerfile
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Copy requirements and install
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install uvicorn with standard extras
+RUN pip install "uvicorn[standard]"
+
+# Copy application
+COPY . .
+
+EXPOSE 8000
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+```
+
+**Dependencies (requirements.txt):**
+```
+fastapi
+pydantic-settings
+pandas
+py7zr
+termcolor
+```
+
+### Testing
+
+Run ebAPI locally:
+```bash
+cd ebAPI
+pip install -r requirements.txt
+uvicorn main:app --reload --port 6904
+```
+
+Test endpoint:
+```bash
+# Valid Spanish plate
+curl "http://localhost:6904/api?carPlate=1234ABC"
+
+# Invalid format
+curl "http://localhost:6904/api?carPlate=INVALID"
+
+# View API documentation
+open http://localhost:6904/docs
+```
+
+## AI Service - ANPR Processing
+
+### Core Components
 
 ### 1. Application Entry Point
 
@@ -490,8 +870,58 @@ FastAPI automatically generates:
 - **ReDoc**: http://localhost:6902/redoc
 - **OpenAPI JSON**: http://localhost:6902/openapi.json
 
+## Service Comparison
+
+| Feature | AI Service | ebAPI Service |
+|---------|-----------|---------------|
+| **Port** | 6902 | 6904 |
+| **Purpose** | ANPR / Plate Recognition | Environmental Badge Lookup |
+| **Technology** | Python 3.11+ | Python 3.11-slim |
+| **Key Libraries** | OpenCV, pytesseract | pandas, py7zr |
+| **Input** | Image file (multipart/form-data) | License plate string (query param) |
+| **Output** | {plate_number, confidence} | {carPlate, badge: {...}} |
+| **Processing** | Computer vision, OCR | CSV lookup, validation |
+| **Dataset** | AI models (in development) | 4M+ vehicle records (592MB) |
+| **Docker Image Size** | ~800MB (with OpenCV) | ~200MB (slim) |
+| **Tests** | 17 passing (pytest, 100%) | Integration tests |
+| **Startup Time** | ~5 seconds | ~2 seconds (+ extraction if needed) |
+
+## Integration Example
+
+Typical workflow combining both services:
+
+```python
+# 1. User uploads vehicle image
+image_file = request.files['image']
+
+# 2. AI Service recognizes plate
+ai_response = requests.post(
+    "http://ai:6902/api/recognize",
+    files={"image": image_file}
+)
+plate_number = ai_response.json()["plate_number"]  # "1234ABC"
+
+# 3. ebAPI Service looks up badge
+badge_response = requests.get(
+    f"http://ebapi:6904/api?carPlate={plate_number}"
+)
+badge_info = badge_response.json()["badge"]  # {vehicleType, badge}
+
+# 4. Return combined result
+return {
+    "plate": plate_number,
+    "confidence": ai_response.json()["confidence"],
+    "environmentalBadge": badge_info["badge"],  # "B"
+    "vehicleType": badge_info["vehicleType"]     # "turism"
+}
+```
+
+This can be orchestrated through Node-RED flows for complex workflows.
+
 ## Next Steps
 
-- Explore [API Endpoints](/api/endpoints/)
-- Learn about [Testing Strategy](/testing/backend/)
-- Review [Frontend Integration](/frontend/components/)
+- Explore [AI API Endpoints](/api/endpoints/) for ANPR recognition
+- Review [ebAPI Endpoints](/api/ebapi-endpoints/) for badge lookup
+- Learn about [Testing Strategy](/testing/backend/) for both services
+- Set up [Dataset Management](/guides/dataset-management/) for environmental badge data
+- Configure [Docker Setup](/architecture/docker/) for multi-service deployment

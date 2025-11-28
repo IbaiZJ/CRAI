@@ -3,209 +3,419 @@ title: Architecture Overview
 description: High-level overview of CRAI's architecture and design principles
 ---
 
-CRAI follows a modern microservices architecture with clear separation between frontend and backend components.
+CRAI follows a modern microservices architecture with 5 independent services orchestrated via Docker Compose, providing scalability, maintainability, and clear separation of concerns.
 
 ## System Architecture
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                      User Browser                        │
-└───────────────────────┬─────────────────────────────────┘
-                        │
-                        │ HTTPS
-                        │
-┌───────────────────────▼─────────────────────────────────┐
-│                  Frontend (React + Vite)                 │
-│  ┌─────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │  Components │  │    Pages     │  │     State    │  │
-│  │    (UI)     │  │  (Routes)    │  │  Management  │  │
-│  └─────────────┘  └──────────────┘  └──────────────┘  │
-└───────────────────────┬─────────────────────────────────┘
-                        │
-                        │ REST API (JSON)
-                        │
-┌───────────────────────▼─────────────────────────────────┐
-│                Backend (FastAPI + Python)                │
-│  ┌─────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │   Routers   │  │   Services   │  │    Models    │  │
-│  │ (Endpoints) │  │ (Business    │  │   (Data)     │  │
-│  │             │  │   Logic)     │  │              │  │
-│  └─────────────┘  └──────────────┘  └──────────────┘  │
-└───────────────────────┬─────────────────────────────────┘
-                        │
-                        │
-┌───────────────────────▼─────────────────────────────────┐
-│                  AI/ML Processing                        │
-│  ┌─────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │   OpenCV    │  │  TensorFlow  │  │   Custom     │  │
-│  │  (Vision)   │  │  (Detection) │  │   Models     │  │
-│  └─────────────┘  └──────────────┘  └──────────────┘  │
-└─────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│                         User Browser                             │
+└────────────────────────────┬─────────────────────────────────────┘
+                             │ HTTPS
+                             ▼
+┌──────────────────────────────────────────────────────────────────┐
+│          Frontend Service (React + Vite) - Port 6901             │
+│  ┌──────────────┐  ┌───────────┐  ┌──────────┐  ┌───────────┐  │
+│  │  Components  │  │   Pages   │  │  State   │  │  Firebase │  │
+│  │     (UI)     │  │ (Routes)  │  │  Mgmt    │  │   Auth    │  │
+│  └──────────────┘  └───────────┘  └──────────┘  └───────────┘  │
+└────────────────┬──────────────────────────┬──────────────────────┘
+                 │                          │
+                 │ REST API                 │ REST API
+                 ▼                          ▼
+┌─────────────────────────────┐  ┌──────────────────────────────┐
+│   AI Service (Port 6902)    │  │  ebAPI Service (Port 6904)   │
+│   FastAPI + Python 3.11+    │  │  FastAPI + Python 3.11-slim  │
+│                             │  │                              │
+│  ┌─────────┐  ┌──────────┐ │  │  ┌─────────┐  ┌──────────┐  │
+│  │ Routers │  │ Services │ │  │  │ Routers │  │ Services │  │
+│  └─────────┘  └──────────┘ │  │  └─────────┘  └──────────┘  │
+│  ┌─────────┐  ┌──────────┐ │  │  ┌─────────┐  ┌──────────┐  │
+│  │ OpenCV  │  │   ANPR   │ │  │  │ Dataset │  │  Badge   │  │
+│  │ Vision  │  │  Model   │ │  │  │  Utils  │  │  Lookup  │  │
+│  └─────────┘  └──────────┘ │  │  └─────────┘  └──────────┘  │
+│                             │  │                              │
+│  • License plate detection  │  │  • Spanish plate validation  │
+│  • Character recognition    │  │  • Environmental badge       │
+│  • Image preprocessing      │  │  • 4M+ plate database        │
+└─────────────┬───────────────┘  └──────────────┬───────────────┘
+              │                                  │
+              └──────────────┬───────────────────┘
+                             │
+                             ▼
+              ┌──────────────────────────────────┐
+              │  Node-RED Service (Port 6903)    │
+              │  nodered/node-red:latest         │
+              │                                  │
+              │  ┌────────────┐  ┌────────────┐ │
+              │  │  Workflow  │  │   Flow     │ │
+              │  │ Automation │  │ Persistence│ │
+              │  └────────────┘  └────────────┘ │
+              │                                  │
+              │  • Data orchestration            │
+              │  • API integration               │
+              │  • Persistent flows (bind mount) │
+              └──────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────┐
+│      Documentation Service (Astro Starlight) - Port 6910         │
+│  • API documentation  • Architecture guides  • Setup tutorials   │
+└──────────────────────────────────────────────────────────────────┘
 ```
+
+## Services Overview
+
+### 1. Frontend Service (Port 6901)
+**Technology:** React 19 + TypeScript 5.9 + Vite 7 + TailwindCSS 4
+
+The user-facing web application providing:
+- Modern, responsive UI with TailwindCSS
+- Firebase authentication integration
+- Client-side routing with React Router 7
+- Real-time communication with backend APIs
+- Comprehensive Vitest testing suite (6 passing tests)
+
+**Key Features:**
+- Login/Signup with Firebase Auth
+- License plate upload and recognition
+- Environmental badge lookup interface
+- Real-time results display
+
+### 2. AI Service (Port 6902)
+**Technology:** FastAPI + Python 3.11+ + OpenCV + pytesseract
+
+The ANPR (Automatic Number Plate Recognition) engine:
+- Image preprocessing and enhancement
+- License plate detection using OpenCV
+- Character recognition with OCR
+- RESTful API with automatic Swagger documentation
+- 100% test coverage with pytest (17 passing tests)
+
+**Key Endpoints:**
+- `POST /api/recognize` - Analyze image and recognize plate
+- `GET /api/health` - Health check endpoint
+- `GET /docs` - Interactive API documentation
+
+### 3. ebAPI Service (Port 6904)
+**Technology:** FastAPI + Python 3.11-slim + pandas + py7zr
+
+The Environmental Badge lookup microservice:
+- Spanish license plate format validation (NNNNLLL)
+- Badge classification lookup (C, ECO, B, 0, n)
+- Dataset auto-extraction from 40MB .7z archive
+- 4M+ Spanish vehicle records
+
+**Key Features:**
+- Validates Spanish plate format (4 digits + 3 consonants)
+- Returns badge type and vehicle classification
+- Automatic dataset management and optimization
+- Badge code parsing (e.g., 16TB → {vehicleType: "turism", badge: "B"})
+
+**Key Endpoints:**
+- `GET /api?carPlate=1234ABC` - Get environmental badge for plate
+- Dataset utilities: `optimize_dataset.py`, `generate_complete_dataset.py`
+
+### 4. Node-RED Service (Port 6903)
+**Technology:** Node-RED (Node.js visual workflow engine)
+
+Workflow automation and orchestration:
+- Visual flow-based programming
+- API integration and data transformation
+- Real-time event processing
+- Persistent flows via bind mount to `backend/node_red_data/`
+
+**Key Features:**
+- Connect AI and ebAPI services
+- Automated data pipelines
+- Custom workflow logic
+- Real-time notifications
+
+### 5. Documentation Service (Port 6910)
+**Technology:** Astro 5 + Starlight 0.36
+
+Comprehensive project documentation:
+- Architecture guides
+- API reference documentation
+- Setup and deployment guides
+- Testing strategies
+- Troubleshooting resources
 
 ## Design Principles
 
-### 1. **Separation of Concerns**
-- Frontend handles presentation and user interaction
-- Backend manages business logic and data processing
-- AI layer focuses on image processing and recognition
+### 1. **Microservices Architecture**
+- Each service has a single responsibility and independent lifecycle
+- Services communicate via REST APIs over HTTP
+- Independent scaling and deployment per service
+- Technology diversity (Python, Node.js, JavaScript/TypeScript)
 
-### 2. **RESTful API Design**
+### 2. **Separation of Concerns**
+- **Frontend**: User interface and experience
+- **AI Service**: Computer vision and ANPR processing
+- **ebAPI Service**: Data lookup and validation
+- **Node-RED**: Workflow orchestration and automation
+- **Documentation**: Project knowledge base
+
+### 3. **RESTful API Design**
 - Stateless communication
-- Standard HTTP methods (GET, POST, PUT, DELETE)
+- Standard HTTP methods (GET, POST)
 - JSON data format
 - Clear resource-based URLs
+- Automatic API documentation (Swagger/OpenAPI)
 
-### 3. **Scalability**
-- Stateless backend allows horizontal scaling
-- Docker containers for easy deployment
-- Async processing for heavy AI operations
+### 4. **Scalability**
+- Stateless services enable horizontal scaling
+- Docker containerization for easy deployment
+- Async processing for I/O-bound operations
+- Independent service scaling based on load
 
-### 4. **Testability**
-- 100% test coverage for backend
-- Unit and integration tests
-- Automated CI/CD pipeline
+### 5. **Testability**
+- Comprehensive test suites per service
+- AI Service: 17 tests, 100% coverage (pytest)
+- Frontend: 6 tests with Vitest and React Testing Library
+- Automated CI/CD pipelines with GitHub Actions
 
-### 5. **Security**
-- CORS configuration
-- Input validation
-- Rate limiting (planned)
-- API authentication (planned)
+### 6. **Security**
+- Firebase authentication for frontend
+- CORS configuration per service
+- Input validation with Pydantic
+- Environment variable configuration
+- Spanish plate format validation (regex-based)
+
+### 7. **Data Management**
+- Auto-extraction of compressed datasets (py7zr)
+- Dataset optimization and cleaning utilities
+- Persistent storage for Node-RED flows (bind mount)
+- Efficient CSV-based badge lookup with pandas
 
 ## Technology Stack
 
-### Frontend Layer
+### Frontend Service
 
-#### React 18
+#### React 19.2.0
 - Modern hooks-based architecture
 - Component-based UI
-- Virtual DOM for performance
+- Latest React features and optimizations
 
-#### TypeScript
-- Type safety
-- Better IDE support
-- Fewer runtime errors
+#### TypeScript 5.9.3
+- Type safety and IntelliSense
+- Better IDE support and refactoring
+- Compile-time error detection
 
-#### Vite
-- Fast build times
-- Hot module replacement
+#### Vite 7.2.2
+- Lightning-fast HMR (Hot Module Replacement)
 - Optimized production builds
+- Native ESM support
 
-#### TailwindCSS
-- Utility-first CSS
+#### TailwindCSS 4.1.17
+- Utility-first CSS framework
 - Consistent design system
-- Small bundle size
+- Small bundle size with tree-shaking
 
-### Backend Layer
+#### React Router 7.9.6
+- Client-side routing
+- Nested routes and layouts
+- Protected routes with authentication
 
-#### FastAPI
-- Automatic API documentation
+#### Firebase
+- User authentication
+- Session management
+- Google OAuth integration
+
+### Backend Services
+
+#### FastAPI (Both AI & ebAPI)
+- Automatic OpenAPI/Swagger documentation
 - Type validation with Pydantic
-- Async support
-- High performance
+- Async/await support
+- High performance ASGI framework
 
-#### Python 3.11+
+#### Python 3.11+ (AI Service)
 - Latest language features
 - Performance improvements
-- Strong typing support
+- OpenCV integration
 
-#### Pydantic
-- Data validation
-- Settings management
-- Type conversion
+#### Python 3.11-slim (ebAPI Service)
+- Lightweight Docker image
+- Reduced attack surface
+- Fast startup times
 
-#### pytest
-- Comprehensive testing
-- Coverage reporting
-- Easy to write tests
+#### Pydantic & pydantic-settings
+- Data validation and parsing
+- Settings management from environment
+- Type conversion and coercion
 
-### AI/ML Layer (In Development)
+#### pandas
+- Efficient CSV processing (ebAPI)
+- DataFrame operations
+- Large dataset handling
+
+#### py7zr
+- Python-native .7z extraction
+- Cross-platform compatibility
+- No system dependencies
+
+### AI/Computer Vision
 
 #### OpenCV
-- Image preprocessing
-- Contour detection
+- Image preprocessing and enhancement
+- Contour detection for plate location
 - Feature extraction
 
-#### TensorFlow/PyTorch
-- Deep learning models
-- Plate detection
-- Character recognition
+#### pytesseract
+- OCR (Optical Character Recognition)
+- License plate text extraction
+- Configurable recognition parameters
+
+#### scikit-image & imutils
+- Advanced image processing
+- Utility functions for CV operations
+
+### Automation Layer
+
+#### Node-RED (nodered/node-red:latest)
+- Visual flow-based programming
+- HTTP API integration
+- Data transformation nodes
+- Event-driven processing
+
+### Testing Frameworks
+
+#### pytest (Backend)
+- Unit and integration tests
+- Coverage reporting (pytest-cov)
+- 17 passing tests, 100% coverage
+
+#### Vitest 4.0.14 (Frontend)
+- Fast unit testing with Vite
+- Hot module replacement for tests
+- 6 passing tests
+
+#### @testing-library/react 16.3.0
+- User-centric testing approach
+- DOM interaction testing
+- Best practices for React components
+
+#### @testing-library/jest-dom
+- Custom matchers for DOM assertions
+- Improved test readability
 
 ## Data Flow
 
-### 1. Plate Recognition Flow
+### 1. ANPR Recognition Flow
 
 ```
 ┌─────────┐
-│  User   │
+│  User   │ 1. Upload Image
 └────┬────┘
      │
-     │ 1. Upload Image
      ▼
-┌──────────┐
-│ Frontend │
-└────┬─────┘
+┌──────────────┐
+│   Frontend   │ 2. POST http://ai:6902/api/recognize
+│  (Port 6901) │
+└────┬─────────┘
      │
-     │ 2. POST /api/recognize
      ▼
-┌──────────┐
-│ Backend  │──────┐
-│  API     │      │ 3. Validate Input
-└────┬─────┘      │
-     │            │
-     │ 4. Process Image
-     ▼            │
-┌──────────┐      │
-│   AI     │◄─────┘
-│ Service  │
-└────┬─────┘
-     │
-     │ 5. Return Result
+┌──────────────┐
+│ AI Service   │ 3. Validate image type
+│  (Port 6902) │ 4. Preprocess with OpenCV
+└────┬─────────┘ 5. Detect plate region
+     │          6. OCR with pytesseract
+     │          7. Return {plate_number, confidence}
      ▼
-┌──────────┐
-│ Backend  │
-│  API     │
-└────┬─────┘
-     │
-     │ 6. JSON Response
-     ▼
-┌──────────┐
-│ Frontend │
-└────┬─────┘
-     │
-     │ 7. Display Result
-     ▼
-┌─────────┐
-│  User   │
-└─────────┘
+┌──────────────┐
+│   Frontend   │ 8. Display results to user
+│  (Port 6901) │
+└──────────────┘
 ```
 
-### 2. Request/Response Cycle
+### 2. Environmental Badge Lookup Flow
 
-```python
-# Frontend Request
-fetch('/api/recognize', {
-  method: 'POST',
-  body: formData
-})
+```
+┌─────────┐
+│  User   │ 1. Enter plate number
+└────┬────┘
+     │
+     ▼
+┌──────────────┐
+│   Frontend   │ 2. GET http://ebapi:6904/api?carPlate=1234ABC
+│  (Port 6901) │
+└────┬─────────┘
+     │
+     ▼
+┌──────────────┐
+│ ebAPI Service│ 3. Validate Spanish plate format (NNNNLLL)
+│  (Port 6904) │ 4. Format plate (uppercase, sanitize)
+└────┬─────────┘ 5. Lookup in CSV dataset (pandas)
+     │          6. Parse badge code (e.g., 16TB → turism + B)
+     │          7. Return {carPlate, badge: {vehicleType, badge}}
+     ▼
+┌──────────────┐
+│   Frontend   │ 8. Display badge info (C/ECO/B/0/n)
+│  (Port 6901) │
+└──────────────┘
+```
 
-# Backend Processing
-@router.post("/recognize")
-async def recognize_plate(image: UploadFile):
-    # 1. Validate image
-    # 2. Preprocess image
-    # 3. Detect plate
-    # 4. Recognize characters
-    # 5. Return result
-    return {
-        "plate_number": "ABC-1234",
-        "confidence": 0.95
-    }
+### 3. Node-RED Orchestration Flow
 
-# Frontend Response
-response.json().then(data => {
-  console.log(data.plate_number);
-});
+```
+┌──────────────┐
+│  Node-RED    │ 1. Trigger workflow
+│  (Port 6903) │
+└──┬───────┬───┘
+   │       │
+   │       ▼
+   │   ┌──────────────┐
+   │   │ AI Service   │ 2. Request ANPR
+   │   │  (Port 6902) │
+   │   └──────┬───────┘
+   │          │ 3. plate_number
+   │          │
+   ▼          ▼
+┌──────────────┐
+│ ebAPI Service│ 4. Lookup badge for recognized plate
+│  (Port 6904) │
+└──────┬───────┘
+       │ 5. badge data
+       ▼
+┌──────────────┐
+│  Node-RED    │ 6. Combine data, transform
+│  (Port 6903) │ 7. Store or forward results
+└──────────────┘
+```
+
+### 4. Dataset Management Flow
+
+```
+┌──────────────────┐
+│  ebAPI Startup   │ 1. Check if environmentalBadge.txt exists
+└────┬─────────────┘
+     │ NO
+     ▼
+┌──────────────────┐
+│  py7zr Extract   │ 2. Extract environmentalBadge.7z (40MB → 592MB)
+└────┬─────────────┘
+     │
+     ▼
+┌──────────────────┐
+│ ebAPI Ready      │ 3. Load dataset into memory (pandas)
+│                  │ 4. Serve badge lookup requests
+└──────────────────┘
+
+Optional: Dataset Optimization
+┌─────────────────────┐
+│ optimize_dataset.py │ • Remove duplicates
+└─────────────────────┘ • Sort by plate
+                        • Format badge codes
+                        • Replace "SIN DISTINTIVO" → "n"
+                        • Add STOL column
+                        • Save as CSV with headers
+
+Optional: Dataset Generation
+┌────────────────────────┐
+│ generate_complete_     │ • Generate missing Spanish plates
+│ dataset.py             │ • 0000BBB to 0000PPP range
+└────────────────────────┘ • Assign badge='n' to missing
+                           • Merge with existing dataset
 ```
 
 ## Component Architecture
@@ -247,20 +457,63 @@ frontend/
 
 ## Communication Patterns
 
-### 1. **REST API**
-- Primary communication method
-- JSON format
+### 1. **HTTP REST APIs**
+- Primary inter-service communication
+- JSON request/response format
 - Stateless requests
+- GET for queries, POST for data submission
 
-### 2. **WebSocket** (Planned)
-- Real-time updates
-- Live camera feed
-- Streaming results
+**Frontend → AI Service:**
+```
+POST http://localhost:6902/api/recognize
+Content-Type: multipart/form-data
+```
 
-### 3. **File Upload**
-- Multipart form data
-- Image files
-- Validation
+**Frontend → ebAPI Service:**
+```
+GET http://localhost:6904/api?carPlate=1234ABC
+```
+
+### 2. **File Upload (Multipart Form Data)**
+- Image upload for ANPR processing
+- FastAPI's `UploadFile` handling
+- Content-type validation
+- Size and format restrictions
+
+```typescript
+const formData = new FormData();
+formData.append('image', file);
+fetch('http://localhost:6902/api/recognize', {
+  method: 'POST',
+  body: formData
+});
+```
+
+### 3. **Query Parameters**
+- ebAPI uses GET with query params
+- Simple, cacheable requests
+- URL-encoded parameters
+
+```bash
+curl "http://localhost:6904/api?carPlate=1234ABC"
+```
+
+### 4. **Node-RED HTTP Requests**
+- HTTP Request nodes for API calls
+- Function nodes for data transformation
+- Inject nodes for triggers
+- Debug nodes for monitoring
+
+### 5. **Docker Network Communication**
+- All services on `app-network` bridge network
+- Service discovery by container name
+- Internal port communication
+- Isolated from host network by default
+
+### 6. **WebSocket** (Planned Future Feature)
+- Real-time plate recognition updates
+- Live camera feed streaming
+- Server-sent events for notifications
 
 ## State Management
 
@@ -345,19 +598,52 @@ try {
 
 ## Deployment Architecture
 
-### Development
+### Development Environment
 ```
-docker-compose up
-├── backend:6902
-└── frontend:5173
+docker-compose up -d
+
+Docker Compose Orchestration (app-network)
+├── frontend:6901     (React + Vite dev server)
+├── ai:6902           (FastAPI with --reload)
+├── node-red:6903     (Node-RED with persistent flows)
+├── ebapi:6904        (FastAPI with auto dataset extraction)
+└── docs:6910         (Astro dev server)
+
+Volumes:
+├── ./frontend:/app                    (bind mount for HMR)
+├── ./ai:/app                          (bind mount for hot reload)
+├── ./ebAPI:/app                       (bind mount for development)
+├── ./backend/node_red_data:/data      (bind mount for flow persistence)
+└── /app/node_modules                  (anonymous volumes)
 ```
 
-### Production
+### Port Mapping
+| Service | Internal Port | External Port | Protocol |
+|---------|---------------|---------------|----------|
+| Frontend | 5173 | 6901 | HTTP |
+| AI | 8000 | 6902 | HTTP |
+| Node-RED | 1880 | 6903 | HTTP |
+| ebAPI | 8000 | 6904 | HTTP |
+| Documentation | 4321 | 6910 | HTTP |
+
+### Production (Planned)
 ```
-Load Balancer
-├── Frontend Instances (Nginx)
-└── Backend Instances (Uvicorn)
-    └── AI Processing Workers
+Load Balancer (Nginx/Traefik)
+├── Frontend Instances (Nginx static hosting)
+│   ├── Optimized React build
+│   ├── Gzip compression
+│   └── Asset caching
+├── AI Service Instances (Uvicorn workers)
+│   ├── Multiple workers per instance
+│   ├── Horizontal scaling
+│   └── GPU acceleration (optional)
+├── ebAPI Service Instances (Uvicorn workers)
+│   ├── In-memory dataset caching
+│   ├── Fast CSV lookups
+│   └── Stateless for easy scaling
+└── Node-RED Instance (PM2/Docker)
+    ├── Persistent flow storage
+    └── Workflow orchestration
 ```
 
 ## Monitoring & Logging
@@ -373,10 +659,40 @@ Load Balancer
 - Error rate
 - Resource usage
 
+## Service Access URLs
+
+### Development
+- Frontend: http://localhost:6901
+- AI Service API: http://localhost:6902
+- AI Service Docs: http://localhost:6902/docs
+- Node-RED Dashboard: http://localhost:6903
+- ebAPI Service: http://localhost:6904
+- ebAPI Docs: http://localhost:6904/docs
+- Documentation: http://localhost:6910
+
+### Docker Commands
+```bash
+# Start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+
+# Rebuild after changes
+docker-compose build --no-cache
+
+# Check service status
+docker-compose ps
+```
+
 ## Next Steps
 
 Dive deeper into specific components:
-- [Backend Architecture](/architecture/backend/)
-- [Frontend Architecture](/architecture/frontend/)
-- [Docker Setup](/architecture/docker/)
-- [API Reference](/api/overview/)
+- [Backend Architecture](/architecture/backend/) - AI and ebAPI services in detail
+- [Frontend Architecture](/architecture/frontend/) - React application structure
+- [Docker Setup](/architecture/docker/) - Complete Docker configuration
+- [API Reference](/api/overview/) - All API endpoints and schemas
+- [Dataset Management](/guides/dataset-management/) - Environmental badge data handling
