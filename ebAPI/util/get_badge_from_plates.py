@@ -28,7 +28,7 @@ def get_badge_from_plate(carPlate: str, file_path: str) -> str | None:
         print(f"Error: {str(e)}")
         return None
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     # Ctrl + C
     def def_handler(sig, frame):
         sys.exit(1)
