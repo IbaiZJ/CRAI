@@ -1,13 +1,28 @@
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
+// Mock the entire Firebase config module to prevent initialization
+vi.mock('../database/config/firebase', () => ({
+  app: {},
+  auth: {
+    currentUser: null,
+    onAuthStateChanged: vi.fn(),
+  },
+  db: {},
+  storage: {},
+  default: {},
+}));
+
 // Mock Firebase modules to prevent initialization errors in tests
 vi.mock('firebase/app', () => ({
   initializeApp: vi.fn(() => ({})),
 }));
 
 vi.mock('firebase/auth', () => ({
-  getAuth: vi.fn(() => ({})),
+  getAuth: vi.fn(() => ({
+    currentUser: null,
+    onAuthStateChanged: vi.fn(),
+  })),
   signInWithEmailAndPassword: vi.fn(),
   createUserWithEmailAndPassword: vi.fn(),
   signOut: vi.fn(),
