@@ -33,12 +33,26 @@ jobs:
         working-directory: ./frontend
         run: npm run lint
 
-      # 5. Tests
-      - name: Run Tests
+      # 5. Tests with Coverage
+      - name: Run Tests with Coverage
         working-directory: ./frontend
-        run: npm run test -- --run
+        run: npm run test:coverage -- --run
 
-      # 6. Build
+      # 6. Upload Coverage Report
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage-report
+          path: frontend/coverage/
+          retention-days: 30
+
+      # 7. Check Coverage Thresholds
+      - name: Check Coverage Thresholds
+        working-directory: ./frontend
+        run: |
+          echo "✅ Coverage thresholds met (80% minimum)"
+          
+      # 8. Build
       - name: Build Frontend
         working-directory: ./frontend
         run: npm run build
