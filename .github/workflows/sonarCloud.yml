@@ -112,17 +112,8 @@ jobs:
 
       # SonarCloud Scan
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarqube-scan-action@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
-            -Dsonar.sources=ebAPI,frontend/src
-            -Dsonar.tests=ebAPI/tests,frontend/src/test
-            -Dsonar.python.coverage.reportPaths=ebAPI/coverage.xml
-            -Dsonar.javascript.lcov.reportPaths=frontend/coverage/lcov.info
-            -Dsonar.python.version=3.13
-            -Dsonar.sourceEncoding=UTF-8
+          SONAR_HOST_URL: https://sonarcloud.io
