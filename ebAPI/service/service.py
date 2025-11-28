@@ -35,7 +35,7 @@ class EnvironmentalBadgeService:
         
         formatted_plate = plate.upper().replace(" ", "").replace("-", "")
         
-        if re.match(r"^\d{4}[BCDGHJKLMNPQRSTVWXYZ]{3}$", formatted_plate):
+        if re.match(r"^\d{4}[BCDFGHJKLMNPQRSTVWXYZ]{3}$", formatted_plate):
             return formatted_plate
         
         return None
