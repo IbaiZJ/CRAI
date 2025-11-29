@@ -2,9 +2,7 @@ import {
   BadgeCheck,
   Bell,
   ChevronsUpDown,
-  CreditCard,
   LogOut,
-  Sparkles,
 } from "lucide-react"
 
 import {
@@ -27,30 +25,43 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { AccountDialog } from "@/components/dialogs/AccountDialog";
 import { signOut } from "firebase/auth";
 import { auth } from "../../database/config/firebase";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useState } from "react";
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
-}) {
+export function NavUser() {
   const { isMobile } = useSidebar()
   const navigate = useNavigate();
+  const { user: authUser } = useAuth();
+  const [isAccountDialogOpen, setIsAccountDialogOpen] = useState(false);
+  
   const handleLogout = async () => {
       try {
         await signOut(auth);
         sessionStorage.removeItem("email");
         navigate("/login");
       } catch (error) {
-        console.error("Error al cerrar sesión:", error);
+        console.error("Error during logout:", error);
       }
     };
+
+  // User data with default values
+  const user = {
+    name: authUser?.displayName || authUser?.email?.split('@')[0] || "User",
+    email: authUser?.email || "user@example.com",
+    avatar: authUser?.photoURL || "",
+  };
+
+  // Initals for AvatarFallback
+  const initials = user.name
+    .split(' ')
+    .map(n => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2) || "US";
 
   return (
     <SidebarMenu>
@@ -63,10 +74,10 @@ export function NavUser({
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate font-medium capitalize  ">{user.name}</span>
                 <span className="truncate text-xs">{user.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
@@ -82,31 +93,31 @@ export function NavUser({
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
+                  <span className="truncate font-medium capitalize">{user.name}</span>
                   <span className="truncate text-xs">{user.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+            {/* <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <Sparkles />
                 Upgrade to Pro
               </DropdownMenuItem>
-            </DropdownMenuGroup>
+            </DropdownMenuGroup> */}
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setIsAccountDialogOpen(true)}>
                 <BadgeCheck />
                 Account
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              {/* <DropdownMenuItem>
                 <CreditCard />
                 Billing
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               <DropdownMenuItem>
                 <Bell />
                 Notifications
@@ -120,6 +131,14 @@ export function NavUser({
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
+
+      <AccountDialog
+        open={isAccountDialogOpen}
+        onOpenChange={setIsAccountDialogOpen}
+        user={user}
+        initials={initials}
+        userId={authUser?.uid}
+      />
     </SidebarMenu>
   )
 }
