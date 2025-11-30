@@ -1,15 +1,6 @@
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  LogOut,
-} from "lucide-react"
+import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from "lucide-react";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,50 +9,36 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/dropdown-menu";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 import { AccountDialog } from "@/components/dialogs/AccountDialog";
-import { signOut } from "firebase/auth";
-import { auth } from "../../database/config/firebase";
-import { useNavigate } from "react-router-dom";
+import { LogOutDialog } from "@/components/dialogs/LogOutDialog";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
+import { useNotifications } from "@/hooks/useNotifications";
 
 export function NavUser() {
-  const { isMobile } = useSidebar()
-  const navigate = useNavigate();
+  const { isMobile } = useSidebar();
   const { user: authUser } = useAuth();
   const [isAccountDialogOpen, setIsAccountDialogOpen] = useState(false);
-  
-  const handleLogout = async () => {
-      try {
-        await signOut(auth);
-        sessionStorage.removeItem("email");
-        navigate("/login");
-      } catch (error) {
-        console.error("Error during logout:", error);
-      }
-    };
+  const [isLogOutDialogOpen, setIsLogOutDialogOpen] = useState(false);
+  const notifications = useNotifications();
 
   // User data with default values
   const user = {
-    name: authUser?.displayName || authUser?.email?.split('@')[0] || "User",
+    name: authUser?.displayName || authUser?.email?.split("@")[0] || "User",
     email: authUser?.email || "user@example.com",
     avatar: authUser?.photoURL || "",
   };
 
   // Initals for AvatarFallback
-  const initials = user.name
-    .split(' ')
-    .map(n => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2) || "US";
+  const initials =
+    user.name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2) || "US";
 
   return (
     <SidebarMenu>
@@ -118,20 +95,19 @@ export function NavUser() {
                 <CreditCard />
                 Billing
               </DropdownMenuItem> */}
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => notifications.info("This is a notification")}>
                 <Bell />
                 Notifications
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout} /*className="cursor-pointer"*/>
+            <DropdownMenuItem onClick={() => setIsLogOutDialogOpen(true)} /*className="cursor-pointer"*/>
               <LogOut />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
-
       <AccountDialog
         open={isAccountDialogOpen}
         onOpenChange={setIsAccountDialogOpen}
@@ -139,6 +115,8 @@ export function NavUser() {
         initials={initials}
         userId={authUser?.uid}
       />
+
+      <LogOutDialog open={isLogOutDialogOpen} onOpenChange={setIsLogOutDialogOpen} />
     </SidebarMenu>
-  )
+  );
 }
