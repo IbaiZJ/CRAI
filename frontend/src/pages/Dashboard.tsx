@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import Layout from "@/layouts/Layout";
 import { ChartAreaInteractive } from "@/components/charts/chart-area-interactive";
 import { ChartBarStacked } from "@/components/charts/barCharts/chart-bar-stacked";
@@ -812,9 +812,11 @@ export default function Dashboard() {
   }, []);
 
   const { user: authUser } = useAuth();
-  const name = authUser?.displayName || authUser?.email?.split("@")[0] || "User";
 
-  console.log("Database content:", data);
+  const name = useMemo(
+    () => authUser?.displayName || authUser?.email?.split("@")[0] || "User",
+    [authUser]
+  );
 
   return (
     <Layout>
@@ -851,9 +853,6 @@ export default function Dashboard() {
         <Link to="/users" className="btn btn-primary w-full justify-center cursor-pointer">
           Go to Users
         </Link>
-
-        
-
       </div>
     </Layout>
   );

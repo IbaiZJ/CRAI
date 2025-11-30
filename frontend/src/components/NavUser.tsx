@@ -1,3 +1,4 @@
+import * as React from "react";
 import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -24,21 +25,27 @@ export function NavUser() {
   const [isLogOutDialogOpen, setIsLogOutDialogOpen] = useState(false);
   const notifications = useNotifications();
 
-  // User data with default values
-  const user = {
-    name: authUser?.displayName || authUser?.email?.split("@")[0] || "User",
-    email: authUser?.email || "user@example.com",
-    avatar: authUser?.photoURL || "",
-  };
+  // User data with default values - memoized
+  const user = React.useMemo(
+    () => ({
+      name: authUser?.displayName || authUser?.email?.split("@")[0] || "User",
+      email: authUser?.email || "user@example.com",
+      avatar: authUser?.photoURL || "",
+    }),
+    [authUser]
+  );
 
-  // Initals for AvatarFallback
-  const initials =
-    user.name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2) || "US";
+  // Initals for AvatarFallback - memoized
+  const initials = React.useMemo(
+    () =>
+      user.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2) || "US",
+    [user.name]
+  );
 
   return (
     <SidebarMenu>
