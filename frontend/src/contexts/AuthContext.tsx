@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { onAuthStateChanged, type User } from "firebase/auth";
-import { auth } from "../../database/config/firebase";
-import { SpinnerCustom } from "@/components/spinner";
+import { auth } from "@/lib/firebase";
+import { SpinnerCustom } from "@/components/Spinner";
 
 interface AuthContextType {
   user: User | null;

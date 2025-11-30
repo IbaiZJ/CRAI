@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { auth } from "../../database/config/firebase";
+import { auth } from "@/lib/firebase";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useNotifications } from "@/hooks/useNotifications";
 
 export default function Login() {
   useEffect(() => {
@@ -12,6 +13,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const notifications = useNotifications();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,17 +25,22 @@ export default function Login() {
       console.log("User logged in:", user);
       sessionStorage.setItem("email", email);
       navigate("/dashboard");
+      notifications.success("Logged in successfully!");
     } catch (err: unknown) {
       console.error("Error in login:", err);
       const error = err as { code?: string; message?: string };
       if (error.code === "auth/invalid-credential") {
         setError("Email or password invalid.");
+        notifications.error("Email or password invalid.");
       } else if (error.code === "auth/user-not-found") {
         setError("User not found.");
+        notifications.error("User not found.");
       } else if (error.code === "auth/wrong-password") {
         setError("Incorrect password.");
+        notifications.error("Incorrect password.");
       } else {
         setError("Error logging in: " + (error.message || "Unknown error"));
+        notifications.error("Error logging in: " + (error.message || "Unknown error"));
       }
     }
   };
@@ -48,13 +55,16 @@ export default function Login() {
       console.log("User logged in with Google:", user);
       sessionStorage.setItem("email", user.email || "");
       navigate("/dashboard");
+      notifications.success("Logged in successfully!");
     } catch (err: unknown) {
       console.error("Error in login with Google:", err);
       const error = err as { code?: string; message?: string };
       if (error.code === "auth/popup-closed-by-user") {
         setError("Google login window closed.");
+        notifications.error("Google login window closed.");
       } else {
         setError("Error logging in with Google: " + (error.message || "Unknown error"));
+        notifications.error("Error logging in with Google: " + (error.message || "Unknown error"));
       }
     }
   };
