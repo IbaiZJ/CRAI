@@ -4,7 +4,7 @@ CREATE database crai-db;
 use crai-db;
 
 CREATE TABLE UserType (
-    userType_id INT AUTO_INCREMENT PRIMARY KEY,
+    userTypeId INT AUTO_INCREMENT PRIMARY KEY,
     nameTyme VARCHAR(50) NOT NULL
 );
 
@@ -15,12 +15,12 @@ CREATE TABLE User (
     surnameUser VARCHAR(50) NOT NULL,
     birthDate DATE,
     userType INT NOT NULL,
-    FOREIGN KEY (userType) REFERENCES UserType(userType_id)
+    FOREIGN KEY (userType) REFERENCES UserType(userTypeId)
 );
 
 
 CREATE TABLE VehicleType (
-    vehicleType_id INT AUTO_INCREMENT PRIMARY KEY,
+    vehicleTypeId INT AUTO_INCREMENT PRIMARY KEY,
     vehicleTypeName VARCHAR(50) NOT NULL
 );
 
@@ -28,34 +28,34 @@ CREATE TABLE VehicleType (
 CREATE TABLE Vehicles (
     plate VARCHAR(10) PRIMARY KEY,
     badge VARCHAR(10),
-    id_user VARCHAR(100),
-    vehicleType_id INT,
-    FOREIGN KEY (id_user) REFERENCES User(email),
-    FOREIGN KEY (vehicleType_id) REFERENCES VehicleType(vehicleType_id)
+    idUser VARCHAR(100),
+    vehicleTypeId INT,
+    FOREIGN KEY (idUser) REFERENCES User(email),
+    FOREIGN KEY (vehicleTypeId) REFERENCES VehicleType(vehicleTypeId)
 );
 
 
-CREATE TABLE Stolen_vehicle (
-    id_robado INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE StolenVehicle (
+    idRobado INT AUTO_INCREMENT PRIMARY KEY,
     plate VARCHAR(10) NOT NULL UNIQUE,
-    stolen_date DATE,
+    stolenDate DATE,
     FOREIGN KEY (plate) REFERENCES Vehicles(plate)
 );
 
 
 CREATE TABLE Camera (
-    camera_id INT AUTO_INCREMENT PRIMARY KEY,
-    location_x FLOAT,
-    location_y FLOAT,
+    cameraId INT AUTO_INCREMENT PRIMARY KEY,
+    locationX FLOAT,
+    locationY FLOAT,
     badge VARCHAR(10)
 );
 
 
 CREATE TABLE Detection (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    vehicle_id VARCHAR(10) NOT NULL,
-    camera_id INT NOT NULL,
-    DetectionDate DATETIME NOT NULL,
-    FOREIGN KEY (vehicle_id) REFERENCES Vehicles(plate),
-    FOREIGN KEY (camera_id) REFERENCES Camera(camera_id)
+    vehicleId VARCHAR(10) NOT NULL,
+    cameraId INT NOT NULL,
+    detectionDate DATETIME NOT NULL,
+    FOREIGN KEY (vehicleId) REFERENCES Vehicles(plate),
+    FOREIGN KEY (cameraId) REFERENCES Camera(cameraId)
 );
