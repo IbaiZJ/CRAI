@@ -1,27 +1,9 @@
 services:
-  # MySQL database
-  # mysql:
-  #   image: mysql:8.0
-  #   container_name: mysql_db
-  #   restart: unless-stopped
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: root
-  #     MYSQL_DATABASE: CRAI_DB
-  #     MYSQL_USER: user
-  #     MYSQL_PASSWORD: password
-  #   ports:
-  #     - "6900:3306"
-  #   volumes:
-  #     - mysql_data:/var/lib/mysql
-  #   networks:
-  #     - app-network
-
-  # Frontend service
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: frontend_app
+    container_name: frontend
     ports:
       - "6901:5173"
     volumes:
@@ -32,12 +14,11 @@ services:
     networks:
       - app-network
 
-  # AI service
   ai:
     build:
       context: ./ai
       dockerfile: Dockerfile
-    container_name: ai_service
+    container_name: ai
     volumes:
       - ./ai:/app
     ports:
@@ -49,10 +30,9 @@ services:
       - app-network
     restart: unless-stopped
 
-  # Node-RED service
   node-red:
     image: nodered/node-red:latest
-    container_name: node_red_service
+    container_name: backend
     ports:
       - "6903:1880"
     volumes:
@@ -65,12 +45,11 @@ services:
       - app-network
     restart: unless-stopped
 
-  # Environmental Badge API service
   ebapi:
     build:
       context: ./ebAPI
       dockerfile: Dockerfile
-    container_name: ebapi_service
+    container_name: ebAPI
     ports:
       - "6904:8000"
     volumes:
@@ -81,26 +60,24 @@ services:
       - app-network
     restart: unless-stopped
 
-      # Operating System service (Java)
   os:
     build:
       context: ./os
       dockerfile: Dockerfile
-    container_name: os_service
+    container_name: os
     ports:
-      - "6903:8080"
+      - "6905:8080"
     depends_on:
       - mysql
     networks:
       - app-network
     restart: unless-stopped
 
-  # Documentation service
   docs:
     build:
       context: ./docs
       dockerfile: Dockerfile
-    container_name: docs_service
+    container_name: docs
     ports:
       - "6910:4321"
     networks:
