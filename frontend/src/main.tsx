@@ -7,7 +7,7 @@ import App from './App.tsx'
 import { AuthProvider } from './contexts/AuthContext'
 import { Toaster } from '@/components/ui/sonner'
 import { TOAST_CONFIG } from './lib/toast-config'
-import { GOOGLE_CLIENT_ID } from './lib/google-outh.ts'
+import { GOOGLE_CLIENT_ID } from './lib/google-oauth.ts'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
