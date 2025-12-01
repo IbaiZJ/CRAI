@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import Layout from "@/layouts/Layout";
 import { Button } from "@/components/ui/button";
 import { SpinnerCustom } from "@/components/Spinner";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 
 export default function UserDetail() {
   useEffect(() => {
@@ -17,6 +15,8 @@ export default function UserDetail() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // TODO: Implement user fetching from your backend/API
+    // For now, showing mock data
     const fetchUser = async () => {
       if (!id) {
         setError("User ID is missing");
@@ -25,18 +25,18 @@ export default function UserDetail() {
       }
 
       try {
-        const userDoc = await getDoc(doc(db, "users", id));
-
-        if (userDoc.exists()) {
-          setUser({ id: userDoc.id, ...userDoc.data() });
-          document.title = `CRAI - User ${userDoc.data().name || id}`;
-        } else {
-          setError("User not found");
-        }
+        // Mock user data - replace with actual API call
+        setUser({
+          id: id,
+          name: "Mock User",
+          email: "user@example.com",
+          role: "User"
+        });
+        document.title = `CRAI - User ${id}`;
+        setLoading(false);
       } catch (err) {
         console.error("Error fetching user:", err);
         setError("Failed to load user data");
-      } finally {
         setLoading(false);
       }
     };

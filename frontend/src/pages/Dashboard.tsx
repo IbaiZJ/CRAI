@@ -1,15 +1,16 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, lazy, Suspense } from "react";
 import Layout from "@/layouts/Layout";
-import { ChartAreaInteractive } from "@/components/charts/chart-area-interactive";
-import { ChartBarStacked } from "@/components/charts/barCharts/chart-bar-stacked";
-import { ChartBarDefault } from "@/components/charts/barCharts/chart-bar-default";
-import { ChartBarMixed } from "@/components/charts/barCharts/chart-bar-mixed";
-import { DataTable } from "@/components/dataTable/data-table";
-import { columns, type Payment } from "@/components/dataTable/columns";
+const ChartAreaInteractive = lazy(() => import("@/components/charts/chart-area-interactive").then(m => ({ default: m.ChartAreaInteractive })));
+const ChartBarStacked = lazy(() => import("@/components/charts/barCharts/chart-bar-stacked").then(m => ({ default: m.ChartBarStacked })));
+const ChartBarDefault = lazy(() => import("@/components/charts/barCharts/chart-bar-default").then(m => ({ default: m.ChartBarDefault })));
+const ChartBarMixed = lazy(() => import("@/components/charts/barCharts/chart-bar-mixed").then(m => ({ default: m.ChartBarMixed })));
+const PaymentsTable = lazy(() => import("@/components/dataTable/PaymentsTable"));
+import type { Payment } from "@/components/dataTable/columns";
 import SplitText from "@/components/SplitText";
 import { useAuth } from "@/contexts/AuthContext";
 import CountUp from "@/components/CountUp";
 import { Link } from "react-router-dom";
+import { SpinnerCustom } from "@/components/Spinner";
 
 const data: Payment[] = [
   {
@@ -808,14 +809,14 @@ const data: Payment[] = [
 
 export default function Dashboard() {
   useEffect(() => {
-    document.title = "Dashboard";
+    document.title = "CRAI - Dashboard";
   }, []);
 
-  const { user: authUser } = useAuth();
+  const { user } = useAuth();
 
   const name = useMemo(
-    () => authUser?.displayName || authUser?.email?.split("@")[0] || "User",
-    [authUser]
+    () => user?.name || "User",
+    [user]
   );
 
   return (
@@ -835,13 +836,23 @@ export default function Dashboard() {
           tag="h1"
           textAlign="center"
         />
-        <ChartAreaInteractive />
+        <Suspense fallback={<div className="h-64 grid place-items-center"><SpinnerCustom /></div>}>
+          <ChartAreaInteractive />
+        </Suspense>
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
-          <ChartBarDefault />
-          <ChartBarStacked />
-          <ChartBarMixed />
+          <Suspense fallback={<div className="h-56 grid place-items-center"><SpinnerCustom /></div>}>
+            <ChartBarDefault />
+          </Suspense>
+          <Suspense fallback={<div className="h-56 grid place-items-center"><SpinnerCustom /></div>}>
+            <ChartBarStacked />
+          </Suspense>
+          <Suspense fallback={<div className="h-56 grid place-items-center"><SpinnerCustom /></div>}>
+            <ChartBarMixed />
+          </Suspense>
         </div>
-        <DataTable columns={columns} data={data} />
+        <Suspense fallback={<div className="h-80 grid place-items-center"><SpinnerCustom /></div>}>
+          <PaymentsTable data={data} />
+        </Suspense>
         <CountUp
           from={0}
           to={100}

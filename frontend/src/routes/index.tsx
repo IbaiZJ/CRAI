@@ -1,10 +1,10 @@
-import Home from "@/pages/Home";
-import Login from "@/pages/Login";
-import SignUp from "@/pages/SignUp";
-import Dashboard from "@/pages/Dashboard";
-import Users from "@/pages/Users";
-import UserDetail from "@/pages/User";
-import NotFound from "@/pages/NotFound";
+import { lazy } from "react";
+const Home = lazy(() => import("@/pages/Home"));
+const Login = lazy(() => import("@/pages/Login"));
+const Dashboard = lazy(() => import("@/pages/Dashboard"));
+const Users = lazy(() => import("@/pages/Users"));
+const UserDetail = lazy(() => import("@/pages/User"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
 import { createRoutes } from "./routeUtils";
 
 const appRoutes = [
@@ -21,11 +21,6 @@ const appRoutes = [
   {
     path: "/login",
     component: Login,
-    // Public route
-  },
-  {
-    path: "/signup",
-    component: SignUp,
     // Public route
   },
   {

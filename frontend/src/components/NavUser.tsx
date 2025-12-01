@@ -20,32 +20,26 @@ import { useNotifications } from "@/hooks/useNotifications";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
-  const { user: authUser } = useAuth();
+  const { user } = useAuth();
   const [isAccountDialogOpen, setIsAccountDialogOpen] = useState(false);
   const [isLogOutDialogOpen, setIsLogOutDialogOpen] = useState(false);
   const notifications = useNotifications();
 
-  // User data with default values - memoized
-  const user = React.useMemo(
-    () => ({
-      name: authUser?.displayName || authUser?.email?.split("@")[0] || "User",
-      email: authUser?.email || "user@example.com",
-      avatar: authUser?.photoURL || "",
-    }),
-    [authUser]
-  );
-
   // Initals for AvatarFallback - memoized
   const initials = React.useMemo(
-    () =>
-      user.name
+    () => {
+      if (!user?.name) return "US";
+      return user.name
         .split(" ")
         .map((n) => n[0])
         .join("")
         .toUpperCase()
-        .slice(0, 2) || "US",
-    [user.name]
+        .slice(0, 2) || "US";
+    },
+    [user?.name]
   );
+
+  if (!user) return null;
 
   return (
     <SidebarMenu>
@@ -57,12 +51,12 @@ export function NavUser() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarImage src={user.picture} alt={user.name} referrerPolicy="no-referrer" />
                 <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium capitalize  ">{user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
+                <span className="truncate font-medium capitalize">{user.name}</span>
+                <span className="truncate text-xs leading-relaxed">{user.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -76,12 +70,12 @@ export function NavUser() {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarImage src={user.picture} alt={user.name} referrerPolicy="no-referrer" />
                   <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium capitalize">{user.name}</span>
-                  <span className="truncate text-xs">{user.email}</span>
+                  <span className="truncate text-xs leading-relaxed">{user.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
@@ -118,9 +112,13 @@ export function NavUser() {
       <AccountDialog
         open={isAccountDialogOpen}
         onOpenChange={setIsAccountDialogOpen}
-        user={user}
+        user={{
+          name: user.name,
+          email: user.email,
+          avatar: user.picture || "",
+        }}
         initials={initials}
-        userId={authUser?.uid}
+        userId={user.sub}
       />
 
       <LogOutDialog open={isLogOutDialogOpen} onOpenChange={setIsLogOutDialogOpen} />

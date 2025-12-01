@@ -10,8 +10,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useNavigate } from "react-router-dom";
 import { useNotifications } from "@/hooks/useNotifications";
-import { signOut } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface LogOutDialogProps {
   open: boolean;
@@ -21,11 +20,11 @@ interface LogOutDialogProps {
 export function LogOutDialog({ open, onOpenChange }: LogOutDialogProps) {
   const navigate = useNavigate();
   const notifications = useNotifications();
+  const { logout } = useAuth();
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     try {
-      await signOut(auth);
-      sessionStorage.removeItem("email");
+      logout();
       navigate("/login");
       notifications.success("Logged out successfully");
     } catch (error) {
