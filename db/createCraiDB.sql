@@ -1,7 +1,4 @@
-DROP database if exists crai-db;
-CREATE database crai-db;
-
-use crai-db;
+use `crai-db`;
 
 CREATE TABLE UserType (
     userTypeId INT AUTO_INCREMENT PRIMARY KEY,
