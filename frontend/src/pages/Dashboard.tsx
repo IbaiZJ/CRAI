@@ -808,7 +808,7 @@ const data: Payment[] = [
 
 export default function Dashboard() {
   useEffect(() => {
-    document.title = "CRAI - Dashboard";
+    document.title = "Dashboard";
   }, []);
 
   const { user: authUser } = useAuth();

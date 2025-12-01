@@ -4,9 +4,15 @@ import SignUp from "@/pages/SignUp";
 import Dashboard from "@/pages/Dashboard";
 import Users from "@/pages/Users";
 import UserDetail from "@/pages/User";
+import NotFound from "@/pages/NotFound";
 import { createRoutes } from "./routeUtils";
 
 const appRoutes = [
+  {
+    path: "*",
+    component: NotFound,
+    // Catch all route for 404
+  },
   {
     path: "/",
     component: Home,

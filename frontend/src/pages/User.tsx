@@ -8,7 +8,7 @@ import { db } from "@/lib/firebase";
 
 export default function UserDetail() {
   useEffect(() => {
-    document.title = "CRAI - User Details";
+    document.title = "User Details";
   }, []);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
