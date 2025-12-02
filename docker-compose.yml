@@ -9,8 +9,10 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    depends_on:
-      - node-red
+    env_file:
+      - ./frontend/.env
+    # depends_on:
+    #   - node-red
     networks:
       - app-network
 
@@ -39,8 +41,8 @@ services:
       - ./backend/node_red_data:/data
     environment:
       - TZ=Europe/Madrid
-    depends_on:
-      - ebapi
+    # depends_on:
+    #   - ebapi
     networks:
       - app-network
     restart: unless-stopped
@@ -67,8 +69,6 @@ services:
     container_name: os
     ports:
       - "6905:8080"
-    depends_on:
-      - mysql
     networks:
       - app-network
     restart: unless-stopped
