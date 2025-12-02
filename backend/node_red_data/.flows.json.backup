@@ -1,5 +1,13 @@
 [
     {
+        "id": "a5406ced814d1895",
+        "type": "tab",
+        "label": "CRAI",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "b8eced2c956132a8",
         "type": "tab",
         "label": "CRUD Vehículos Firebase",
@@ -909,7 +917,10 @@
         "tls": "",
         "persist": false,
         "proxy": "",
+        "insecureHTTPParser": false,
         "authType": "",
+        "senderr": false,
+        "headers": [],
         "x": 410,
         "y": 120,
         "wires": [
