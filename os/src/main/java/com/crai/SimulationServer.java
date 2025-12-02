@@ -19,7 +19,6 @@ public class SimulationServer {
                 return;
             }
 
-            // Leer JSON de entrada
             InputStream is = exchange.getRequestBody();
             String body = new String(is.readAllBytes(), StandardCharsets.UTF_8);
 

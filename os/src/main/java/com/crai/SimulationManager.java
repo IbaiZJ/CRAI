@@ -18,6 +18,8 @@ public class SimulationManager {
 
     public SimulationResult execute() {
 
+        StolenPlateRegistry.init(vehicles);
+
         BlockingQueue<String> ocrQueue = new ArrayBlockingQueue<>(vehicles);
         BlockingQueue<String> classifyQueue = new ArrayBlockingQueue<>(vehicles);
 
