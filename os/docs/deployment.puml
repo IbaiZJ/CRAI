@@ -1,0 +1,21 @@
+@startuml Deployment
+title Despliegue / Componentes
+node "Host Spring Boot" {
+  component "CRAI Simulation API\n(Spring Boot)" as Api
+  component "Camera Queue\n(PriorityBlockingQueue)" as CamQ
+  component "Police Queue\n(BlockingQueue)" as PolQ
+}
+
+node "Nodo externo" {
+  component "Node-RED\n(webhook)" as NR
+}
+
+Api --> CamQ
+Api --> PolQ
+Api --> NR : HTTP webhook /alerts
+actor Operador
+Operador --> Api : REST (start/stop/send vehicle/status)
+actor Policia
+Policia --> Api : Consulta alertas
+Api --> Policia : Respuestas/alertas
+@enduml
