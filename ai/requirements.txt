@@ -8,5 +8,6 @@ pytest
 pytest-cov
 pytest-asyncio
 httpx
+customtkinter
 # tensorflow
 # torch

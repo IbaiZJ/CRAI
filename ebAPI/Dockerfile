@@ -1,9 +1,10 @@
-FROM python:3.11-slim
+FROM python:3.13-slim
 
 WORKDIR /app
 
 # Instalar dependencias del sistema si son necesarias
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    p7zip-full \
     && rm -rf /var/lib/apt/lists/*
 
 # Copiar requirements e instalar dependencias
@@ -14,8 +15,11 @@ RUN pip install --no-cache-dir -r requirements.txt && \
 # Copiar código de la aplicación
 COPY . .
 
+# Crear directorio de datos si no existe
+RUN mkdir -p data
+
 # Exponer puerto
 EXPOSE 8000
 
 # Comando para ejecutar la aplicación
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload", "--log-level", "info"]
