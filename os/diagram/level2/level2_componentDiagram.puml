@@ -1,0 +1,19 @@
+@startuml
+title Component Diagram - Node-RED Integration
+
+package "External System" {
+    [Node-RED Flow] --> [HTTP Client Node]
+}
+
+package "Java Simulation Service" {
+    [HTTP Server /simulate] --> [SimulationEngine]
+    [SimulationEngine] --> [SimulationManager]
+    [SimulationManager] --> [CameraPool]
+    [SimulationManager] --> [OCRPool]
+    [SimulationManager] --> [ClassifierPool]
+}
+
+[HTTP Client Node] --> [HTTP Server /simulate]
+
+@enduml
+

@@ -1,0 +1,18 @@
+@startuml
+title Multistage Pipeline - Sequence Diagram
+
+actor VehicleThread as V
+participant CameraPool as C
+participant OCRPool as O
+participant ClassifierPool as CL
+participant SimulationResult as R
+
+V -> C : enqueueVehicle(v)
+C -> C : select vehicle by priority
+C -> O : plate = capture()
+O -> O : OCR processing
+O -> CL : send plate
+CL -> CL : classify plate
+CL -> R : update counters
+
+@enduml
