@@ -74,6 +74,7 @@ export type Payment = {
   email: string
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const columns: ColumnDef<Payment>[] = [
   {
     id: "select",

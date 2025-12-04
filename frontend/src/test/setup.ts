@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
+import type React from 'react';
 
 // Mock the entire Firebase config module to prevent initialization
 vi.mock('../database/config/firebase', () => ({
@@ -47,7 +48,7 @@ vi.mock('firebase/storage', () => ({
 
 // Mock Google OAuth
 vi.mock('@react-oauth/google', () => ({
-  GoogleOAuthProvider: ({ children }: { children: any }) => children,
+  GoogleOAuthProvider: ({ children }: { children: React.ReactNode }) => children,
   GoogleLogin: vi.fn(() => null),
   useGoogleLogin: vi.fn(() => vi.fn()),
 }));

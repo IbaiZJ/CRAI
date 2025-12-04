@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { SpinnerCustom } from "@/components/Spinner";
 
@@ -19,19 +19,21 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+interface DecodedToken {
+  exp: number;
+  [key: string]: unknown;
+}
 
-  useEffect(() => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(() => {
     const storedUser = localStorage.getItem('user');
     const token = localStorage.getItem('token');
     
     if (storedUser && token) {
       try {
-        const decoded: any = jwtDecode(token);
+        const decoded = jwtDecode<DecodedToken>(token);
         if (decoded.exp * 1000 > Date.now()) {
-          setUser(JSON.parse(storedUser));
+          return JSON.parse(storedUser);
         } else {
           localStorage.removeItem('user');
           localStorage.removeItem('token');
@@ -42,12 +44,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.removeItem('token');
       }
     }
-    setLoading(false);
-  }, []);
+    return null;
+  });
+  const loading = false;
 
   const login = (credential: string) => {
     try {
-      const decoded: any = jwtDecode(credential);
+      const decoded = jwtDecode<DecodedToken>(credential);
       const userData: User = {
         email: decoded.email,
         name: decoded.name,
@@ -91,6 +94,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {

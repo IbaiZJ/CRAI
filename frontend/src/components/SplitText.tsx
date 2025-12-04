@@ -40,12 +40,12 @@ const SplitText: React.FC<SplitTextProps> = ({
   // https://reactbits.dev/text-animations/split-text
   const ref = useRef<HTMLParagraphElement>(null);
   const animationCompletedRef = useRef(false);
-  const [fontsLoaded, setFontsLoaded] = useState<boolean>(false);
+  const [fontsLoaded, setFontsLoaded] = useState<boolean>(
+    document.fonts.status === "loaded"
+  );
 
   useEffect(() => {
-    if (document.fonts.status === "loaded") {
-      setFontsLoaded(true);
-    } else {
+    if (document.fonts.status !== "loaded") {
       document.fonts.ready.then(() => {
         setFontsLoaded(true);
       });
@@ -62,7 +62,9 @@ const SplitText: React.FC<SplitTextProps> = ({
       if (el._rbsplitInstance) {
         try {
           el._rbsplitInstance.revert();
-        } catch (_) {}
+        } catch {
+          // Ignore revert errors
+        }
         el._rbsplitInstance = undefined;
       }
 
@@ -127,7 +129,9 @@ const SplitText: React.FC<SplitTextProps> = ({
         });
         try {
           splitInstance.revert();
-        } catch (_) {}
+        } catch {
+          // Ignore revert errors
+        }
         el._rbsplitInstance = undefined;
       };
     },
