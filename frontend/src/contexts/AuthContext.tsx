@@ -21,7 +21,10 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 interface DecodedToken {
   exp: number;
-  [key: string]: unknown;
+  email: string;
+  name: string;
+  picture?: string;
+  sub: string;
 }
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
