@@ -1,0 +1,44 @@
+{
+  "folders": [
+    {
+      "path": "backend"
+    },
+    {
+      "path": "ebAPI"
+    },
+    {
+      "path": "itvAPI"
+    },
+    {
+      "path": "os"
+    },
+    {
+      "path": "frontend"
+    },
+    {
+      "path": "db"
+    },
+    {
+      "path": "ai"
+    },
+    {
+      "path": "docs"
+    },
+    {
+      "path": ".github"
+    }
+  ],
+  "settings": {
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.import.maven.enabled": true,
+    "java.import.gradle.enabled": false,
+    "java.project.referencedLibraries": [],
+    "maven.executable.path": "mvn",
+    "files.exclude": {
+      "**/target": true,
+      "**/.git": true,
+      "**/.idea": true,
+      "**/.vscode": false
+    }
+  }
+}
