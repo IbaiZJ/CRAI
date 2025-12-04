@@ -1,7 +1,7 @@
 {
     "node-red": {
         "name": "node-red",
-        "version": "4.1.1",
+        "version": "4.1.2",
         "local": false,
         "user": false,
         "nodes": {
@@ -424,6 +424,26 @@
                 "user": false,
                 "module": "node-red",
                 "file": "/usr/src/node-red/node_modules/@node-red/nodes/core/storage/23-watch.js"
+            }
+        }
+    },
+    "node-red-node-mysql": {
+        "name": "node-red-node-mysql",
+        "version": "2.0.0",
+        "local": true,
+        "user": true,
+        "nodes": {
+            "mysql": {
+                "name": "mysql",
+                "types": [
+                    "MySQLdatabase",
+                    "mysql"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "node-red-node-mysql",
+                "file": "/data/node_modules/node-red-node-mysql/68-mysql.js"
             }
         }
     }
