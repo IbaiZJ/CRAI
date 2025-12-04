@@ -2,12 +2,12 @@ name: ebAPI CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
     paths:
       - 'ebAPI/**'
       - '.github/workflows/ebAPI-ci.yml'
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
     paths:
       - 'ebAPI/**'
       - '.github/workflows/ebAPI-ci.yml'
