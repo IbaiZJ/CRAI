@@ -44,3 +44,10 @@ vi.mock('firebase/firestore', () => ({
 vi.mock('firebase/storage', () => ({
   getStorage: vi.fn(() => ({})),
 }));
+
+// Mock Google OAuth
+vi.mock('@react-oauth/google', () => ({
+  GoogleOAuthProvider: ({ children }: { children: any }) => children,
+  GoogleLogin: vi.fn(() => null),
+  useGoogleLogin: vi.fn(() => vi.fn()),
+}));

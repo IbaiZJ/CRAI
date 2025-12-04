@@ -19,9 +19,9 @@ describe('Routes', () => {
     expect(loginRoute).toBeDefined();
   });
 
-  it('contains signup route', () => {
-    const signupRoute = routes.find(route => route.path === '/signup');
-    expect(signupRoute).toBeDefined();
+  it('contains users route', () => {
+    const usersRoute = routes.find(route => route.path === '/users');
+    expect(usersRoute).toBeDefined();
   });
 
   it('contains dashboard route', () => {

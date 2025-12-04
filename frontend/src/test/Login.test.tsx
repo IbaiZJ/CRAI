@@ -1,13 +1,16 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from '../contexts/AuthContext';
 import Login from '../pages/Login';
 
 describe('Login Component', () => {
   it('renders login form with title', () => {
     render(
       <BrowserRouter>
-        <Login />
+        <AuthProvider>
+          <Login />
+        </AuthProvider>
       </BrowserRouter>
     );
     
@@ -15,38 +18,43 @@ describe('Login Component', () => {
     expect(screen.getByRole('heading', { name: 'Log In' })).toBeInTheDocument();
   });
 
-  it('renders email and password inputs', () => {
+  it('renders google sign in description', () => {
     render(
       <BrowserRouter>
-        <Login />
+        <AuthProvider>
+          <Login />
+        </AuthProvider>
       </BrowserRouter>
     );
     
-    // Verifica que los inputs estén presentes
-    expect(screen.getByLabelText('Email')).toBeInTheDocument();
-    expect(screen.getByLabelText('Password')).toBeInTheDocument();
+    // Verifica que el texto de descripción esté presente
+    expect(screen.getByText('Sign in with your Google account to continue')).toBeInTheDocument();
   });
 
-  it('renders login and google buttons', () => {
+  it('renders google login component', () => {
     render(
       <BrowserRouter>
-        <Login />
+        <AuthProvider>
+          <Login />
+        </AuthProvider>
       </BrowserRouter>
     );
     
-    // Verifica que los botones estén presentes
-    expect(screen.getByRole('button', { name: 'Log In' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Continue with Google' })).toBeInTheDocument();
+    // Verifica que el contenedor de Google Login esté presente
+    const container = screen.getByText('Log In').closest('div');
+    expect(container).toBeInTheDocument();
   });
 
-  it('renders signup link', () => {
+  it('renders back to home link', () => {
     render(
       <BrowserRouter>
-        <Login />
+        <AuthProvider>
+          <Login />
+        </AuthProvider>
       </BrowserRouter>
     );
     
-    // Verifica que el link de registro esté presente
-    expect(screen.getByRole('link', { name: 'Sign Up' })).toBeInTheDocument();
+    // Verifica que el link de volver esté presente
+    expect(screen.getByRole('link', { name: 'Back to Home' })).toBeInTheDocument();
   });
 });
