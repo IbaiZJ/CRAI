@@ -32,6 +32,19 @@ services:
       - app-network
     restart: unless-stopped
 
+  cloud-sql-proxy:
+    image: gcr.io/cloudsql-docker/gce-proxy:1.33.2
+    container_name: cloud-sql-proxy
+    volumes:
+      - ./gcp/service-account.json:/config/service-account.json:ro
+    command:
+      - "/cloud_sql_proxy"
+      - "-instances=crai-479909:europe-southwest1:root=tcp:0.0.0.0:3306"
+      - "-credential_file=/config/service-account.json"
+    networks:
+      - app-network
+    restart: unless-stopped
+
   node-red:
     image: nodered/node-red:latest
     container_name: backend
@@ -41,8 +54,11 @@ services:
       - ./backend/node_red_data:/data
     environment:
       - TZ=Europe/Madrid
-    # depends_on:
-    #   - ebapi
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - cloud-sql-proxy
+      # - ebapi
     networks:
       - app-network
     restart: unless-stopped
@@ -69,6 +85,8 @@ services:
     container_name: os
     ports:
       - "6905:8080"
+    # depends_on:
+    #   - node-red
     networks:
       - app-network
     restart: unless-stopped
