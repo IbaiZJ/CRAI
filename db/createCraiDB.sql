@@ -1,3 +1,5 @@
+drop database if exists `crai-db`;
+create database `crai-db`;
 use `crai-db`;
 
 CREATE TABLE UserType (
