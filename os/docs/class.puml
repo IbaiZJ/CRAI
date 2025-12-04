@@ -1,0 +1,89 @@
+@startuml Class
+title CRAI Simulation - Diagrama de clases (simplificado)
+package config {
+  class SimulationConfig {
+    -cameraCount : int
+    -vehiclesPerCycle : int
+    -vehicleIntervalMs : int
+    -ocrDelayMs : int
+    -cameraQueueCapacity : int
+    -policeQueueCapacity : int
+    -stolenProbability : double
+    -itvFailProbability : double
+  }
+  class AppConfig
+}
+
+package controller {
+  class SimulationController
+  class ControlController
+  class VehicleController
+  class CameraController
+  class PoliceController
+  class DebugController
+  class HomeController
+}
+
+package model {
+  class Vehicle
+  class PoliceMessage
+  class PoliceMessageType
+  class ITVRecord
+  class ITVStatus
+  class AlertType
+}
+
+package repository {
+  class ITVRepository
+}
+
+package service {
+  class SimulationService
+  class VehicleSpawnerService
+  class CameraPoolService
+  class ITVService
+  class PoliceService
+  class OCRService
+}
+
+package utils {
+  class LoggingUtils
+  class VehicleMapper
+}
+
+SimulationController --> SimulationService
+ControlController --> SimulationConfig
+ControlController --> SimulationService
+VehicleController --> SimulationService
+CameraController --> CameraPoolService
+PoliceController --> PoliceService
+DebugController --> SimulationConfig
+HomeController --> SimulationService
+
+SimulationService --> SimulationConfig
+SimulationService --> VehicleSpawnerService
+SimulationService --> CameraPoolService
+SimulationService --> PoliceService
+
+VehicleSpawnerService --> SimulationConfig
+VehicleSpawnerService --> CameraPoolService : enqueue(Vehicle)
+
+CameraPoolService --> SimulationConfig
+CameraPoolService --> ITVService
+CameraPoolService --> PoliceService : alert(PoliceMessage)
+CameraPoolService --> OCRService
+CameraPoolService --> VehicleMapper
+CameraPoolService --> LoggingUtils
+
+ITVService --> ITVRepository
+ITVService --> LoggingUtils
+
+PoliceService --> SimulationConfig
+PoliceService --> LoggingUtils
+
+OCRService --> LoggingUtils
+
+ITVRepository --> ITVRecord
+PoliceService --> PoliceMessage
+VehicleMapper --> Vehicle
+@enduml
