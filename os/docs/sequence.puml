@@ -1,0 +1,21 @@
+@startuml Sequence
+title Flujo principal (vehículo generado automáticamente)
+actor "VehicleSpawnerService" as Spawner
+participant "CameraQueue\n(PriorityBlockingQueue)" as Queue
+participant "CameraWorker\n(CameraPoolService)" as Camera
+participant "ITVService" as ITV
+participant "PoliceService" as Police
+participant "Node-RED\n(Webhook)" as NodeRed
+
+Spawner -> Queue : put(Vehicle)
+loop Por cada cámara activa
+  Queue -> Camera : take()
+  Camera -> ITV : checkItv(vehicle)
+  ITV --> Camera : status
+  Camera -> Police : alertIfNeeded(status, env/stolen)
+  alt alerta generada
+    Police -> Police : enqueue + procesar
+    Police -> NodeRed : HTTP POST (alerta)
+  end
+end
+@enduml

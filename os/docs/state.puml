@@ -1,0 +1,10 @@
+@startuml State
+title Ciclo de vida de un vehículo
+[*] --> Creado
+Creado --> EnCola : enqueued by spawner/API
+EnCola --> Procesando : cámara libre
+Procesando --> Alertado : infracción grave
+Procesando --> Completado : sin infracción o leve
+Alertado --> Completado
+Completado --> [*]
+@enduml
