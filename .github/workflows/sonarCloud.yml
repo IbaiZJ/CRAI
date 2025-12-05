@@ -116,7 +116,7 @@ jobs:
         with:
           args: >
             -Dsonar.projectKey=crai123
-            -Dsonar.organization=CRAI
+            -Dsonar.organization=crai
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
