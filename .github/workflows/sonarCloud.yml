@@ -115,7 +115,7 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v6
         with:
           args: >
-            -Dsonar.projectKey=crai123
+            -Dsonar.projectKey=IbaiZJ_CRAI
             -Dsonar.organization=crai123
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
