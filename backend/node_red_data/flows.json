@@ -8,12 +8,16 @@
         "env": []
     },
     {
-        "id": "9121735248a37744",
+        "id": "64608cd93cad35de",
         "type": "subflow",
-        "name": "Subflow 1",
+        "name": "Web Registration",
         "info": "",
+        "category": "",
         "in": [],
-        "out": []
+        "out": [],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
     },
     {
         "id": "9ab4bf7d96539dde",
@@ -26,14 +30,46 @@
         "charset": "UTF8"
     },
     {
-        "id": "83a358e27f478098",
-        "type": "MySQLdatabase",
-        "name": "SQL",
-        "host": "34.175.35.187",
-        "port": "3306",
-        "db": "root",
-        "tz": "",
-        "charset": "UTF8"
+        "id": "53207df66be3ebe9",
+        "type": "http in",
+        "z": "64608cd93cad35de",
+        "name": "/login",
+        "url": "/login",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a0116f693d8e742c",
+        "type": "comment",
+        "z": "64608cd93cad35de",
+        "name": "",
+        "info": "🌐 1. ¿Qué debe pasar cuando un usuario inicia sesión?\n🔑 Login con credenciales manuales (email/contraseña)\n\nEl front-end envía email + password a un endpoint Node-RED.\n\nNode-RED:\n\nBusca el usuario en la base de datos.\n\nCompara la contraseña con un hash (bcrypt, argon2, etc.).\n\nSi es correcta → genera un JWT o crea sesión.\n\nDevuelve la respuesta al cliente: éxito o error.\n\nEl cliente guarda el token (localStorage / cookie HTTPOnly).\n\nEl token se usa en todas las llamadas posteriores.\n\n🔐 Login con Google (OAuth2)\n\nEste flujo es distinto:\n\nEl usuario hace clic en “Sign in with Google”.\n\nEl front-end redirige a Google.\n\nGoogle devuelve un authorization code a tu backend (Node-RED).\n\nNode-RED intercambia ese código por:\n\naccess token\n\nid token (con los datos del usuario)\n\nNode-RED:\n\nVerifica el id_token (firma JWT de Google).\n\nRevisa si el usuario ya existe (email).\n\nSi no existe → crea uno (auto-signup).\n\nGenera tu propio JWT de sesión interna.\n\nResponde al cliente con tu token.",
+        "x": 180,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "e90dde223a7fa16e",
+        "type": "http in",
+        "z": "64608cd93cad35de",
+        "name": "/signup",
+        "url": "/signup",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 320,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "c95ef74f78e9ac1f",
@@ -42,7 +78,7 @@
         "mydb": "9ab4bf7d96539dde",
         "name": "Google Cloud SQL DB",
         "x": 520,
-        "y": 260,
+        "y": 500,
         "wires": [
             [
                 "8050d46f8bb52965"
@@ -71,7 +107,7 @@
         "payload": "",
         "payloadType": "str",
         "x": 290,
-        "y": 260,
+        "y": 500,
         "wires": [
             [
                 "c95ef74f78e9ac1f"
@@ -91,7 +127,26 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 740,
-        "y": 260,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "553fdf189e1996b3",
+        "type": "subflow:64608cd93cad35de",
+        "z": "a5406ced814d1895",
+        "name": "",
+        "x": 180,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "84ddcaa84c0ee2c8",
+        "type": "comment",
+        "z": "a5406ced814d1895",
+        "name": "Manages web authentication tasks such as user login, account creation, credential validation, and session handling.",
+        "info": "",
+        "x": 490,
+        "y": 80,
         "wires": []
     }
 ]

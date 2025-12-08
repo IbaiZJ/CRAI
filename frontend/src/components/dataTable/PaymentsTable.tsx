@@ -1,10 +1,61 @@
-import { DataTable } from "./data-table";
-import { columns, type Payment } from "./columns";
+import { DataTable } from "@/components/dataTable/lib/data-table"
+import { createColumns } from "@/components/dataTable/lib/createColumns"
+import type { Payment } from "@/constants/paymentConstant"
 
 type Props = {
-  data: Payment[];
-};
+  data: Payment[]
+}
+
+const paymentColumns = createColumns<Payment>({
+  columns: [
+    {
+      accessorKey: "name",
+      header: "Name",
+      enableSorting: true,
+      cell: (value) => <div className="font-medium">{value}</div>,
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      enableSorting: true,
+      cell: (value) => <div className="capitalize">{value}</div>,
+    },
+    {
+      accessorKey: "date",
+      header: "Date",
+      enableSorting: true,
+      cell: (value) => <div className="text-sm text-muted-foreground">{value}</div>,
+    },
+    {
+      accessorKey: "email",
+      header: "Email",
+      enableSorting: true,
+      cell: (value) => <div className="lowercase">{value}</div>,
+    },
+    {
+      accessorKey: "amount",
+      header: "Amount",
+      enableSorting: true,
+      cell: (value) => {
+        const formatted = new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+        }).format(value)
+        return <div className="font-medium">{formatted}</div>
+      },
+    },
+  ],
+})
 
 export default function PaymentsTable({ data }: Props) {
-  return <DataTable columns={columns} data={data} />;
+  return (
+    <DataTable
+      columns={paymentColumns}
+      data={data}
+      searchPlaceholder="Filter by name, email, status..."
+      enableColumnVisibility={true}
+      enableRowSelection={false}
+      enableGlobalFilter={true}
+    />
+  )
 }

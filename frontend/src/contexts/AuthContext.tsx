@@ -5,8 +5,14 @@ import { SpinnerCustom } from "@/components/Spinner";
 interface User {
   email: string;
   name: string;
+  surname?: string;
+  fullName: string;
   picture?: string;
   sub: string;
+  email_verified?: boolean;
+  locale?: string;
+  iat?: number; // Emission time
+  exp?: number; // Expiration time
 }
 
 interface AuthContextType {
@@ -19,12 +25,18 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// JSON Web Token decoded structure
 interface DecodedToken {
-  exp: number;
   email: string;
   name: string;
+  given_name?: string;
+  family_name?: string;
   picture?: string;
   sub: string;
+  email_verified?: boolean;
+  locale?: string;
+  exp: number;
+  iat: number;
 }
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -56,9 +68,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const decoded = jwtDecode<DecodedToken>(credential);
       const userData: User = {
         email: decoded.email,
-        name: decoded.name,
+        name: decoded.given_name || decoded.name.split(' ')[0],
+        surname: decoded.family_name || decoded.name.split(' ').slice(1).join(' '),
+        fullName: decoded.name,
         picture: decoded.picture,
         sub: decoded.sub,
+        email_verified: decoded.email_verified,
+        locale: decoded.locale,
+        iat: decoded.iat,
+        exp: decoded.exp,
       };
       setUser(userData);
       localStorage.setItem('user', JSON.stringify(userData));

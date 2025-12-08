@@ -5,6 +5,11 @@ const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const Users = lazy(() => import("@/pages/Users"));
 const UserDetail = lazy(() => import("@/pages/User"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
+const Statistics = lazy(() => import("@/pages/Statistics"));
+const Cameras = lazy(() => import("@/pages/Cameras"));
+const Cars = lazy(() => import("@/pages/Cars"));
+const Simulations = lazy(() => import("@/pages/Simulations"));
+const SignUp = lazy(() => import("@/pages/SignUp"));
 import { createRoutes } from "./routeUtils";
 
 const appRoutes = [
@@ -24,20 +29,45 @@ const appRoutes = [
     // Public route
   },
   {
+    path: "/signup",
+    component: SignUp,
+    // Public route
+  },
+  {
     path: "/dashboard",
     component: Dashboard,
-    protected: true, // Requires authentication
+    protected: true,
   },
   {
     path: "/users",
     component: Users,
-    protected: true, // Requires authentication
+    protected: true,
   },
   {
     path: "/users/:id",
     component: UserDetail,
-    protected: true, // Requires authentication
+    protected: true,
   },
+  {
+    path: "/statistics",
+    component: Statistics,
+    protected: true, 
+  },
+  {
+    path: "/cameras",
+    component: Cameras,
+    protected: true,
+  },
+  {
+    path: "/cars",
+    component: Cars,
+    protected: true,
+  },
+  {
+    path: "/simulations",
+    component: Simulations,
+    protected: true,
+  }
 ];
 
 export const routes = createRoutes(appRoutes);

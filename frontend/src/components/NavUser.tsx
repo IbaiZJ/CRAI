@@ -28,15 +28,15 @@ export function NavUser() {
   // Initals for AvatarFallback - memoized
   const initials = React.useMemo(
     () => {
-      if (!user?.name) return "US";
-      return user.name
+      if (!user?.fullName) return "US";
+      return user.fullName
         .split(" ")
         .map((n) => n[0])
         .join("")
         .toUpperCase()
         .slice(0, 2) || "US";
     },
-    [user?.name]
+    [user?.fullName]
   );
 
   if (!user) return null;
@@ -51,11 +51,11 @@ export function NavUser() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.picture} alt={user.name} referrerPolicy="no-referrer" />
+                <AvatarImage src={user.picture} alt={user.fullName} referrerPolicy="no-referrer" />
                 <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium capitalize">{user.name}</span>
+                <span className="truncate font-medium capitalize">{user.fullName}</span>
                 <span className="truncate text-xs leading-relaxed">{user.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
@@ -70,11 +70,11 @@ export function NavUser() {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.picture} alt={user.name} referrerPolicy="no-referrer" />
+                  <AvatarImage src={user.picture} alt={user.fullName} referrerPolicy="no-referrer" />
                   <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium capitalize">{user.name}</span>
+                  <span className="truncate font-medium capitalize">{user.fullName}</span>
                   <span className="truncate text-xs leading-relaxed">{user.email}</span>
                 </div>
               </div>
@@ -113,7 +113,7 @@ export function NavUser() {
         open={isAccountDialogOpen}
         onOpenChange={setIsAccountDialogOpen}
         user={{
-          name: user.name,
+          name: user.fullName,
           email: user.email,
           avatar: user.picture || "",
         }}
