@@ -1,136 +1,76 @@
 import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
+  User,
+  UserStar,
   CircleGauge,
+  Siren,
+  ChartBar,
+  Cctv,
+  Sparkles,
+  Car
 } from "lucide-react"
 
 export const sidebarConfig = {
   teams: [
     {
+      name: "CRAI Admin",
+      logo: UserStar,
+      plan: "Administrator",
+    },
+    {
+      name: "CRAI Police",
+      logo: Siren,
+      plan: "Police",
+    },
+    {
       name: "CRAI Inc",
-      logo: GalleryVerticalEnd,
+      logo: User,
       plan: "Enterprise",
     },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
   ],
-  navMain: [
+  nav: [
     {
-      title: "Playground",
-      url: "#",
+      title: "Dashboard",
+      url: "/dashboard",
       icon: CircleGauge,
       isActive: true,
+      navType: "button",
+    },
+    {
+      title: "Statistics",
+      url: "#",
+      icon: ChartBar,
+      navType: "collapsible",
       items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
+        { title: "General", url: "/statistics" },
+        { title: "Cars", url: "/statistics/cars" },
+        { title: "Users", url: "/statistics/users" },
+        { title: "Cameras", url: "/statistics/cameras" },
+        { title: "Simulations", url: "/statistics/simulations" },
       ],
     },
     {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
+      title: "Cars",
+      url: "/cars",
+      icon: Car,
+      navType: "button",
     },
     {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
+      title: "Users",
+      url: "/users",
+      icon: User,
+      navType: "button",
     },
     {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
+      title: "Cameras",
+      url: "/cameras",
+      icon: Cctv,
+      navType: "button",
     },
     {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
+      title: "Simulations",
+      url: "/simulations",
+      icon: Sparkles,
+      navType: "button",
     },
   ],
 }
