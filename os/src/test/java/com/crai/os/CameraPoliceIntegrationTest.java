@@ -3,15 +3,18 @@ package com.crai.os;
 import com.crai.os.model.Vehicle;
 import com.crai.os.service.CameraPoolService;
 import com.crai.os.service.PoliceService;
+import com.crai.os.utils.SpanishPlateGenerator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 import java.util.concurrent.*;
 
 @SpringBootTest
+@TestPropertySource(properties = "node-red.webhook-url=")
 public class CameraPoliceIntegrationTest {
 
     @Autowired
@@ -30,7 +33,8 @@ public class CameraPoliceIntegrationTest {
         for (int p = 0; p < producers; p++) {
             exec.submit(() -> {
                 for (int i = 0; i < vehiclesPerProducer; i++) {
-                    Vehicle v = new Vehicle("TST" + ThreadLocalRandom.current().nextInt(10000), ThreadLocalRandom.current().nextInt(10), ThreadLocalRandom.current().nextBoolean());
+                    String plate = SpanishPlateGenerator.generate();
+                    Vehicle v = new Vehicle(plate, ThreadLocalRandom.current().nextInt(10), ThreadLocalRandom.current().nextBoolean());
                     cameraPoolService.enqueueVehicle(v);
                 }
                 latch.countDown();

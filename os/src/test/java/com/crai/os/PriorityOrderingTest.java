@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,6 +16,7 @@ import java.time.Instant;
 import java.util.List;
 
 @SpringBootTest
+@TestPropertySource(properties = "node-red.webhook-url=")
 public class PriorityOrderingTest {
 
     // For determinism we test the queue implementation directly instead of the full Spring wiring.
@@ -56,13 +58,15 @@ public class PriorityOrderingTest {
     public void testPriorityProcessedFirst() throws Exception {
         // Use the BoundedPriorityBlockingQueue directly to deterministically verify ordering
         com.crai.os.utils.BoundedPriorityBlockingQueue<Vehicle> q = new com.crai.os.utils.BoundedPriorityBlockingQueue<>(10);
-        Vehicle low = make("LOW_PRI", 1);
-        Vehicle high = make("HIGH_PRI", 9);
+        String lowPlate = "1111AAA";
+        String highPlate = "9999ZZZ";
+        Vehicle low = make(lowPlate, 1);
+        Vehicle high = make(highPlate, 9);
 
         q.put(low);
         q.put(high);
 
         Vehicle first = q.take();
-        Assertions.assertEquals("HIGH_PRI", first.getPlate(), "High priority vehicle was not returned first by the priority queue");
+        Assertions.assertEquals(highPlate, first.getPlate(), "High priority vehicle was not returned first by the priority queue");
     }
 }
