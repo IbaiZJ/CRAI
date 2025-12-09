@@ -110,6 +110,26 @@ jobs:
           name: frontend-coverage
           path: frontend/coverage/
 
+        # Validate SonarCloud project and default branch before scanning
+        - name: Validate SonarCloud project exists
+          run: |
+            echo "Checking SonarCloud project '${{ secrets.SONAR_PROJECT_KEY }}'"
+            resp=$(curl -s -u "${{ secrets.SONAR_TOKEN }}:" "https://sonarcloud.io/api/projects/search?projects=${{ secrets.SONAR_PROJECT_KEY }}")
+            if ! echo "$resp" | grep -q "\"key\":\"${{ secrets.SONAR_PROJECT_KEY }}\""; then
+              echo "ERROR: SonarCloud project '${{ secrets.SONAR_PROJECT_KEY }}' not found in organization '${{ secrets.SONAR_ORGANIZATION }}'."
+              echo "Response: $resp"
+              exit 1
+            fi
+
+        - name: Validate SonarCloud default branch
+          run: |
+            resp=$(curl -s -u "${{ secrets.SONAR_TOKEN }}:" "https://sonarcloud.io/api/project_branches/list?project=${{ secrets.SONAR_PROJECT_KEY }}")
+            if ! echo "$resp" | grep -q '"default":true'; then
+              echo "ERROR: No default branch found for project '${{ secrets.SONAR_PROJECT_KEY }}'. Ensure project has a default branch (e.g. 'main') and is bound to the repository."
+              echo "Response: $resp"
+              exit 1
+            fi
+
       # SonarCloud Scan
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v6
