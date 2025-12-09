@@ -54,8 +54,8 @@ services:
       - ./backend/node_red_data:/data
     environment:
       - TZ=Europe/Madrid
-    env_file:
-      - ./backend/.env
+    # env_file:
+    #   - ./backend/.env
     depends_on:
       - cloud-sql-proxy
       # - ebapi
@@ -102,11 +102,35 @@ services:
       - app-network
     restart: unless-stopped
 
+  sonarqube:
+    image: sonarqube:lts
+    container_name: sonarqube
+    ports:
+      - "6911:9000"
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_logs:/opt/sonarqube/logs
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_temp:/opt/sonarqube/temp
+    networks:
+      - app-network
+    restart: unless-stopped
+
 networks:
   app-network:
     driver: bridge
 
 volumes:
   mysql_data:
+    driver: local
+  sonarqube_data:
+    driver: local
+  sonarqube_logs:
+    driver: local
+  sonarqube_extensions:
+    driver: local
+  sonarqube_temp:
     driver: local
 
