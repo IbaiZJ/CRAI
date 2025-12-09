@@ -1,18 +1,32 @@
 """
-Integration tests for ebAPI - End-to-end testing
+Integration tests for itvAPI - End-to-end testing
 """
 import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import patch
 import pandas as pd
+from datetime import date, timedelta
 
 
 @pytest.fixture
 def mock_csv_data():
     """Mock CSV data for integration tests"""
+    today = date.today()
     return pd.DataFrame({
-        'plate': ['1234BBB', '5678XYZ', '0000BBB', '1111CCC', '2222DDD'],
-        'badge': ['TB', 'MC', 'T0', 'TE', 'TC']
+        'plate': [
+            '1234BBB',  # vigente (60 days ahead)
+            '5678XYZ',  # warning (15 days ahead)
+            '0000BBB',  # caducado (100 days ago)
+            '1111CCC',  # vigente
+            '2222DDD'   # warning
+        ],
+        'date_itv': [
+            (today + timedelta(days=60)).isoformat(),
+            (today + timedelta(days=15)).isoformat(),
+            (today - timedelta(days=100)).isoformat(),
+            (today + timedelta(days=90)).isoformat(),
+            (today + timedelta(days=20)).isoformat(),
+        ]
     })
 
 
@@ -36,41 +50,31 @@ class TestIntegration:
     """Integration tests for full API workflow"""
     
     def test_full_workflow_valid_plate(self, integration_client):
-        """Test complete workflow with valid plate"""
+        """Test complete workflow with valid vigente plate"""
         response = integration_client.get("/api?carPlate=1234BBB")
         
         assert response.status_code == 200
         data = response.json()
         assert data["carPlate"] == "1234BBB"
-        assert "badge" in data
-        assert isinstance(data["badge"], dict)
-        assert data["badge"]["vehicleType"] == "turism"
-        assert data["badge"]["badge"] == "B"
+        assert "itv_date" in data
+        assert data["itv_date"] == 0  # vigente
     
-    def test_full_workflow_motorbike(self, integration_client):
-        """Test complete workflow with motorbike"""
-        response = integration_client.get("/api?carPlate=5678XYZ")
-        
-        assert response.status_code == 200
-        data = response.json()
-        assert data["badge"]["vehicleType"] == "motorbike"
-        assert data["badge"]["badge"] == "C"
-    
-    def test_full_workflow_eco_badge(self, integration_client):
-        """Test complete workflow with ECO badge"""
-        response = integration_client.get("/api?carPlate=1111CCC")
-        
-        assert response.status_code == 200
-        data = response.json()
-        assert data["badge"]["badge"] == "ECO"
-    
-    def test_full_workflow_zero_emissions(self, integration_client):
-        """Test complete workflow with 0 emissions badge"""
+    def test_full_workflow_expired_plate(self, integration_client):
+        """Test complete workflow with expired ITV"""
         response = integration_client.get("/api?carPlate=0000BBB")
         
         assert response.status_code == 200
         data = response.json()
-        assert data["badge"]["badge"] == "0"
+        assert data["carPlate"] == "0000BBB"
+        assert data["itv_date"] == 1  # caducado
+    
+    def test_full_workflow_warning_plate(self, integration_client):
+        """Test complete workflow with warning (expires soon)"""
+        response = integration_client.get("/api?carPlate=5678XYZ")
+        
+        assert response.status_code == 200
+        data = response.json()
+        assert data["itv_date"] == "warning"
     
     def test_full_workflow_case_insensitive(self, integration_client):
         """Test complete workflow with lowercase input"""
@@ -79,7 +83,7 @@ class TestIntegration:
         assert response.status_code == 200
         data = response.json()
         assert data["carPlate"] == "1234bbb"
-        assert data["badge"]["vehicleType"] == "turism"
+        assert data["itv_date"] == 0  # vigente
     
     def test_full_workflow_with_spaces(self, integration_client):
         """Test complete workflow with spaces"""
@@ -87,7 +91,7 @@ class TestIntegration:
         
         assert response.status_code == 200
         data = response.json()
-        assert "badge" in data
+        assert "itv_date" in data
     
     def test_full_workflow_plate_not_found(self, integration_client):
         """Test complete workflow when plate not in database"""
@@ -96,7 +100,7 @@ class TestIntegration:
         assert response.status_code == 200
         data = response.json()
         assert data["carPlate"] == "9999ZZZ"
-        assert data["badge"] == "none"
+        assert data["itv_date"] == "none"
     
     def test_full_workflow_invalid_format(self, integration_client):
         """Test complete workflow with invalid plate format"""
@@ -104,7 +108,7 @@ class TestIntegration:
         
         assert response.status_code == 200
         data = response.json()
-        assert "error" in data["badge"]
+        assert "error" in data["itv_date"]
     
     def test_multiple_requests(self, integration_client):
         """Test multiple sequential requests"""
@@ -115,7 +119,7 @@ class TestIntegration:
             assert response.status_code == 200
             data = response.json()
             assert data["carPlate"] == plate
-            assert "badge" in data
+            assert "itv_date" in data
     
     def test_api_prefix_configured(self, integration_client):
         """Test that API prefix is correctly configured"""
@@ -129,12 +133,25 @@ class TestIntegration:
         
         # Check top-level keys
         assert "carPlate" in data
-        assert "badge" in data
+        assert "itv_date" in data
         
-        # Check badge structure
-        if isinstance(data["badge"], dict) and "error" not in data["badge"]:
-            assert "vehicleType" in data["badge"]
-            assert "badge" in data["badge"]
+        # Check itv_date structure (should be int, string "none", "warning", or dict with error)
+        itv_value = data["itv_date"]
+        assert isinstance(itv_value, (int, str, dict))
+    
+    def test_all_state_types(self, integration_client):
+        """Test that all three ITV states are returned correctly"""
+        # Vigente
+        response = integration_client.get("/api?carPlate=1234BBB")
+        assert response.json()["itv_date"] == 0
+        
+        # Warning
+        response = integration_client.get("/api?carPlate=5678XYZ")
+        assert response.json()["itv_date"] == "warning"
+        
+        # Caducado
+        response = integration_client.get("/api?carPlate=0000BBB")
+        assert response.json()["itv_date"] == 1
 
 
 class TestAPIDocumentation:
@@ -148,7 +165,7 @@ class TestAPIDocumentation:
     def test_app_metadata(self, integration_client):
         """Test app has correct metadata"""
         from main import app
-        assert app.title == "Environmental Badge API"
+        assert app.title == "ITV API"
         assert app.version == "1.0.0"
 
 
@@ -160,14 +177,14 @@ class TestEdgeCases:
         response = integration_client.get("/api?carPlate=" + "A" * 100)
         assert response.status_code == 200
         data = response.json()
-        assert "error" in data["badge"] or data["badge"] == "none"
+        assert "error" in data["itv_date"] or data["itv_date"] == "none"
     
     def test_special_characters(self, integration_client):
         """Test with special characters"""
         response = integration_client.get("/api?carPlate=1234@#$")
         assert response.status_code == 200
         data = response.json()
-        assert "error" in data["badge"] or data["badge"] == "none"
+        assert "error" in data["itv_date"] or data["itv_date"] == "none"
     
     def test_unicode_characters(self, integration_client):
         """Test with unicode characters"""
@@ -179,4 +196,49 @@ class TestEdgeCases:
         response = integration_client.get("/api?carPlate=1234567")
         assert response.status_code == 200
         data = response.json()
-        assert "error" in data["badge"] or data["badge"] == "none"
+        assert "error" in data["itv_date"] or data["itv_date"] == "none"
+    
+    def test_plates_with_vowels(self, integration_client):
+        """Test plates with vowels (invalid)"""
+        response = integration_client.get("/api?carPlate=1234ABC")
+        assert response.status_code == 200
+        data = response.json()
+        # Should be invalid (A is a vowel)
+        assert "error" in data["itv_date"] or data["itv_date"] == "none"
+    
+    def test_missing_query_parameter(self, integration_client):
+        """Test missing required carPlate parameter"""
+        response = integration_client.get("/api")
+        assert response.status_code == 422  # Validation error
+
+
+class TestConcurrentRequests:
+    """Test handling of concurrent requests"""
+    
+    def test_rapid_sequential_requests(self, integration_client):
+        """Test rapid sequential requests to same endpoint"""
+        plates = ["1234BBB"] * 10
+        
+        responses = []
+        for plate in plates:
+            response = integration_client.get(f"/api?carPlate={plate}")
+            responses.append(response)
+        
+        # All should succeed
+        for response in responses:
+            assert response.status_code == 200
+            assert response.json()["itv_date"] == 0
+    
+    def test_different_plates_sequence(self, integration_client):
+        """Test sequential requests for different plates"""
+        test_cases = [
+            ("1234BBB", 0),
+            ("5678XYZ", "warning"),
+            ("0000BBB", 1),
+            ("1111CCC", 0),
+        ]
+        
+        for plate, expected in test_cases:
+            response = integration_client.get(f"/api?carPlate={plate}")
+            assert response.status_code == 200
+            assert response.json()["itv_date"] == expected

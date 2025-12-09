@@ -10,10 +10,10 @@ class TestSettings:
     
     def test_settings_default_values(self):
         """Test that settings have correct default values"""
-        assert settings.API_TITLE == "Environmental Badge API"
+        assert settings.API_TITLE == "ITV API"
         assert settings.API_VERSION == "1.0.0"
         assert settings.API_PREFIX == "/api"
-        assert settings.API_TAGS == ["EB API"]
+        assert settings.API_TAGS == ["ITV API"]
     
     def test_settings_is_instance_of_base_settings(self):
         """Test that settings is an instance of Settings"""
@@ -46,5 +46,16 @@ class TestSettings:
     def test_create_new_settings_instance(self):
         """Test creating a new Settings instance"""
         new_settings = Settings()
-        assert new_settings.API_TITLE == "Environmental Badge API"
+        assert new_settings.API_TITLE == "ITV API"
         assert new_settings.API_VERSION == "1.0.0"
+    
+    def test_settings_api_title_not_empty(self):
+        """Test API_TITLE is not empty"""
+        assert len(settings.API_TITLE) > 0
+    
+    def test_settings_api_version_format(self):
+        """Test API_VERSION follows semantic versioning"""
+        version_parts = settings.API_VERSION.split('.')
+        assert len(version_parts) == 3
+        for part in version_parts:
+            assert part.isdigit()

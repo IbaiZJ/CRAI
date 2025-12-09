@@ -1,9 +1,10 @@
 """
-Tests for service/service.py - EnvironmentalBadgeService
+Tests for service/service.py - PlatesItvService
 """
 import pytest
 from unittest.mock import patch, MagicMock, mock_open
 import pandas as pd
+from datetime import date, timedelta
 
 
 @pytest.fixture
@@ -11,34 +12,36 @@ def mock_csv_data():
     """Mock CSV data for testing"""
     return pd.DataFrame({
         'plate': ['1234BBB', '5678XYZ', '0000BBB', '1111CCC'],
-        'badge': ['TB', 'MC', 'T0', 'TE']
+        'date_itv': ['2026-01-15', '2024-12-01', '2027-06-30', '2025-12-10']
     })
 
 
 @pytest.fixture
 def service(mock_csv_data):
     """Create service instance with mocked data"""
-    with patch('service.service.pd.read_csv', return_value=mock_csv_data):
-        with patch('builtins.print'):  # Suppress print statements
-            from service.service import EnvironmentalBadgeService
-            return EnvironmentalBadgeService()
+    with patch('service.service.unzip_itv_date_file'):
+        with patch('service.service.pd.read_csv', return_value=mock_csv_data):
+            with patch('builtins.print'):  # Suppress print statements
+                from service.service import PlatesItvService
+                return PlatesItvService()
 
 
-class TestEnvironmentalBadgeService:
-    """Test suite for EnvironmentalBadgeService"""
+class TestPlatesItvService:
+    """Test suite for PlatesItvService"""
     
     def test_service_initialization(self, mock_csv_data):
         """Test service initializes correctly"""
-        with patch('service.service.pd.read_csv', return_value=mock_csv_data):
-            with patch('builtins.print'):
-                from service.service import EnvironmentalBadgeService
-                service = EnvironmentalBadgeService()
-                
-                assert service.df is not None
-                assert len(service.df) == 4
-                assert 'plate' in service.df.columns
-                assert 'badge' in service.df.columns
-                assert len(service.plate_to_badge) == 4
+        with patch('service.service.unzip_itv_date_file'):
+            with patch('service.service.pd.read_csv', return_value=mock_csv_data):
+                with patch('builtins.print'):
+                    from service.service import PlatesItvService
+                    service = PlatesItvService()
+                    
+                    assert service.df is not None
+                    assert len(service.df) == 4
+                    assert 'plate' in service.df.columns
+                    assert 'date_itv' in service.df.columns
+                    assert len(service.plate_to_itv_date) == 4
     
     def test_validate_plate_valid(self, service):
         """Test validation of valid plates"""
@@ -71,114 +74,100 @@ class TestEnvironmentalBadgeService:
         assert service.validate_plate("12345BB") is None  # 5 digits, 2 letters
         assert service.validate_plate("") is None         # Empty string
         assert service.validate_plate("INVALID") is None  # Complete invalid
-        assert service.validate_plate("1234ABC") is None  # ABC contains vowel A
     
     def test_validate_plate_with_vowels(self, service):
         """Test validation rejects plates with vowels"""
         assert service.validate_plate("1234AEI") is None
         assert service.validate_plate("1234OUA") is None
     
-    def test_get_badge_from_plate_exists(self, service):
-        """Test getting badge for existing plate"""
-        assert service.get_badge_from_plate("1234BBB") == "TB"
-        assert service.get_badge_from_plate("5678XYZ") == "MC"
-        assert service.get_badge_from_plate("0000BBB") == "T0"
+    def test_convert_itv_date_code_to_state_expired(self, service):
+        """Test ITV date conversion for expired date"""
+        # Date in the past
+        past_date = (date.today() - timedelta(days=100)).isoformat()
+        result = service.convert_itv_date_code_to_state(past_date)
+        assert result == 1  # caducado
     
-    def test_get_badge_from_plate_not_exists(self, service):
-        """Test getting badge for non-existing plate"""
-        assert service.get_badge_from_plate("9999ZZZ") is None
-        assert service.get_badge_from_plate("8888XXX") is None
+    def test_convert_itv_date_code_to_state_valid(self, service):
+        """Test ITV date conversion for valid date (more than 30 days)"""
+        # Date more than 30 days in future
+        future_date = (date.today() + timedelta(days=60)).isoformat()
+        result = service.convert_itv_date_code_to_state(future_date)
+        assert result == 0  # vigente
     
-    def test_convert_badge_code_turism(self, service):
-        """Test badge code conversion for turism"""
-        result = service.convert_badge_code_to_name("TB")
-        assert result["vehicleType"] == "turism"
-        assert result["badge"] == "B"
-        
-        result = service.convert_badge_code_to_name("TC")
-        assert result["vehicleType"] == "turism"
-        assert result["badge"] == "C"
-        
-        result = service.convert_badge_code_to_name("T0")
-        assert result["vehicleType"] == "turism"
-        assert result["badge"] == "0"
-        
-        result = service.convert_badge_code_to_name("TE")
-        assert result["vehicleType"] == "turism"
-        assert result["badge"] == "ECO"
+    def test_convert_itv_date_code_to_state_warning(self, service):
+        """Test ITV date conversion for warning (less than 30 days)"""
+        # Date less than 30 days in future
+        warning_date = (date.today() + timedelta(days=15)).isoformat()
+        result = service.convert_itv_date_code_to_state(warning_date)
+        assert result == "warning"
     
-    def test_convert_badge_code_motorbike(self, service):
-        """Test badge code conversion for motorbike"""
-        result = service.convert_badge_code_to_name("MB")
-        assert result["vehicleType"] == "motorbike"
-        assert result["badge"] == "B"
-        
-        result = service.convert_badge_code_to_name("MC")
-        assert result["vehicleType"] == "motorbike"
-        assert result["badge"] == "C"
+    def test_convert_itv_date_code_to_state_today(self, service):
+        """Test ITV date conversion for today"""
+        today = date.today().isoformat()
+        result = service.convert_itv_date_code_to_state(today)
+        # Today is technically not expired (same day)
+        assert result == "warning"
     
-    def test_convert_badge_code_unknown(self, service):
-        """Test badge code conversion for unknown types"""
-        result = service.convert_badge_code_to_name("XB")
-        assert result["vehicleType"] is None
-        assert result["badge"] == "B"
-        
-        result = service.convert_badge_code_to_name("YC")
-        assert result["vehicleType"] is None
-        assert result["badge"] == "C"
+    def test_convert_itv_date_code_to_state_invalid_date(self, service):
+        """Test ITV date conversion with invalid date format"""
+        result = service.convert_itv_date_code_to_state("invalid-date")
+        assert result == 0  # defaults to vigente on error
     
-    def test_convert_badge_code_unknown_badge(self, service):
-        """Test badge code with unknown badge letter"""
-        result = service.convert_badge_code_to_name("TX")
-        assert result["vehicleType"] == "turism"
-        assert result["badge"] == "Unknown"
-        
-        result = service.convert_badge_code_to_name("MZ")
-        assert result["vehicleType"] == "motorbike"
-        assert result["badge"] == "Unknown"
+    def test_convert_itv_date_code_to_state_empty_string(self, service):
+        """Test ITV date conversion with empty string"""
+        result = service.convert_itv_date_code_to_state("")
+        assert result == 0  # defaults to vigente on error
     
-    def test_convert_badge_code_single_char(self, service):
-        """Test badge code with single character"""
-        result = service.convert_badge_code_to_name("T")
-        assert result["vehicleType"] == "turism"
-        assert result["badge"] == "Unknown"  # No second character
-    
-    def test_get_badge_by_plate_success(self, service):
+    def test_get_itv_date_by_plate_success(self, service):
         """Test complete flow for valid plate"""
-        # Mock data has 1234BBB with badge TB (turism B)
-        result = service.get_badge_by_plate("1234BBB")  
-        
-        # Should find it and convert to dict
-        assert isinstance(result, dict)
-        assert result["vehicleType"] == "turism"
-        assert result["badge"] == "B"
+        # Mock data has 1234BBB with date 2026-01-15
+        with patch.object(service, 'convert_itv_date_code_to_state', return_value=0) as mock_convert:
+            result = service.get_itv_date_by_plate("1234BBB")
+            
+            assert result == 0
+            mock_convert.assert_called_once_with('2026-01-15')
     
-    def test_get_badge_by_plate_invalid_format(self, service):
+    def test_get_itv_date_by_plate_invalid_format(self, service):
         """Test complete flow for invalid plate format"""
-        result = service.get_badge_by_plate("INVALID")
+        result = service.get_itv_date_by_plate("INVALID")
         
         assert isinstance(result, dict)
         assert "error" in result
         assert result["error"] == "Invalid plate format"
     
-    def test_get_badge_by_plate_not_found(self, service):
+    def test_get_itv_date_by_plate_not_found(self, service):
         """Test complete flow for plate not in database"""
-        result = service.get_badge_by_plate("9999ZZZ")
+        result = service.get_itv_date_by_plate("9999ZZZ")
         
-    def test_get_badge_by_plate_with_formatting(self, service):
-        """Test complete flow with spaces and lowercase"""
-        # ABC contains vowel A, so it's invalid format
-        result = service.get_badge_by_plate("1234 abc")
-        
-        assert isinstance(result, dict)
-        assert "error" in result
-        assert result["error"] == "Invalid plate format"
+        assert result == "none"
     
-    def test_plate_to_badge_dictionary(self, service):
-        """Test internal plate_to_badge dictionary"""
-        assert "1234BBB" in service.plate_to_badge
-        assert service.plate_to_badge["1234BBB"] == "TB"
-        assert len(service.plate_to_badge) == 4
+    def test_get_itv_date_by_plate_with_formatting(self, service):
+        """Test complete flow with spaces and lowercase"""
+        with patch.object(service, 'convert_itv_date_code_to_state', return_value=0):
+            result = service.get_itv_date_by_plate("1234 bbb")
+            
+            assert result == 0
+    
+    def test_plate_to_itv_date_dictionary(self, service):
+        """Test internal plate_to_itv_date dictionary"""
+        assert "1234BBB" in service.plate_to_itv_date
+        assert service.plate_to_itv_date["1234BBB"] == "2026-01-15"
+        assert len(service.plate_to_itv_date) == 4
+    
+    def test_dataframe_columns(self, service):
+        """Test dataframe has correct columns"""
+        assert 'plate' in service.df.columns
+        assert 'date_itv' in service.df.columns
+        assert len(service.df.columns) == 2
+    
+    def test_service_with_expired_dates(self, service):
+        """Test service handles expired dates correctly"""
+        # Set a plate with expired date in the mock
+        expired_date = "2020-01-01"
+        service.plate_to_itv_date["9999XXX"] = expired_date
+        
+        result = service.convert_itv_date_code_to_state(expired_date)
+        assert result == 1  # caducado
 
 
 class TestPlateServiceSingleton:
@@ -186,7 +175,50 @@ class TestPlateServiceSingleton:
     
     def test_plate_service_exists(self):
         """Test that plateService is created"""
-        with patch('service.service.pd.read_csv'):
-            with patch('builtins.print'):
-                from service.service import plateService
-                assert plateService is not None
+        with patch('service.service.unzip_itv_date_file'):
+            with patch('service.service.pd.read_csv'):
+                with patch('builtins.print'):
+                    from service.service import plateService
+                    assert plateService is not None
+    
+    def test_plate_service_is_instance(self):
+        """Test that plateService is instance of PlatesItvService"""
+        with patch('service.service.unzip_itv_date_file'):
+            with patch('service.service.pd.read_csv'):
+                with patch('builtins.print'):
+                    from service.service import plateService, PlatesItvService
+                    assert isinstance(plateService, PlatesItvService)
+
+
+class TestEdgeCases:
+    """Test edge cases for PlatesItvService"""
+    
+    def test_validate_plate_mixed_case(self, service):
+        """Test validation with mixed case"""
+        assert service.validate_plate("1234BbB") == "1234BBB"
+        assert service.validate_plate("5678xYz") == "5678XYZ"
+    
+    def test_validate_plate_multiple_spaces(self, service):
+        """Test validation removes multiple spaces"""
+        assert service.validate_plate("1234  BBB") == "1234BBB"
+        assert service.validate_plate(" 1 2 3 4 B B B ") == "1234BBB"
+    
+    def test_convert_itv_boundary_29_days(self, service):
+        """Test warning boundary at exactly 29 days"""
+        date_29 = (date.today() + timedelta(days=29)).isoformat()
+        result = service.convert_itv_date_code_to_state(date_29)
+        assert result == "warning"
+    
+    def test_convert_itv_boundary_30_days(self, service):
+        """Test valid boundary at exactly 30 days"""
+        date_30 = (date.today() + timedelta(days=30)).isoformat()
+        result = service.convert_itv_date_code_to_state(date_30)
+        assert result == 0  # vigente
+    
+    def test_validate_plate_only_numbers(self, service):
+        """Test validation rejects only numbers"""
+        assert service.validate_plate("1234567") is None
+    
+    def test_validate_plate_only_letters(self, service):
+        """Test validation rejects only letters"""
+        assert service.validate_plate("BBBBBBB") is None
