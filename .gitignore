@@ -64,6 +64,7 @@ dmypy.json
 environmentalBadge.txt
 environmentalBadge.csv
 
+plates_itv.csv
 # node-red
 # Node modules
 node_modules/
