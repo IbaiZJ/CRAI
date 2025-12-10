@@ -4,14 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
+import com.crai.os.model.AlertType;
+import com.crai.os.model.PoliceMessage;
 import com.crai.os.service.PoliceService;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,7 +31,9 @@ class PoliceControllerTest {
 
     @Test
     void getAlertsDelegatesToService() {
-        List<String> alerts = List.of("a1", "a2");
+        List<PoliceMessage> alerts = List.of(
+                new PoliceMessage(AlertType.POLICE, "1234ABC", "desc"),
+                new PoliceMessage(AlertType.BADGE, "5678DEF", "other"));
         when(policeService.getProcessedAlerts()).thenReturn(alerts);
 
         Object result = controller.getAlerts();
