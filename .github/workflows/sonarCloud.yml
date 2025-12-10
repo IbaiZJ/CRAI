@@ -163,9 +163,10 @@ jobs:
             -Dsonar.organization=${{ env.SONAR_ORGANIZATION }}
             -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }}
             -Dsonar.host.url=${{ env.SONAR_HOST_URL }}
-            -Dsonar.python.coverage.reportPaths=ebAPI/coverage.xml
+            -Dsonar.python.coverage.reportPaths=ebAPI/coverage.xml,itvAPI/coverage.xml
             -Dsonar.javascript.lcov.reportPaths=frontend/coverage/lcov.info
             -Dsonar.coverage.jacoco.xmlReportPaths=os/target/site/jacoco/jacoco.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
