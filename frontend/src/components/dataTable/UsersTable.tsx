@@ -1,5 +1,5 @@
-import { DataTable } from "@/components/dataTable/lib/data-table.tsx"
-import { createColumns } from "@/components/dataTable/lib/createColumns.tsx"
+import { DataTable } from "@/components/dataTable/lib/data-table"
+import { createColumns } from "@/components/dataTable/lib/createColumns"
 import { Badge } from "@/components/ui/badge"
 import { users, type User } from "@/constants/userConstant"
 
