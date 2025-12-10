@@ -20,7 +20,7 @@ const userColumns = createColumns<User>({
       accessorKey: "role",
       header: "Role",
       enableSorting: true,
-      cell: (value) => (
+      cell: (value: string) => (
         <Badge variant={value === "admin" ? "default" : "secondary"}>
           {value}
         </Badge>
@@ -30,7 +30,7 @@ const userColumns = createColumns<User>({
       accessorKey: "status",
       header: "Status",
       enableSorting: true,
-      cell: (value) => (
+      cell: (value: string) => (
         <Badge variant={value === "active" ? "default" : "destructive"}>
           {value}
         </Badge>
