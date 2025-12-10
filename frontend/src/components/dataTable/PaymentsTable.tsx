@@ -1,5 +1,5 @@
-import { DataTable } from "@/components/dataTable/lib/data-table"
-import { createColumns } from "@/components/dataTable/lib/createColumns"
+import { DataTable } from "@/components/dataTable/lib/data-table.tsx"
+import { createColumns } from "@/components/dataTable/lib/createColumns.tsx"
 import type { Payment } from "@/constants/paymentConstant"
 
 type Props = {
