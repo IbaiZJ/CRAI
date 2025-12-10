@@ -1,10 +1,14 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from '../contexts/AuthContext';
 import Login from '../pages/Login';
 
 describe('Login Component', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   it('renders login form with title', () => {
     render(
       <BrowserRouter>
@@ -14,7 +18,6 @@ describe('Login Component', () => {
       </BrowserRouter>
     );
     
-    // Verifica que el título esté presente
     expect(screen.getByRole('heading', { name: 'Log In' })).toBeInTheDocument();
   });
 
@@ -27,7 +30,6 @@ describe('Login Component', () => {
       </BrowserRouter>
     );
     
-    // Verifica que el texto de descripción esté presente
     expect(screen.getByText('Sign in with your Google account to continue')).toBeInTheDocument();
   });
 
@@ -40,7 +42,6 @@ describe('Login Component', () => {
       </BrowserRouter>
     );
     
-    // Verifica que el contenedor de Google Login esté presente
     const container = screen.getByText('Log In').closest('div');
     expect(container).toBeInTheDocument();
   });
@@ -54,7 +55,32 @@ describe('Login Component', () => {
       </BrowserRouter>
     );
     
-    // Verifica que el link de volver esté presente
+    expect(screen.getByRole('link', { name: 'Back to Home' })).toBeInTheDocument();
+  });
+
+  it('sets document title on mount', () => {
+    render(
+      <BrowserRouter>
+        <AuthProvider>
+          <Login />
+        </AuthProvider>
+      </BrowserRouter>
+    );
+    
+    expect(document.title).toBe('CRAI - Login');
+  });
+
+  it('renders all UI elements', () => {
+    render(
+      <BrowserRouter>
+        <AuthProvider>
+          <Login />
+        </AuthProvider>
+      </BrowserRouter>
+    );
+    
+    expect(screen.getByRole('heading', { name: 'Log In' })).toBeInTheDocument();
+    expect(screen.getByText('Sign in with your Google account to continue')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Back to Home' })).toBeInTheDocument();
   });
 });
