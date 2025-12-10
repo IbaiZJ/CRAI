@@ -13,7 +13,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 dist/
-coverage/
 
 # IDE
 .vscode/
@@ -53,7 +52,6 @@ build/
 .coverage
 .coverage.*
 htmlcov/
-coverage.xml
 .tox/
 .nox/
 .hypothesis/
