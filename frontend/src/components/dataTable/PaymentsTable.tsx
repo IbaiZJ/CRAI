@@ -12,31 +12,31 @@ const paymentColumns = createColumns<Payment>({
       accessorKey: "name",
       header: "Name",
       enableSorting: true,
-      cell: (value) => <div className="font-medium">{value}</div>,
+      cell: (value: string) => <div className="font-medium">{value}</div>,
     },
     {
       accessorKey: "status",
       header: "Status",
       enableSorting: true,
-      cell: (value) => <div className="capitalize">{value}</div>,
+      cell: (value: string) => <div className="capitalize">{value}</div>,
     },
     {
       accessorKey: "date",
       header: "Date",
       enableSorting: true,
-      cell: (value) => <div className="text-sm text-muted-foreground">{value}</div>,
+      cell: (value: string) => <div className="text-sm text-muted-foreground">{value}</div>,
     },
     {
       accessorKey: "email",
       header: "Email",
       enableSorting: true,
-      cell: (value) => <div className="lowercase">{value}</div>,
+      cell: (value: string) => <div className="lowercase">{value}</div>,
     },
     {
       accessorKey: "amount",
       header: "Amount",
       enableSorting: true,
-      cell: (value) => {
+      cell: (value: number) => {
         const formatted = new Intl.NumberFormat("en-US", {
           style: "currency",
           currency: "USD",
