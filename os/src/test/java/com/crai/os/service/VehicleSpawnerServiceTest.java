@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -55,8 +56,7 @@ class VehicleSpawnerServiceTest {
 
         spawner.spawnVehicle();
 
-        verify(cameraPoolService).enqueueVehicle(vehicleCaptor.capture());
-        verify(cameraPoolService).enqueueVehicle(vehicleCaptor.capture());
+        verify(cameraPoolService, times(2)).enqueueVehicle(vehicleCaptor.capture());
 
         assertEquals(2, vehicleCaptor.getAllValues().size());
         for (Vehicle v : vehicleCaptor.getAllValues()) {
