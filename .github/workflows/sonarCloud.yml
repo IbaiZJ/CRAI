@@ -10,40 +10,26 @@ env:
   SONAR_HOST_URL: https://sonarcloud.io
 
 jobs:
-  # Job para ebAPI Backend
   ebapi-analysis:
     name: ebAPI Backend Analysis
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for better analysis
-
-      # Configure Python
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
           cache: "pip"
           cache-dependency-path: ebAPI/requirements.txt
-
-      # Install Python Dependencies
       - name: Install ebAPI Dependencies
         working-directory: ./ebAPI
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
-      # Run tests and generate coverage report
       - name: Run ebAPI Tests with Coverage
         working-directory: ./ebAPI
         run: |
           pytest -v --cov --cov-report=xml --cov-report=term-missing
-        continue-on-error: false
-
-      # Upload coverage for SonarCloud
       - name: Upload ebAPI Coverage
         uses: actions/upload-artifact@v4
         with:
@@ -51,36 +37,23 @@ jobs:
           path: ebAPI/coverage.xml
           retention-days: 7
 
-  # Job para Frontend
   frontend-analysis:
     name: Frontend Analysis
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      # Configure Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
           cache-dependency-path: frontend/package-lock.json
-
-      # Install Frontend Dependencies
       - name: Install Frontend Dependencies
         working-directory: ./frontend
         run: npm ci
-
-      # Run tests and generate coverage
       - name: Run Frontend Tests with Coverage
         working-directory: ./frontend
         run: npm run test:coverage -- --run
-
-      # Upload coverage for SonarCloud
       - name: Upload Frontend Coverage
         uses: actions/upload-artifact@v4
         with:
@@ -88,40 +61,26 @@ jobs:
           path: frontend/coverage/lcov.info
           retention-days: 7
 
-  # Job para itvAPI
   itvapi-analysis:
     name: itvAPI Analysis
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      # Configure Python
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
           cache: "pip"
           cache-dependency-path: itvAPI/requirements.txt
-
-      # Install itvAPI Dependencies
       - name: Install itvAPI Dependencies
         working-directory: ./itvAPI
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
-      # Run tests and generate coverage report
       - name: Run itvAPI Tests with Coverage
         working-directory: ./itvAPI
         run: |
           pytest -v --cov --cov-report=xml --cov-report=term-missing
-        continue-on-error: false
-
-      # Upload coverage for SonarCloud
       - name: Upload itvAPI Coverage
         uses: actions/upload-artifact@v4
         with:
@@ -129,52 +88,28 @@ jobs:
           path: itvAPI/coverage.xml
           retention-days: 7
 
-<<<<<<< HEAD
-  # Job para SonarCloud Scan
   sonarcloud-scan:
     name: SonarCloud Scan
     runs-on: ubuntu-latest
-    needs:
-      - ebapi-analysis
-      - frontend-analysis
-      - itvapi-analysis
+    needs: [ebapi-analysis, frontend-analysis, itvapi-analysis]
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
       SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
-=======
-  # Job para SonarCloud Analysis - downloads coverage artifacts and runs scanner
-  sonarcloud:
-    name: SonarCloud Scan
-    runs-on: ubuntu-latest
-    needs: [ebapi-analysis, frontend-analysis, itvapi-analysis]
->>>>>>> a192a24192d36e4c4689ba389d68a7b9a958d400
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
 
-<<<<<<< HEAD
-=======
-      # Download coverage reports
->>>>>>> a192a24192d36e4c4689ba389d68a7b9a958d400
       - name: Download ebAPI Coverage
         uses: actions/download-artifact@v4
         with:
           name: ebapi-coverage
-<<<<<<< HEAD
           path: ebAPI
-=======
-          path: ebAPI/
->>>>>>> a192a24192d36e4c4689ba389d68a7b9a958d400
 
       - name: Download Frontend Coverage
         uses: actions/download-artifact@v4
         with:
           name: frontend-coverage
-<<<<<<< HEAD
           path: frontend/coverage
 
       - name: Download itvAPI Coverage
@@ -194,38 +129,4 @@ jobs:
             -Dsonar.javascript.lcov.reportPaths=frontend/coverage/lcov.info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-=======
-          path: frontend/coverage/
-
-        # Validate SonarCloud project and default branch before scanning
-      - name: Validate SonarCloud project exists
-        run: |
-          echo "Checking SonarCloud project '${{ secrets.SONAR_PROJECT_KEY }}'"
-          resp=$(curl -s -u "${{ secrets.SONAR_TOKEN }}:" "https://sonarcloud.io/api/projects/search?projects=${{ secrets.SONAR_PROJECT_KEY }}")
-          if ! echo "$resp" | grep -q "\"key\":\"${{ secrets.SONAR_PROJECT_KEY }}\""; then
-            echo "ERROR: SonarCloud project '${{ secrets.SONAR_PROJECT_KEY }}' not found in organization '${{ secrets.SONAR_ORGANIZATION }}'."
-            echo "Response: $resp"
-            exit 1
-          fi
-
-      - name: Validate SonarCloud default branch
-        run: |
-          resp=$(curl -s -u "${{ secrets.SONAR_TOKEN }}:" "https://sonarcloud.io/api/project_branches/list?project=${{ secrets.SONAR_PROJECT_KEY }}")
-          if ! echo "$resp" | grep -q '"default":true'; then
-            echo "ERROR: No default branch found for project '${{ secrets.SONAR_PROJECT_KEY }}'. Ensure project has a default branch (e.g. 'main') and is bound to the repository."
-            echo "Response: $resp"
-            exit 1
-          fi
-
-      # SonarCloud Scan (imports coverage reports)
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v6
-        with:
-          args: >
-            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
->>>>>>> a192a24192d36e4c4689ba389d68a7b9a958d400
