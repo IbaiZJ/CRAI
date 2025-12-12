@@ -36,7 +36,9 @@ jobs:
           # SonarCloud needs paths relative to repo root
           # 1. Change source to empty (will use filename as full path)
           sed -i 's|<source>.*</source>|<source></source>|g' coverage.xml
-          # 2. Add ebAPI/ prefix to all filenames
+          # 2. Normalize absolute paths to relative first (strip everything up to ebAPI/)
+          sed -i 's|filename=".*/ebAPI/|filename="|g' coverage.xml
+          # 3. Add ebAPI/ prefix to all filenames
           sed -i 's|filename="|filename="ebAPI/|g' coverage.xml
           # Debug output
           echo "=== Fixed coverage.xml ==="
@@ -105,7 +107,9 @@ jobs:
           # SonarCloud needs paths relative to repo root
           # 1. Change source to empty (will use filename as full path)
           sed -i 's|<source>.*</source>|<source></source>|g' coverage.xml
-          # 2. Add itvAPI/ prefix to all filenames
+          # 2. Normalize absolute paths to relative first (strip everything up to itvAPI/)
+          sed -i 's|filename=".*/itvAPI/|filename="|g' coverage.xml
+          # 3. Add itvAPI/ prefix to all filenames
           sed -i 's|filename="|filename="itvAPI/|g' coverage.xml
           # Debug output
           echo "=== Fixed coverage.xml ==="
