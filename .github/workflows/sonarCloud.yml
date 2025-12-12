@@ -136,25 +136,25 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ebapi-coverage
-          path: ebAPI
+          path: .
 
       - name: Download Frontend Coverage
         uses: actions/download-artifact@v4
         with:
           name: frontend-coverage
-          path: frontend/coverage
+          path: .
 
       - name: Download itvAPI Coverage
         uses: actions/download-artifact@v4
         with:
           name: itvapi-coverage
-          path: itvAPI
+          path: .
 
       - name: Download os Coverage
         uses: actions/download-artifact@v4
         with:
           name: os-coverage
-          path: os/target/site/jacoco
+          path: .
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2.3.0
