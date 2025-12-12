@@ -30,16 +30,17 @@ jobs:
         working-directory: ./ebAPI
         run: |
           pytest -v --cov --cov-report=xml:coverage.xml --cov-report=term-missing
-          # Fix coverage paths for SonarCloud
-          # 1. Change source to root (.)
-          sed -i 's|<source>.*</source>|<source>.</source>|g' coverage.xml
+      - name: Fix ebAPI Coverage Paths for SonarCloud
+        working-directory: ./ebAPI
+        run: |
+          # SonarCloud needs paths relative to repo root
+          # 1. Change source to empty (will use filename as full path)
+          sed -i 's|<source>.*</source>|<source></source>|g' coverage.xml
           # 2. Add ebAPI/ prefix to all filenames
           sed -i 's|filename="|filename="ebAPI/|g' coverage.xml
           # Debug output
-          echo "=== Sources ==="
-          grep '<source>' coverage.xml
-          echo "=== Sample filenames ==="
-          grep -m5 'filename=' coverage.xml
+          echo "=== Fixed coverage.xml ==="
+          head -30 coverage.xml
       - name: Upload ebAPI Coverage
         uses: actions/upload-artifact@v4
         with:
@@ -91,16 +92,17 @@ jobs:
         working-directory: ./itvAPI
         run: |
           pytest -v --cov --cov-report=xml:coverage.xml --cov-report=term-missing
-          # Fix coverage paths for SonarCloud
-          # 1. Change source to root (.)
-          sed -i 's|<source>.*</source>|<source>.</source>|g' coverage.xml
+      - name: Fix itvAPI Coverage Paths for SonarCloud
+        working-directory: ./itvAPI
+        run: |
+          # SonarCloud needs paths relative to repo root
+          # 1. Change source to empty (will use filename as full path)
+          sed -i 's|<source>.*</source>|<source></source>|g' coverage.xml
           # 2. Add itvAPI/ prefix to all filenames
           sed -i 's|filename="|filename="itvAPI/|g' coverage.xml
           # Debug output
-          echo "=== Sources ==="
-          grep '<source>' coverage.xml
-          echo "=== Sample filenames ==="
-          grep -m5 'filename=' coverage.xml
+          echo "=== Fixed coverage.xml ==="
+          head -30 coverage.xml
       - name: Upload itvAPI Coverage
         uses: actions/upload-artifact@v4
         with:
@@ -128,20 +130,18 @@ jobs:
         working-directory: ./ai
         run: |
           pytest tests/ -v --cov=src/video --cov-report=xml:coverage.xml --cov-report=term-missing
-          # Fix coverage paths for SonarCloud
-          # 1. Change source to root (.)
-          sed -i 's|<source>.*</source>|<source>.</source>|g' coverage.xml
-          # 2. Fix filename paths - they might be like "video/file.py" or "src/video/file.py"
-          # First add ai/ prefix
-          sed -i 's|filename="src/|filename="ai/src/|g' coverage.xml
+      - name: Fix AI Coverage Paths for SonarCloud
+        working-directory: ./ai
+        run: |
+          # SonarCloud needs paths relative to repo root
+          # 1. Change source to empty
+          sed -i 's|<source>.*</source>|<source></source>|g' coverage.xml
+          # 2. Fix filename paths to be relative to repo root
+          sed -i 's|filename="src/video/|filename="ai/src/video/|g' coverage.xml
           sed -i 's|filename="video/|filename="ai/src/video/|g' coverage.xml
-          # For any remaining direct filenames
-          sed -i 's|filename="\([^a][^i][^/]\)|filename="ai/src/video/\1|g' coverage.xml || true
           # Debug output
-          echo "=== Sources ==="
-          grep '<source>' coverage.xml
-          echo "=== Sample filenames ==="
-          grep -m5 'filename=' coverage.xml
+          echo "=== Fixed coverage.xml ==="
+          head -30 coverage.xml
       - name: Upload AI Coverage
         uses: actions/upload-artifact@v4
         with:
@@ -197,19 +197,19 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ebapi-coverage
-          path: .
+          path: ebAPI
 
       - name: Download Frontend Coverage
         uses: actions/download-artifact@v4
         with:
           name: frontend-coverage
-          path: .
+          path: frontend/coverage
 
       - name: Download itvAPI Coverage
         uses: actions/download-artifact@v4
         with:
           name: itvapi-coverage
-          path: .
+          path: itvAPI
 
       - name: Download AI Coverage
         uses: actions/download-artifact@v4
@@ -221,23 +221,33 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: os-coverage
-          path: .
+          path: os/target/site/jacoco
 
       - name: Debug Coverage Files
         run: |
-          echo "=== ebAPI coverage.xml ==="
-          head -20 ebAPI/coverage.xml || echo "Not found"
+          echo "=== Directory structure ==="
+          ls -la ebAPI/ || echo "ebAPI dir not found"
+          ls -la itvAPI/ || echo "itvAPI dir not found"
+          ls -la ai/ || echo "ai dir not found"
+          ls -la os/target/site/jacoco/ || echo "jacoco dir not found"
+          ls -la frontend/coverage/ || echo "frontend coverage dir not found"
           echo ""
-          echo "=== itvAPI coverage.xml ==="
-          head -20 itvAPI/coverage.xml || echo "Not found"
+          echo "=== ebAPI coverage.xml sources and filenames ==="
+          grep '<source>' ebAPI/coverage.xml || echo "Not found"
+          grep -m3 'filename=' ebAPI/coverage.xml || echo "Not found"
           echo ""
-          echo "=== AI coverage.xml ==="
-          head -20 ai/coverage.xml || echo "Not found"
+          echo "=== itvAPI coverage.xml sources and filenames ==="
+          grep '<source>' itvAPI/coverage.xml || echo "Not found"
+          grep -m3 'filename=' itvAPI/coverage.xml || echo "Not found"
           echo ""
-          echo "=== OS jacoco.xml ==="
-          head -20 os/target/site/jacoco/jacoco.xml || echo "Not found"
+          echo "=== AI coverage.xml sources and filenames ==="
+          grep '<source>' ai/coverage.xml || echo "Not found"
+          grep -m3 'filename=' ai/coverage.xml || echo "Not found"
           echo ""
-          echo "=== Frontend lcov.info ==="
+          echo "=== OS jacoco.xml first 30 lines ==="
+          head -30 os/target/site/jacoco/jacoco.xml || echo "Not found"
+          echo ""
+          echo "=== Frontend lcov.info first 20 lines ==="
           head -20 frontend/coverage/lcov.info || echo "Not found"
 
       - name: SonarCloud Scan
