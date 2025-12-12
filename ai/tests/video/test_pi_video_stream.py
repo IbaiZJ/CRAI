@@ -183,25 +183,71 @@ class TestPiVideoStream:
         assert stream.camera is not None
     
     def test_update_cleanup_on_stop(self, mock_picamera):
-        """Test that update calls cleanup methods when stopped."""
+        """Test that update calls cleanup methods when stopped is set during iteration."""
+        import time
+        from threading import Thread
+        
         stream = PiVideoStream()
         
-        # Mock cleanup methods
-        stream.stream = Mock()
-        stream.stream.close = Mock()
-        stream.rawCapture.close = Mock()
-        stream.camera.close = Mock()
+        # Create mock frame objects for the stream iterator
+        mock_frame1 = Mock()
+        mock_frame1.array = "frame1"
         
-        # Set stopped flag
-        stream.stopped = True
+        # Track if cleanup was called
+        cleanup_called = {'stream': False, 'rawCapture': False, 'camera': False}
         
-        # Manually simulate what happens in update when stopped
-        if stream.stopped:
-            stream.stream.close()
-            stream.rawCapture.close()
-            stream.camera.close()
+        # Make stream an iterator that yields frames, then checks stopped flag
+        def frame_generator():
+            yield mock_frame1
+            yield mock_frame1
+            # After a couple frames, check stopped flag frequently
+            while not stream.stopped:
+                time.sleep(0.001)
+                yield mock_frame1
+        
+        # Create a mock stream wrapper
+        class MockStream:
+            def __init__(self, generator):
+                self.generator = generator
+                
+            def __iter__(self):
+                return self.generator
+            
+            def close(self):
+                cleanup_called['stream'] = True
+        
+        stream.stream = MockStream(frame_generator())
+        
+        # Replace the actual camera and rawCapture close methods to track calls
+        original_raw_close = stream.rawCapture.close
+        original_cam_close = stream.camera.close
+        
+        def raw_close_wrapper():
+            cleanup_called['rawCapture'] = True
+            return original_raw_close()
+            
+        def cam_close_wrapper():
+            cleanup_called['camera'] = True
+            return original_cam_close()
+        
+        stream.rawCapture.close = raw_close_wrapper
+        stream.camera.close = cam_close_wrapper
+        
+        # Start the update in a thread
+        update_thread = Thread(target=stream.update)
+        update_thread.daemon = True
+        update_thread.start()
+        
+        # Let it process a few frames
+        time.sleep(0.05)
+        
+        # Now stop it
+        stream.stop()
+        
+        # Wait for the thread to finish and cleanup to be called
+        update_thread.join(timeout=2.0)
         
         # Verify cleanup was called
-        stream.stream.close.assert_called_once()
-        stream.rawCapture.close.assert_called_once()
-        stream.camera.close.assert_called_once()
+        assert cleanup_called['stream'] is True, "stream.close() was not called"
+        assert cleanup_called['rawCapture'] is True, "rawCapture.close() was not called"
+        assert cleanup_called['camera'] is True, "camera.close() was not called"
