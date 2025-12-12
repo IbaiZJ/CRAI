@@ -1,12 +1,22 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from '../contexts/AuthContext';
 import Login from '../pages/Login';
 
+// Mock useNotifications hook
+vi.mock('@/hooks/useNotifications', () => ({
+  useNotifications: () => ({
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+  }),
+}));
+
 describe('Login Component', () => {
   beforeEach(() => {
     localStorage.clear();
+    document.title = '';
   });
 
   it('renders login form with title', () => {
@@ -82,5 +92,55 @@ describe('Login Component', () => {
     expect(screen.getByRole('heading', { name: 'Log In' })).toBeInTheDocument();
     expect(screen.getByText('Sign in with your Google account to continue')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Back to Home' })).toBeInTheDocument();
+  });
+});
+
+// Tests with mocked AuthContext for better coverage
+describe('Login Component - Authentication flow', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    document.title = '';
+  });
+
+  it('should render login page layout correctly', () => {
+    render(
+      <BrowserRouter>
+        <AuthProvider>
+          <Login />
+        </AuthProvider>
+      </BrowserRouter>
+    );
+
+    // Check for main container structure
+    const heading = screen.getByRole('heading', { name: 'Log In' });
+    expect(heading).toBeInTheDocument();
+    expect(heading.tagName).toBe('H1');
+  });
+
+  it('should have back to home link pointing to root', () => {
+    render(
+      <BrowserRouter>
+        <AuthProvider>
+          <Login />
+        </AuthProvider>
+      </BrowserRouter>
+    );
+
+    const homeLink = screen.getByRole('link', { name: 'Back to Home' });
+    expect(homeLink).toHaveAttribute('href', '/');
+  });
+
+  it('should render centered content', () => {
+    render(
+      <BrowserRouter>
+        <AuthProvider>
+          <Login />
+        </AuthProvider>
+      </BrowserRouter>
+    );
+
+    // The outer container should have centering classes
+    const description = screen.getByText('Sign in with your Google account to continue');
+    expect(description.closest('.text-center')).toBeInTheDocument();
   });
 });
