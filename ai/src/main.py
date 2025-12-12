@@ -1,4 +1,3 @@
-from app_ui import AppUI
 import cv2
 
 # if __name__ == "__main__":
