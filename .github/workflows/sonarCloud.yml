@@ -65,6 +65,13 @@ jobs:
       - name: Run Frontend Tests with Coverage
         working-directory: ./frontend
         run: npm run test:coverage -- --run
+      - name: Fix Frontend Coverage Paths
+        working-directory: ./frontend
+        run: |
+          # Fix paths in lcov.info
+          sed -i 's|SF:src/|SF:frontend/src/|g' coverage/lcov.info
+          echo "=== Fixed lcov.info ==="
+          head -20 coverage/lcov.info
       - name: Upload Frontend Coverage
         uses: actions/upload-artifact@v4
         with:
@@ -136,8 +143,12 @@ jobs:
           # SonarCloud needs paths relative to repo root
           # 1. Change source to empty
           sed -i 's|<source>.*</source>|<source></source>|g' coverage.xml
-          # 2. Fix filename paths to be relative to repo root
+          # 2. Fix filename paths
+          # Handle absolute paths containing /ai/ (Linux)
+          sed -i 's|filename=".*/ai/|filename="ai/|g' coverage.xml
+          # Handle relative paths starting with src/video/
           sed -i 's|filename="src/video/|filename="ai/src/video/|g' coverage.xml
+          # Handle relative paths starting with video/
           sed -i 's|filename="video/|filename="ai/src/video/|g' coverage.xml
           # Debug output
           echo "=== Fixed coverage.xml ==="
