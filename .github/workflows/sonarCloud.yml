@@ -30,9 +30,10 @@ jobs:
         working-directory: ./ebAPI
         run: |
           pytest -v --cov --cov-report=xml:coverage.xml --cov-report=term-missing
-          # Fix coverage paths for SonarCloud - set source to repo root
-          sed -i 's|<source>.*</source>|<source>.</source>|g' coverage.xml
-          sed -i 's|filename="|filename="ebAPI/|g' coverage.xml
+          # Fix coverage paths for SonarCloud - replace absolute source with relative path
+          sed -i 's|<source>.*ebAPI.*</source>|<source>ebAPI</source>|g' coverage.xml
+          # Debug: show the fixed coverage.xml sources
+          grep -A2 '<sources>' coverage.xml || true
       - name: Upload ebAPI Coverage
         uses: actions/upload-artifact@v4
         with:
@@ -84,9 +85,10 @@ jobs:
         working-directory: ./itvAPI
         run: |
           pytest -v --cov --cov-report=xml:coverage.xml --cov-report=term-missing
-          # Fix coverage paths for SonarCloud - set source to repo root
-          sed -i 's|<source>.*</source>|<source>.</source>|g' coverage.xml
-          sed -i 's|filename="|filename="itvAPI/|g' coverage.xml
+          # Fix coverage paths for SonarCloud - replace absolute source with relative path
+          sed -i 's|<source>.*itvAPI.*</source>|<source>itvAPI</source>|g' coverage.xml
+          # Debug: show the fixed coverage.xml sources
+          grep -A2 '<sources>' coverage.xml || true
       - name: Upload itvAPI Coverage
         uses: actions/upload-artifact@v4
         with:
@@ -114,9 +116,11 @@ jobs:
         working-directory: ./ai
         run: |
           pytest tests/ -v --cov=src/video --cov-report=xml:coverage.xml --cov-report=term-missing
-          # Fix coverage paths for SonarCloud - set source to repo root
-          sed -i 's|<source>.*</source>|<source>.</source>|g' coverage.xml
-          sed -i 's|filename="|filename="ai/src/video/|g' coverage.xml
+          # Fix coverage paths for SonarCloud - replace absolute source with relative path
+          sed -i 's|<source>.*/ai/src/video</source>|<source>ai/src/video</source>|g' coverage.xml
+          sed -i 's|<source>.*src.video.*</source>|<source>ai/src/video</source>|g' coverage.xml
+          # Debug: show the fixed coverage.xml sources
+          grep -A2 '<sources>' coverage.xml || true
       - name: Upload AI Coverage
         uses: actions/upload-artifact@v4
         with:
@@ -205,7 +209,7 @@ jobs:
             -Dsonar.organization=${{ env.SONAR_ORGANIZATION }}
             -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }}
             -Dsonar.host.url=${{ env.SONAR_HOST_URL }}
-            -Dsonar.sources=ebAPI,itvAPI,ai/src,frontend/src,os/src/main/java
+            -Dsonar.sources=ebAPI,itvAPI,ai/src/video,frontend/src,os/src/main/java
             -Dsonar.tests=ebAPI/tests,itvAPI/tests,ai/tests,frontend/src/test,os/src/test/java
             -Dsonar.python.coverage.reportPaths=ebAPI/coverage.xml,itvAPI/coverage.xml,ai/coverage.xml
             -Dsonar.javascript.lcov.reportPaths=frontend/coverage/lcov.info
