@@ -1,18 +1,17 @@
 package com.crai.os.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.crai.os.config.SimulationConfig;
@@ -158,5 +157,68 @@ class ControlControllerTest {
         assertTrue(errors.containsKey("stolenProbability"));
         assertTrue(errors.containsKey("vehicleIntervalMs"));
         verify(cameraPoolService, never()).resizeCameraPool(org.mockito.Mockito.anyInt());
+    }
+
+    @Test
+    void updateSimValidatesItvProbabilityBoundaries() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("itvFailProbability", 1.5); // > 1, invalid
+
+        Map<String, Object> result = controller.updateSim(params);
+
+        assertEquals("PARTIAL", result.get("status"));
+        Map<?, ?> errors = (Map<?, ?>) result.get("errors");
+        assertTrue(errors.containsKey("itvFailProbability"));
+    }
+
+    @Test
+    void updateSimValidatesStolenProbabilityNegative() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("stolenProbability", -0.5); // < 0, invalid
+
+        Map<String, Object> result = controller.updateSim(params);
+
+        assertEquals("PARTIAL", result.get("status"));
+        Map<?, ?> errors = (Map<?, ?>) result.get("errors");
+        assertTrue(errors.containsKey("stolenProbability"));
+    }
+
+    @Test
+    void updateSimParsesIntegerFromString() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("cameraCount", "10"); // valid integer string
+        params.put("ocrDelayMs", "200"); // valid integer string
+
+        Map<String, Object> result = controller.updateSim(params);
+
+        assertEquals("OK", result.get("status"));
+        Map<?, ?> updated = (Map<?, ?>) result.get("updated");
+        assertEquals(10, updated.get("cameraCount"));
+        assertEquals(200, updated.get("ocrDelayMs"));
+        verify(cameraPoolService).resizeCameraPool(10);
+    }
+
+    @Test
+    void updateSimParsesDoubleFromString() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("stolenProbability", "0.75"); // valid double string
+
+        Map<String, Object> result = controller.updateSim(params);
+
+        assertEquals("OK", result.get("status"));
+        Map<?, ?> updated = (Map<?, ?>) result.get("updated");
+        assertEquals(0.75, updated.get("stolenProbability"));
+    }
+
+    @Test
+    void updateSimHandlesInvalidDoubleString() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("itvFailProbability", "not-a-number");
+
+        Map<String, Object> result = controller.updateSim(params);
+
+        assertEquals("PARTIAL", result.get("status"));
+        Map<?, ?> errors = (Map<?, ?>) result.get("errors");
+        assertTrue(errors.containsKey("itvFailProbability"));
     }
 }

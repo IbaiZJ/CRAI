@@ -1,10 +1,11 @@
 package com.crai.os;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class OsApplicationTests {
@@ -24,6 +25,38 @@ class OsApplicationTests {
 		} finally {
 			OsApplication.stop();
 		}
+	}
+
+	@Test
+	void startMethodStartsContextAndReturnsIt() {
+		String[] args = { "--spring.main.web-application-type=none", "--server.port=0", "--spring.main.banner-mode=off" };
+		try {
+			ConfigurableApplicationContext ctx = OsApplication.start(args);
+			assertNotNull(ctx);
+			assertTrue(ctx.isActive());
+			assertNotNull(OsApplication.getContext());
+		} finally {
+			OsApplication.stop();
+		}
+	}
+
+	@Test
+	void stopMethodClosesContext() {
+		String[] args = { "--spring.main.web-application-type=none", "--server.port=0", "--spring.main.banner-mode=off" };
+		OsApplication.start(args);
+		assertTrue(OsApplication.getContext().isActive());
+		
+		OsApplication.stop();
+		assertFalse(OsApplication.getContext().isActive());
+	}
+
+	@Test
+	void stopMethodHandlesNullContext() {
+		// Ensure no exception is thrown when context is null
+		// First, reset context by stopping any existing one
+		OsApplication.stop();
+		// Now calling stop again should not throw
+		OsApplication.stop();
 	}
 
 }
