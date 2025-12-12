@@ -163,7 +163,7 @@ class TestEnvironmentalBadgeService:
     
     def test_get_badge_by_plate_not_found(self, service):
         """Test complete flow for plate not in database"""
-        service.get_badge_by_plate("9999ZZZ")
+        result = service.get_badge_by_plate("9999ZZZ")
         
     def test_get_badge_by_plate_with_formatting(self, service):
         """Test complete flow with spaces and lowercase"""

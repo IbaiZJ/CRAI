@@ -8,10 +8,6 @@ public class RandomVehicleGenerator {
 
     private static final Random r = new Random();
 
-    private RandomVehicleGenerator() {
-        throw new IllegalStateException("Utility class");
-    }
-
     public static Vehicle generate(double stolenProbability, double itvFailProbability) {
 
         String plate = SpanishPlateGenerator.generate();

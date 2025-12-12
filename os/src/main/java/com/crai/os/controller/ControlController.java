@@ -17,13 +17,6 @@ import com.crai.os.service.CameraPoolService;
 @RequestMapping("/admin")
 public class ControlController {
 
-    private static final String OCR_DELAY_MS = "ocrDelayMs";
-    private static final String STOLEN_PROBABILITY = "stolenProbability";
-    private static final String ITV_FAIL_PROBABILITY = "itvFailProbability";
-    private static final String CAMERA_COUNT = "cameraCount";
-    private static final String VEHICLES_PER_CYCLE = "vehiclesPerCycle";
-    private static final String VEHICLE_INTERVAL_MS = "vehicleIntervalMs";
-
     private final SimulationConfig config;
     private final CameraPoolService cameraPoolService;
 
@@ -53,10 +46,10 @@ public class ControlController {
     @GetMapping("/status")
     public Map<String, Object> status() {
         return Map.of(
-                OCR_DELAY_MS, config.getOcrDelayMs(),
-                STOLEN_PROBABILITY, config.getStolenProbability(),
-                ITV_FAIL_PROBABILITY, config.getItvFailProbability(),
-                CAMERA_COUNT, config.getCameraCount());
+                "ocrDelayMs", config.getOcrDelayMs(),
+                "stolenProbability", config.getStolenProbability(),
+                "itvFailProbability", config.getItvFailProbability(),
+                "cameraCount", config.getCameraCount());
     }
 
     @PostMapping("/cameras")
@@ -84,64 +77,64 @@ public class ControlController {
         Map<String, Object> updated = new HashMap<>();
         Map<String, String> errors = new HashMap<>();
 
-        if (params.containsKey(CAMERA_COUNT)) {
-            Integer c = toInt(params.get(CAMERA_COUNT));
+        if (params.containsKey("cameraCount")) {
+            Integer c = toInt(params.get("cameraCount"));
             if (c == null || c <= 0) {
-                errors.put(CAMERA_COUNT, "Must be a positive integer");
+                errors.put("cameraCount", "Must be a positive integer");
             } else {
                 config.setCameraCount(c);
                 cameraPoolService.resizeCameraPool(c);
-                updated.put(CAMERA_COUNT, c);
+                updated.put("cameraCount", c);
             }
         }
 
-        if (params.containsKey(STOLEN_PROBABILITY)) {
-            Double p = toDouble(params.get(STOLEN_PROBABILITY));
+        if (params.containsKey("stolenProbability")) {
+            Double p = toDouble(params.get("stolenProbability"));
             if (p == null || p < 0 || p > 1) {
-                errors.put(STOLEN_PROBABILITY, "Must be a number between 0 and 1");
+                errors.put("stolenProbability", "Must be a number between 0 and 1");
             } else {
                 config.setStolenProbability(p);
-                updated.put(STOLEN_PROBABILITY, p);
+                updated.put("stolenProbability", p);
             }
         }
 
-        if (params.containsKey(ITV_FAIL_PROBABILITY)) {
-            Double p = toDouble(params.get(ITV_FAIL_PROBABILITY));
+        if (params.containsKey("itvFailProbability")) {
+            Double p = toDouble(params.get("itvFailProbability"));
             if (p == null || p < 0 || p > 1) {
-                errors.put(ITV_FAIL_PROBABILITY, "Must be a number between 0 and 1");
+                errors.put("itvFailProbability", "Must be a number between 0 and 1");
             } else {
                 config.setItvFailProbability(p);
-                updated.put(ITV_FAIL_PROBABILITY, p);
+                updated.put("itvFailProbability", p);
             }
         }
 
-        if (params.containsKey(OCR_DELAY_MS)) {
-            Integer ms = toInt(params.get(OCR_DELAY_MS));
+        if (params.containsKey("ocrDelayMs")) {
+            Integer ms = toInt(params.get("ocrDelayMs"));
             if (ms == null || ms < 0) {
-                errors.put(OCR_DELAY_MS, "Must be a non-negative integer (ms)");
+                errors.put("ocrDelayMs", "Must be a non-negative integer (ms)");
             } else {
                 config.setOcrDelayMs(ms);
-                updated.put(OCR_DELAY_MS, ms);
+                updated.put("ocrDelayMs", ms);
             }
         }
 
-        if (params.containsKey(VEHICLES_PER_CYCLE)) {
-            Integer n = toInt(params.get(VEHICLES_PER_CYCLE));
+        if (params.containsKey("vehiclesPerCycle")) {
+            Integer n = toInt(params.get("vehiclesPerCycle"));
             if (n == null || n <= 0) {
-                errors.put(VEHICLES_PER_CYCLE, "Must be a positive integer");
+                errors.put("vehiclesPerCycle", "Must be a positive integer");
             } else {
                 config.setVehiclesPerCycle(n);
-                updated.put(VEHICLES_PER_CYCLE, n);
+                updated.put("vehiclesPerCycle", n);
             }
         }
 
-        if (params.containsKey(VEHICLE_INTERVAL_MS)) {
-            Integer ms = toInt(params.get(VEHICLE_INTERVAL_MS));
+        if (params.containsKey("vehicleIntervalMs")) {
+            Integer ms = toInt(params.get("vehicleIntervalMs"));
             if (ms == null || ms < 0) {
-                errors.put(VEHICLE_INTERVAL_MS, "Must be a non-negative integer (ms)");
+                errors.put("vehicleIntervalMs", "Must be a non-negative integer (ms)");
             } else {
                 config.setVehicleIntervalMs(ms);
-                updated.put(VEHICLE_INTERVAL_MS, ms);
+                updated.put("vehicleIntervalMs", ms);
             }
         }
 

@@ -7,10 +7,6 @@ public class SpanishPlateGenerator {
     private static final String LETTERS = "BCDFGHJKLMNPRSTVWXYZ";
     private static final Random random = new Random();
 
-    private SpanishPlateGenerator() {
-        throw new IllegalStateException("Utility class");
-    }
-
     public static String generate() {
 
         int numbers = random.nextInt(9000) + 1000; // 1000-9999

@@ -8,6 +8,6 @@ router = APIRouter(
 )
 
 @router.get("")
-async def detect_plate(car_plate: str):
-    result: str = plateService.get_badge_by_plate(car_plate)
-    return {"carPlate": car_plate, "badge": result}
+async def detect_plate(carPlate: str):
+    result: str = plateService.get_badge_by_plate(carPlate)
+    return {"carPlate": carPlate, "badge": result}

@@ -15,16 +15,14 @@ public class DebugController {
     public List<Map<String, Object>> threads() {
         Map<Thread, StackTraceElement[]> all = Thread.getAllStackTraces();
         List<Map<String, Object>> out = new ArrayList<>();
-        for (Map.Entry<Thread, StackTraceElement[]> entry : all.entrySet()) {
-            Thread t = entry.getKey();
-            StackTraceElement[] stack = entry.getValue();
+        for (Thread t : all.keySet()) {
             Map<String, Object> m = new HashMap<>();
             m.put("id", t.getId());
             m.put("name", t.getName());
             m.put("state", t.getState().toString());
             m.put("daemon", t.isDaemon());
             m.put("priority", t.getPriority());
-            m.put("stackDepth", stack != null ? stack.length : 0);
+            m.put("stackDepth", all.get(t) != null ? all.get(t).length : 0);
             out.add(m);
         }
         return out;
