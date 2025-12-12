@@ -30,8 +30,8 @@ jobs:
         working-directory: ./ebAPI
         run: |
           pytest -v --cov --cov-report=xml:coverage.xml --cov-report=term-missing
-          # Fix coverage paths for SonarCloud
-          sed -i 's|<source>.*</source>|<source>ebAPI</source>|g' coverage.xml
+          # Fix coverage paths for SonarCloud - set source to repo root
+          sed -i 's|<source>.*</source>|<source>.</source>|g' coverage.xml
           sed -i 's|filename="|filename="ebAPI/|g' coverage.xml
       - name: Upload ebAPI Coverage
         uses: actions/upload-artifact@v4
@@ -84,8 +84,8 @@ jobs:
         working-directory: ./itvAPI
         run: |
           pytest -v --cov --cov-report=xml:coverage.xml --cov-report=term-missing
-          # Fix coverage paths for SonarCloud
-          sed -i 's|<source>.*</source>|<source>itvAPI</source>|g' coverage.xml
+          # Fix coverage paths for SonarCloud - set source to repo root
+          sed -i 's|<source>.*</source>|<source>.</source>|g' coverage.xml
           sed -i 's|filename="|filename="itvAPI/|g' coverage.xml
       - name: Upload itvAPI Coverage
         uses: actions/upload-artifact@v4
@@ -114,8 +114,8 @@ jobs:
         working-directory: ./ai
         run: |
           pytest tests/ -v --cov=src/video --cov-report=xml:coverage.xml --cov-report=term-missing
-          # Fix coverage paths for SonarCloud
-          sed -i 's|<source>.*</source>|<source>ai/src/video</source>|g' coverage.xml
+          # Fix coverage paths for SonarCloud - set source to repo root
+          sed -i 's|<source>.*</source>|<source>.</source>|g' coverage.xml
           sed -i 's|filename="|filename="ai/src/video/|g' coverage.xml
       - name: Upload AI Coverage
         uses: actions/upload-artifact@v4
@@ -209,7 +209,6 @@ jobs:
             -Dsonar.tests=ebAPI/tests,itvAPI/tests,ai/tests,frontend/src/test,os/src/test/java
             -Dsonar.python.coverage.reportPaths=ebAPI/coverage.xml,itvAPI/coverage.xml,ai/coverage.xml
             -Dsonar.javascript.lcov.reportPaths=frontend/coverage/lcov.info
-            -Dsonar.coverage.jacoco.xmlReportPaths=os/target/site/jacoco/jacoco.xml
             -Dsonar.coverage.jacoco.xmlReportPaths=os/target/site/jacoco/jacoco.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
