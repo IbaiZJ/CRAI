@@ -11,3 +11,6 @@
 - https://datasetsearch.research.google.com/search?src=2&query=88%2C000%2B%20Images%20of%20Cars&docid=L2cvMTFrcGZoM2swcQ%3D%3D
 - https://github.com/ramajoballester/UC3M-LP?tab=readme-ov-file
 - https://universe.roboflow.com/roboflow-universe-projects/license-plate-recognition-rxg4e/dataset/11
+- https://images.cv/dataset/car-image-classification-dataset
+- https://github.com/yjzhai-cs/Vehicle-10?tab=readme-ov-file
+- https://www.kaggle.com/datasets/prondeau/the-car-connection-picture-dataset?resource=download
