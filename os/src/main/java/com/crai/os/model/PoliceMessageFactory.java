@@ -2,6 +2,10 @@ package com.crai.os.model;
 
 public class PoliceMessageFactory {
 
+    private PoliceMessageFactory() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static PoliceMessage build(AlertType type, String plate, String detail) {
         return build(type, plate, detail, null);
     }

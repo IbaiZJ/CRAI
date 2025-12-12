@@ -1,11 +1,16 @@
 package com.crai.os.utils;
 
-import com.crai.os.model.Vehicle;
 import java.util.Random;
+
+import com.crai.os.model.Vehicle;
 
 public class RandomVehicleGenerator {
 
     private static final Random r = new Random();
+
+    private RandomVehicleGenerator() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static Vehicle generate(double stolenProbability, double itvFailProbability) {
 

@@ -1,7 +1,5 @@
 package com.crai.os.model;
 
-import java.time.LocalDateTime;
-
 public class PoliceMessage {
 
     private AlertType type;
