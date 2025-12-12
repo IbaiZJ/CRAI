@@ -7,7 +7,9 @@ scikit-learn
 pytest
 pytest-cov
 pytest-asyncio
+pytest-mock
 httpx
 customtkinter
+opencv-python
 # tensorflow
 # torch

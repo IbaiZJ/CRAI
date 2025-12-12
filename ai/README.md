@@ -12,3 +12,5 @@
 - https://github.com/ramajoballester/UC3M-LP?tab=readme-ov-file
 - https://universe.roboflow.com/roboflow-universe-projects/license-plate-recognition-rxg4e/dataset/11
 - https://images.cv/dataset/car-image-classification-dataset
+- https://github.com/yjzhai-cs/Vehicle-10?tab=readme-ov-file
+- https://www.kaggle.com/datasets/prondeau/the-car-connection-picture-dataset?resource=download
