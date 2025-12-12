@@ -1,0 +1,109 @@
+name: AI CI
+
+on:
+  push:
+    branches: [ "main", "dev" ]
+    paths:
+      - 'ai/**'
+      - '.github/workflows/ai-ci.yml'
+  pull_request:
+    branches: [ "main", "dev" ]
+    paths:
+      - 'ai/**'
+      - '.github/workflows/ai-ci.yml'
+
+jobs:
+  test:
+    name: Test Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
+      fail-fast: false
+    
+    steps:
+      # 1. Checkout to the repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Set up Python
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+          cache-dependency-path: ai/requirements.txt
+
+      # 3. Install Dependencies
+      - name: Install Dependencies
+        working-directory: ./ai
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 4. Run Tests with Coverage
+      - name: Run Tests with 100% Coverage Requirement
+        working-directory: ./ai
+        run: |
+          pytest tests/ --cov=src/video --cov-report=xml --cov-report=term-missing --cov-fail-under=100 -v
+
+      # 5. Upload Coverage to Codecov (Optional)
+      - name: Upload Coverage Reports
+        if: matrix.python-version == '3.13'
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./ai/coverage.xml
+          flags: ai
+          name: ai-coverage
+          fail_ci_if_error: false
+
+      # 6. Archive Coverage HTML Report
+      - name: Archive Coverage HTML Report
+        if: matrix.python-version == '3.13'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-coverage-report
+          path: ai/htmlcov/
+          retention-days: 30
+
+  lint:
+    name: Lint and Type Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. Checkout to the repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Set up Python
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+          cache-dependency-path: ai/requirements.txt
+
+      # 3. Install Dependencies
+      - name: Install Dependencies
+        working-directory: ./ai
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install flake8 mypy
+
+      # 4. Run Flake8
+      - name: Lint with Flake8
+        working-directory: ./ai
+        run: |
+          # Stop the build if there are Python syntax errors or undefined names
+          flake8 src/ --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Exit-zero treats all errors as warnings
+          flake8 src/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      # 5. Run MyPy (Optional - Type Checking)
+      - name: Type Check with MyPy
+        working-directory: ./ai
+        continue-on-error: true
+        run: |
+          mypy src/ --ignore-missing-imports || true
