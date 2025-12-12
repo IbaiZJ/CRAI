@@ -1,17 +1,20 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 
 // Helper component to test the hook
 function TestComponent() {
-  const { user, isAuthenticated, logout, login } = useAuth();
+  const { user, isAuthenticated, logout, login, loading } = useAuth();
   
   return (
     <div>
+      <div data-testid="loading-state">{loading ? 'loading' : 'not-loading'}</div>
       {isAuthenticated ? (
         <>
           <div data-testid="user-name">{user?.fullName}</div>
+          <div data-testid="user-email">{user?.email}</div>
           <button onClick={logout} data-testid="logout-btn">Logout</button>
         </>
       ) : (
@@ -173,5 +176,52 @@ describe('AuthContext', () => {
     expect(screen.getByTestId('not-authenticated')).toBeInTheDocument();
     expect(localStorage.getItem('user')).toBeNull();
     expect(localStorage.getItem('token')).toBeNull();
+  });
+});
+
+describe('AuthContext - Login and Logout actions', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    localStorage.clear();
+  });
+
+  it('should show loading state as false by default', () => {
+    render(
+      <BrowserRouter>
+        <AuthProvider>
+          <TestComponent />
+        </AuthProvider>
+      </BrowserRouter>
+    );
+
+    expect(screen.getByTestId('loading-state')).toHaveTextContent('not-loading');
+  });
+
+  it('should have login button available', () => {
+    render(
+      <BrowserRouter>
+        <AuthProvider>
+          <TestComponent />
+        </AuthProvider>
+      </BrowserRouter>
+    );
+
+    expect(screen.getByTestId('login-btn')).toBeInTheDocument();
+  });
+
+  it('should provide isAuthenticated as false when no user', () => {
+    render(
+      <BrowserRouter>
+        <AuthProvider>
+          <TestComponent />
+        </AuthProvider>
+      </BrowserRouter>
+    );
+
+    expect(screen.getByTestId('not-authenticated')).toBeInTheDocument();
   });
 });
