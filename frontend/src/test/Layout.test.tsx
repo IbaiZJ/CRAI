@@ -24,7 +24,7 @@ vi.mock('@/components/ui/breadcrumb', () => ({
   BreadcrumbItem: ({ children, className }: { children: React.ReactNode; className?: string }) => (
     <li data-testid="breadcrumb-item" className={className}>{children}</li>
   ),
-  BreadcrumbLink: ({ children, asChild }: { children: React.ReactNode; asChild?: boolean }) => (
+  BreadcrumbLink: ({ children }: { children: React.ReactNode; asChild?: boolean }) => (
     <span data-testid="breadcrumb-link">{children}</span>
   ),
   BreadcrumbList: ({ children }: { children: React.ReactNode }) => <ol data-testid="breadcrumb-list">{children}</ol>,

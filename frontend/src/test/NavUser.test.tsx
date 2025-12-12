@@ -61,20 +61,20 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
     <div data-testid="dropdown-menu-label" className={className}>{children}</div>
   ),
   DropdownMenuSeparator: () => <hr data-testid="dropdown-menu-separator" />,
-  DropdownMenuTrigger: ({ children, asChild }: { children: React.ReactNode; asChild?: boolean }) => (
+  DropdownMenuTrigger: ({ children }: { children: React.ReactNode; asChild?: boolean }) => (
     <div data-testid="dropdown-menu-trigger">{children}</div>
   ),
 }));
 
 // Mock dialogs
 vi.mock('@/components/dialogs/AccountDialog', () => ({
-  AccountDialog: ({ open, onOpenChange, user, initials, userId }: any) => (
+  AccountDialog: ({ open, user }: any) => (
     open ? <div data-testid="account-dialog">Account Dialog for {user?.name}</div> : null
   ),
 }));
 
 vi.mock('@/components/dialogs/LogOutDialog', () => ({
-  LogOutDialog: ({ open, onOpenChange }: any) => (
+  LogOutDialog: ({ open }: any) => (
     open ? <div data-testid="logout-dialog">Logout Dialog</div> : null
   ),
 }));
