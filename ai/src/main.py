@@ -1,5 +1,10 @@
 import cv2
 
+def main_entry():
+    """Entry point for the application"""
+    print("Starting application...")
+    return True
+
 # if __name__ == "__main__":
 #     # Initialize camera
 #     camera = cv2.VideoCapture(0)  # 0 = default camera

@@ -136,7 +136,7 @@ jobs:
       - name: Run AI Tests with Coverage
         working-directory: ./ai
         run: |
-          pytest tests/ -v --cov=src/video --cov-report=xml:coverage.xml --cov-report=term-missing
+          pytest tests/ -v --cov=src --cov-report=xml:coverage.xml --cov-report=term-missing
       - name: Fix AI Coverage Paths for SonarCloud
         working-directory: ./ai
         run: |
@@ -146,9 +146,11 @@ jobs:
           # 2. Fix filename paths
           # Handle absolute paths containing /ai/ (Linux)
           sed -i 's|filename=".*/ai/|filename="ai/|g' coverage.xml
-          # Handle relative paths starting with src/video/
-          sed -i 's|filename="src/video/|filename="ai/src/video/|g' coverage.xml
-          # Handle relative paths starting with video/
+          # Handle relative paths starting with src/
+          sed -i 's|filename="src/|filename="ai/src/|g' coverage.xml
+          # Handle main.py specifically if it appears without src prefix
+          sed -i 's|filename="main.py"|filename="ai/src/main.py"|g' coverage.xml
+          # Handle relative paths starting with video/ (legacy)
           sed -i 's|filename="video/|filename="ai/src/video/|g' coverage.xml
           # Debug output
           echo "=== Fixed coverage.xml ==="
