@@ -9,9 +9,9 @@ CREATE TABLE UserType (
 
 
 CREATE TABLE User (
-    email VARCHAR(100) PRIMARY KEY,
-    nameUser VARCHAR(50) NOT NULL,
-    surnameUser VARCHAR(50) NOT NULL,
+    email VARCHAR2(100) PRIMARY KEY,
+    nameUser VARCHAR2(50) NOT NULL,
+    surnameUser VARCHAR2(50) NOT NULL,
     birthDate DATE,
     userType INT NOT NULL,
     FOREIGN KEY (userType) REFERENCES UserType(userTypeId)
@@ -25,9 +25,9 @@ CREATE TABLE VehicleType (
 
 
 CREATE TABLE Vehicles (
-    plate VARCHAR(10) PRIMARY KEY,
-    badge VARCHAR(10),
-    idUser VARCHAR(100),
+    plate VARCHAR2(10) PRIMARY KEY,
+    badge VARCHAR2(10),
+    idUser VARCHAR2(100),
     vehicleTypeId INT,
     FOREIGN KEY (idUser) REFERENCES User(email),
     FOREIGN KEY (vehicleTypeId) REFERENCES VehicleType(vehicleTypeId)
