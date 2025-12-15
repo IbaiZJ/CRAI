@@ -80,4 +80,8 @@ public class SimulationConfig {
     public void setItvFailProbability(double p) {
         this.itvFailProbability = p;
     }
+
+    public void setNodeRedWebhookUrl(String url) {
+        this.nodeRedWebhookUrl = url;
+    }
 }
