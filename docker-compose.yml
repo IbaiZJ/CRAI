@@ -32,18 +32,18 @@ services:
       - app-network
     restart: unless-stopped
 
-  cloud-sql-proxy:
-    image: gcr.io/cloudsql-docker/gce-proxy:1.33.2
-    container_name: cloud-sql-proxy
-    volumes:
-      - ./gcp/service-account.json:/config/service-account.json:ro
-    command:
-      - "/cloud_sql_proxy"
-      - "-instances=crai-479909:europe-southwest1:root=tcp:0.0.0.0:3306"
-      - "-credential_file=/config/service-account.json"
-    networks:
-      - app-network
-    restart: unless-stopped
+  #cloud-sql-proxy:
+    #image: gcr.io/cloudsql-docker/gce-proxy:1.33.2
+    #container_name: cloud-sql-proxy
+    #volumes:
+     # - ./gcp/service-account.json:/config/service-account.json:ro
+    #command:
+     # - "/cloud_sql_proxy"
+     # - "-instances=crai-479909:europe-southwest1:root=tcp:0.0.0.0:3306"
+     # - "-credential_file=/config/service-account.json"
+    #networks:
+     # - app-network
+    #restart: unless-stopped
 
   node-red:
     image: nodered/node-red:latest
@@ -54,10 +54,10 @@ services:
       - ./backend/node_red_data:/data
     environment:
       - TZ=Europe/Madrid
-    env_file:
-      - ./backend/.env
-    depends_on:
-      - cloud-sql-proxy
+    # env_file:
+      #- ./backend/.env
+    #depends_on:
+      #- cloud-sql-proxy
       # - ebapi
     networks:
       - app-network
@@ -98,6 +98,20 @@ services:
     container_name: docs
     ports:
       - "6910:4321"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: crai
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
     networks:
       - app-network
     restart: unless-stopped
