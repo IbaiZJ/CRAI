@@ -1,9 +1,12 @@
 package com.crai.os.service;
 
+import java.lang.reflect.Field;
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +17,7 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doThrow;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.crai.os.config.SimulationConfig;
@@ -24,6 +28,7 @@ import com.crai.os.model.PoliceMessage;
 import com.crai.os.model.Vehicle;
 import com.crai.os.repository.ITVRepository;
 import com.crai.os.repository.OwnerRepository;
+import com.crai.os.utils.BoundedPriorityBlockingQueue;
 
 @ExtendWith(MockitoExtension.class)
 class CameraPoolServiceTest {
