@@ -53,11 +53,7 @@ const HeroIllustration = () => (
     {/* Abstract City Grid */}
     <div className="absolute inset-0 grid grid-cols-6 grid-rows-6 gap-4 opacity-10 transform perspective-1000 rotate-x-12">
       {[...Array(36)].map((_, i) => (
-        <div key={i} className="bg-blue-500 rounded-lg h-full w-full animate-pulse" style={{ animationDelay: `${i * 0.1}s` }} />
-      ))}
-    </div>
-
-    {/* Central Scanner Card */}
+        <div key={`city-grid-${i}`} className="bg-blue-500 rounded-lg h-full w-full animate-pulse" style={{ animationDelay: `${i * 0.1}s` }} />
     <div className="relative bg-white/80 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/50 w-80 z-10 animate-float">
       <div className="flex items-center gap-4 mb-4">
         <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
@@ -135,7 +131,7 @@ const Hero = () => (
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
               </span>
-              Next Gen ANPR Technology
+              <span>Next Gen ANPR Technology</span>
             </div>
             <h1 className="text-5xl lg:text-7xl font-bold text-slate-900 leading-[1.1] mb-6 tracking-tight">
               Smarter cities start with <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-cyan-500">intelligent vision.</span>
@@ -199,7 +195,7 @@ const Features = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, idx) => (
-            <div key={idx} className="group p-8 rounded-3xl bg-slate-50 hover:bg-white border border-slate-100 hover:border-blue-100 hover:shadow-xl hover:shadow-blue-50/50 transition-all duration-300">
+            <div key={`feature-${idx}`} className="group p-8 rounded-3xl bg-slate-50 hover:bg-white border border-slate-100 hover:border-blue-100 hover:shadow-xl hover:shadow-blue-50/50 transition-all duration-300">
               <div className="w-12 h-12 bg-white rounded-2xl border border-gray-100 shadow-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 {feature.icon}
               </div>
@@ -213,15 +209,15 @@ const Features = () => {
   );
 };
 
-// const HowItWorks = () => {
-//   const steps = [
-//     { num: "01", title: "Capture", desc: "Cameras across the infrastructure capture high-res video in real-time." },
-//     { num: "02", title: "Analyze", desc: "Our AI engine identifies plates, make, and model within milliseconds." },
-//     { num: "03", title: "Process", desc: "Data is encrypted and sent to the centralized CRAI cloud core." },
-//     { num: "04", title: "Act", desc: "Admins receive alerts and visual analytics on the dashboard." }
-//   ];
+const HowItWorks = () => {
+  const steps = [
+    { num: "01", title: "Capture", desc: "Cameras across the infrastructure capture high-res video in real-time." },
+    { num: "02", title: "Analyze", desc: "Our AI engine identifies plates, make, and model within milliseconds." },
+    { num: "03", title: "Process", desc: "Data is encrypted and sent to the centralized CRAI cloud core." },
+    { num: "04", title: "Act", desc: "Admins receive alerts and visual analytics on the dashboard." }
+  ];
 
-//   return (
+  return (
 //     <section id="how-it-works" className="py-24 bg-slate-900 text-white relative overflow-hidden">
 //       {/* Abstract Grid Background */}
 //       <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#4b5563 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>

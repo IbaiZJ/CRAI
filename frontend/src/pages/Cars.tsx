@@ -90,7 +90,7 @@ export default function Cars() {
   };
 
   const getFuelColor = (fuel: string) => {
-    const percentage = parseInt(fuel);
+    const percentage = Number.parseInt(fuel);
     if (percentage > 50) return "text-green-600";
     if (percentage > 20) return "text-yellow-600";
     return "text-red-600";
