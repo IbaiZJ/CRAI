@@ -106,9 +106,9 @@ export function createColumns<TData>(
                 {config.actions!.label || "Actions"}
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {config.actions!.items.map((action, index) => (
+              {config.actions!.items.map((action) => (
                 <DropdownMenuItem
-                  key={index}
+                  key={action.label}
                   onClick={() => action.onClick(row.original)}
                 >
                   {action.label}

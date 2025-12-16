@@ -52,8 +52,8 @@ export function AccountDialog({
           </div>
           <div className="space-y-2">
             <div>
-              <label className="text-sm font-medium">User ID</label>
-              <p className="text-sm text-muted-foreground">{userId}</p>
+              <label htmlFor="userId" className="text-sm font-medium">User ID</label>
+              <p id="userId" className="text-sm text-muted-foreground">{userId}</p>
             </div>
           </div>
         </div>

@@ -247,10 +247,10 @@ export function DataTable<TData, TValue>({
             Previous
           </Button>
 
-          {pagination.pages.map((page, index) => {
+          {pagination.pages.map((page) => {
             if (page === ELLIPSIS) {
               return (
-                <DropdownMenu key={`ellipsis-${index}`}>
+                <DropdownMenu key={`ellipsis-${Math.random()}`}>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="sm">
                       ...
