@@ -59,4 +59,16 @@ class OsApplicationTests {
 		OsApplication.stop();
 	}
 
+	@Test
+	void stopMethodHandlesInactiveContext() {
+		// Start and close context to make it inactive but not null
+		String[] args = { "--spring.main.web-application-type=none", "--server.port=0", "--spring.main.banner-mode=off" };
+		OsApplication.start(args);
+		OsApplication.getContext().close(); // Close directly, making isActive() = false
+		
+		assertFalse(OsApplication.getContext().isActive());
+		// Calling stop should not throw when context is not null but inactive
+		OsApplication.stop();
+	}
+
 }

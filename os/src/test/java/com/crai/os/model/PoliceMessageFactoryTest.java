@@ -1,9 +1,20 @@
 package com.crai.os.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import java.lang.reflect.Constructor;
+
 import org.junit.jupiter.api.Test;
 
 class PoliceMessageFactoryTest {
+
+    @Test
+    void privateConstructorForCoverage() throws Exception {
+        Constructor<PoliceMessageFactory> constructor = PoliceMessageFactory.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+        PoliceMessageFactory instance = constructor.newInstance();
+        assertThat(instance).isNotNull();
+    }
 
     @Test
     void buildsBadgeMessage() {

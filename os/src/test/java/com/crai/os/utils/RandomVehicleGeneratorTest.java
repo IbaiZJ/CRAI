@@ -1,5 +1,6 @@
 package com.crai.os.utils;
 
+import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -78,5 +79,13 @@ class RandomVehicleGeneratorTest {
         }
         // With 100 generations, we should have multiple unique plates
         assertThat(plates.size()).isGreaterThan(1);
+    }
+
+    @Test
+    void privateConstructorForCoverage() throws Exception {
+        Constructor<RandomVehicleGenerator> constructor = RandomVehicleGenerator.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+        RandomVehicleGenerator instance = constructor.newInstance();
+        assertThat(instance).isNotNull();
     }
 }
