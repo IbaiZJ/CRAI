@@ -34,7 +34,7 @@ class TestRouter:
         }
         mock_plate_service.get_badge_by_plate.return_value = mock_badge
         
-        response = client.get("/api?carPlate=1234ABC")
+        response = client.get("/api?car_plate=1234ABC")
         
         assert response.status_code == 200
         data = response.json()
@@ -46,7 +46,7 @@ class TestRouter:
         """Test plate not found in database"""
         mock_plate_service.get_badge_by_plate.return_value = "none"
         
-        response = client.get("/api?carPlate=9999ZZZ")
+        response = client.get("/api?car_plate=9999ZZZ")
         
         assert response.status_code == 200
         data = response.json()
@@ -57,7 +57,7 @@ class TestRouter:
         """Test invalid plate format"""
         mock_plate_service.get_badge_by_plate.return_value = {"error": "Invalid plate format"}
         
-        response = client.get("/api?carPlate=INVALID")
+        response = client.get("/api?car_plate=INVALID")
         
         assert response.status_code == 200
         data = response.json()
@@ -73,7 +73,7 @@ class TestRouter:
         """Test empty plate string"""
         mock_plate_service.get_badge_by_plate.return_value = {"error": "Invalid plate format"}
         
-        response = client.get("/api?carPlate=")
+        response = client.get("/api?car_plate=")
         
         assert response.status_code == 422 or response.status_code == 200
     
@@ -85,7 +85,7 @@ class TestRouter:
         }
         mock_plate_service.get_badge_by_plate.return_value = mock_badge
         
-        response = client.get("/api?carPlate=1234 ABC")
+        response = client.get("/api?car_plate=1234 ABC")
         
         assert response.status_code == 200
         mock_plate_service.get_badge_by_plate.assert_called_once()
@@ -98,7 +98,7 @@ class TestRouter:
         }
         mock_plate_service.get_badge_by_plate.return_value = mock_badge
         
-        response = client.get("/api?carPlate=1234abc")
+        response = client.get("/api?car_plate=1234abc")
         
         assert response.status_code == 200
         mock_plate_service.get_badge_by_plate.assert_called_once()

@@ -2,8 +2,6 @@ from fastapi import FastAPI
 from routers.router import router
 from conf.config import settings
 from util.util import unzip_environmental_badge_file
-    
-unzip_environmental_badge_file()
 
 app = FastAPI(
     title=settings.API_TITLE,
@@ -11,3 +9,7 @@ app = FastAPI(
 )
 
 app.include_router(router)
+
+@app.on_event("startup")
+def startup_event():
+    unzip_environmental_badge_file()

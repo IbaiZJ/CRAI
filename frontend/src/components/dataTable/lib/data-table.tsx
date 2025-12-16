@@ -274,7 +274,7 @@ export function DataTable<TData, TValue>({
 
             return (
               <Button
-                key={`${page}-${index}`}
+                key={`page-${page}`}
                 variant={currentPage === page ? "default" : "outline"}
                 size="sm"
                 onClick={() => table.setPageIndex((page as number) - 1)}
