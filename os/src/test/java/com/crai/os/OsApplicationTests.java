@@ -52,10 +52,9 @@ class OsApplicationTests {
 
 	@Test
 	void stopMethodHandlesNullContext() {
-		// Ensure no exception is thrown when context is null
-		// First, reset context by stopping any existing one
-		OsApplication.stop();
-		// Now calling stop again should not throw
+		// Reset context to null to test the null branch
+		OsApplication.resetContext();
+		// Calling stop should not throw when context is null
 		OsApplication.stop();
 	}
 

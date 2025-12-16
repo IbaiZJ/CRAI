@@ -24,7 +24,7 @@ public class DebugController {
             m.put("state", t.getState().toString());
             m.put("daemon", t.isDaemon());
             m.put("priority", t.getPriority());
-            m.put("stackDepth", stack != null ? stack.length : 0);
+            m.put("stackDepth", stack.length);
             out.add(m);
         }
         return out;

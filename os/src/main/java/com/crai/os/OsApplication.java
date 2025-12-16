@@ -26,9 +26,15 @@ public class OsApplication {
 	}
 
 	static void stop() {
-		if (context != null && context.isActive()) {
-			context.close();
+		ConfigurableApplicationContext ctx = context;
+		if (ctx != null && ctx.isActive()) {
+			ctx.close();
 		}
+	}
+
+	// For testing only - resets static context to null
+	static void resetContext() {
+		context = null;
 	}
 
 }
