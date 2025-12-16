@@ -19,6 +19,6 @@ def test_main_execution_logic():
     """Test the logic inside main.py if it were to run"""
     # Since the code in main.py is mostly commented out or inside if __name__ == "__main__":
     # we can't easily test the execution without uncommenting or refactoring.
-    # However, we can verify that importing it doesn't raise errors.
+    # However, we can verify that importing it doesn't raise errors.a
     import main
     # If there were functions, we would test them here.
