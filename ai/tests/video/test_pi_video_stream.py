@@ -223,14 +223,14 @@ class TestPiVideoStream:
         original_cam_close = stream.camera.close
         
         def raw_close_wrapper():
-            cleanup_called['rawCapture'] = True
+            cleanup_called['raw_capture'] = True
             return original_raw_close()
             
         def cam_close_wrapper():
             cleanup_called['camera'] = True
             return original_cam_close()
         
-        stream.rawCapture.close = raw_close_wrapper
+        stream.raw_capture.close = raw_close_wrapper
         stream.camera.close = cam_close_wrapper
         
         # Start the update in a thread
@@ -249,5 +249,5 @@ class TestPiVideoStream:
         
         # Verify cleanup was called
         assert cleanup_called['stream'] is True, "stream.close() was not called"
-        assert cleanup_called['rawCapture'] is True, "rawCapture.close() was not called"
+        assert cleanup_called['raw_capture'] is True, "raw_capture.close() was not called"
         assert cleanup_called['camera'] is True, "camera.close() was not called"

@@ -54,6 +54,8 @@ const HeroIllustration = () => (
     <div className="absolute inset-0 grid grid-cols-6 grid-rows-6 gap-4 opacity-10 transform perspective-1000 rotate-x-12">
       {[...new Array(36)].map((_, i) => (
         <div key={`city-grid-${i}`} className="bg-blue-500 rounded-lg h-full w-full animate-pulse" style={{ animationDelay: `${i * 0.1}s` }} />
+      ))}
+    </div>
     <div className="relative bg-white/80 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/50 w-80 z-10 animate-float">
       <div className="flex items-center gap-4 mb-4">
         <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
