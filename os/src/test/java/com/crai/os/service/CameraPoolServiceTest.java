@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -18,6 +19,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.crai.os.config.SimulationConfig;
@@ -28,6 +30,7 @@ import com.crai.os.model.PoliceMessage;
 import com.crai.os.model.Vehicle;
 import com.crai.os.repository.ITVRepository;
 import com.crai.os.repository.OwnerRepository;
+import com.crai.os.utils.BoundedPriorityBlockingQueue;
 import com.crai.os.utils.BoundedPriorityBlockingQueue;
 
 @ExtendWith(MockitoExtension.class)
@@ -332,5 +335,63 @@ class CameraPoolServiceTest {
 
         // Should NOT send badge alert for 0 tag
         verify(policeService, never()).sendAlert(any(PoliceMessage.class));
+    }
+
+    @Test
+    void enqueueVehicleThrowsRuntimeExceptionOnInterrupt() throws Exception {
+        // Create a mock BoundedPriorityBlockingQueue that throws InterruptedException
+        @SuppressWarnings("unchecked")
+        BoundedPriorityBlockingQueue<Vehicle> mockQueue = mock(BoundedPriorityBlockingQueue.class);
+        doThrow(new InterruptedException("Test interrupt")).when(mockQueue).put(any(Vehicle.class));
+        
+        ITVService itvService = new ITVService(itvRepository, config);
+        CameraPoolService service = new CameraPoolService(config, itvService, policeService, ownerRepository);
+        
+        // Replace the queue with our mock via reflection
+        Field queueField = CameraPoolService.class.getDeclaredField("queue");
+        queueField.setAccessible(true);
+        queueField.set(service, mockQueue);
+        
+        Vehicle v = new Vehicle("INTERRUPT", 5, false, "C", false);
+        
+        // Test the exception handling
+        assertThatThrownBy(() -> service.enqueueVehicle(v))
+            .isInstanceOf(RuntimeException.class)
+            .hasMessageContaining("Interrupted while enqueueing vehicle")
+            .hasCauseInstanceOf(InterruptedException.class);
+            
+        // Verify the interrupt flag is set
+        assertThat(Thread.currentThread().isInterrupted()).isTrue();
+        
+        // Clear the interrupt flag for other tests
+        Thread.interrupted();
+    }
+
+    @Test
+    void cameraWorkerHandlesExceptionGracefully() throws InterruptedException {
+        // Create a mock PoliceService that throws exception
+        doThrow(new RuntimeException("Simulated error")).when(policeService).sendAlert(any(PoliceMessage.class));
+        
+        ITVService itvService = new ITVService(itvRepository, config);
+        CameraPoolService service = new CameraPoolService(config, itvService, policeService, ownerRepository);
+        service.init();
+
+        // Vehicle with invalid badge that will trigger exception in worker
+        Vehicle v = new Vehicle("ERROR123", 5, false, "INVALID", false);
+        service.enqueueVehicle(v);
+
+        // Give worker time to process and handle the exception
+        Thread.sleep(800);
+
+        // Verify the exception was caught and logged (worker should continue running)
+        verify(policeService, atLeastOnce()).sendAlert(any(PoliceMessage.class));
+        
+        // Send another vehicle to verify worker is still running after exception
+        Vehicle v2 = new Vehicle("TEST456", 3, false, "X", false);
+        service.enqueueVehicle(v2);
+        Thread.sleep(500);
+        
+        // Should have attempted to send alert for second vehicle too
+        verify(policeService, atLeastOnce()).sendAlert(any(PoliceMessage.class));
     }
 }
