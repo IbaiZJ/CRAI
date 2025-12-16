@@ -103,4 +103,65 @@ class VehicleTest {
         assertThat(alert.isAlertVehicle()).isTrue();
         assertThat(notAlert.isAlertVehicle()).isFalse();
     }
+
+    @Test
+    void equalsSameObjectReturnsTrue() {
+        Vehicle v = new Vehicle("1234ABC", 5, false);
+        assertThat(v.equals(v)).isTrue();
+    }
+
+    @Test
+    void equalsNullReturnsFalse() {
+        Vehicle v = new Vehicle("1234ABC", 5, false);
+        assertThat(v.equals(null)).isFalse();
+    }
+
+    @Test
+    void equalsDifferentClassReturnsFalse() {
+        Vehicle v = new Vehicle("1234ABC", 5, false);
+        assertThat(v.equals("not a vehicle")).isFalse();
+    }
+
+    @Test
+    void equalsSamePriorityReturnsTrue() {
+        Vehicle v1 = new Vehicle("AAA", 5, false);
+        Vehicle v2 = new Vehicle("BBB", 5, true);
+
+        assertThat(v1.equals(v2)).isTrue();
+        assertThat(v2.equals(v1)).isTrue();
+    }
+
+    @Test
+    void equalsDifferentPriorityReturnsFalse() {
+        Vehicle v1 = new Vehicle("AAA", 5, false);
+        Vehicle v2 = new Vehicle("AAA", 3, false);
+
+        assertThat(v1.equals(v2)).isFalse();
+    }
+
+    @Test
+    void hashCodeSameForEqualPriority() {
+        Vehicle v1 = new Vehicle("AAA", 5, false);
+        Vehicle v2 = new Vehicle("BBB", 5, true);
+
+        assertThat(v1.hashCode()).isEqualTo(v2.hashCode());
+    }
+
+    @Test
+    void hashCodeDifferentForDifferentPriority() {
+        Vehicle v1 = new Vehicle("AAA", 5, false);
+        Vehicle v2 = new Vehicle("AAA", 3, false);
+
+        assertThat(v1.hashCode()).isNotEqualTo(v2.hashCode());
+    }
+
+    @Test
+    void hashCodeConsistentWithEquals() {
+        Vehicle v1 = new Vehicle("AAA", 7, true);
+        Vehicle v2 = new Vehicle("ZZZ", 7, false);
+
+        if (v1.equals(v2)) {
+            assertThat(v1.hashCode()).isEqualTo(v2.hashCode());
+        }
+    }
 }
