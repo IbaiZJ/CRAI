@@ -2,6 +2,8 @@ package com.crai.os.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +18,13 @@ import com.crai.os.service.CameraPoolService;
 @RestController
 @RequestMapping("/admin")
 public class ControlController {
+
+    private static final String OCR_DELAY_MS = "ocrDelayMs";
+    private static final String STOLEN_PROBABILITY = "stolenProbability";
+    private static final String ITV_FAIL_PROBABILITY = "itvFailProbability";
+    private static final String CAMERA_COUNT = "cameraCount";
+    private static final String VEHICLES_PER_CYCLE = "vehiclesPerCycle";
+    private static final String VEHICLE_INTERVAL_MS = "vehicleIntervalMs";
 
     private final SimulationConfig config;
     private final CameraPoolService cameraPoolService;
@@ -46,10 +55,10 @@ public class ControlController {
     @GetMapping("/status")
     public Map<String, Object> status() {
         return Map.of(
-                "ocrDelayMs", config.getOcrDelayMs(),
-                "stolenProbability", config.getStolenProbability(),
-                "itvFailProbability", config.getItvFailProbability(),
-                "cameraCount", config.getCameraCount());
+                OCR_DELAY_MS, config.getOcrDelayMs(),
+                STOLEN_PROBABILITY, config.getStolenProbability(),
+                ITV_FAIL_PROBABILITY, config.getItvFailProbability(),
+                CAMERA_COUNT, config.getCameraCount());
     }
 
     @PostMapping("/cameras")
@@ -77,66 +86,32 @@ public class ControlController {
         Map<String, Object> updated = new HashMap<>();
         Map<String, String> errors = new HashMap<>();
 
-        if (params.containsKey("cameraCount")) {
-            Integer c = toInt(params.get("cameraCount"));
-            if (c == null || c <= 0) {
-                errors.put("cameraCount", "Must be a positive integer");
-            } else {
-                config.setCameraCount(c);
-                cameraPoolService.resizeCameraPool(c);
-                updated.put("cameraCount", c);
-            }
-        }
+        handleIntParam(params, CAMERA_COUNT, this::isPositive,
+                value -> {
+                    config.setCameraCount(value);
+                    cameraPoolService.resizeCameraPool(value);
+                },
+                "Must be a positive integer", updated, errors);
 
-        if (params.containsKey("stolenProbability")) {
-            Double p = toDouble(params.get("stolenProbability"));
-            if (p == null || p < 0 || p > 1) {
-                errors.put("stolenProbability", "Must be a number between 0 and 1");
-            } else {
-                config.setStolenProbability(p);
-                updated.put("stolenProbability", p);
-            }
-        }
+        handleDoubleParam(params, STOLEN_PROBABILITY, this::isProbability,
+                config::setStolenProbability,
+                "Must be a number between 0 and 1", updated, errors);
 
-        if (params.containsKey("itvFailProbability")) {
-            Double p = toDouble(params.get("itvFailProbability"));
-            if (p == null || p < 0 || p > 1) {
-                errors.put("itvFailProbability", "Must be a number between 0 and 1");
-            } else {
-                config.setItvFailProbability(p);
-                updated.put("itvFailProbability", p);
-            }
-        }
+        handleDoubleParam(params, ITV_FAIL_PROBABILITY, this::isProbability,
+                config::setItvFailProbability,
+                "Must be a number between 0 and 1", updated, errors);
 
-        if (params.containsKey("ocrDelayMs")) {
-            Integer ms = toInt(params.get("ocrDelayMs"));
-            if (ms == null || ms < 0) {
-                errors.put("ocrDelayMs", "Must be a non-negative integer (ms)");
-            } else {
-                config.setOcrDelayMs(ms);
-                updated.put("ocrDelayMs", ms);
-            }
-        }
+        handleIntParam(params, OCR_DELAY_MS, this::isNonNegative,
+                config::setOcrDelayMs,
+                "Must be a non-negative integer (ms)", updated, errors);
 
-        if (params.containsKey("vehiclesPerCycle")) {
-            Integer n = toInt(params.get("vehiclesPerCycle"));
-            if (n == null || n <= 0) {
-                errors.put("vehiclesPerCycle", "Must be a positive integer");
-            } else {
-                config.setVehiclesPerCycle(n);
-                updated.put("vehiclesPerCycle", n);
-            }
-        }
+        handleIntParam(params, VEHICLES_PER_CYCLE, this::isPositive,
+                config::setVehiclesPerCycle,
+                "Must be a positive integer", updated, errors);
 
-        if (params.containsKey("vehicleIntervalMs")) {
-            Integer ms = toInt(params.get("vehicleIntervalMs"));
-            if (ms == null || ms < 0) {
-                errors.put("vehicleIntervalMs", "Must be a non-negative integer (ms)");
-            } else {
-                config.setVehicleIntervalMs(ms);
-                updated.put("vehicleIntervalMs", ms);
-            }
-        }
+        handleIntParam(params, VEHICLE_INTERVAL_MS, this::isNonNegative,
+                config::setVehicleIntervalMs,
+                "Must be a non-negative integer (ms)", updated, errors);
 
         return Map.of(
                 "status", errors.isEmpty() ? "OK" : "PARTIAL",
@@ -170,6 +145,50 @@ public class ControlController {
             }
         }
         return null;
+    }
+
+    private void handleIntParam(Map<String, Object> params, String key, Predicate<Integer> validator,
+            Consumer<Integer> onValid, String errorMessage, Map<String, Object> updated, Map<String, String> errors) {
+        if (!params.containsKey(key)) {
+            return;
+        }
+
+        Integer value = toInt(params.get(key));
+        if (value == null || !validator.test(value)) {
+            errors.put(key, errorMessage);
+            return;
+        }
+
+        onValid.accept(value);
+        updated.put(key, value);
+    }
+
+    private void handleDoubleParam(Map<String, Object> params, String key, Predicate<Double> validator,
+            Consumer<Double> onValid, String errorMessage, Map<String, Object> updated, Map<String, String> errors) {
+        if (!params.containsKey(key)) {
+            return;
+        }
+
+        Double value = toDouble(params.get(key));
+        if (value == null || !validator.test(value)) {
+            errors.put(key, errorMessage);
+            return;
+        }
+
+        onValid.accept(value);
+        updated.put(key, value);
+    }
+
+    private boolean isPositive(Integer value) {
+        return value > 0;
+    }
+
+    private boolean isNonNegative(Integer value) {
+        return value >= 0;
+    }
+
+    private boolean isProbability(Double value) {
+        return value >= 0 && value <= 1;
     }
 
 }

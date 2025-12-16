@@ -30,6 +30,53 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+const ELLIPSIS = "..."
+
+function buildPaginationPages(currentPage: number, totalPages: number) {
+  const pages: Array<number | string> = []
+
+  if (totalPages <= 5) {
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(i)
+    }
+    return pages
+  }
+
+  pages.push(1)
+
+  if (currentPage > 3) {
+    pages.push(ELLIPSIS)
+  }
+
+  const start = Math.max(2, currentPage - 1)
+  const end = Math.min(totalPages - 1, currentPage + 1)
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i)
+  }
+
+  if (currentPage < totalPages - 2) {
+    pages.push(ELLIPSIS)
+  }
+
+  pages.push(totalPages)
+
+  return pages
+}
+
+function buildHiddenPages(pages: Array<number | string>, totalPages: number) {
+  const visible = new Set(pages.filter((page) => page !== ELLIPSIS))
+  const hidden: number[] = []
+
+  for (let i = 1; i <= totalPages; i++) {
+    if (!visible.has(i)) {
+      hidden.push(i)
+    }
+  }
+
+  return hidden
+}
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
@@ -78,6 +125,16 @@ export function DataTable<TData, TValue>({
       globalFilter,
     },
   })
+
+  const paginationState = table.getState().pagination
+  const currentPage = paginationState.pageIndex + 1
+  const totalPages = table.getPageCount()
+
+  const pagination = React.useMemo(() => {
+    const pages = buildPaginationPages(currentPage, totalPages)
+    const hiddenPages = buildHiddenPages(pages, totalPages)
+    return { pages, hiddenPages }
+  }, [currentPage, totalPages])
 
   return (
     <div className="w-full">
@@ -189,79 +246,44 @@ export function DataTable<TData, TValue>({
           >
             Previous
           </Button>
-          
-          {(() => {
-            const currentPage = table.getState().pagination.pageIndex + 1
-            const totalPages = table.getPageCount()
-            const pages: (number | string)[] = []
 
-            if (totalPages <= 5) {
-              // Show all pages if 5 or less
-              for (let i = 1; i <= totalPages; i++) {
-                pages.push(i)
-              }
-            } else {
-              // Always show first page
-              pages.push(1)
-
-              if (currentPage > 3) {
-                pages.push("...")
-              }
-
-              // Show pages around current page
-              const start = Math.max(2, currentPage - 1)
-              const end = Math.min(totalPages - 1, currentPage + 1)
-
-              for (let i = start; i <= end; i++) {
-                pages.push(i)
-              }
-
-              if (currentPage < totalPages - 2) {
-                pages.push("...")
-              }
-
-              // Always show last page
-              pages.push(totalPages)
+          {pagination.pages.map((page, index) => {
+            if (page === ELLIPSIS) {
+              return (
+                <DropdownMenu key={`ellipsis-${index}`}>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      ...
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    {pagination.hiddenPages.map((hiddenPage) => (
+                      <DropdownMenuCheckboxItem
+                        key={hiddenPage}
+                        checked={currentPage === hiddenPage}
+                        onCheckedChange={() =>
+                          table.setPageIndex(hiddenPage - 1)
+                        }
+                      >
+                        Page {hiddenPage}
+                      </DropdownMenuCheckboxItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )
             }
 
-            return pages.map((page, index) => {
-              if (page === "...") {
-                return (
-                  <DropdownMenu key={`ellipsis-${index}`}>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm">
-                        ...
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      {Array.from({ length: totalPages }, (_, i) => i + 1)
-                        .filter((p) => !pages.includes(p))
-                        .map((p) => (
-                          <DropdownMenuCheckboxItem
-                            key={p}
-                            checked={currentPage === p}
-                            onCheckedChange={() => table.setPageIndex(p - 1)}
-                          >
-                            Page {p}
-                          </DropdownMenuCheckboxItem>
-                        ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                )
-              }
-
-              return (
-                <Button
-                  key={page}
-                  variant={currentPage === page ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => table.setPageIndex((page as number) - 1)}
-                >
-                  {page}
-                </Button>
-              )
-            })
-          })()}
+            return (
+              <Button
+                key={`${page}-${index}`}
+                variant={currentPage === page ? "default" : "outline"}
+                size="sm"
+                onClick={() => table.setPageIndex((page as number) - 1)}
+              >
+                {page}
+              </Button>
+            )
+          })}
 
           <Button
             variant="outline"
