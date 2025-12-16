@@ -1,9 +1,8 @@
 package com.crai.os.model;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.lang.reflect.Constructor;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 
 class PoliceMessageFactoryTest {
