@@ -37,7 +37,7 @@ export type UnifiedNavItem = {
   actions?: { label: string; icon?: LucideIcon }[]
 }
 
-export function NavUnified({ items, label = "Navigation" }: { items: UnifiedNavItem[]; label?: string }) {
+export function NavUnified({ items, label = "Navigation" }: Readonly<{ items: ReadonlyArray<UnifiedNavItem>; label?: string }>) {
   const { isMobile } = useSidebar()
   const location = useLocation()
   

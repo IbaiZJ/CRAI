@@ -96,19 +96,19 @@ class VideoUtils:
             Rotated image with expanded canvas
         """
         (h, w) = image.shape[:2]
-        (cX, cY) = (w / 2, h / 2)
+        (cx, cy) = (w / 2, h / 2)
         
-        M = cv2.getRotationMatrix2D((cX, cY), -angle, 1.0)
+        M = cv2.getRotationMatrix2D((cx, cy), -angle, 1.0)
         cos = np.abs(M[0, 0])
         sin = np.abs(M[0, 1])
         
-        nW = int((h * sin) + (w * cos))
-        nH = int((h * cos) + (w * sin))
+        nw = int((h * sin) + (w * cos))
+        nh = int((h * cos) + (w * sin))
         
-        M[0, 2] += (nW / 2) - cX
-        M[1, 2] += (nH / 2) - cY
+        M[0, 2] += (nw / 2) - cx
+        M[1, 2] += (nh / 2) - cy
         
-        return cv2.warpAffine(image, M, (nW, nH))
+        return cv2.warpAffine(image, M, (nw, nh))
 
     @staticmethod
     def crop(image: np.ndarray, x: int, y: int, w: int, h: int) -> np.ndarray:
