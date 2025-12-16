@@ -2,10 +2,10 @@ package com.crai.os.controller;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.IntPredicate;
-import java.util.function.IntConsumer;
-import java.util.function.DoublePredicate;
 import java.util.function.DoubleConsumer;
+import java.util.function.DoublePredicate;
+import java.util.function.IntConsumer;
+import java.util.function.IntPredicate;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
