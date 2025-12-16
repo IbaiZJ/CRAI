@@ -10,6 +10,6 @@ app = FastAPI(
 
 app.include_router(router)
 
-@app.on_event("startup")
-def startup_event():
-    unzip_environmental_badge_file()
+@app.on_event("startup")  # pragma: no cover
+def startup_event():  # pragma: no cover
+    unzip_environmental_badge_file()  # pragma: no cover
