@@ -219,41 +219,8 @@ const HowItWorks = () => {
     { num: "04", title: "Act", desc: "Admins receive alerts and visual analytics on the dashboard." }
   ];
 
-  return (
-//     <section id="how-it-works" className="py-24 bg-slate-900 text-white relative overflow-hidden">
-//       {/* Abstract Grid Background */}
-//       <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#4b5563 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
-      
-//       <div className="container mx-auto px-8 relative z-10">
-//         <div className="flex flex-col md:flex-row justify-between items-end mb-16">
-//           <div className="max-w-xl">
-//             <h2 className="text-3xl md:text-4xl font-bold mb-4">From pixel to insight in milliseconds.</h2>
-//             <p className="text-slate-400">Our pipeline is optimized for speed and privacy, ensuring data is processed securely at the edge.</p>
-//           </div>
-//           <Button variant="outline" className="mt-6 md:mt-0">See System Architecture</Button>
-//         </div>
-
-//         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-//           {steps.map((step, idx) => (
-//             <div key={idx} className="relative p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors backdrop-blur-sm">
-//               <div className="text-5xl font-bold text-slate-700/50 mb-4 absolute top-4 right-4">{step.num}</div>
-//               <div className="relative">
-//                 <div className="w-2 h-2 rounded-full bg-blue-500 mb-6 shadow-[0_0_10px_rgba(59,130,246,0.8)]"></div>
-//                 <h3 className="text-xl font-bold mb-2">{step.title}</h3>
-//                 <p className="text-sm text-slate-400">{step.desc}</p>
-//               </div>
-//               {idx !== steps.length - 1 && (
-//                 <div className="hidden md:block absolute top-1/2 -right-3 transform -translate-y-1/2 z-20">
-//                   <ArrowRight className="text-slate-600 w-5 h-5" />
-//                 </div>
-//               )}
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//     </section>
-//   );
-// };
+  return null;
+};
 
 const DashboardPreview = () => (
     <section id="analytics" className="py-24 bg-slate-50 overflow-hidden">
