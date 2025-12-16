@@ -3,8 +3,6 @@ package com.crai.os.service;
 import java.lang.reflect.Field;
 import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -15,11 +13,11 @@ import org.mockito.ArgumentCaptor;
 import static org.mockito.ArgumentMatchers.any;
 import org.mockito.Mock;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.crai.os.config.SimulationConfig;
@@ -30,7 +28,6 @@ import com.crai.os.model.PoliceMessage;
 import com.crai.os.model.Vehicle;
 import com.crai.os.repository.ITVRepository;
 import com.crai.os.repository.OwnerRepository;
-import com.crai.os.utils.BoundedPriorityBlockingQueue;
 import com.crai.os.utils.BoundedPriorityBlockingQueue;
 
 @ExtendWith(MockitoExtension.class)
