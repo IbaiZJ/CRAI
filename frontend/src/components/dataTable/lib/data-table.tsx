@@ -78,13 +78,12 @@ function buildHiddenPages(pages: Array<number | string>, totalPages: number) {
 }
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  searchPlaceholder?: string
-  searchKey?: string
-  enableColumnVisibility?: boolean
-  enableRowSelection?: boolean
-  enableGlobalFilter?: boolean
+  readonly columns: ColumnDef<TData, TValue>[]
+  readonly data: TData[]
+  readonly searchPlaceholder?: string
+  readonly enableColumnVisibility?: boolean
+  readonly enableRowSelection?: boolean
+  readonly enableGlobalFilter?: boolean
 }
 
 export function DataTable<TData, TValue>({
@@ -94,7 +93,7 @@ export function DataTable<TData, TValue>({
   enableColumnVisibility = true,
   enableRowSelection = true,
   enableGlobalFilter = true,
-}: DataTableProps<TData, TValue>) {
+}: Readonly<DataTableProps<TData, TValue>>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

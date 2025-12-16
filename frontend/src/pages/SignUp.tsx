@@ -99,7 +99,8 @@ export default function SignUp() {
       notifications.success("Account created successfully!");
       navigate("/login");
     } catch (error) {
-      notifications.error("Failed to create account. Please try again.");
+      const message = error instanceof Error ? error.message : "Unknown error";
+      notifications.error(`Failed to create account: ${message}`);
     } finally {
       setLoading(false);
     }

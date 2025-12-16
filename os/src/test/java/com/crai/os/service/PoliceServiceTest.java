@@ -413,12 +413,6 @@ class PoliceServiceTest {
         SimulationConfig cfg = new SimulationConfig();
         PoliceService svc = new PoliceService(cfg);
         
-        // Get the queue via reflection and add a null message
-        Field queueField = PoliceService.class.getDeclaredField("queue");
-        queueField.setAccessible(true);
-        @SuppressWarnings("unchecked")
-        BlockingQueue<PoliceMessage> queue = (BlockingQueue<PoliceMessage>) queueField.get(svc);
-        
         // Start the worker
         svc.init();
         

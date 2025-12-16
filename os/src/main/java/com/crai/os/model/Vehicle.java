@@ -50,6 +50,22 @@ public class Vehicle implements Comparable<Vehicle> {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Vehicle other)) {
+            return false;
+        }
+        return this.priority == other.priority;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(priority);
+    }
+
+    @Override
     public String toString() {
         return """
                 🚗 Vehicle:

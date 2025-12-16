@@ -12,15 +12,15 @@ import {
 } from "@/components/ui/avatar";
 
 interface AccountDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  user: {
+  readonly open: boolean;
+  readonly onOpenChange: (open: boolean) => void;
+  readonly user: {
     name: string;
     email: string;
     avatar: string;
   };
-  initials: string;
-  userId?: string;
+  readonly initials: string;
+  readonly userId?: string;
 }
 
 export function AccountDialog({
@@ -29,7 +29,7 @@ export function AccountDialog({
   user,
   initials,
   userId,
-}: AccountDialogProps) {
+}: Readonly<AccountDialogProps>) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>

@@ -11,11 +11,11 @@ export type BreadcrumbItem = {
 }
 
 interface LayoutProps {
-  children: ReactNode
-  breadcrumbs?: BreadcrumbItem[]
+  readonly children: ReactNode
+  readonly breadcrumbs?: BreadcrumbItem[]
 }
 
-export default function Layout({ children, breadcrumbs }: LayoutProps) {
+export default function Layout({ children, breadcrumbs }: Readonly<LayoutProps>) {
   const items: BreadcrumbItem[] =
     breadcrumbs && breadcrumbs.length > 0
       ? breadcrumbs

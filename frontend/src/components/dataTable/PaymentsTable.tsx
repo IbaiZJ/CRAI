@@ -3,7 +3,7 @@ import { createColumns } from "@/components/dataTable/lib/createColumns"
 import type { Payment } from "@/constants/paymentConstant"
 
 type Props = {
-  data: Payment[]
+  readonly data: Payment[]
 }
 
 const paymentColumns = createColumns<Payment>({
@@ -47,7 +47,7 @@ const paymentColumns = createColumns<Payment>({
   ],
 })
 
-export default function PaymentsTable({ data }: Props) {
+export default function PaymentsTable({ data }: Readonly<Props>) {
   return (
     <DataTable
       columns={paymentColumns}

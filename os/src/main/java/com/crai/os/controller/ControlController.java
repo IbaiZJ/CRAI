@@ -2,8 +2,10 @@ package com.crai.os.controller;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
+import java.util.function.IntPredicate;
+import java.util.function.IntConsumer;
+import java.util.function.DoublePredicate;
+import java.util.function.DoubleConsumer;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -147,8 +149,8 @@ public class ControlController {
         return null;
     }
 
-    private void handleIntParam(Map<String, Object> params, String key, Predicate<Integer> validator,
-            Consumer<Integer> onValid, String errorMessage, Map<String, Object> updated, Map<String, String> errors) {
+    private void handleIntParam(Map<String, Object> params, String key, IntPredicate validator,
+            IntConsumer onValid, String errorMessage, Map<String, Object> updated, Map<String, String> errors) {
         if (!params.containsKey(key)) {
             return;
         }
@@ -163,8 +165,8 @@ public class ControlController {
         updated.put(key, value);
     }
 
-    private void handleDoubleParam(Map<String, Object> params, String key, Predicate<Double> validator,
-            Consumer<Double> onValid, String errorMessage, Map<String, Object> updated, Map<String, String> errors) {
+    private void handleDoubleParam(Map<String, Object> params, String key, DoublePredicate validator,
+            DoubleConsumer onValid, String errorMessage, Map<String, Object> updated, Map<String, String> errors) {
         if (!params.containsKey(key)) {
             return;
         }
@@ -179,15 +181,15 @@ public class ControlController {
         updated.put(key, value);
     }
 
-    private boolean isPositive(Integer value) {
+    private boolean isPositive(int value) {
         return value > 0;
     }
 
-    private boolean isNonNegative(Integer value) {
+    private boolean isNonNegative(int value) {
         return value >= 0;
     }
 
-    private boolean isProbability(Double value) {
+    private boolean isProbability(double value) {
         return value >= 0 && value <= 1;
     }
 

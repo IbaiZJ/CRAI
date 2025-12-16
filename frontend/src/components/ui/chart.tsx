@@ -45,7 +45,7 @@ function ChartContainer({
   >["children"]
 }) {
   const uniqueId = React.useId()
-  const chartId = `chart-${id || uniqueId.replace(/:/g, "")}`
+  const chartId = `chart-${id || uniqueId.replaceAll(":", "")}`
   const contextValue = React.useMemo(() => ({ config }), [config])
 
   return (
@@ -179,7 +179,7 @@ function ChartTooltipContent({
       {!nestLabel ? tooltipLabel : null}
       <div className="grid gap-1.5">
         {payload
-          .filter((item) => item.type !== "none")
+          .filter((item) => isRenderableItem(item.type))
           .map((item, index) => {
             const key = `${nameKey || item.name || item.dataKey || "value"}`
             const itemConfig = getPayloadConfigFromPayload(config, item, key)
@@ -277,7 +277,7 @@ function ChartLegendContent({
       )}
     >
       {payload
-        .filter((item) => item.type !== "none")
+        .filter((item) => isRenderableItem(item.type))
         .map((item) => {
           const key = `${nameKey || item.dataKey || "value"}`
           const itemConfig = getPayloadConfigFromPayload(config, item, key)
@@ -305,6 +305,10 @@ function ChartLegendContent({
         })}
     </div>
   )
+}
+
+function isRenderableItem(type: unknown): boolean {
+  return type !== "none"
 }
 
 // Helper to extract item config from a payload.
