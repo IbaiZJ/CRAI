@@ -221,4 +221,136 @@ class ControlControllerTest {
         Map<?, ?> errors = (Map<?, ?>) result.get("errors");
         assertTrue(errors.containsKey("itvFailProbability"));
     }
+
+    // ========= Additional branch coverage tests =========
+
+    @Test
+    void updateSimValidatesStolenProbabilityGreaterThanOne() {
+        // Covers line 93: p > 1 branch
+        Map<String, Object> params = new HashMap<>();
+        params.put("stolenProbability", 1.5); // > 1, invalid
+
+        Map<String, Object> result = controller.updateSim(params);
+
+        assertEquals("PARTIAL", result.get("status"));
+        Map<?, ?> errors = (Map<?, ?>) result.get("errors");
+        assertTrue(errors.containsKey("stolenProbability"));
+    }
+
+    @Test
+    void updateSimValidatesItvFailProbabilityNegative() {
+        // Covers line 103: p < 0 branch
+        Map<String, Object> params = new HashMap<>();
+        params.put("itvFailProbability", -0.3); // < 0, invalid
+
+        Map<String, Object> result = controller.updateSim(params);
+
+        assertEquals("PARTIAL", result.get("status"));
+        Map<?, ?> errors = (Map<?, ?>) result.get("errors");
+        assertTrue(errors.containsKey("itvFailProbability"));
+    }
+
+    @Test
+    void updateSimValidatesOcrDelayMsNull() {
+        // Covers line 113: ms == null branch
+        Map<String, Object> params = new HashMap<>();
+        params.put("ocrDelayMs", new Object()); // not a Number or String -> toInt returns null
+
+        Map<String, Object> result = controller.updateSim(params);
+
+        assertEquals("PARTIAL", result.get("status"));
+        Map<?, ?> errors = (Map<?, ?>) result.get("errors");
+        assertTrue(errors.containsKey("ocrDelayMs"));
+    }
+
+    @Test
+    void updateSimValidatesVehiclesPerCycleNull() {
+        // Covers lines 123-124: n == null branch
+        Map<String, Object> params = new HashMap<>();
+        params.put("vehiclesPerCycle", new Object()); // not a Number or String -> toInt returns null
+
+        Map<String, Object> result = controller.updateSim(params);
+
+        assertEquals("PARTIAL", result.get("status"));
+        Map<?, ?> errors = (Map<?, ?>) result.get("errors");
+        assertTrue(errors.containsKey("vehiclesPerCycle"));
+    }
+
+    @Test
+    void updateSimValidatesVehiclesPerCycleZero() {
+        // Covers lines 123-124: n <= 0 branch
+        Map<String, Object> params = new HashMap<>();
+        params.put("vehiclesPerCycle", 0);
+
+        Map<String, Object> result = controller.updateSim(params);
+
+        assertEquals("PARTIAL", result.get("status"));
+        Map<?, ?> errors = (Map<?, ?>) result.get("errors");
+        assertTrue(errors.containsKey("vehiclesPerCycle"));
+    }
+
+    @Test
+    void updateSimValidatesVehiclesPerCycleNegative() {
+        // Covers lines 123-124: n <= 0 branch (negative)
+        Map<String, Object> params = new HashMap<>();
+        params.put("vehiclesPerCycle", -5);
+
+        Map<String, Object> result = controller.updateSim(params);
+
+        assertEquals("PARTIAL", result.get("status"));
+        Map<?, ?> errors = (Map<?, ?>) result.get("errors");
+        assertTrue(errors.containsKey("vehiclesPerCycle"));
+    }
+
+    @Test
+    void updateSimValidatesVehicleIntervalMsNull() {
+        // Covers line 133: ms == null branch
+        Map<String, Object> params = new HashMap<>();
+        params.put("vehicleIntervalMs", new Object()); // not a Number or String -> toInt returns null
+
+        Map<String, Object> result = controller.updateSim(params);
+
+        assertEquals("PARTIAL", result.get("status"));
+        Map<?, ?> errors = (Map<?, ?>) result.get("errors");
+        assertTrue(errors.containsKey("vehicleIntervalMs"));
+    }
+
+    @Test
+    void updateSimValidatesVehicleIntervalMsNegative() {
+        // Covers line 133: ms < 0 branch
+        Map<String, Object> params = new HashMap<>();
+        params.put("vehicleIntervalMs", -100);
+
+        Map<String, Object> result = controller.updateSim(params);
+
+        assertEquals("PARTIAL", result.get("status"));
+        Map<?, ?> errors = (Map<?, ?>) result.get("errors");
+        assertTrue(errors.containsKey("vehicleIntervalMs"));
+    }
+
+    @Test
+    void updateSimValidatesStolenProbabilityNull() {
+        // Covers line 93: p == null branch
+        Map<String, Object> params = new HashMap<>();
+        params.put("stolenProbability", new Object()); // toDouble returns null
+
+        Map<String, Object> result = controller.updateSim(params);
+
+        assertEquals("PARTIAL", result.get("status"));
+        Map<?, ?> errors = (Map<?, ?>) result.get("errors");
+        assertTrue(errors.containsKey("stolenProbability"));
+    }
+
+    @Test
+    void updateSimValidatesItvFailProbabilityNull() {
+        // Covers line 103: p == null branch
+        Map<String, Object> params = new HashMap<>();
+        params.put("itvFailProbability", new Object()); // toDouble returns null
+
+        Map<String, Object> result = controller.updateSim(params);
+
+        assertEquals("PARTIAL", result.get("status"));
+        Map<?, ?> errors = (Map<?, ?>) result.get("errors");
+        assertTrue(errors.containsKey("itvFailProbability"));
+    }
 }
