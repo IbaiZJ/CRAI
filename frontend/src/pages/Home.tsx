@@ -211,16 +211,7 @@ const Features = () => {
   );
 };
 
-const HowItWorks = () => {
-  const steps = [
-    { num: "01", title: "Capture", desc: "Cameras across the infrastructure capture high-res video in real-time." },
-    { num: "02", title: "Analyze", desc: "Our AI engine identifies plates, make, and model within milliseconds." },
-    { num: "03", title: "Process", desc: "Data is encrypted and sent to the centralized CRAI cloud core." },
-    { num: "04", title: "Act", desc: "Admins receive alerts and visual analytics on the dashboard." }
-  ];
 
-  return null;
-};
 
 const DashboardPreview = () => (
     <section id="analytics" className="py-24 bg-slate-50 overflow-hidden">

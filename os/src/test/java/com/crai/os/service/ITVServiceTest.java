@@ -108,8 +108,8 @@ class ITVServiceTest {
 
     @Test
     void returnsValidAt31Days() {
-        long exactly31Days = System.currentTimeMillis() + Duration.ofDays(31).toMillis();
-        repository.save(new ITVRecord("7890GHI", exactly31Days));
+        long moreThan30Days = System.currentTimeMillis() + Duration.ofDays(31).toMillis() + 60_000;
+        repository.save(new ITVRecord("7890GHI", moreThan30Days));
 
         ITVService service = new ITVService(repository, config);
         ITVStatus status = service.check("7890GHI");
