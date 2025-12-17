@@ -449,11 +449,6 @@ describe('SignUp Page - Password visibility', () => {
     (useAuth as any).mockReturnValue({
       isAuthenticated: false,
     });
-    (useNotifications as any).mockReturnValue({
-      success: vi.fn(),
-      error: vi.fn(),
-      info: vi.fn(),
-    });
   });
 
   it('should render password toggle buttons', () => {
