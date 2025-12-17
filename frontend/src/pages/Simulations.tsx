@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Play, Pause, RotateCcw, Clock, Zap, TrendingUp } from "lucide-react";
 import { useEffect } from "react";
+import type React from "react";
 
 // Helper functions to reduce cognitive complexity
 const getProgressBarColor = (status: string): string => {
@@ -13,7 +14,7 @@ const getProgressBarColor = (status: string): string => {
   return "bg-gray-400";
 };
 
-const getActionButton = (status: string): JSX.Element => {
+const getActionButton = (status: string): React.ReactElement => {
   if (status === "running") {
     return (
       <Button size="sm" variant="outline" className="flex-1 gap-1">
