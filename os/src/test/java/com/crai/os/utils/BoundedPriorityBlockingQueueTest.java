@@ -10,6 +10,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("java:S2925") // Thread.sleep is necessary in concurrent queue tests
 class BoundedPriorityBlockingQueueTest {
 
     @Test

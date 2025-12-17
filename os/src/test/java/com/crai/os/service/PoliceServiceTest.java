@@ -22,6 +22,7 @@ import com.crai.os.config.SimulationConfig;
 import com.crai.os.model.AlertType;
 import com.crai.os.model.PoliceMessage;
 
+@SuppressWarnings("java:S2925") // Thread.sleep is necessary in async tests to wait for worker threads
 class PoliceServiceTest {
 
     private SimulationConfig config;

@@ -17,6 +17,7 @@ import java.util.List;
 
 @SpringBootTest
 @TestPropertySource(properties = "node-red.webhook-url=")
+@SuppressWarnings("java:S2925") // Thread.sleep is necessary in async tests for synchronization
 public class PriorityOrderingTest {
 
     // For determinism we test the queue implementation directly instead of the full Spring wiring.

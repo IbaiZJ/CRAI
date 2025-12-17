@@ -15,6 +15,7 @@ import java.util.concurrent.*;
 
 @SpringBootTest
 @TestPropertySource(properties = "node-red.webhook-url=")
+@SuppressWarnings("java:S2925") // Thread.sleep is necessary in async integration tests
 public class CameraPoliceIntegrationTest {
 
     @Autowired

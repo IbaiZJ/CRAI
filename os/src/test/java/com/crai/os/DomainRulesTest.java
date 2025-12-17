@@ -17,6 +17,7 @@ import java.util.List;
 
 @SpringBootTest
 @TestPropertySource(properties = "node-red.webhook-url=")
+@SuppressWarnings("java:S2925") // Thread.sleep is necessary in async integration tests
 public class DomainRulesTest {
 
     @Autowired

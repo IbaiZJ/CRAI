@@ -30,6 +30,7 @@ import com.crai.os.repository.ITVRepository;
 import com.crai.os.repository.OwnerRepository;
 import com.crai.os.utils.BoundedPriorityBlockingQueue;
 
+@SuppressWarnings("java:S2925") // Thread.sleep is necessary in async tests to wait for worker threads
 @ExtendWith(MockitoExtension.class)
 class CameraPoolServiceTest {
 
