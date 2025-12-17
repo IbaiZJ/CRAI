@@ -8,15 +8,15 @@ class ITVRecordTest {
 
     @Test
     void detectsExpiredWhenPastNow() {
-        long past = System.currentTimeMillis() - 1000;
-        ITVRecord record = new ITVRecord("1234BCD", past);
-        assertThat(record.isExpired()).isTrue();
+        long pastTimestamp = System.currentTimeMillis() - 1000;
+        ITVRecord itvRecord = new ITVRecord("1234BCD", pastTimestamp);
+        assertThat(itvRecord.isExpired()).isTrue();
     }
 
     @Test
     void detectsValidWhenFuture() {
-        long future = System.currentTimeMillis() + 1000;
-        ITVRecord record = new ITVRecord("2345CDE", future);
-        assertThat(record.isExpired()).isFalse();
+        long futureTimestamp = System.currentTimeMillis() + 1000;
+        ITVRecord itvRecord = new ITVRecord("2345CDE", futureTimestamp);
+        assertThat(itvRecord.isExpired()).isFalse();
     }
 }

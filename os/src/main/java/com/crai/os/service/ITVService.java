@@ -17,7 +17,7 @@ public class ITVService {
 
     private final ITVRepository itvRepository;
     private final SimulationConfig config;
-    private final Random random = new Random();
+    private final Random randomGenerator = new Random();
 
     public ITVService(ITVRepository itvRepository, SimulationConfig config) {
         this.itvRepository = itvRepository;
@@ -30,7 +30,7 @@ public class ITVService {
 
         if (record == null) {
             // Genera un registro al vuelo: probabilidad de fallo según configuración.
-            boolean fail = random.nextDouble() < config.getItvFailProbability();
+            boolean fail = randomGenerator.nextDouble() < config.getItvFailProbability();
             long now = System.currentTimeMillis();
             long expiration = fail
                     // Caducada en algún momento de los últimos 90 días
@@ -69,11 +69,11 @@ public class ITVService {
 
             String plate = SpanishPlateGenerator.generate();
 
-            boolean expired = random.nextBoolean();
+            boolean expired = randomGenerator.nextBoolean();
 
             long expiration = expired
-                    ? now - random.nextInt(1000 * 60 * 60 * 24 * 365)
-                    : now + random.nextInt(1000 * 60 * 60 * 24 * 365);
+                    ? now - randomGenerator.nextInt(1000 * 60 * 60 * 24 * 365)
+                    : now + randomGenerator.nextInt(1000 * 60 * 60 * 24 * 365);
 
             itvRepository.save(new ITVRecord(plate, expiration));
         }
