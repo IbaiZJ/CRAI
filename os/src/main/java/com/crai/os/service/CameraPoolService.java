@@ -1,22 +1,25 @@
 package com.crai.os.service;
 
-import com.crai.os.model.AlertType;
-import com.crai.os.model.ITVStatus;
-import com.crai.os.model.PoliceMessageFactory;
-import com.crai.os.model.Vehicle;
-import com.crai.os.model.Owner;
-import jakarta.annotation.PostConstruct;
-import com.crai.os.config.SimulationConfig;
-import org.springframework.stereotype.Service;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
-import java.util.Set;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import com.crai.os.utils.BoundedPriorityBlockingQueue;
+import com.crai.os.config.SimulationConfig;
+import com.crai.os.model.AlertType;
+import com.crai.os.model.ITVStatus;
+import com.crai.os.model.Owner;
+import com.crai.os.model.PoliceMessageFactory;
+import com.crai.os.model.Vehicle;
 import com.crai.os.repository.OwnerRepository;
+import com.crai.os.utils.BoundedPriorityBlockingQueue;
+
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class CameraPoolService {
@@ -153,6 +156,10 @@ public class CameraPoolService {
                                     "Vehiculo robado o marcado"));
                 }
 
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                log.warn("Camera worker interrupted, exiting");
+                break;
             } catch (Exception e) {
                 log.error("Error processing vehicle in camera worker", e);
             }
