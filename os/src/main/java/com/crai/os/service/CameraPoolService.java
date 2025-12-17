@@ -114,47 +114,7 @@ public class CameraPoolService {
                 log.info("Camera captured {} (processing thread={})",
                         v.getPlate(), Thread.currentThread().getName());
 
-                // 1. Environmental badge validation
-                String tag = v.getEnvTag();
-                Set<String> allowed = Set.of("C", "ECO", "0");
-
-                if (tag == null || !allowed.contains(tag.toUpperCase())) {
-
-                    log.info("Vehicle denied entry due to environmental tag: {} - {}",
-                            tag, v.getPlate());
-
-                    policeService.sendAlert(
-                            PoliceMessageFactory.build(
-                                    AlertType.BADGE,
-                                    v.getPlate(),
-                                    tag));
-
-                    continue;
-                }
-
-                // 2. ITV validation
-                String plate = v.getPlate();
-                ITVStatus status = itvService.check(plate);
-
-                if (status != ITVStatus.VALID) {
-                    Owner owner = ownerRepository.findByPlate(plate);
-                    String email = owner != null ? owner.getEmail() : null;
-                    policeService.sendAlert(
-                            PoliceMessageFactory.build(
-                                    AlertType.ITV,
-                                    plate,
-                                    status.name(),
-                                    email));
-                }
-
-                // 3. Stolen or marked vehicle
-                if (v.isStolen() || v.isAlertVehicle()) {
-                    policeService.sendAlert(
-                            PoliceMessageFactory.build(
-                                    AlertType.POLICE,
-                                    v.getPlate(),
-                                    "Vehiculo robado o marcado"));
-                }
+                processVehicle(v);
 
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -163,6 +123,60 @@ public class CameraPoolService {
             } catch (Exception e) {
                 log.error("Error processing vehicle in camera worker", e);
             }
+        }
+    }
+
+    private void processVehicle(Vehicle v) {
+        if (!validateEnvironmentalBadge(v)) {
+            return;
+        }
+
+        validateITV(v);
+        checkStolenOrMarked(v);
+    }
+
+    private boolean validateEnvironmentalBadge(Vehicle v) {
+        String tag = v.getEnvTag();
+        Set<String> allowed = Set.of("C", "ECO", "0");
+
+        if (tag == null || !allowed.contains(tag.toUpperCase())) {
+            log.info("Vehicle denied entry due to environmental tag: {} - {}",
+                    tag, v.getPlate());
+
+            policeService.sendAlert(
+                    PoliceMessageFactory.build(
+                            AlertType.BADGE,
+                            v.getPlate(),
+                            tag));
+
+            return false;
+        }
+        return true;
+    }
+
+    private void validateITV(Vehicle v) {
+        String plate = v.getPlate();
+        ITVStatus status = itvService.check(plate);
+
+        if (status != ITVStatus.VALID) {
+            Owner owner = ownerRepository.findByPlate(plate);
+            String email = owner != null ? owner.getEmail() : null;
+            policeService.sendAlert(
+                    PoliceMessageFactory.build(
+                            AlertType.ITV,
+                            plate,
+                            status.name(),
+                            email));
+        }
+    }
+
+    private void checkStolenOrMarked(Vehicle v) {
+        if (v.isStolen() || v.isAlertVehicle()) {
+            policeService.sendAlert(
+                    PoliceMessageFactory.build(
+                            AlertType.POLICE,
+                            v.getPlate(),
+                            "Vehiculo robado o marcado"));
         }
     }
 
