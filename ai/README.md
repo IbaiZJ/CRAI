@@ -1,5 +1,8 @@
 # AI
 
+- https://www.youtube.com/watch?v=402DciWGvt8
+
+## Read more
 - https://pyimagesearch.com/start-here/
 - https://pyimagesearch.com/category/optical-character-recognition-ocr/
 - https://pyimagesearch.com/2020/09/21/opencv-automatic-license-number-plate-recognition-anpr-with-python/
@@ -14,3 +17,5 @@
 - https://images.cv/dataset/car-image-classification-dataset
 - https://github.com/yjzhai-cs/Vehicle-10?tab=readme-ov-file
 - https://www.kaggle.com/datasets/prondeau/the-car-connection-picture-dataset?resource=download
+- https://www.kaggle.com/datasets/dtrnngc/ua-detrac-dataset
+- https://www.kaggle.com/datasets/eduardo4jesus/stanford-cars-dataset
