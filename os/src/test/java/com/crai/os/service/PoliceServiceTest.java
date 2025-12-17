@@ -533,7 +533,5 @@ class PoliceServiceTest {
         svc.sendAlert(new PoliceMessage(AlertType.BADGE, "OK", "Works fine"));
         Thread.sleep(500);
         
-        // Worker should still be running and processing
-        // We can't easily verify mock calls here, but the worker thread should continue
     }
 }
