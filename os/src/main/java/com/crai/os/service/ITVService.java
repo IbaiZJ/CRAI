@@ -26,9 +26,9 @@ public class ITVService {
 
     public ITVStatus check(String plate) {
 
-        ITVRecord record = itvRepository.find(plate);
+        ITVRecord itvRecord = itvRepository.find(plate);
 
-        if (record == null) {
+        if (itvRecord == null) {
             // Genera un registro al vuelo: probabilidad de fallo según configuración.
             boolean fail = randomGenerator.nextDouble() < config.getItvFailProbability();
             long now = System.currentTimeMillis();
@@ -37,15 +37,15 @@ public class ITVService {
                     ? now - randomDurationMillis(90)
                     // Válida pero con caducidad entre 0 y 180 días
                     : now + randomDurationMillis(180);
-            record = new ITVRecord(plate, expiration);
-            itvRepository.save(record);
+            itvRecord = new ITVRecord(plate, expiration);
+            itvRepository.save(itvRecord);
         }
 
-        if (record.isExpired()) {
+        if (itvRecord.isExpired()) {
             return ITVStatus.EXPIRED; // ITV caducada
         }
 
-        long daysLeft = (record.getExpirationTimestamp() - System.currentTimeMillis()) / (1000 * 60 * 60 * 24);
+        long daysLeft = (itvRecord.getExpirationTimestamp() - System.currentTimeMillis()) / (1000 * 60 * 60 * 24);
         if (daysLeft <= 30) {
             return ITVStatus.EXPIRING_SOON; // Próxima a caducar
         }

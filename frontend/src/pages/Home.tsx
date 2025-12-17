@@ -48,12 +48,14 @@ const Button = ({ children, variant = 'primary', className = '', onClick }: { ch
 
 // --- Custom Illustrations ---
 
+const cityGridCells = Array.from({ length: 36 }, (_, i) => `city-grid-cell-${i}`);
+
 const HeroIllustration = () => (
   <div className="relative w-full h-full min-h-[400px] flex items-center justify-center">
     {/* Abstract City Grid */}
     <div className="absolute inset-0 grid grid-cols-6 grid-rows-6 gap-4 opacity-10 transform perspective-1000 rotate-x-12">
-      {[...new Array(36)].map((_, i) => (
-        <div key={`city-grid-cell-${i}`} className="bg-blue-500 rounded-lg h-full w-full animate-pulse" style={{ animationDelay: `${i * 0.1}s` }} />
+      {cityGridCells.map((cellId, index) => (
+        <div key={cellId} className="bg-blue-500 rounded-lg h-full w-full animate-pulse" style={{ animationDelay: `${index * 0.1}s` }} />
       ))}
     </div>
     <div className="relative bg-white/80 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/50 w-80 z-10 animate-float">
