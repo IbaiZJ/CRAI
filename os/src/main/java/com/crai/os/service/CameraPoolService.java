@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.crai.os.config.SimulationConfig;
+import com.crai.os.exception.VehicleQueueException;
 import com.crai.os.model.AlertType;
 import com.crai.os.model.ITVStatus;
 import com.crai.os.model.Owner;
@@ -76,7 +77,7 @@ public class CameraPoolService {
                     v.getPlate(), Thread.currentThread().getName());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException("Interrupted while enqueueing vehicle", e);
+            throw new VehicleQueueException("Interrupted while enqueueing vehicle", e);
         }
     }
 

@@ -7,6 +7,10 @@ public class SpanishPlateGenerator {
     private static final String LETTERS = "BCDFGHJKLMNPRSTVWXYZ";
     private static final Random random = new Random();
 
+    private SpanishPlateGenerator() {
+        // Private constructor to hide implicit public one
+    }
+
     public static String generate() {
 
         int numbers = random.nextInt(9000) + 1000; // 1000-9999

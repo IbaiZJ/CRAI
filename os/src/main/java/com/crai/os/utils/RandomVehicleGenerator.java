@@ -8,6 +8,10 @@ public class RandomVehicleGenerator {
 
     private static final Random r = new Random();
 
+    private RandomVehicleGenerator() {
+        // Private constructor to hide implicit public one
+    }
+
     public static Vehicle generate(double stolenProbability, double itvFailProbability) {
 
         String plate = SpanishPlateGenerator.generate();

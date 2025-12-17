@@ -425,7 +425,6 @@ class PoliceServiceTest {
         svc.sendAlert(new PoliceMessage(AlertType.BADGE, "AFTER_ERROR", "After"));
         Thread.sleep(300);
         
-        // Worker should continue processing
         assertThat(svc.getProcessedAlerts().size()).isGreaterThanOrEqualTo(2);
     }
 

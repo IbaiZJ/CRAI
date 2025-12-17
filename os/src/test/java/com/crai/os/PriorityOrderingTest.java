@@ -45,16 +45,6 @@ public class PriorityOrderingTest {
         return new Vehicle(plate, priority, true, "C", false); // alertVehicle=true to generate police alert
     }
 
-    private boolean waitForProcessedCount(int expected, long timeoutMs) throws InterruptedException {
-        long deadline = Instant.now().toEpochMilli() + timeoutMs;
-        while (Instant.now().toEpochMilli() < deadline) {
-            List<?> processed = policeService.getProcessedAlerts();
-            if (processed.size() >= expected) return true;
-            Thread.sleep(50);
-        }
-        return false;
-    }
-
     @Test
     public void testPriorityProcessedFirst() throws Exception {
         // Use the BoundedPriorityBlockingQueue directly to deterministically verify ordering

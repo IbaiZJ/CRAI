@@ -15,8 +15,8 @@ public class ITVRepository {
         return records.get(plate);
     }
 
-    public void save(ITVRecord record) {
-        records.put(record.getPlate(), record);
+    public void save(ITVRecord itvRecord) {
+        records.put(itvRecord.getPlate(), itvRecord);
     }
 
     public boolean exists(String plate) {

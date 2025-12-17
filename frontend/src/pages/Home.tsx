@@ -53,7 +53,7 @@ const HeroIllustration = () => (
     {/* Abstract City Grid */}
     <div className="absolute inset-0 grid grid-cols-6 grid-rows-6 gap-4 opacity-10 transform perspective-1000 rotate-x-12">
       {[...new Array(36)].map((_, i) => (
-        <div key={`city-grid-${i}`} className="bg-blue-500 rounded-lg h-full w-full animate-pulse" style={{ animationDelay: `${i * 0.1}s` }} />
+        <div key={`city-grid-cell-${i}`} className="bg-blue-500 rounded-lg h-full w-full animate-pulse" style={{ animationDelay: `${i * 0.1}s` }} />
       ))}
     </div>
     <div className="relative bg-white/80 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/50 w-80 z-10 animate-float">
@@ -196,8 +196,8 @@ const Features = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {features.map((feature, idx) => (
-            <div key={`feature-${idx}`} className="group p-8 rounded-3xl bg-slate-50 hover:bg-white border border-slate-100 hover:border-blue-100 hover:shadow-xl hover:shadow-blue-50/50 transition-all duration-300">
+          {features.map((feature) => (
+            <div key={feature.title} className="group p-8 rounded-3xl bg-slate-50 hover:bg-white border border-slate-100 hover:border-blue-100 hover:shadow-xl hover:shadow-blue-50/50 transition-all duration-300">
               <div className="w-12 h-12 bg-white rounded-2xl border border-gray-100 shadow-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 {feature.icon}
               </div>
@@ -262,14 +262,14 @@ const DashboardPreview = () => (
                              {/* Chart Area */}
                              <div className="col-span-3 bg-white h-64 rounded-xl border border-slate-100 shadow-sm flex items-end justify-between p-6 gap-2">
                                 {[35, 55, 40, 70, 60, 85, 95, 75, 50, 65, 80, 60].map((h, i) => (
-                                    <div key={i} className="w-full bg-blue-500 rounded-t-sm opacity-80 hover:opacity-100 transition-opacity" style={{height: `${h}%`}}></div>
+                                    <div key={`chart-bar-${i}-${h}`} className="w-full bg-blue-500 rounded-t-sm opacity-80 hover:opacity-100 transition-opacity" style={{height: `${h}%`}}></div>
                                 ))}
                              </div>
 
                              {/* Table Area */}
                              <div className="col-span-3 bg-white h-32 rounded-xl border border-slate-100 shadow-sm p-4 space-y-3">
                                 {[1,2,3].map(i => (
-                                    <div key={i} className="flex justify-between items-center pb-2 border-b border-slate-50 last:border-0">
+                                    <div key={`table-row-${i}`} className="flex justify-between items-center pb-2 border-b border-slate-50 last:border-0">
                                         <div className="h-3 w-32 bg-slate-100 rounded"></div>
                                         <div className="h-3 w-20 bg-slate-100 rounded"></div>
                                         <div className="h-3 w-10 bg-green-100 rounded"></div>
