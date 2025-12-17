@@ -248,8 +248,9 @@ export function DataTable<TData, TValue>({
 
           {pagination.pages.map((page, index) => {
             if (page === ELLIPSIS) {
+              const ellipsisKey = pagination.hiddenPages.length > 0 ? `ellipsis-${pagination.hiddenPages[0]}` : `ellipsis-${index}`;
               return (
-                <DropdownMenu key={`ellipsis-${index}`}>
+                <DropdownMenu key={ellipsisKey}>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="sm">
                       ...
