@@ -1,17 +1,22 @@
 package com.crai.os;
 
-import com.crai.os.model.Vehicle;
-import com.crai.os.service.CameraPoolService;
-import com.crai.os.service.PoliceService;
-import com.crai.os.utils.SpanishPlateGenerator;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import java.util.List;
-import java.util.concurrent.*;
+import com.crai.os.model.Vehicle;
+import com.crai.os.service.CameraPoolService;
+import com.crai.os.service.PoliceService;
+import com.crai.os.utils.SpanishPlateGenerator;
 
 @SpringBootTest
 @TestPropertySource(properties = "node-red.webhook-url=")
