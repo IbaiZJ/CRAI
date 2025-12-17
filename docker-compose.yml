@@ -85,8 +85,10 @@ services:
     container_name: os
     ports:
       - "6905:8080"
-    # depends_on:
-    #   - node-red
+    environment:
+      - node-red.webhook-url=http://node-red:1880/alerts
+    depends_on:
+      - node-red
     networks:
       - app-network
     restart: unless-stopped
@@ -123,4 +125,3 @@ networks:
 volumes:
   mysql_data:
     driver: local
-

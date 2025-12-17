@@ -8,6 +8,14 @@
         "env": []
     },
     {
+        "id": "01df77f7ae4c4f86",
+        "type": "tab",
+        "label": "OS simulation",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "64608cd93cad35de",
         "type": "subflow",
         "name": "Web Registration",
@@ -20,14 +28,31 @@
         "color": "#DDAA99"
     },
     {
-        "id": "9ab4bf7d96539dde",
-        "type": "MySQLdatabase",
-        "name": "root",
-        "host": "cloud-sql-proxy",
-        "port": "3306",
-        "db": "crai-db",
-        "tz": "",
-        "charset": "UTF8"
+        "id": "6432ebeb5db11b74",
+        "type": "telegram bot",
+        "botname": "craai_bot",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "testenvironment": false,
+        "updatemode": "polling",
+        "pollinterval": 300,
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": 6667,
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbothost": "0.0.0.0",
+        "localbotport": 8443,
+        "publicbotport": 8443,
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
     },
     {
         "id": "53207df66be3ebe9",
@@ -147,6 +172,828 @@
         "info": "",
         "x": 490,
         "y": 80,
+        "wires": []
+    },
+    {
+        "id": "425769f2630a88db",
+        "type": "http in",
+        "z": "01df77f7ae4c4f86",
+        "name": "Receive Alert",
+        "url": "/alerts",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 1020,
+        "wires": [
+            [
+                "b03480a384c272e8"
+            ]
+        ]
+    },
+    {
+        "id": "b03480a384c272e8",
+        "type": "json",
+        "z": "01df77f7ae4c4f86",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 350,
+        "y": 1020,
+        "wires": [
+            [
+                "3280259e0b919d43"
+            ]
+        ]
+    },
+    {
+        "id": "913e446c8e8bbdb9",
+        "type": "inject",
+        "z": "01df77f7ae4c4f86",
+        "name": "Start simulation",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 160,
+        "y": 540,
+        "wires": [
+            [
+                "5352a749c4a0aa68"
+            ]
+        ]
+    },
+    {
+        "id": "c104fda7ab33b14a",
+        "type": "inject",
+        "z": "01df77f7ae4c4f86",
+        "name": "Stop simulation",
+        "props": [],
+        "repeat": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 600,
+        "wires": [
+            [
+                "02e426d4974b32e1"
+            ]
+        ]
+    },
+    {
+        "id": "16f3110a960393a3",
+        "type": "inject",
+        "z": "01df77f7ae4c4f86",
+        "name": "Get status",
+        "props": [],
+        "repeat": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 660,
+        "wires": [
+            [
+                "938afc576a02ecb0"
+            ]
+        ]
+    },
+    {
+        "id": "5352a749c4a0aa68",
+        "type": "http request",
+        "z": "01df77f7ae4c4f86",
+        "name": "POST /simulation/start",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://os:8080/simulation/start",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 430,
+        "y": 540,
+        "wires": [
+            [
+                "b2478287e61643e3"
+            ]
+        ]
+    },
+    {
+        "id": "02e426d4974b32e1",
+        "type": "http request",
+        "z": "01df77f7ae4c4f86",
+        "name": "POST /simulation/stop",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://os:8080/simulation/stop",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 430,
+        "y": 600,
+        "wires": [
+            [
+                "4ff83d29a5f1f9f0"
+            ]
+        ]
+    },
+    {
+        "id": "938afc576a02ecb0",
+        "type": "http request",
+        "z": "01df77f7ae4c4f86",
+        "name": "GET /simulation/status",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://os:8080/simulation/status",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 430,
+        "y": 660,
+        "wires": [
+            [
+                "ee68c22b68c46794"
+            ]
+        ]
+    },
+    {
+        "id": "b2478287e61643e3",
+        "type": "debug",
+        "z": "01df77f7ae4c4f86",
+        "name": "Start response",
+        "active": true,
+        "console": false,
+        "complete": "payload",
+        "x": 670,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "4ff83d29a5f1f9f0",
+        "type": "debug",
+        "z": "01df77f7ae4c4f86",
+        "name": "Stop response",
+        "active": true,
+        "console": false,
+        "complete": "payload",
+        "x": 670,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "ee68c22b68c46794",
+        "type": "debug",
+        "z": "01df77f7ae4c4f86",
+        "name": "Status response",
+        "active": true,
+        "console": false,
+        "complete": "payload",
+        "x": 680,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "4c8d0361725eece2",
+        "type": "inject",
+        "z": "01df77f7ae4c4f86",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "2",
+        "payloadType": "num",
+        "x": 130,
+        "y": 120,
+        "wires": [
+            [
+                "fadc77b0ffb80ac9"
+            ]
+        ]
+    },
+    {
+        "id": "21d064adab7e1d12",
+        "type": "inject",
+        "z": "01df77f7ae4c4f86",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "0.1",
+        "payloadType": "num",
+        "x": 130,
+        "y": 160,
+        "wires": [
+            [
+                "4c419ee0f4fc4c76"
+            ]
+        ]
+    },
+    {
+        "id": "617d73211d9ab6d6",
+        "type": "inject",
+        "z": "01df77f7ae4c4f86",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "0.3",
+        "payloadType": "num",
+        "x": 130,
+        "y": 200,
+        "wires": [
+            [
+                "c53384464d1f2b48"
+            ]
+        ]
+    },
+    {
+        "id": "8d0feca90923d603",
+        "type": "inject",
+        "z": "01df77f7ae4c4f86",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 130,
+        "y": 240,
+        "wires": [
+            [
+                "a353a44162b3fbf9"
+            ]
+        ]
+    },
+    {
+        "id": "705f751f87d540e9",
+        "type": "inject",
+        "z": "01df77f7ae4c4f86",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "100",
+        "payloadType": "num",
+        "x": 130,
+        "y": 280,
+        "wires": [
+            [
+                "a1af7ab4f98ea557"
+            ]
+        ]
+    },
+    {
+        "id": "0ce25c0ebed1c7f8",
+        "type": "inject",
+        "z": "01df77f7ae4c4f86",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "180",
+        "payloadType": "num",
+        "x": 130,
+        "y": 320,
+        "wires": [
+            [
+                "d5df394e5a180987"
+            ]
+        ]
+    },
+    {
+        "id": "fadc77b0ffb80ac9",
+        "type": "change",
+        "z": "01df77f7ae4c4f86",
+        "name": "Set flow.cameraCount",
+        "rules": [
+            {
+                "t": "set",
+                "p": "cameraCount",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "x": 340,
+        "y": 120,
+        "wires": [
+            [
+                "63b140e5befc811a"
+            ]
+        ]
+    },
+    {
+        "id": "4c419ee0f4fc4c76",
+        "type": "change",
+        "z": "01df77f7ae4c4f86",
+        "name": "Set flow.stolenProbability",
+        "rules": [
+            {
+                "t": "set",
+                "p": "stolenProbability",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "x": 350,
+        "y": 160,
+        "wires": [
+            [
+                "63b140e5befc811a"
+            ]
+        ]
+    },
+    {
+        "id": "c53384464d1f2b48",
+        "type": "change",
+        "z": "01df77f7ae4c4f86",
+        "name": "Set flow.itvFailProbability",
+        "rules": [
+            {
+                "t": "set",
+                "p": "itvFailProbability",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "x": 350,
+        "y": 200,
+        "wires": [
+            [
+                "63b140e5befc811a"
+            ]
+        ]
+    },
+    {
+        "id": "a353a44162b3fbf9",
+        "type": "change",
+        "z": "01df77f7ae4c4f86",
+        "name": "Set flow.vehiclesPerCycle",
+        "rules": [
+            {
+                "t": "set",
+                "p": "vehiclesPerCycle",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "x": 350,
+        "y": 240,
+        "wires": [
+            [
+                "63b140e5befc811a"
+            ]
+        ]
+    },
+    {
+        "id": "a1af7ab4f98ea557",
+        "type": "change",
+        "z": "01df77f7ae4c4f86",
+        "name": "Set flow.vehicleIntervalMs",
+        "rules": [
+            {
+                "t": "set",
+                "p": "vehicleIntervalMs",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "x": 350,
+        "y": 280,
+        "wires": [
+            [
+                "63b140e5befc811a"
+            ]
+        ]
+    },
+    {
+        "id": "d5df394e5a180987",
+        "type": "change",
+        "z": "01df77f7ae4c4f86",
+        "name": "Set flow.ocrDelayMs",
+        "rules": [
+            {
+                "t": "set",
+                "p": "ocrDelayMs",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "x": 340,
+        "y": 320,
+        "wires": [
+            [
+                "63b140e5befc811a"
+            ]
+        ]
+    },
+    {
+        "id": "c336750601b0fd7c",
+        "type": "change",
+        "z": "01df77f7ae4c4f86",
+        "name": "Set headers",
+        "rules": [
+            {
+                "t": "set",
+                "p": "headers",
+                "pt": "msg",
+                "to": "{\"Content-Type\":\"application/json\"}",
+                "tot": "json"
+            }
+        ],
+        "x": 890,
+        "y": 220,
+        "wires": [
+            [
+                "d42b61f843663589"
+            ]
+        ]
+    },
+    {
+        "id": "d42b61f843663589",
+        "type": "http request",
+        "z": "01df77f7ae4c4f86",
+        "name": "POST /admin/update",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://os:8080/admin/update",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1140,
+        "y": 220,
+        "wires": [
+            [
+                "0acc76bc0ed23af1"
+            ]
+        ]
+    },
+    {
+        "id": "234531cdf842e239",
+        "type": "debug",
+        "z": "01df77f7ae4c4f86",
+        "name": "Payload -> update",
+        "active": true,
+        "tosidebar": true,
+        "complete": "payload",
+        "x": 770,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "0acc76bc0ed23af1",
+        "type": "debug",
+        "z": "01df77f7ae4c4f86",
+        "name": "Response",
+        "active": true,
+        "tosidebar": true,
+        "complete": "true",
+        "x": 1400,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "63b140e5befc811a",
+        "type": "function",
+        "z": "01df77f7ae4c4f86",
+        "name": "Change parameters",
+        "func": "msg.headers = { \"Content-Type\": \"application/json\" };\n\nconst defaults = {\n  cameraCount: 3,\n  stolenProbability: 0.05,\n  itvFailProbability: 0.30,\n  vehiclesPerCycle: 1,\n  vehicleIntervalMs: 2000,\n  ocrDelayMs: 200\n};\n\n// toma valor de msg.<k> si viene del inject, si no el último en flow, si no el default\n[\"cameraCount\",\"stolenProbability\",\"itvFailProbability\",\"vehiclesPerCycle\",\"vehicleIntervalMs\",\"ocrDelayMs\"]\n  .forEach(k => {\n    if (msg[k] !== undefined) flow.set(k, msg[k]);\n  });\n\nmsg.payload = {\n  cameraCount: flow.get(\"cameraCount\") ?? defaults.cameraCount,\n  stolenProbability: flow.get(\"stolenProbability\") ?? defaults.stolenProbability,\n  itvFailProbability: flow.get(\"itvFailProbability\") ?? defaults.itvFailProbability,\n  vehiclesPerCycle: flow.get(\"vehiclesPerCycle\") ?? defaults.vehiclesPerCycle,\n  vehicleIntervalMs: flow.get(\"vehicleIntervalMs\") ?? defaults.vehicleIntervalMs,\n  ocrDelayMs: flow.get(\"ocrDelayMs\") ?? defaults.ocrDelayMs\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 220,
+        "wires": [
+            [
+                "c336750601b0fd7c",
+                "234531cdf842e239"
+            ]
+        ]
+    },
+    {
+        "id": "3280259e0b919d43",
+        "type": "switch",
+        "z": "01df77f7ae4c4f86",
+        "name": "type",
+        "property": "payload.type",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "ITV",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "POLICE",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 3,
+        "x": 510,
+        "y": 1020,
+        "wires": [
+            [
+                "23932db24f1c5301"
+            ],
+            [
+                "6309be18cf01aebf"
+            ],
+            [
+                "f9cdcebade72552e"
+            ]
+        ]
+    },
+    {
+        "id": "23932db24f1c5301",
+        "type": "switch",
+        "z": "01df77f7ae4c4f86",
+        "name": "ITV status",
+        "property": "payload.description",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "CADUCADA",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "proxima",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 3,
+        "x": 710,
+        "y": 1020,
+        "wires": [
+            [
+                "b010632ce9ea2afd",
+                "77b28f5d31012cb5"
+            ],
+            [
+                "b010632ce9ea2afd"
+            ],
+            [
+                "e90899417993a3aa"
+            ]
+        ]
+    },
+    {
+        "id": "b010632ce9ea2afd",
+        "type": "function",
+        "z": "01df77f7ae4c4f86",
+        "name": "Build email",
+        "func": "const p = msg.payload;\nconst to = p.recipientEmail || \"u0400412775@gmail.com\";\nmsg.to = to;\nmsg.topic = `🚗 Aviso ITV • ${p.plate}`;\nmsg.payload =\n    `Hello,\n\nWe have updates about your vehicle ${p.plate}:\n\n• ITV status: ${p.description}\n• License plate: ${p.plate}\n• Date: ${new Date().toLocaleString()}\n\nIf your ITV has expired or is about to expire, book an appointment as soon as possible to avoid fines and ensure your safety.\n\nThanks,\nCRAI Team`;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 910,
+        "y": 1020,
+        "wires": [
+            [
+                "5e22649949e1823c",
+                "5ecdb5ab132aad75"
+            ]
+        ]
+    },
+    {
+        "id": "77b28f5d31012cb5",
+        "type": "function",
+        "z": "01df77f7ae4c4f86",
+        "name": "Build Telegram (ITV)",
+        "func": "const p = msg.payload;\nconst chatId = p.chatId || 1143392395;\nmsg.payload = {\n    chatId,\n    type: 'message',\n    content: `🚦 ITV Notice\\n\\nLicense plate: ${p.plate}\\nStatus: ${p.description}\\n\\nIf it has expired or is close to expiring, book an appointment as soon as possible.`\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 860,
+        "wires": [
+            [
+                "083d998fbb5dde7a"
+            ]
+        ]
+    },
+    {
+        "id": "6309be18cf01aebf",
+        "type": "function",
+        "z": "01df77f7ae4c4f86",
+        "name": "Build Telegram (POLICE)",
+        "func": "const p = msg.payload;\nconst chatId = p.chatId || 1143392395;\nmsg.payload = {\n    chatId,\n    type: 'message',\n    content: `🚨 Police Alert\\n\\nLicense plate: ${p.plate}\\nReason: ${p.description}\\n\\nCheck the vehicle status immediately.`\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 1140,
+        "wires": [
+            [
+                "083d998fbb5dde7a"
+            ]
+        ]
+    },
+    {
+        "id": "f9cdcebade72552e",
+        "type": "debug",
+        "z": "01df77f7ae4c4f86",
+        "name": "Other alerts",
+        "active": true,
+        "complete": "payload",
+        "x": 690,
+        "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "e90899417993a3aa",
+        "type": "debug",
+        "z": "01df77f7ae4c4f86",
+        "name": "ITV other",
+        "active": true,
+        "complete": "payload",
+        "x": 900,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "828dab69e9e76a83",
+        "type": "debug",
+        "z": "01df77f7ae4c4f86",
+        "name": "Telegram error",
+        "active": true,
+        "complete": "payload",
+        "x": 1740,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "5ecdb5ab132aad75",
+        "type": "debug",
+        "z": "01df77f7ae4c4f86",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1100,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "5e22649949e1823c",
+        "type": "e-mail",
+        "z": "01df77f7ae4c4f86",
+        "server": "smtp.gmail.com",
+        "port": "587",
+        "authtype": "BASIC",
+        "saslformat": false,
+        "token": "oauth2Response.access_token",
+        "secure": false,
+        "tls": false,
+        "name": "",
+        "dname": "Send email",
+        "x": 1110,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "083d998fbb5dde7a",
+        "type": "telegram sender",
+        "z": "01df77f7ae4c4f86",
+        "name": "Telegram alerts",
+        "bot": "6432ebeb5db11b74",
+        "haserroroutput": true,
+        "outputs": 2,
+        "x": 1480,
+        "y": 1120,
+        "wires": [
+            [],
+            [
+                "828dab69e9e76a83"
+            ]
+        ]
+    },
+    {
+        "id": "c5fab67d44a35626",
+        "type": "comment",
+        "z": "01df77f7ae4c4f86",
+        "name": "Flow to adjust parameters",
+        "info": "ES\nEste flujo ajusta parametros de simulacion (camaras, probabilidades, ritmo) desde varios injects, los guarda en flow, construye un payload con defaults si falta algun valor y lo envia por HTTP POST a /admin/update, mostrando el payload y la respuesta en debug.\n\nEN \nThis flow updates simulation parameters (cameras, probabilities, pacing) via inject nodes, stores them in flow, builds a payload with defaults when a value is missing, and sends it by HTTP POST to /admin/update, showing both the payload and the response in the debug panel.",
+        "x": 170,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "c75b2307c72af870",
+        "type": "comment",
+        "z": "01df77f7ae4c4f86",
+        "name": "Flow to start / stop simulations",
+        "info": "",
+        "x": 180,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "a964a6cfbad38ca7",
+        "type": "comment",
+        "z": "01df77f7ae4c4f86",
+        "name": "This flow represent how to manage the alerts",
+        "info": "ES\nEste flujo recibe alertas por POST /alerts, parsea el JSON y enruta por tipo. Si es ITV y está caducada o próxima, construye y envía un email y un aviso por Telegram; si es POLICE, envía un aviso por Telegram. El resto de alertas se muestran en debug.\n\nEN \nThis flow receives alerts via POST /alerts, parses the JSON, and routes by type. If it is ITV and expired or near expiry, it builds and sends an email and a Telegram notice; if it is POLICE, it sends a Telegram alert. Any other alerts are shown in debug.",
+        "x": 230,
+        "y": 880,
         "wires": []
     }
 ]
