@@ -231,11 +231,6 @@ export default function Simulations() {
 
                   <div className="flex gap-2 pt-2">
                     {getActionButton(sim.status)}
-                      <Button size="sm" variant="outline" className="flex-1 gap-1">
-                        <RotateCcw className="h-3 w-3" />
-                        Restart
-                      </Button>
-                    )}
                     <Button size="sm" variant="secondary">
                       Details
                     </Button>
