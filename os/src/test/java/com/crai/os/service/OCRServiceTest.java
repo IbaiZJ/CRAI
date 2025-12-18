@@ -32,4 +32,16 @@ class OCRServiceTest {
 
         assertThat(result1).isEqualTo(result2);
     }
+
+    @Test
+    void recognizeReturnsUnknownWhenImageIsNull() {
+        String result = ocrService.recognize(null);
+        assertThat(result).isEqualTo("UNKNOWN");
+    }
+
+    @Test
+    void recognizeReturnsUnknownWhenImageIsBlank() {
+        String result = ocrService.recognize("");
+        assertThat(result).isEqualTo("UNKNOWN");
+    }
 }

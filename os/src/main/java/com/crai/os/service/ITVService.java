@@ -17,7 +17,7 @@ public class ITVService {
 
     private final ITVRepository itvRepository;
     private final SimulationConfig config;
-    private final Random random = new Random();
+    private final Random randomGenerator = new Random();
 
     public ITVService(ITVRepository itvRepository, SimulationConfig config) {
         this.itvRepository = itvRepository;
@@ -26,26 +26,26 @@ public class ITVService {
 
     public ITVStatus check(String plate) {
 
-        ITVRecord record = itvRepository.find(plate);
+        ITVRecord itvRecord = itvRepository.find(plate);
 
-        if (record == null) {
+        if (itvRecord == null) {
             // Genera un registro al vuelo: probabilidad de fallo según configuración.
-            boolean fail = random.nextDouble() < config.getItvFailProbability();
+            boolean fail = randomGenerator.nextDouble() < config.getItvFailProbability();
             long now = System.currentTimeMillis();
             long expiration = fail
                     // Caducada en algún momento de los últimos 90 días
                     ? now - randomDurationMillis(90)
                     // Válida pero con caducidad entre 0 y 180 días
                     : now + randomDurationMillis(180);
-            record = new ITVRecord(plate, expiration);
-            itvRepository.save(record);
+            itvRecord = new ITVRecord(plate, expiration);
+            itvRepository.save(itvRecord);
         }
 
-        if (record.isExpired()) {
+        if (itvRecord.isExpired()) {
             return ITVStatus.EXPIRED; // ITV caducada
         }
 
-        long daysLeft = (record.getExpirationTimestamp() - System.currentTimeMillis()) / (1000 * 60 * 60 * 24);
+        long daysLeft = (itvRecord.getExpirationTimestamp() - System.currentTimeMillis()) / (1000 * 60 * 60 * 24);
         if (daysLeft <= 30) {
             return ITVStatus.EXPIRING_SOON; // Próxima a caducar
         }
@@ -69,11 +69,11 @@ public class ITVService {
 
             String plate = SpanishPlateGenerator.generate();
 
-            boolean expired = random.nextBoolean();
+            boolean expired = randomGenerator.nextBoolean();
 
             long expiration = expired
-                    ? now - random.nextInt(1000 * 60 * 60 * 24 * 365)
-                    : now + random.nextInt(1000 * 60 * 60 * 24 * 365);
+                    ? now - randomGenerator.nextInt(1000 * 60 * 60 * 24 * 365)
+                    : now + randomGenerator.nextInt(1000 * 60 * 60 * 24 * 365);
 
             itvRepository.save(new ITVRecord(plate, expiration));
         }

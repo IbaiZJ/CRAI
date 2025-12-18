@@ -2,6 +2,10 @@ package com.crai.os.model;
 
 public class PoliceMessageFactory {
 
+    private PoliceMessageFactory() {
+        // Private constructor to hide implicit public one
+    }
+
     public static PoliceMessage build(AlertType type, String plate, String detail) {
         return build(type, plate, detail, null);
     }

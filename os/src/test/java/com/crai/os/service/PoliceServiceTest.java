@@ -22,6 +22,7 @@ import com.crai.os.config.SimulationConfig;
 import com.crai.os.model.AlertType;
 import com.crai.os.model.PoliceMessage;
 
+@SuppressWarnings("java:S2925") // Thread.sleep is necessary in async tests to wait for worker threads
 class PoliceServiceTest {
 
     private SimulationConfig config;
@@ -424,7 +425,6 @@ class PoliceServiceTest {
         svc.sendAlert(new PoliceMessage(AlertType.BADGE, "AFTER_ERROR", "After"));
         Thread.sleep(300);
         
-        // Worker should continue processing
         assertThat(svc.getProcessedAlerts().size()).isGreaterThanOrEqualTo(2);
     }
 
@@ -533,7 +533,5 @@ class PoliceServiceTest {
         svc.sendAlert(new PoliceMessage(AlertType.BADGE, "OK", "Works fine"));
         Thread.sleep(500);
         
-        // Worker should still be running and processing
-        // We can't easily verify mock calls here, but the worker thread should continue
     }
 }

@@ -14,7 +14,11 @@ public class OCRService {
     }
 
     public String recognize(String image) {
-        return "1234ABC"; // Mock
+        if (image == null || image.isBlank()) {
+            return "UNKNOWN";
+        }
+        // Mocked recognition that returns a fixed plate but validates input is provided
+        return "1234ABC";
     }
 }
 

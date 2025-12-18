@@ -4,6 +4,8 @@
     "version": "0.0.1",
     "private": true,
     "dependencies": {
+        "node-red-contrib-telegrambot": "~17.0.3",
+        "node-red-node-email": "~5.0.1",
         "node-red-node-mysql": "~2.0.0"
     }
 }

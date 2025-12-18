@@ -208,8 +208,8 @@ function FieldError({
     return (
       <ul className="ml-4 flex list-disc flex-col gap-1">
         {uniqueErrors.map(
-          (error) =>
-            error?.message && <li key={error.message || Math.random()}>{error.message}</li>
+          (error, index) =>
+            error?.message && <li key={error.message || `error-${index}`}>{error.message}</li>
         )}
       </ul>
     )

@@ -1,22 +1,26 @@
 package com.crai.os.service;
 
-import com.crai.os.model.AlertType;
-import com.crai.os.model.ITVStatus;
-import com.crai.os.model.PoliceMessageFactory;
-import com.crai.os.model.Vehicle;
-import com.crai.os.model.Owner;
-import jakarta.annotation.PostConstruct;
-import com.crai.os.config.SimulationConfig;
-import org.springframework.stereotype.Service;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
-import java.util.Set;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import com.crai.os.utils.BoundedPriorityBlockingQueue;
+import com.crai.os.config.SimulationConfig;
+import com.crai.os.exception.VehicleQueueException;
+import com.crai.os.model.AlertType;
+import com.crai.os.model.ITVStatus;
+import com.crai.os.model.Owner;
+import com.crai.os.model.PoliceMessageFactory;
+import com.crai.os.model.Vehicle;
 import com.crai.os.repository.OwnerRepository;
+import com.crai.os.utils.BoundedPriorityBlockingQueue;
+
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class CameraPoolService {
@@ -73,7 +77,7 @@ public class CameraPoolService {
                     v.getPlate(), Thread.currentThread().getName());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException("Interrupted while enqueueing vehicle", e);
+            throw new VehicleQueueException("Interrupted while enqueueing vehicle", e);
         }
     }
 
@@ -111,51 +115,69 @@ public class CameraPoolService {
                 log.info("Camera captured {} (processing thread={})",
                         v.getPlate(), Thread.currentThread().getName());
 
-                // 1. Environmental badge validation
-                String tag = v.getEnvTag();
-                Set<String> allowed = Set.of("C", "ECO", "0");
+                processVehicle(v);
 
-                if (tag == null || !allowed.contains(tag.toUpperCase())) {
-
-                    log.info("Vehicle denied entry due to environmental tag: {} - {}",
-                            tag, v.getPlate());
-
-                    policeService.sendAlert(
-                            PoliceMessageFactory.build(
-                                    AlertType.BADGE,
-                                    v.getPlate(),
-                                    tag));
-
-                    continue;
-                }
-
-                // 2. ITV validation
-                String plate = v.getPlate();
-                ITVStatus status = itvService.check(plate);
-
-                if (status != ITVStatus.VALID) {
-                    Owner owner = ownerRepository.findByPlate(plate);
-                    String email = owner != null ? owner.getEmail() : null;
-                    policeService.sendAlert(
-                            PoliceMessageFactory.build(
-                                    AlertType.ITV,
-                                    plate,
-                                    status.name(),
-                                    email));
-                }
-
-                // 3. Stolen or marked vehicle
-                if (v.isStolen() || v.isAlertVehicle()) {
-                    policeService.sendAlert(
-                            PoliceMessageFactory.build(
-                                    AlertType.POLICE,
-                                    v.getPlate(),
-                                    "Vehiculo robado o marcado"));
-                }
-
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                log.warn("Camera worker interrupted, exiting");
+                break;
             } catch (Exception e) {
                 log.error("Error processing vehicle in camera worker", e);
             }
+        }
+    }
+
+    private void processVehicle(Vehicle v) {
+        if (!validateEnvironmentalBadge(v)) {
+            return;
+        }
+
+        validateITV(v);
+        checkStolenOrMarked(v);
+    }
+
+    private boolean validateEnvironmentalBadge(Vehicle v) {
+        String tag = v.getEnvTag();
+        Set<String> allowed = Set.of("C", "ECO", "0");
+
+        if (tag == null || !allowed.contains(tag.toUpperCase())) {
+            log.info("Vehicle denied entry due to environmental tag: {} - {}",
+                    tag, v.getPlate());
+
+            policeService.sendAlert(
+                    PoliceMessageFactory.build(
+                            AlertType.BADGE,
+                            v.getPlate(),
+                            tag));
+
+            return false;
+        }
+        return true;
+    }
+
+    private void validateITV(Vehicle v) {
+        String plate = v.getPlate();
+        ITVStatus status = itvService.check(plate);
+
+        if (status != ITVStatus.VALID) {
+            Owner owner = ownerRepository.findByPlate(plate);
+            String email = owner != null ? owner.getEmail() : null;
+            policeService.sendAlert(
+                    PoliceMessageFactory.build(
+                            AlertType.ITV,
+                            plate,
+                            status.name(),
+                            email));
+        }
+    }
+
+    private void checkStolenOrMarked(Vehicle v) {
+        if (v.isStolen() || v.isAlertVehicle()) {
+            policeService.sendAlert(
+                    PoliceMessageFactory.build(
+                            AlertType.POLICE,
+                            v.getPlate(),
+                            "Vehiculo robado o marcado"));
         }
     }
 

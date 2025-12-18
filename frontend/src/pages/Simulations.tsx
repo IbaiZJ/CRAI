@@ -4,6 +4,48 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Play, Pause, RotateCcw, Clock, Zap, TrendingUp } from "lucide-react";
 import { useEffect } from "react";
+import type React from "react";
+
+// Helper functions to reduce cognitive complexity
+const getProgressBarColor = (status: string): string => {
+  if (status === "completed") return "bg-green-500";
+  if (status === "running") return "bg-blue-500";
+  if (status === "paused") return "bg-yellow-500";
+  return "bg-gray-400";
+};
+
+const getActionButton = (status: string): React.ReactElement => {
+  if (status === "running") {
+    return (
+      <Button size="sm" variant="outline" className="flex-1 gap-1">
+        <Pause className="h-3 w-3" />
+        Pause
+      </Button>
+    );
+  }
+  if (status === "paused") {
+    return (
+      <Button size="sm" variant="outline" className="flex-1 gap-1">
+        <Play className="h-3 w-3" />
+        Resume
+      </Button>
+    );
+  }
+  if (status === "pending") {
+    return (
+      <Button size="sm" className="flex-1 gap-1">
+        <Play className="h-3 w-3" />
+        Start
+      </Button>
+    );
+  }
+  return (
+    <Button size="sm" variant="outline" className="flex-1 gap-1">
+      <RotateCcw className="h-3 w-3" />
+      View Results
+    </Button>
+  );
+};
 
 export default function Simulations() {
   useEffect(() => {
@@ -165,15 +207,7 @@ export default function Simulations() {
                     </div>
                     <div className="w-full bg-secondary rounded-full h-2">
                       <div
-                        className={`h-2 rounded-full transition-all ${
-                          sim.status === "completed"
-                            ? "bg-green-500"
-                            : sim.status === "running"
-                            ? "bg-blue-500"
-                            : sim.status === "paused"
-                            ? "bg-yellow-500"
-                            : "bg-gray-400"
-                        }`}
+                        className={`h-2 rounded-full transition-all ${getProgressBarColor(sim.status)}`}
                         style={{ width: `${sim.progress}%` }}
                       />
                     </div>
@@ -197,27 +231,7 @@ export default function Simulations() {
                   </div>
 
                   <div className="flex gap-2 pt-2">
-                    {sim.status === "running" ? (
-                      <Button size="sm" variant="outline" className="flex-1 gap-1">
-                        <Pause className="h-3 w-3" />
-                        Pause
-                      </Button>
-                    ) : sim.status === "paused" ? (
-                      <Button size="sm" variant="outline" className="flex-1 gap-1">
-                        <Play className="h-3 w-3" />
-                        Resume
-                      </Button>
-                    ) : sim.status === "pending" ? (
-                      <Button size="sm" className="flex-1 gap-1">
-                        <Play className="h-3 w-3" />
-                        Start
-                      </Button>
-                    ) : (
-                      <Button size="sm" variant="outline" className="flex-1 gap-1">
-                        <RotateCcw className="h-3 w-3" />
-                        Restart
-                      </Button>
-                    )}
+                    {getActionButton(sim.status)}
                     <Button size="sm" variant="secondary">
                       Details
                     </Button>

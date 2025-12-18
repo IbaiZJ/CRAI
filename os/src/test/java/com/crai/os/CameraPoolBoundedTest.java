@@ -32,7 +32,11 @@ public class CameraPoolBoundedTest {
 
         // Wait briefly for puts to drain into the queue
         for (Future<?> f : futures) {
-            try { f.get(500, TimeUnit.MILLISECONDS); } catch (TimeoutException ignored) {}
+            try { 
+                f.get(500, TimeUnit.MILLISECONDS); 
+            } catch (TimeoutException ignored) {
+                // Expected timeout for blocked puts - intentionally ignored
+            }
         }
 
         // Now a subsequent put should block

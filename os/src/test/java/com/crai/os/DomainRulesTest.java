@@ -1,22 +1,23 @@
 package com.crai.os;
 
-import com.crai.os.model.AlertType;
-import com.crai.os.model.Vehicle;
-import com.crai.os.service.CameraPoolService;
-import com.crai.os.service.PoliceService;
-import com.crai.os.repository.ITVRepository;
-import com.crai.os.model.ITVRecord;
+import java.time.Instant;
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import java.time.Instant;
-import java.util.List;
+import com.crai.os.model.ITVRecord;
+import com.crai.os.model.Vehicle;
+import com.crai.os.repository.ITVRepository;
+import com.crai.os.service.CameraPoolService;
+import com.crai.os.service.PoliceService;
 
 @SpringBootTest
 @TestPropertySource(properties = "node-red.webhook-url=")
+@SuppressWarnings("java:S2925") // Thread.sleep is necessary in async integration tests
 public class DomainRulesTest {
 
     @Autowired

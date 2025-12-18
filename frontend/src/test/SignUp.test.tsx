@@ -3,6 +3,11 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 
+// Create mock functions first
+const mockSuccess = vi.fn();
+const mockError = vi.fn();
+const mockInfo = vi.fn();
+
 // Mock dependencies
 vi.mock('@/contexts/AuthContext', () => ({
   useAuth: vi.fn(() => ({
@@ -12,9 +17,9 @@ vi.mock('@/contexts/AuthContext', () => ({
 
 vi.mock('@/hooks/useNotifications', () => ({
   useNotifications: vi.fn(() => ({
-    success: vi.fn(),
-    error: vi.fn(),
-    info: vi.fn(),
+    success: mockSuccess,
+    error: mockError,
+    info: mockInfo,
   })),
 }));
 
@@ -59,27 +64,18 @@ vi.mock('react-router-dom', async () => {
 
 import SignUp from '@/pages/SignUp';
 import { useAuth } from '@/contexts/AuthContext';
-import { useNotifications } from '@/hooks/useNotifications';
 
 describe('SignUp Page', () => {
-  const mockSuccess = vi.fn();
-  const mockError = vi.fn();
-
   beforeEach(() => {
     vi.clearAllMocks();
     document.title = '';
     mockNavigate.mockClear();
     mockSuccess.mockClear();
     mockError.mockClear();
+    mockInfo.mockClear();
     
     (useAuth as any).mockReturnValue({
       isAuthenticated: false,
-    });
-    
-    (useNotifications as any).mockReturnValue({
-      success: mockSuccess,
-      error: mockError,
-      info: vi.fn(),
     });
   });
 
@@ -452,11 +448,6 @@ describe('SignUp Page - Password visibility', () => {
     vi.clearAllMocks();
     (useAuth as any).mockReturnValue({
       isAuthenticated: false,
-    });
-    (useNotifications as any).mockReturnValue({
-      success: vi.fn(),
-      error: vi.fn(),
-      info: vi.fn(),
     });
   });
 

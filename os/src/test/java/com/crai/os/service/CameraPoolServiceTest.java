@@ -30,6 +30,7 @@ import com.crai.os.repository.ITVRepository;
 import com.crai.os.repository.OwnerRepository;
 import com.crai.os.utils.BoundedPriorityBlockingQueue;
 
+@SuppressWarnings("java:S2925") // Thread.sleep is necessary in async tests to wait for worker threads
 @ExtendWith(MockitoExtension.class)
 class CameraPoolServiceTest {
 
@@ -390,5 +391,31 @@ class CameraPoolServiceTest {
         
         // Should have attempted to send alert for second vehicle too
         verify(policeService, atLeastOnce()).sendAlert(any(PoliceMessage.class));
+    }
+
+    @Test
+    void cameraWorkerExitsOnInterrupt() throws Exception {
+        ITVService itvService = new ITVService(itvRepository, config);
+        CameraPoolService service = new CameraPoolService(config, itvService, policeService, ownerRepository);
+        
+        // Get the executor field via reflection to access worker threads
+        Field executorField = CameraPoolService.class.getDeclaredField("executor");
+        executorField.setAccessible(true);
+        
+        // Initialize the service (starts worker threads)
+        service.init();
+        
+        // Get the executor and shut it down with interruption
+        java.util.concurrent.ExecutorService executor = 
+            (java.util.concurrent.ExecutorService) executorField.get(service);
+        
+        // This will interrupt all waiting threads (in queue.take())
+        executor.shutdownNow();
+        
+        // Wait for workers to terminate
+        boolean terminated = executor.awaitTermination(2, java.util.concurrent.TimeUnit.SECONDS);
+        
+        // Workers should have exited gracefully due to InterruptedException handling
+        assertThat(terminated).isTrue();
     }
 }
