@@ -1,4 +1,21 @@
 services:
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: crai
+      MYSQL_USER: crai
+      MYSQL_PASSWORD: crai
+    ports:
+      - "6900:3306"
+    volumes:
+      - ./db/db_data:/var/lib/mysql
+      - ./db/createCraiDB.sql:/docker-entrypoint-initdb.d/01_createCraiDB.sql:ro
+    networks:
+      - app-network
+    restart: unless-stopped
+
   frontend:
     build:
       context: ./frontend
@@ -78,13 +95,28 @@ services:
       - app-network
     restart: unless-stopped
 
+  itvapi:
+    build:
+      context: ./itvAPI
+      dockerfile: Dockerfile
+    container_name: itvAPI
+    ports:
+      - "6905:8000"
+    volumes:
+      - ./itvAPI:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - app-network
+    restart: unless-stopped
+
   os:
     build:
       context: ./os
       dockerfile: Dockerfile
     container_name: os
     ports:
-      - "6905:8080"
+      - "6906:8080"
     # depends_on:
     #   - node-red
     networks:
@@ -102,22 +134,6 @@ services:
       - app-network
     restart: unless-stopped
 
-  mysql:
-    image: mysql:8
-    container_name: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: crai
-      MYSQL_USER: crai_user
-      MYSQL_PASSWORD: crai_pass
-    ports:
-      - "3307:3306"
-    volumes:
-      - ./db/db_data:/data
-      - ./db/createCraiDB.sql:/docker-entrypoint-initdb.d/01_createCraiDB.sql:ro
-    networks:
-      - app-network
-    restart: unless-stopped
 
 networks:
   app-network:
