@@ -1,5 +1,6 @@
 @startuml Class
-title CRAI Simulation - Diagrama de clases (simplificado)
+title CRAI Simulation - Diagrama de clases (núcleo + operaciones)
+
 package config {
   class SimulationConfig {
     -cameraCount : int
@@ -10,80 +11,186 @@ package config {
     -policeQueueCapacity : int
     -stolenProbability : double
     -itvFailProbability : double
+    -nodeRedWebhookUrl : String
+    +getCameraCount()
+    +getVehiclesPerCycle()
+    +getVehicleIntervalMs()
+    +getOcrDelayMs()
+    +getCameraQueueCapacity()
+    +getPoliceQueueCapacity()
+    +getStolenProbability()
+    +getItvFailProbability()
+    +getNodeRedWebhookUrl()
+    +setCameraCount(int)
+    +setVehiclesPerCycle(int)
+    +setVehicleIntervalMs(int)
+    +setOcrDelayMs(int)
+    +setStolenProbability(double)
+    +setItvFailProbability(double)
+    +setNodeRedWebhookUrl(String)
   }
   class AppConfig
 }
 
 package controller {
-  class SimulationController
-  class ControlController
-  class VehicleController
-  class CameraController
-  class PoliceController
-  class DebugController
-  class HomeController
+  class SimulationController {
+    +start()
+    +stop()
+    +status()
+  }
+  class ControlController {
+    +setDelay(int)
+    +setStealProb(double)
+    +setItvProb(double)
+    +status()
+    +updateCameras(int)
+    +setVehiclesPerCycle(int)
+    +setInterval(int)
+    +updateSim(Map)
+  }
+  class VehicleController {
+    +sendVehicle(Vehicle)
+  }
+  class CameraController {
+    +status()
+  }
+  class PoliceController {
+    +getAlerts()
+  }
 }
 
 package model {
-  class Vehicle
-  class PoliceMessage
-  class PoliceMessageType
-  class ITVRecord
+  class Vehicle {
+    -plate : String
+    -priority : int
+    -alertVehicle : boolean
+    -envTag : String
+    -stolen : boolean
+    -itvFail : boolean
+    +compareTo(Vehicle)
+    +hasItvFail()
+    +setItvFail(boolean)
+  }
+  class PoliceMessage {
+    -type : AlertType
+    -plate : String
+    -description : String
+    -messageText : String
+    -recipientEmail : String
+    +getType()
+    +getPlate()
+    +getDescription()
+    +getRecipientEmail()
+  }
+  class PoliceMessageFactory {
+    +build(AlertType,String,String)
+    +build(AlertType,String,String,String)
+  }
+  class ITVRecord {
+    -plate : String
+    -expirationTimestamp : long
+    +isExpired()
+    +getExpirationTimestamp()
+  }
   class ITVStatus
   class AlertType
+  class Owner {
+    -plate : String
+    -email : String
+    -name : String
+  }
+  class SimulationState {
+    -running : boolean
+    +isRunning()
+    +setRunning(boolean)
+  }
 }
 
 package repository {
-  class ITVRepository
+  class ITVRepository {
+    +find(String)
+    +save(ITVRecord)
+  }
+  class OwnerRepository {
+    +findByPlate(String)
+    +save(Owner)
+  }
 }
 
 package service {
-  class SimulationService
-  class VehicleSpawnerService
-  class CameraPoolService
-  class ITVService
-  class PoliceService
-  class OCRService
+  class SimulationService {
+    +startSimulation()
+    +stopSimulation()
+    +isRunning()
+    +getStatus()
+  }
+  class VehicleSpawnerService {
+    +spawnVehicle()
+  }
+  class CameraPoolService {
+    +enqueueVehicle(Vehicle)
+    +resizeCameraPool(int)
+    +getStatus()
+  }
+  class ITVService {
+    +check(String)
+    +preloadItvDatabase()
+  }
+  class PoliceService {
+    +sendAlert(PoliceMessage)
+    +getProcessedAlerts()
+  }
+  class AlertFilterService {
+    +shouldSend(AlertType)
+  }
 }
 
 package utils {
-  class LoggingUtils
-  class VehicleMapper
+  class BoundedPriorityBlockingQueue {
+    +put(E)
+    +take() : E
+    +size() : int
+  }
+  class RandomVehicleGenerator {
+    +generate(double,double) : Vehicle
+  }
+  class SpanishPlateGenerator {
+    +generate() : String
+  }
 }
 
 SimulationController --> SimulationService
 ControlController --> SimulationConfig
-ControlController --> SimulationService
-VehicleController --> SimulationService
+ControlController --> CameraPoolService
+VehicleController --> CameraPoolService
 CameraController --> CameraPoolService
 PoliceController --> PoliceService
-DebugController --> SimulationConfig
-HomeController --> SimulationService
 
-SimulationService --> SimulationConfig
-SimulationService --> VehicleSpawnerService
-SimulationService --> CameraPoolService
-SimulationService --> PoliceService
+SimulationService --> SimulationState
 
 VehicleSpawnerService --> SimulationConfig
+VehicleSpawnerService --> SimulationService
 VehicleSpawnerService --> CameraPoolService : enqueue(Vehicle)
+VehicleSpawnerService --> RandomVehicleGenerator : generate()
 
 CameraPoolService --> SimulationConfig
 CameraPoolService --> ITVService
+CameraPoolService --> OwnerRepository
 CameraPoolService --> PoliceService : alert(PoliceMessage)
-CameraPoolService --> OCRService
-CameraPoolService --> VehicleMapper
-CameraPoolService --> LoggingUtils
+CameraPoolService --> BoundedPriorityBlockingQueue : queue<Vehicle>
+CameraPoolService --> PoliceMessageFactory
+CameraPoolService --> AlertFilterService
 
 ITVService --> ITVRepository
-ITVService --> LoggingUtils
+ITVService --> SimulationConfig
 
 PoliceService --> SimulationConfig
-PoliceService --> LoggingUtils
-
-OCRService --> LoggingUtils
+PoliceService --> PoliceMessage
+PoliceService --> AlertFilterService : shouldSend()
 
 ITVRepository --> ITVRecord
-PoliceService --> PoliceMessage
-VehicleMapper --> Vehicle
+OwnerRepository --> Owner
+PoliceMessageFactory --> PoliceMessage
+RandomVehicleGenerator --> SpanishPlateGenerator
+SpanishPlateGenerator --> Vehicle : plate()
 @enduml
