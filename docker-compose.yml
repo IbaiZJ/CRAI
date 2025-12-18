@@ -85,10 +85,8 @@ services:
     container_name: os
     ports:
       - "6905:8080"
-    environment:
-      - node-red.webhook-url=http://node-red:1880/alerts
-    depends_on:
-      - node-red
+    # depends_on:
+    #   - node-red
     networks:
       - app-network
     restart: unless-stopped
@@ -110,10 +108,13 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: crai
+      MYSQL_USER: crai_user
+      MYSQL_PASSWORD: crai_pass
     ports:
       - "3307:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - ./db/db_data:/data
+      - ./db/createCraiDB.sql:/docker-entrypoint-initdb.d/01_createCraiDB.sql:ro
     networks:
       - app-network
     restart: unless-stopped

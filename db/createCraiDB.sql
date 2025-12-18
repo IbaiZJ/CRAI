@@ -1,6 +1,6 @@
-drop database if exists `crai-db`;
-create database `crai-db`;
-use `crai-db`;
+drop database if exists `crai`;
+create database `crai`;
+use `crai`;
 
 CREATE TABLE UserType (
     userTypeId INT AUTO_INCREMENT PRIMARY KEY,
@@ -8,10 +8,10 @@ CREATE TABLE UserType (
 );
 
 
-CREATE TABLE User (
-    email VARCHAR2(100) PRIMARY KEY,
-    nameUser VARCHAR2(50) NOT NULL,
-    surnameUser VARCHAR2(50) NOT NULL,
+CREATE TABLE `User` (
+    email VARCHAR(100) PRIMARY KEY,
+    nameUser VARCHAR(50) NOT NULL,
+    surnameUser VARCHAR(50) NOT NULL,
     birthDate DATE,
     userType INT NOT NULL,
     FOREIGN KEY (userType) REFERENCES UserType(userTypeId)
@@ -25,11 +25,11 @@ CREATE TABLE VehicleType (
 
 
 CREATE TABLE Vehicles (
-    plate VARCHAR2(10) PRIMARY KEY,
-    badge VARCHAR2(10),
-    idUser VARCHAR2(100),
+    plate VARCHAR(10) PRIMARY KEY,
+    badge VARCHAR(10),
+    idUser VARCHAR(100),
     vehicleTypeId INT,
-    FOREIGN KEY (idUser) REFERENCES User(email),
+    FOREIGN KEY (idUser) REFERENCES `User`(email),
     FOREIGN KEY (vehicleTypeId) REFERENCES VehicleType(vehicleTypeId)
 );
 
