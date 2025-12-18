@@ -55,6 +55,16 @@
         "verboselogging": false
     },
     {
+        "id": "2c6f0c9a010f04a0",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "mysql",
+        "port": "3306",
+        "db": "crai",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
         "id": "53207df66be3ebe9",
         "type": "http in",
         "z": "64608cd93cad35de",
@@ -100,9 +110,9 @@
         "id": "c95ef74f78e9ac1f",
         "type": "mysql",
         "z": "a5406ced814d1895",
-        "mydb": "9ab4bf7d96539dde",
-        "name": "Google Cloud SQL DB",
-        "x": 520,
+        "mydb": "2c6f0c9a010f04a0",
+        "name": "mysql",
+        "x": 470,
         "y": 500,
         "wires": [
             [
@@ -153,25 +163,6 @@
         "statusType": "auto",
         "x": 740,
         "y": 500,
-        "wires": []
-    },
-    {
-        "id": "553fdf189e1996b3",
-        "type": "subflow:64608cd93cad35de",
-        "z": "a5406ced814d1895",
-        "name": "",
-        "x": 180,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "84ddcaa84c0ee2c8",
-        "type": "comment",
-        "z": "a5406ced814d1895",
-        "name": "Manages web authentication tasks such as user login, account creation, credential validation, and session handling.",
-        "info": "",
-        "x": 490,
-        "y": 80,
         "wires": []
     },
     {

@@ -55,6 +55,16 @@
         "verboselogging": false
     },
     {
+        "id": "2c6f0c9a010f04a0",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "mysql",
+        "port": "3306",
+        "db": "crai",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
         "id": "53207df66be3ebe9",
         "type": "http in",
         "z": "64608cd93cad35de",
@@ -100,9 +110,9 @@
         "id": "c95ef74f78e9ac1f",
         "type": "mysql",
         "z": "a5406ced814d1895",
-        "mydb": "9ab4bf7d96539dde",
-        "name": "Google Cloud SQL DB",
-        "x": 520,
+        "mydb": "2c6f0c9a010f04a0",
+        "name": "mysql",
+        "x": 470,
         "y": 500,
         "wires": [
             [
@@ -153,15 +163,6 @@
         "statusType": "auto",
         "x": 740,
         "y": 500,
-        "wires": []
-    },
-    {
-        "id": "553fdf189e1996b3",
-        "type": "subflow:64608cd93cad35de",
-        "z": "a5406ced814d1895",
-        "name": "",
-        "x": 180,
-        "y": 160,
         "wires": []
     },
     {
@@ -965,5 +966,35 @@
                 "828dab69e9e76a83"
             ]
         ]
+    },
+    {
+        "id": "c5fab67d44a35626",
+        "type": "comment",
+        "z": "01df77f7ae4c4f86",
+        "name": "Flow to adjust parameters",
+        "info": "ES\nEste flujo ajusta parametros de simulacion (camaras, probabilidades, ritmo) desde varios injects, los guarda en flow, construye un payload con defaults si falta algun valor y lo envia por HTTP POST a /admin/update, mostrando el payload y la respuesta en debug.\n\nEN \nThis flow updates simulation parameters (cameras, probabilities, pacing) via inject nodes, stores them in flow, builds a payload with defaults when a value is missing, and sends it by HTTP POST to /admin/update, showing both the payload and the response in the debug panel.",
+        "x": 170,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "c75b2307c72af870",
+        "type": "comment",
+        "z": "01df77f7ae4c4f86",
+        "name": "Flow to start / stop simulations",
+        "info": "",
+        "x": 180,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "a964a6cfbad38ca7",
+        "type": "comment",
+        "z": "01df77f7ae4c4f86",
+        "name": "This flow represent how to manage the alerts",
+        "info": "ES\nEste flujo recibe alertas por POST /alerts, parsea el JSON y enruta por tipo. Si es ITV y está caducada o próxima, construye y envía un email y un aviso por Telegram; si es POLICE, envía un aviso por Telegram. El resto de alertas se muestran en debug.\n\nEN \nThis flow receives alerts via POST /alerts, parses the JSON, and routes by type. If it is ITV and expired or near expiry, it builds and sends an email and a Telegram notice; if it is POLICE, it sends a Telegram alert. Any other alerts are shown in debug.",
+        "x": 230,
+        "y": 880,
+        "wires": []
     }
 ]
