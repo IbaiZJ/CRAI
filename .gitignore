@@ -31,7 +31,14 @@ gcp/service-account.json
 
 # Logs
 *.log
-logs/
+logs/*
+!logs/ssd_training/
+logs/ssd_training/*
+!logs/ssd_training/**/*.v2
+
+# Exceptions: Upload .log files from ai/ folder
+!ai/**/*.log
+!ai/*.log
 
 # OS
 .DS_Store
@@ -68,9 +75,6 @@ plates_itv.csv
 # node-red
 # Node modules
 node_modules/
-
-# Logs y datos temporales
-*.log
 
 # Archivos de configuración local o sensibles
 .config.nodes.json
