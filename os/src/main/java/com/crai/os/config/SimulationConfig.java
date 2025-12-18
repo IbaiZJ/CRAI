@@ -17,7 +17,8 @@ public class SimulationConfig {
     private volatile double stolenProbability = 0.05;
     private volatile double itvFailProbability = 0.30;
 
-    @Value("${node-red.webhook-url:http://localhost:1880/alerts}")
+    // Default points to Node-RED container name on Docker network; override via env/property if needed.
+    @Value("${node-red.webhook-url:http://backend:1880/alerts}")
     private String nodeRedWebhookUrl;
 
     public int getCameraCount() {
