@@ -5,13 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class DebugController {
 
-    @GetMapping("/debug/threads")
+    @GetMapping(value = "/debug/threads", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public List<Map<String, Object>> threads() {
         Map<Thread, StackTraceElement[]> all = Thread.getAllStackTraces();
         List<Map<String, Object>> out = new ArrayList<>();

@@ -2,6 +2,7 @@ package com.crai.os.controller;
 
 import com.crai.os.model.Vehicle;
 import com.crai.os.service.CameraPoolService;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,7 +15,9 @@ public class VehicleController {
         this.cameraService = cameraService;
     }
 
-    @PostMapping("/send")
+    @PostMapping(value = "/send",
+            consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+            produces = MediaType.TEXT_PLAIN_VALUE)
     public String sendVehicle(@RequestBody Vehicle v) {
         cameraService.enqueueVehicle(v);
         return "Vehicle added to camera queue.";

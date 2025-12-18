@@ -7,6 +7,7 @@ import java.util.function.DoublePredicate;
 import java.util.function.IntConsumer;
 import java.util.function.IntPredicate;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,7 +55,7 @@ public class ControlController {
         return "ITV fail probability updated to " + prob;
     }
 
-    @GetMapping("/status")
+    @GetMapping(value = "/status", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public Map<String, Object> status() {
         return Map.of(
                 OCR_DELAY_MS, config.getOcrDelayMs(),
@@ -82,7 +83,9 @@ public class ControlController {
         return " Vehicle generator interval updated to " + ms + " ms";
     }
 
-    @PostMapping("/update")
+    @PostMapping(value = "/update",
+            consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public Map<String, Object> updateSim(@RequestBody Map<String, Object> params) {
 
         Map<String, Object> updated = new HashMap<>();
