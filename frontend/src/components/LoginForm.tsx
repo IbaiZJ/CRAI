@@ -43,12 +43,12 @@ export function LoginForm({
               <Field>
                 <div className="flex items-center">
                   <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                  <button
+                    type="button"
+                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline bg-none border-none cursor-pointer p-0"
                   >
                     Forgot your password?
-                  </a>
+                  </button>
                 </div>
                 <Input id="password" type="password" required />
               </Field>
@@ -58,7 +58,7 @@ export function LoginForm({
                   Login with Google
                 </Button>
                 <FieldDescription className="text-center">
-                  Don&apos;t have an account? <a href="#">Sign up</a>
+                  Don&apos;t have an account? <button type="button" className="text-blue-600 hover:underline bg-none border-none cursor-pointer p-0">Sign up</button>
                 </FieldDescription>
               </Field>
             </FieldGroup>

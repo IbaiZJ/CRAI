@@ -70,19 +70,22 @@ const SplitText: React.FC<SplitTextProps> = ({
 
       const startPct = (1 - threshold) * 100;
       const marginMatch = /^(-?\d+(?:\.\d+)?)(px|em|rem|%)?$/.exec(rootMargin);
-      const marginValue = marginMatch ? parseFloat(marginMatch[1]) : 0;
+      const marginValue = marginMatch ? Number.parseFloat(marginMatch[1]) : 0;
       const marginUnit = marginMatch ? marginMatch[2] || "px" : "px";
-      const sign =
-        marginValue === 0
-          ? ""
-          : marginValue < 0
-          ? `-=${Math.abs(marginValue)}${marginUnit}`
-          : `+=${marginValue}${marginUnit}`;
+      
+      let sign = "";
+      if (marginValue !== 0) {
+        if (marginValue < 0) {
+          sign = `-=${Math.abs(marginValue)}${marginUnit}`;
+        } else {
+          sign = `+=${marginValue}${marginUnit}`;
+        }
+      }
       const start = `top ${startPct}%${sign}`;
       let targets: Element[] = [];
       const assignTargets = (self: GSAPSplitText) => {
-        if (splitType.includes("chars") && (self as GSAPSplitText).chars?.length)
-          targets = (self as GSAPSplitText).chars;
+        if (splitType.includes("chars") && self.chars?.length)
+          targets = self.chars;
         if (!targets.length && splitType.includes("words") && self.words.length) targets = self.words;
         if (!targets.length && splitType.includes("lines") && self.lines.length) targets = self.lines;
         if (!targets.length) targets = self.chars || self.words || self.lines;

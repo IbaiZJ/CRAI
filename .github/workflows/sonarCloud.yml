@@ -2,7 +2,7 @@ name: SonarCloud Analysis
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main","workflows"]
   pull_request:
     branches: ["main"]
 
@@ -29,7 +29,20 @@ jobs:
       - name: Run ebAPI Tests with Coverage
         working-directory: ./ebAPI
         run: |
-          pytest -v --cov --cov-report=xml --cov-report=term-missing
+          pytest -v --cov --cov-report=xml:coverage.xml --cov-report=term-missing
+      - name: Fix ebAPI Coverage Paths for SonarCloud
+        working-directory: ./ebAPI
+        run: |
+          # SonarCloud needs paths relative to repo root
+          # 1. Change source to empty (will use filename as full path)
+          sed -i 's|<source>.*</source>|<source></source>|g' coverage.xml
+          # 2. Normalize absolute paths to relative first (strip everything up to ebAPI/)
+          sed -i 's|filename=".*/ebAPI/|filename="|g' coverage.xml
+          # 3. Add ebAPI/ prefix to all filenames
+          sed -i 's|filename="|filename="ebAPI/|g' coverage.xml
+          # Debug output
+          echo "=== Fixed coverage.xml ==="
+          head -30 coverage.xml
       - name: Upload ebAPI Coverage
         uses: actions/upload-artifact@v4
         with:
@@ -54,6 +67,13 @@ jobs:
       - name: Run Frontend Tests with Coverage
         working-directory: ./frontend
         run: npm run test:coverage -- --run
+      - name: Fix Frontend Coverage Paths
+        working-directory: ./frontend
+        run: |
+          # Fix paths in lcov.info
+          sed -i 's|SF:src/|SF:frontend/src/|g' coverage/lcov.info
+          echo "=== Fixed lcov.info ==="
+          head -20 coverage/lcov.info
       - name: Upload Frontend Coverage
         uses: actions/upload-artifact@v4
         with:
@@ -80,12 +100,70 @@ jobs:
       - name: Run itvAPI Tests with Coverage
         working-directory: ./itvAPI
         run: |
-          pytest -v --cov --cov-report=xml --cov-report=term-missing
+          pytest -v --cov --cov-report=xml:coverage.xml --cov-report=term-missing
+      - name: Fix itvAPI Coverage Paths for SonarCloud
+        working-directory: ./itvAPI
+        run: |
+          # SonarCloud needs paths relative to repo root
+          # 1. Change source to empty (will use filename as full path)
+          sed -i 's|<source>.*</source>|<source></source>|g' coverage.xml
+          # 2. Normalize absolute paths to relative first (strip everything up to itvAPI/)
+          sed -i 's|filename=".*/itvAPI/|filename="|g' coverage.xml
+          # 3. Add itvAPI/ prefix to all filenames
+          sed -i 's|filename="|filename="itvAPI/|g' coverage.xml
+          # Debug output
+          echo "=== Fixed coverage.xml ==="
+          head -30 coverage.xml
       - name: Upload itvAPI Coverage
         uses: actions/upload-artifact@v4
         with:
           name: itvapi-coverage
           path: itvAPI/coverage.xml
+          retention-days: 7
+
+  ai-analysis:
+    name: AI Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: "pip"
+          cache-dependency-path: ai/requirements.txt
+      - name: Install AI Dependencies
+        working-directory: ./ai
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run AI Tests with Coverage
+        working-directory: ./ai
+        run: |
+          pytest tests/ -v --cov=src --cov-report=xml:coverage.xml --cov-report=term-missing
+      - name: Fix AI Coverage Paths for SonarCloud
+        working-directory: ./ai
+        run: |
+          # SonarCloud needs paths relative to repo root
+          # 1. Change source to empty
+          sed -i 's|<source>.*</source>|<source></source>|g' coverage.xml
+          # 2. Fix filename paths
+          # Handle absolute paths containing /ai/ (Linux)
+          sed -i 's|filename=".*/ai/|filename="ai/|g' coverage.xml
+          # Handle relative paths starting with src/
+          sed -i 's|filename="src/|filename="ai/src/|g' coverage.xml
+          # Handle main.py specifically if it appears without src prefix
+          sed -i 's|filename="main.py"|filename="ai/src/main.py"|g' coverage.xml
+          # Handle relative paths starting with video/ (legacy)
+          sed -i 's|filename="video/|filename="ai/src/video/|g' coverage.xml
+          # Debug output
+          echo "=== Fixed coverage.xml ==="
+          head -30 coverage.xml
+      - name: Upload AI Coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-coverage
+          path: ai/coverage.xml
           retention-days: 7
 
   os-analysis:
@@ -112,7 +190,7 @@ jobs:
   sonarcloud-scan:
     name: SonarCloud Scan
     runs-on: ubuntu-latest
-    needs: [ebapi-analysis, frontend-analysis, itvapi-analysis, os-analysis]
+    needs: [ebapi-analysis, frontend-analysis, itvapi-analysis, ai-analysis, os-analysis]
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
@@ -150,11 +228,44 @@ jobs:
           name: itvapi-coverage
           path: itvAPI
 
+      - name: Download AI Coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: ai-coverage
+          path: ai
+
       - name: Download os Coverage
         uses: actions/download-artifact@v4
         with:
           name: os-coverage
           path: os/target/site/jacoco
+
+      - name: Debug Coverage Files
+        run: |
+          echo "=== Directory structure ==="
+          ls -la ebAPI/ || echo "ebAPI dir not found"
+          ls -la itvAPI/ || echo "itvAPI dir not found"
+          ls -la ai/ || echo "ai dir not found"
+          ls -la os/target/site/jacoco/ || echo "jacoco dir not found"
+          ls -la frontend/coverage/ || echo "frontend coverage dir not found"
+          echo ""
+          echo "=== ebAPI coverage.xml sources and filenames ==="
+          grep '<source>' ebAPI/coverage.xml || echo "Not found"
+          grep -m3 'filename=' ebAPI/coverage.xml || echo "Not found"
+          echo ""
+          echo "=== itvAPI coverage.xml sources and filenames ==="
+          grep '<source>' itvAPI/coverage.xml || echo "Not found"
+          grep -m3 'filename=' itvAPI/coverage.xml || echo "Not found"
+          echo ""
+          echo "=== AI coverage.xml sources and filenames ==="
+          grep '<source>' ai/coverage.xml || echo "Not found"
+          grep -m3 'filename=' ai/coverage.xml || echo "Not found"
+          echo ""
+          echo "=== OS jacoco.xml first 30 lines ==="
+          head -30 os/target/site/jacoco/jacoco.xml || echo "Not found"
+          echo ""
+          echo "=== Frontend lcov.info first 20 lines ==="
+          head -20 frontend/coverage/lcov.info || echo "Not found"
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2.3.0
@@ -163,9 +274,14 @@ jobs:
             -Dsonar.organization=${{ env.SONAR_ORGANIZATION }}
             -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }}
             -Dsonar.host.url=${{ env.SONAR_HOST_URL }}
-            -Dsonar.python.coverage.reportPaths=ebAPI/coverage.xml
+            -Dsonar.sources=ebAPI,itvAPI,ai/src/video,frontend/src,os/src/main/java
+            -Dsonar.tests=ebAPI/tests,itvAPI/tests,ai/tests,frontend/src/test,os/src/test/java
+            -Dsonar.python.coverage.reportPaths=ebAPI/coverage.xml,itvAPI/coverage.xml,ai/coverage.xml
             -Dsonar.javascript.lcov.reportPaths=frontend/coverage/lcov.info
             -Dsonar.coverage.jacoco.xmlReportPaths=os/target/site/jacoco/jacoco.xml
+            -Dsonar.verbose=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+

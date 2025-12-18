@@ -31,7 +31,7 @@ class TestVideoStream:
     def test_initialization_webcam(self, mock_webcam_stream):
         """Test initialization with webcam."""
         with patch('video.video_stream.WebcamVideoStream', return_value=mock_webcam_stream):
-            stream = VideoStream(src=0, usePiCamera=False)
+            stream = VideoStream(src=0, use_pi_camera=False)
             
             assert stream.stream == mock_webcam_stream
     
@@ -48,10 +48,10 @@ class TestVideoStream:
         with patch('builtins.__import__', side_effect=lambda name, *args, **kwargs: 
                    Mock() if 'pi_video_stream' in name else __import__(name, *args, **kwargs)):
             with patch('video.video_stream.WebcamVideoStream') as mock_webcam:
-                # When usePiCamera is True, it imports dynamically
+                # When use_pi_camera is True, it imports dynamically
                 # We test that the code path is reached
                 try:
-                    stream = VideoStream(usePiCamera=True, resolution=(640, 480), framerate=30)
+                    stream = VideoStream(use_pi_camera=True, resolution=(640, 480), framerate=30)
                     # If PiVideoStream is available, stream is created
                     assert stream is not None
                 except ImportError:
@@ -65,7 +65,7 @@ class TestVideoStream:
             mock_instance = Mock()
             mock_webcam.return_value = mock_instance
             
-            stream = VideoStream(usePiCamera=False)
+            stream = VideoStream(use_pi_camera=False)
             assert stream.stream == mock_instance
     
     def test_start_webcam(self, mock_webcam_stream):

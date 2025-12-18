@@ -1,11 +1,11 @@
-from video.webcam_video_stream import WebcamVideoStream
+from .webcam_video_stream import WebcamVideoStream
 
 class VideoStream:
     """ Video Stream class """
     
-    def __init__(self, src: int = 0, usePiCamera: bool = False, resolution: tuple = (320, 240), framerate: int = 32):
-        if usePiCamera:
-            from video.pi_video_stream import PiVideoStream
+    def __init__(self, src: int = 0, use_pi_camera: bool = False, resolution: tuple = (320, 240), framerate: int = 32):
+        if use_pi_camera:
+            from .pi_video_stream import PiVideoStream
             self.stream = PiVideoStream(resolution = resolution, framerate = framerate)
         else:
             self.stream = WebcamVideoStream(src=src)

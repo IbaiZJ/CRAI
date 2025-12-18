@@ -13,11 +13,11 @@ import { useNotifications } from "@/hooks/useNotifications";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface LogOutDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  readonly open: boolean;
+  readonly onOpenChange: (open: boolean) => void;
 }
 
-export function LogOutDialog({ open, onOpenChange }: LogOutDialogProps) {
+export function LogOutDialog({ open, onOpenChange }: Readonly<LogOutDialogProps>) {
   const navigate = useNavigate();
   const notifications = useNotifications();
   const { logout } = useAuth();

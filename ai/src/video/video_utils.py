@@ -2,6 +2,18 @@ import cv2
 import numpy as np
 from urllib.request import urlopen
 
+class ContourError(Exception):
+    """Exception raised for errors in contour processing."""
+    pass
+
+class ImageShapeError(ValueError):
+    """Exception raised for invalid image shape parameters."""
+    pass
+
+class InvalidImageTypeError(TypeError):
+    """Exception raised when input is not a valid numpy array."""
+    pass
+
 class VideoUtils:
     """ Video and image processing utilities class """
     
@@ -96,19 +108,19 @@ class VideoUtils:
             Rotated image with expanded canvas
         """
         (h, w) = image.shape[:2]
-        (cX, cY) = (w / 2, h / 2)
+        (cx, cy) = (w / 2, h / 2)
         
-        M = cv2.getRotationMatrix2D((cX, cY), -angle, 1.0)
+        M = cv2.getRotationMatrix2D((cx, cy), -angle, 1.0)
         cos = np.abs(M[0, 0])
         sin = np.abs(M[0, 1])
         
-        nW = int((h * sin) + (w * cos))
-        nH = int((h * cos) + (w * sin))
+        nw = int((h * sin) + (w * cos))
+        nh = int((h * cos) + (w * sin))
         
-        M[0, 2] += (nW / 2) - cX
-        M[1, 2] += (nH / 2) - cY
+        M[0, 2] += (nw / 2) - cx
+        M[1, 2] += (nh / 2) - cy
         
-        return cv2.warpAffine(image, M, (nW, nH))
+        return cv2.warpAffine(image, M, (nw, nh))
 
     @staticmethod
     def crop(image: np.ndarray, x: int, y: int, w: int, h: int) -> np.ndarray:
@@ -220,7 +232,7 @@ class VideoUtils:
         elif len(cnts) == 3:
             cnts = cnts[1]
         else:
-            raise Exception(("Contours tuple must have length 2 or 3, "
+            raise ContourError(("Contours tuple must have length 2 or 3, "
                 "otherwise OpenCV changed their cv2.findContours return "
                 "signature yet again. Refer to OpenCV's documentation "
                 "in that case"))
@@ -255,9 +267,9 @@ class VideoUtils:
             List of montage images
         """
         if len(image_shape) != 2:
-            raise Exception('image shape must be list or tuple of length 2 (rows, cols)')
+            raise ImageShapeError('image shape must be list or tuple of length 2 (rows, cols)')
         if len(montage_shape) != 2:
-            raise Exception('montage shape must be list or tuple of length 2 (rows, cols)')
+            raise ImageShapeError('montage shape must be list or tuple of length 2 (rows, cols)')
         
         image_montages = []
         montage_image = np.zeros(shape=(image_shape[1] * montage_shape[1], 
@@ -268,7 +280,7 @@ class VideoUtils:
         
         for img in image_list:
             if type(img).__module__ != np.__name__:
-                raise Exception('input of type {} is not a valid numpy array'.format(type(img)))
+                raise InvalidImageTypeError('input of type {} is not a valid numpy array'.format(type(img)))
             
             start_new_img = False
             img = cv2.resize(img, image_shape)

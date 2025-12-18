@@ -66,8 +66,9 @@ export function createColumns<TData>(
   config.columns.forEach((col) => {
     columns.push({
       accessorKey: col.accessorKey as string,
-      header: col.enableSorting !== false
-        ? ({ column }) => (
+      header: col.enableSorting === false
+        ? col.header
+        : ({ column }) => (
             <Button
               variant="ghost"
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -76,8 +77,7 @@ export function createColumns<TData>(
               {col.header}
               <ArrowUpDown className="ml-2 h-4 w-4 text-gray-300 group-hover:text-gray-600 transition-colors duration-200" />
             </Button>
-          )
-        : col.header,
+          ),
       cell: col.cell
         ? ({ row }) => col.cell!(row.getValue(col.accessorKey as string), row.original)
         : ({ row }) => {
@@ -106,9 +106,9 @@ export function createColumns<TData>(
                 {config.actions!.label || "Actions"}
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {config.actions!.items.map((action, index) => (
+              {config.actions!.items.map((action) => (
                 <DropdownMenuItem
-                  key={index}
+                  key={action.label}
                   onClick={() => action.onClick(row.original)}
                 >
                   {action.label}

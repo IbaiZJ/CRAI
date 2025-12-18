@@ -48,16 +48,16 @@ const Button = ({ children, variant = 'primary', className = '', onClick }: { ch
 
 // --- Custom Illustrations ---
 
+const cityGridCells = Array.from({ length: 36 }, (_, i) => `city-grid-cell-${i}`);
+
 const HeroIllustration = () => (
   <div className="relative w-full h-full min-h-[400px] flex items-center justify-center">
     {/* Abstract City Grid */}
     <div className="absolute inset-0 grid grid-cols-6 grid-rows-6 gap-4 opacity-10 transform perspective-1000 rotate-x-12">
-      {[...Array(36)].map((_, i) => (
-        <div key={i} className="bg-blue-500 rounded-lg h-full w-full animate-pulse" style={{ animationDelay: `${i * 0.1}s` }} />
+      {cityGridCells.map((cellId, index) => (
+        <div key={cellId} className="bg-blue-500 rounded-lg h-full w-full animate-pulse" style={{ animationDelay: `${index * 0.1}s` }} />
       ))}
     </div>
-
-    {/* Central Scanner Card */}
     <div className="relative bg-white/80 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/50 w-80 z-10 animate-float">
       <div className="flex items-center gap-4 mb-4">
         <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
@@ -135,7 +135,7 @@ const Hero = () => (
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
               </span>
-              Next Gen ANPR Technology
+              <span>Next Gen ANPR Technology</span>
             </div>
             <h1 className="text-5xl lg:text-7xl font-bold text-slate-900 leading-[1.1] mb-6 tracking-tight">
               Smarter cities start with <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-cyan-500">intelligent vision.</span>
@@ -144,7 +144,7 @@ const Hero = () => (
               Real-time license plate recognition and vehicle analytics powered by advanced AI. Centralize your city's monitoring infrastructure in one beautiful cloud dashboard.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button className='cursor-pointer' onClick={() => window.location.href = '/dashboard'}>
+              <Button className='cursor-pointer' onClick={() => (globalThis.location.href = '/dashboard')}>
                 Get Started <ChevronRight className="w-4 h-4" />
               </Button>
               <Button className='cursor-pointer' variant="secondary">
@@ -198,8 +198,8 @@ const Features = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {features.map((feature, idx) => (
-            <div key={idx} className="group p-8 rounded-3xl bg-slate-50 hover:bg-white border border-slate-100 hover:border-blue-100 hover:shadow-xl hover:shadow-blue-50/50 transition-all duration-300">
+          {features.map((feature) => (
+            <div key={feature.title} className="group p-8 rounded-3xl bg-slate-50 hover:bg-white border border-slate-100 hover:border-blue-100 hover:shadow-xl hover:shadow-blue-50/50 transition-all duration-300">
               <div className="w-12 h-12 bg-white rounded-2xl border border-gray-100 shadow-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 {feature.icon}
               </div>
@@ -213,49 +213,7 @@ const Features = () => {
   );
 };
 
-// const HowItWorks = () => {
-//   const steps = [
-//     { num: "01", title: "Capture", desc: "Cameras across the infrastructure capture high-res video in real-time." },
-//     { num: "02", title: "Analyze", desc: "Our AI engine identifies plates, make, and model within milliseconds." },
-//     { num: "03", title: "Process", desc: "Data is encrypted and sent to the centralized CRAI cloud core." },
-//     { num: "04", title: "Act", desc: "Admins receive alerts and visual analytics on the dashboard." }
-//   ];
 
-//   return (
-//     <section id="how-it-works" className="py-24 bg-slate-900 text-white relative overflow-hidden">
-//       {/* Abstract Grid Background */}
-//       <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#4b5563 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
-      
-//       <div className="container mx-auto px-8 relative z-10">
-//         <div className="flex flex-col md:flex-row justify-between items-end mb-16">
-//           <div className="max-w-xl">
-//             <h2 className="text-3xl md:text-4xl font-bold mb-4">From pixel to insight in milliseconds.</h2>
-//             <p className="text-slate-400">Our pipeline is optimized for speed and privacy, ensuring data is processed securely at the edge.</p>
-//           </div>
-//           <Button variant="outline" className="mt-6 md:mt-0">See System Architecture</Button>
-//         </div>
-
-//         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-//           {steps.map((step, idx) => (
-//             <div key={idx} className="relative p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors backdrop-blur-sm">
-//               <div className="text-5xl font-bold text-slate-700/50 mb-4 absolute top-4 right-4">{step.num}</div>
-//               <div className="relative">
-//                 <div className="w-2 h-2 rounded-full bg-blue-500 mb-6 shadow-[0_0_10px_rgba(59,130,246,0.8)]"></div>
-//                 <h3 className="text-xl font-bold mb-2">{step.title}</h3>
-//                 <p className="text-sm text-slate-400">{step.desc}</p>
-//               </div>
-//               {idx !== steps.length - 1 && (
-//                 <div className="hidden md:block absolute top-1/2 -right-3 transform -translate-y-1/2 z-20">
-//                   <ArrowRight className="text-slate-600 w-5 h-5" />
-//                 </div>
-//               )}
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//     </section>
-//   );
-// };
 
 const DashboardPreview = () => (
     <section id="analytics" className="py-24 bg-slate-50 overflow-hidden">
@@ -306,14 +264,14 @@ const DashboardPreview = () => (
                              {/* Chart Area */}
                              <div className="col-span-3 bg-white h-64 rounded-xl border border-slate-100 shadow-sm flex items-end justify-between p-6 gap-2">
                                 {[35, 55, 40, 70, 60, 85, 95, 75, 50, 65, 80, 60].map((h, i) => (
-                                    <div key={i} className="w-full bg-blue-500 rounded-t-sm opacity-80 hover:opacity-100 transition-opacity" style={{height: `${h}%`}}></div>
+                                    <div key={`chart-bar-${i}-${h}`} className="w-full bg-blue-500 rounded-t-sm opacity-80 hover:opacity-100 transition-opacity" style={{height: `${h}%`}}></div>
                                 ))}
                              </div>
 
                              {/* Table Area */}
                              <div className="col-span-3 bg-white h-32 rounded-xl border border-slate-100 shadow-sm p-4 space-y-3">
                                 {[1,2,3].map(i => (
-                                    <div key={i} className="flex justify-between items-center pb-2 border-b border-slate-50 last:border-0">
+                                    <div key={`table-row-${i}`} className="flex justify-between items-center pb-2 border-b border-slate-50 last:border-0">
                                         <div className="h-3 w-32 bg-slate-100 rounded"></div>
                                         <div className="h-3 w-20 bg-slate-100 rounded"></div>
                                         <div className="h-3 w-10 bg-green-100 rounded"></div>

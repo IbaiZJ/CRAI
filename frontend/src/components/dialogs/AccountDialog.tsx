@@ -12,15 +12,15 @@ import {
 } from "@/components/ui/avatar";
 
 interface AccountDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  user: {
+  readonly open: boolean;
+  readonly onOpenChange: (open: boolean) => void;
+  readonly user: {
     name: string;
     email: string;
     avatar: string;
   };
-  initials: string;
-  userId?: string;
+  readonly initials: string;
+  readonly userId?: string;
 }
 
 export function AccountDialog({
@@ -29,7 +29,7 @@ export function AccountDialog({
   user,
   initials,
   userId,
-}: AccountDialogProps) {
+}: Readonly<AccountDialogProps>) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -52,8 +52,8 @@ export function AccountDialog({
           </div>
           <div className="space-y-2">
             <div>
-              <label className="text-sm font-medium">User ID</label>
-              <p className="text-sm text-muted-foreground">{userId}</p>
+              <label htmlFor="userId" className="text-sm font-medium">User ID</label>
+              <p id="userId" className="text-sm text-muted-foreground">{userId}</p>
             </div>
           </div>
         </div>

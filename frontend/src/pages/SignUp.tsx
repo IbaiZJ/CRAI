@@ -99,7 +99,8 @@ export default function SignUp() {
       notifications.success("Account created successfully!");
       navigate("/login");
     } catch (error) {
-      notifications.error("Failed to create account. Please try again.");
+      const message = error instanceof Error ? error.message : "Unknown error";
+      notifications.error(`Failed to create account: ${message}`);
     } finally {
       setLoading(false);
     }
@@ -119,8 +120,9 @@ export default function SignUp() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">First Name</label>
+                  <label htmlFor="firstName" className="text-sm font-medium">First Name</label>
                   <Input
+                    id="firstName"
                     type="text"
                     name="firstName"
                     placeholder="John"
@@ -133,8 +135,9 @@ export default function SignUp() {
                   )}
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Last Name</label>
+                  <label htmlFor="lastName" className="text-sm font-medium">Last Name</label>
                   <Input
+                    id="lastName"
                     type="text"
                     name="lastName"
                     placeholder="Doe"
@@ -149,8 +152,9 @@ export default function SignUp() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium">Email</label>
+                <label htmlFor="email" className="text-sm font-medium">Email</label>
                 <Input
+                  id="email"
                   type="email"
                   name="email"
                   placeholder="john@example.com"
@@ -164,9 +168,10 @@ export default function SignUp() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium">Password</label>
+                <label htmlFor="password" className="text-sm font-medium">Password</label>
                 <div className="relative">
                   <Input
+                    id="password"
                     type={showPassword ? "text" : "password"}
                     name="password"
                     placeholder="••••••••"
@@ -192,9 +197,10 @@ export default function SignUp() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium">Confirm Password</label>
+                <label htmlFor="confirmPassword" className="text-sm font-medium">Confirm Password</label>
                 <div className="relative">
                   <Input
+                    id="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
                     name="confirmPassword"
                     placeholder="••••••••"

@@ -1,22 +1,23 @@
 package com.crai.os;
 
-import com.crai.os.config.SimulationConfig;
-import com.crai.os.model.Vehicle;
-import com.crai.os.service.CameraPoolService;
-import com.crai.os.service.PoliceService;
+import java.time.Instant;
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.TestPropertySource;
 
-import java.time.Instant;
-import java.util.List;
+import com.crai.os.config.SimulationConfig;
+import com.crai.os.model.Vehicle;
+import com.crai.os.service.CameraPoolService;
+import com.crai.os.service.PoliceService;
 
 @SpringBootTest
 @TestPropertySource(properties = "node-red.webhook-url=")
+@SuppressWarnings("java:S2925") // Thread.sleep is necessary in async tests for synchronization
 public class PriorityOrderingTest {
 
     // For determinism we test the queue implementation directly instead of the full Spring wiring.
@@ -42,16 +43,6 @@ public class PriorityOrderingTest {
 
     private Vehicle make(String plate, int priority) {
         return new Vehicle(plate, priority, true, "C", false); // alertVehicle=true to generate police alert
-    }
-
-    private boolean waitForProcessedCount(int expected, long timeoutMs) throws InterruptedException {
-        long deadline = Instant.now().toEpochMilli() + timeoutMs;
-        while (Instant.now().toEpochMilli() < deadline) {
-            List<?> processed = policeService.getProcessedAlerts();
-            if (processed.size() >= expected) return true;
-            Thread.sleep(50);
-        }
-        return false;
     }
 
     @Test

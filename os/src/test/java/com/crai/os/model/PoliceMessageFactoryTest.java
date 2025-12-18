@@ -1,10 +1,19 @@
 package com.crai.os.model;
 
-import org.junit.jupiter.api.Test;
+import java.lang.reflect.Constructor;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
 
 class PoliceMessageFactoryTest {
+
+    @Test
+    void privateConstructorForCoverage() throws Exception {
+        Constructor<PoliceMessageFactory> constructor = PoliceMessageFactory.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+        PoliceMessageFactory instance = constructor.newInstance();
+        assertThat(instance).isNotNull();
+    }
 
     @Test
     void buildsBadgeMessage() {
@@ -30,5 +39,25 @@ class PoliceMessageFactoryTest {
         assertThat(soon.getDescription()).contains("proxima a caducar");
         assertThat(unknown.getDescription()).contains("No se pudo verificar");
         assertThat(expired.getRecipientEmail()).isEqualTo("mail@test.com");
+    }
+
+    @Test
+    void buildsItvMessageWithDefaultCase() {
+        // Test the default case in buildItvMessage switch
+        PoliceMessage msg = PoliceMessageFactory.build(AlertType.ITV, "4444DDD", "INVALID_STATUS");
+        assertThat(msg.getDescription()).contains("ITV desconocida para 4444DDD");
+    }
+
+    @Test
+    void buildWithThreeArgsPassesNullEmail() {
+        PoliceMessage msg = PoliceMessageFactory.build(AlertType.POLICE, "5555EEE", "detail");
+        assertThat(msg.getRecipientEmail()).isNull();
+    }
+
+    @Test
+    void buildWithFourArgsIncludesEmail() {
+        PoliceMessage msg = PoliceMessageFactory.build(AlertType.BADGE, "6666FFF", "tag", "test@example.com");
+        assertThat(msg.getRecipientEmail()).isEqualTo("test@example.com");
+        assertThat(msg.getPlate()).isEqualTo("6666FFF");
     }
 }

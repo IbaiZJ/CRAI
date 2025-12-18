@@ -18,7 +18,7 @@ import {
 
 export function NavMain({
   items,
-}: {
+}: Readonly<{
   items: {
     title: string
     url: string
@@ -29,7 +29,7 @@ export function NavMain({
       url: string
     }[]
   }[]
-}) {
+}>) {
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>

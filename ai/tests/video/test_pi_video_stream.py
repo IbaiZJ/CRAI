@@ -77,7 +77,7 @@ class TestPiVideoStream:
         stream = PiVideoStream()
         
         stream.camera.capture_continuous.assert_called_once_with(
-            stream.rawCapture,
+            stream.raw_capture,
             format="bgr",
             use_video_port=True
         )
@@ -119,11 +119,11 @@ class TestPiVideoStream:
         # Manually iterate once
         for f in [mock_picamera['frame_data']]:
             stream.frame = f.array
-            stream.rawCapture.truncate(0)
+            stream.raw_capture.truncate(0)
             break
         
         assert stream.frame == "mock_frame_array"
-        stream.rawCapture.truncate.assert_called_with(0)
+        stream.raw_capture.truncate.assert_called_with(0)
     
     def test_update_stops_when_flag_set(self, mock_picamera):
         """Test that update stops when stopped flag is set."""
@@ -136,7 +136,7 @@ class TestPiVideoStream:
         
         # Verify camera cleanup methods exist
         assert hasattr(stream, 'camera')
-        assert hasattr(stream, 'rawCapture')
+        assert hasattr(stream, 'raw_capture')
         assert hasattr(stream, 'stream')
     
     def test_custom_resolution(self, mock_picamera):
@@ -169,11 +169,11 @@ class TestPiVideoStream:
         assert stream.stream is not None
     
     def test_raw_capture_attribute_exists(self, mock_picamera):
-        """Test that rawCapture attribute is set."""
+        """Test that raw_capture attribute is set."""
         stream = PiVideoStream()
         
-        assert hasattr(stream, 'rawCapture')
-        assert stream.rawCapture is not None
+        assert hasattr(stream, 'raw_capture')
+        assert stream.raw_capture is not None
     
     def test_camera_attribute_exists(self, mock_picamera):
         """Test that camera attribute is set."""
@@ -194,7 +194,7 @@ class TestPiVideoStream:
         mock_frame1.array = "frame1"
         
         # Track if cleanup was called
-        cleanup_called = {'stream': False, 'rawCapture': False, 'camera': False}
+        cleanup_called = {'stream': False, 'raw_capture': False, 'camera': False}
         
         # Make stream an iterator that yields frames, then checks stopped flag
         def frame_generator():
@@ -218,19 +218,19 @@ class TestPiVideoStream:
         
         stream.stream = MockStream(frame_generator())
         
-        # Replace the actual camera and rawCapture close methods to track calls
-        original_raw_close = stream.rawCapture.close
+        # Replace the actual camera and raw_capture close methods to track calls
+        original_raw_close = stream.raw_capture.close
         original_cam_close = stream.camera.close
         
         def raw_close_wrapper():
-            cleanup_called['rawCapture'] = True
+            cleanup_called['raw_capture'] = True
             return original_raw_close()
             
         def cam_close_wrapper():
             cleanup_called['camera'] = True
             return original_cam_close()
         
-        stream.rawCapture.close = raw_close_wrapper
+        stream.raw_capture.close = raw_close_wrapper
         stream.camera.close = cam_close_wrapper
         
         # Start the update in a thread
@@ -249,5 +249,5 @@ class TestPiVideoStream:
         
         # Verify cleanup was called
         assert cleanup_called['stream'] is True, "stream.close() was not called"
-        assert cleanup_called['rawCapture'] is True, "rawCapture.close() was not called"
+        assert cleanup_called['raw_capture'] is True, "raw_capture.close() was not called"
         assert cleanup_called['camera'] is True, "camera.close() was not called"

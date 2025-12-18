@@ -92,6 +92,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem('token');
   };
 
+  const contextValue = React.useMemo(() => ({
+    user,
+    isAuthenticated: !!user,
+    login,
+    logout,
+    loading,
+  }), [user, login, logout, loading]);
+
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -101,15 +109,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isAuthenticated: !!user,
-        login,
-        logout,
-        loading,
-      }}
-    >
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );

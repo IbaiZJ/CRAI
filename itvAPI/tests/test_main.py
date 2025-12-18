@@ -40,3 +40,11 @@ class TestMain:
         
         assert app.title == settings.API_TITLE
         assert app.version == settings.API_VERSION
+    
+    @patch('main.unzip_itv_date_file')
+    def test_startup_event_called(self, mock_unzip):
+        """Test that startup event calls unzip_itv_date_file"""
+        from main import startup_event
+        
+        startup_event()
+        mock_unzip.assert_called_once()

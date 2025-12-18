@@ -1,18 +1,20 @@
 # import the necessary packages
-from video_stream import VideoStream
-from fps import FPS
+from video.video_stream import VideoStream
+from video.fps import FPS
 import datetime
 import argparse
 import time
 import cv2
-from video_utils import VideoUtils
+from video.video_utils import VideoUtils
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--picamera", type=int, default=-1,
 	help="whether or not the Raspberry Pi camera should be used")
+ap.add_argument("-c", "--camera", type=int, default=0,
+	help="camera source index (0=default, 1=USB external, 2=second USB, etc.)")
 args = vars(ap.parse_args())
 
-vs = VideoStream(usePiCamera=args["picamera"] > 0).start()
+vs = VideoStream(src=args["camera"], use_pi_camera=args["picamera"] > 0).start()
 time.sleep(2.0)
 
 # start the FPS counter

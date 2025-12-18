@@ -5,21 +5,21 @@ import sys
 
 file_path = "../data/environmentalBadge.txt"
 
-def get_badge_from_plate(carPlate: str, file_path: str) -> str | None:
+def get_badge_from_plate(car_plate: str, file_path: str) -> str | None:
     """Returns the environmental badge associated with the given car plate"""
     
     try:
         df = pd.read_csv(file_path, sep='|', header=None, names=['plate', 'badge'], dtype=str)
         df['plate'] = df['plate'].str.upper().str.replace(" ", "").str.replace("-", "")
-        carPlate_formatted = carPlate.upper().replace(" ", "").replace("-", "")
+        car_plate_formatted = car_plate.upper().replace(" ", "").replace("-", "")
         
-        badge_row = df[df['plate'] == carPlate_formatted]
+        badge_row = df[df['plate'] == car_plate_formatted]
         if not badge_row.empty:
             badge = badge_row.iloc[0]['badge']
-            print(f"Car Plate: {carPlate_formatted}, Badge: {badge}")
+            print(f"Car Plate: {car_plate_formatted}, Badge: {badge}")
             return badge
         else:
-            print(f"Car Plate: {carPlate_formatted}, Badge: Not Found")
+            print(f"Car Plate: {car_plate_formatted}, Badge: Not Found")
             return None
     except FileNotFoundError:
         print(f"Error: The data file was not found: '{file_path}'")
