@@ -1,5 +1,4 @@
 # AI
-
 - https://www.youtube.com/watch?v=402DciWGvt8
 
 ## Read more
