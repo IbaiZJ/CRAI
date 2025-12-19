@@ -51,7 +51,7 @@ Ask to the administrator for all the environment variables.
    | Service | URL | Description |
    |---------|-----|-------------|
    | frontend | http://localhost:6901 | Main dashboard |
-   | as | http://localhost:6902 | AI API |
+   | ai | http://localhost:6902 | AI API |
    | backend | http://localhost:6903 | Workflow orchestration |
    | ebAPI | http://localhost:6904 | Environmental Badge API |
    | itvAPI | http://localhost:6905 | ITV Date API |
@@ -61,6 +61,7 @@ Ask to the administrator for all the environment variables.
 ## 📝 License
 
 This project is under the license specified in `LICENSE`
+
 
 
 
