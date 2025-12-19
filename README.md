@@ -30,7 +30,6 @@
 - **Node.js** 18+ and npm (if running services locally)
 - **Python** 3.9+ (if running AI service locally)
 - **Google Cloud SQL** with configured access
-- `gcp/service-account.json` file with GCP credentials
 
 ### Option 1: Complete Execution with Docker Compose (Recommended)
 
@@ -62,4 +61,5 @@ Ask to the administrator for all the environment variables.
 ## 📝 License
 
 This project is under the license specified in `LICENSE`
+
 
