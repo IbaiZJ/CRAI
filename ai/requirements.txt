@@ -11,5 +11,10 @@ pytest-mock
 httpx
 customtkinter
 opencv-python
-# tensorflow
-# torch
+# tensorflow - NO NECESARIO, usando YOLO
+# torch - se instala automáticamente con ultralytics
+
+# YOLOv8 para detección de vehículos
+ultralytics>=8.0.0
+torch>=2.0.0
+torchvision>=0.15.0
