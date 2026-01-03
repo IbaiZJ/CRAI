@@ -1010,12 +1010,18 @@
         "type": "inject",
         "z": "3bf36f2bd537dee3",
         "name": "Consulta etiqueta",
-        "props": [],
+        "props": [
+            {
+                "p": "carPlate",
+                "v": "0163MRC",
+                "vt": "str"
+            }
+        ],
         "repeat": "",
+        "crontab": "",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payloadType": "date",
         "x": 140,
         "y": 100,
         "wires": [
@@ -1029,7 +1035,7 @@
         "type": "function",
         "z": "3bf36f2bd537dee3",
         "name": "Construir URL API",
-        "func": "let matricula = \"6425KWR\";   // <<< CAMBIA ESTO\n\nmsg.url = \"http://itvapi:8000/api?carPlate=\" + matricula;\nreturn msg;",
+        "func": "msg.url = \"http://itvapi:8000/api?carPlate=\" + msg.carPlate;\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -1048,7 +1054,7 @@
         "id": "045b96f1a06e805e",
         "type": "http request",
         "z": "3bf36f2bd537dee3",
-        "name": "GET etiqueta",
+        "name": "GET ITV",
         "method": "GET",
         "ret": "txt",
         "paytoqs": "ignore",
@@ -1060,7 +1066,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 690,
+        "x": 680,
         "y": 100,
         "wires": [
             [

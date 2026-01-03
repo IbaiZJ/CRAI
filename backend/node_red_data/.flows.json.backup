@@ -16,6 +16,14 @@
         "env": []
     },
     {
+        "id": "3bf36f2bd537dee3",
+        "type": "tab",
+        "label": "Backend",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "64608cd93cad35de",
         "type": "subflow",
         "name": "Web Registration",
@@ -995,6 +1003,89 @@
         "info": "ES\nEste flujo recibe alertas por POST /alerts, parsea el JSON y enruta por tipo. Si es ITV y está caducada o próxima, construye y envía un email y un aviso por Telegram; si es POLICE, envía un aviso por Telegram. El resto de alertas se muestran en debug.\n\nEN \nThis flow receives alerts via POST /alerts, parses the JSON, and routes by type. If it is ITV and expired or near expiry, it builds and sends an email and a Telegram notice; if it is POLICE, it sends a Telegram alert. Any other alerts are shown in debug.",
         "x": 230,
         "y": 880,
+        "wires": []
+    },
+    {
+        "id": "cdf1c72662bf117f",
+        "type": "inject",
+        "z": "3bf36f2bd537dee3",
+        "name": "Consulta etiqueta",
+        "props": [
+            {
+                "p": "carPlate",
+                "v": "0163MRC",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 140,
+        "y": 100,
+        "wires": [
+            [
+                "9b43f1756f746aa6"
+            ]
+        ]
+    },
+    {
+        "id": "9b43f1756f746aa6",
+        "type": "function",
+        "z": "3bf36f2bd537dee3",
+        "name": "Construir URL API",
+        "func": "msg.url = \"http://itvapi:8000/api?carPlate=\" + msg.carPlate;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 100,
+        "wires": [
+            [
+                "045b96f1a06e805e"
+            ]
+        ]
+    },
+    {
+        "id": "045b96f1a06e805e",
+        "type": "http request",
+        "z": "3bf36f2bd537dee3",
+        "name": "GET etiqueta",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 690,
+        "y": 100,
+        "wires": [
+            [
+                "3e9aa4386d37b161"
+            ]
+        ]
+    },
+    {
+        "id": "3e9aa4386d37b161",
+        "type": "debug",
+        "z": "3bf36f2bd537dee3",
+        "name": "Resultado API",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 950,
+        "y": 100,
         "wires": []
     }
 ]
