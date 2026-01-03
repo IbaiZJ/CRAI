@@ -174,16 +174,6 @@
         "wires": []
     },
     {
-        "id": "84ddcaa84c0ee2c8",
-        "type": "comment",
-        "z": "a5406ced814d1895",
-        "name": "Manages web authentication tasks such as user login, account creation, credential validation, and session handling.",
-        "info": "",
-        "x": 470,
-        "y": 120,
-        "wires": []
-    },
-    {
         "id": "425769f2630a88db",
         "type": "http in",
         "z": "01df77f7ae4c4f86",
@@ -1070,7 +1060,7 @@
         "y": 100,
         "wires": [
             [
-                "3e9aa4386d37b161"
+                "d601febbf8cec9c0"
             ]
         ]
     },
@@ -1084,8 +1074,150 @@
         "console": false,
         "tostatus": false,
         "complete": "payload",
-        "x": 950,
+        "x": 1180,
         "y": 100,
+        "wires": []
+    },
+    {
+        "id": "d601febbf8cec9c0",
+        "type": "json",
+        "z": "3bf36f2bd537dee3",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 910,
+        "y": 100,
+        "wires": [
+            [
+                "a1b2c3d4e5f60789",
+                "3e9aa4386d37b161"
+            ]
+        ]
+    },
+    {
+        "id": "a1b2c3d4e5f60789",
+        "type": "switch",
+        "z": "3bf36f2bd537dee3",
+        "name": "ITV decision",
+        "property": "payload.itv_date",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "warning",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "none",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 5,
+        "x": 1090,
+        "y": 260,
+        "wires": [
+            [
+                "b0b1b2b3b4b5b6b7"
+            ],
+            [
+                "c0c1c2c3c4c5c6c7"
+            ],
+            [
+                "d0d1d2d3d4d5d6d7"
+            ],
+            [
+                "e0e1e2e3e4e5e6e7"
+            ],
+            [
+                "f0f1f2f3f4f5f6f7"
+            ]
+        ]
+    },
+    {
+        "id": "b0b1b2b3b4b5b6b7",
+        "type": "debug",
+        "z": "3bf36f2bd537dee3",
+        "name": "ITV OK (0)",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 1370,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "c0c1c2c3c4c5c6c7",
+        "type": "debug",
+        "z": "3bf36f2bd537dee3",
+        "name": "ITV caducada (1)",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 1390,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "d0d1d2d3d4d5d6d7",
+        "type": "debug",
+        "z": "3bf36f2bd537dee3",
+        "name": "ITV warning",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 1370,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "e0e1e2e3e4e5e6e7",
+        "type": "debug",
+        "z": "3bf36f2bd537dee3",
+        "name": "ITV none",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 1360,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "f0f1f2f3f4f5f6f7",
+        "type": "debug",
+        "z": "3bf36f2bd537dee3",
+        "name": "ITV other",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 1360,
+        "y": 340,
         "wires": []
     }
 ]
