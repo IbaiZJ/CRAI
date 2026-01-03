@@ -16,6 +16,14 @@
         "env": []
     },
     {
+        "id": "3bf36f2bd537dee3",
+        "type": "tab",
+        "label": "Backend",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "64608cd93cad35de",
         "type": "subflow",
         "name": "Web Registration",
@@ -55,9 +63,9 @@
         "verboselogging": false
     },
     {
-        "id": "2c6f0c9a010f04a0",
+        "id": "389e871481694f64",
         "type": "MySQLdatabase",
-        "name": "",
+        "name": "mysql",
         "host": "mysql",
         "port": "3306",
         "db": "crai",
@@ -110,10 +118,10 @@
         "id": "c95ef74f78e9ac1f",
         "type": "mysql",
         "z": "a5406ced814d1895",
-        "mydb": "2c6f0c9a010f04a0",
-        "name": "mysql",
-        "x": 470,
-        "y": 500,
+        "mydb": "389e871481694f64",
+        "name": "MySQL Docker",
+        "x": 380,
+        "y": 200,
         "wires": [
             [
                 "8050d46f8bb52965"
@@ -141,8 +149,8 @@
         "topic": "SELECT 1;",
         "payload": "",
         "payloadType": "str",
-        "x": 290,
-        "y": 500,
+        "x": 170,
+        "y": 200,
         "wires": [
             [
                 "c95ef74f78e9ac1f"
@@ -161,8 +169,18 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 740,
-        "y": 500,
+        "x": 620,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "84ddcaa84c0ee2c8",
+        "type": "comment",
+        "z": "a5406ced814d1895",
+        "name": "Manages web authentication tasks such as user login, account creation, credential validation, and session handling.",
+        "info": "",
+        "x": 470,
+        "y": 120,
         "wires": []
     },
     {
@@ -985,6 +1003,83 @@
         "info": "ES\nEste flujo recibe alertas por POST /alerts, parsea el JSON y enruta por tipo. Si es ITV y está caducada o próxima, construye y envía un email y un aviso por Telegram; si es POLICE, envía un aviso por Telegram. El resto de alertas se muestran en debug.\n\nEN \nThis flow receives alerts via POST /alerts, parses the JSON, and routes by type. If it is ITV and expired or near expiry, it builds and sends an email and a Telegram notice; if it is POLICE, it sends a Telegram alert. Any other alerts are shown in debug.",
         "x": 230,
         "y": 880,
+        "wires": []
+    },
+    {
+        "id": "cdf1c72662bf117f",
+        "type": "inject",
+        "z": "3bf36f2bd537dee3",
+        "name": "Consulta etiqueta",
+        "props": [],
+        "repeat": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 100,
+        "wires": [
+            [
+                "9b43f1756f746aa6"
+            ]
+        ]
+    },
+    {
+        "id": "9b43f1756f746aa6",
+        "type": "function",
+        "z": "3bf36f2bd537dee3",
+        "name": "Construir URL API",
+        "func": "let matricula = \"6425KWR\";   // <<< CAMBIA ESTO\n\nmsg.url = \"http://itvapi:8000/api?carPlate=\" + matricula;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 100,
+        "wires": [
+            [
+                "045b96f1a06e805e"
+            ]
+        ]
+    },
+    {
+        "id": "045b96f1a06e805e",
+        "type": "http request",
+        "z": "3bf36f2bd537dee3",
+        "name": "GET etiqueta",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 690,
+        "y": 100,
+        "wires": [
+            [
+                "3e9aa4386d37b161"
+            ]
+        ]
+    },
+    {
+        "id": "3e9aa4386d37b161",
+        "type": "debug",
+        "z": "3bf36f2bd537dee3",
+        "name": "Resultado API",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 950,
+        "y": 100,
         "wires": []
     }
 ]

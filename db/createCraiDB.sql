@@ -2,6 +2,11 @@ drop database if exists `crai`;
 create database `crai`;
 use `crai`;
 
+-- Ensure application user exists even if root creates the schema
+CREATE USER IF NOT EXISTS 'crai_user'@'%' IDENTIFIED BY 'crai_pass';
+GRANT ALL PRIVILEGES ON `crai`.* TO 'crai_user'@'%';
+FLUSH PRIVILEGES;
+
 CREATE TABLE UserType (
     userTypeId INT AUTO_INCREMENT PRIMARY KEY,
     nameTyme VARCHAR(50) NOT NULL
