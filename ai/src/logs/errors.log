@@ -1,0 +1,7 @@
+[2026-01-05 23:32:04] [[31mERROR[0m] [logger.py:128] 
+Unexpected error: name 'current_fps' is not defined
+Traceback (most recent call last):
+  File "C:\Users\iibai\projects\CRAI\ai\src\main.py", line 302, in main
+    f"FPS: {current_fps}" if show_fps else None,
+            ^^^^^^^^^^^
+NameError: name 'current_fps' is not defined
