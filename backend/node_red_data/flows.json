@@ -680,8 +680,8 @@
         "id": "d42b61f843663589",
         "type": "http request",
         "z": "01df77f7ae4c4f86",
-        "name": "POST /admin/update",
-        "method": "POST",
+        "name": "PUT /admin/update",
+        "method": "PUT",
         "ret": "obj",
         "paytoqs": "ignore",
         "url": "http://os:8080/admin/update",
@@ -692,7 +692,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 1140,
+        "x": 1130,
         "y": 220,
         "wires": [
             [
@@ -993,6 +993,73 @@
         "info": "ES\nEste flujo recibe alertas por POST /alerts, parsea el JSON y enruta por tipo. Si es ITV y está caducada o próxima, construye y envía un email y un aviso por Telegram; si es POLICE, envía un aviso por Telegram. El resto de alertas se muestran en debug.\n\nEN \nThis flow receives alerts via POST /alerts, parses the JSON, and routes by type. If it is ITV and expired or near expiry, it builds and sends an email and a Telegram notice; if it is POLICE, it sends a Telegram alert. Any other alerts are shown in debug.",
         "x": 230,
         "y": 880,
+        "wires": []
+    },
+    {
+        "id": "b7f38f3f8a8b6f10",
+        "type": "inject",
+        "z": "01df77f7ae4c4f86",
+        "name": "Clear alerts",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 150,
+        "y": 780,
+        "wires": [
+            [
+                "b13ab7f2e44ef2a2"
+            ]
+        ]
+    },
+    {
+        "id": "b13ab7f2e44ef2a2",
+        "type": "http request",
+        "z": "01df77f7ae4c4f86",
+        "name": "DELETE /police/alerts",
+        "method": "DELETE",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://os:8080/police/alerts",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 440,
+        "y": 780,
+        "wires": [
+            [
+                "f3d8a2f9f8e46d40"
+            ]
+        ]
+    },
+    {
+        "id": "f3d8a2f9f8e46d40",
+        "type": "debug",
+        "z": "01df77f7ae4c4f86",
+        "name": "Clear alerts response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 720,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "0f2bc3273b5e7546",
+        "type": "comment",
+        "z": "01df77f7ae4c4f86",
+        "name": "Flow to delete alerts",
+        "info": "",
+        "x": 150,
+        "y": 720,
         "wires": []
     },
     {

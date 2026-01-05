@@ -10,6 +10,7 @@ import java.util.function.IntPredicate;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,19 +38,19 @@ public class ControlController {
         this.cameraPoolService = cameraPoolService;
     }
 
-    @PostMapping("/ocr-delay")
+    @PutMapping("/ocr-delay")
     public String setDelay(@RequestParam int ms) {
         config.setOcrDelayMs(ms);
         return "OCR delay updated to " + ms + " ms";
     }
 
-    @PostMapping("/steal-prob")
+    @PutMapping("/steal-prob")
     public String setStealProb(@RequestParam double prob) {
         config.setStolenProbability(prob);
         return "Stolen probability updated to " + prob;
     }
 
-    @PostMapping("/itv-prob")
+    @PutMapping("/itv-prob")
     public String setItvProb(@RequestParam double prob) {
         config.setItvFailProbability(prob);
         return "ITV fail probability updated to " + prob;
@@ -64,26 +65,26 @@ public class ControlController {
                 CAMERA_COUNT, config.getCameraCount());
     }
 
-    @PostMapping("/cameras")
+    @PutMapping("/cameras")
     public String updateCameras(@RequestParam int count) {
         config.setCameraCount(count);
         cameraPoolService.resizeCameraPool(count);
         return " Camera count updated to " + count;
     }
 
-    @PostMapping("/vehicles-per-cycle")
+    @PutMapping("/vehicles-per-cycle")
     public String setVehiclesPerCycle(@RequestParam int n) {
         config.setVehiclesPerCycle(n);
         return " Vehicles per cycle updated to " + n;
     }
 
-    @PostMapping("/vehicle-interval")
+    @PutMapping("/vehicle-interval")
     public String setInterval(@RequestParam int ms) {
         config.setVehicleIntervalMs(ms);
         return " Vehicle generator interval updated to " + ms + " ms";
     }
 
-    @PostMapping(value = "/update",
+    @PutMapping(value = "/update",
             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public Map<String, Object> updateSim(@RequestBody Map<String, Object> params) {

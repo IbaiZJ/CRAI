@@ -117,4 +117,9 @@ public class PoliceService {
     public List<PoliceMessage> getProcessedAlerts() {
         return List.copyOf(processed);
     }
+
+    public void clearAlerts() {
+        queue.clear();
+        processed.clear();
+    }
 }

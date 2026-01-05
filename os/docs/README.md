@@ -1,67 +1,179 @@
-# Documentacion del proyecto CRAI
+# CRAI OS - Documentacion para principiantes
 
-Guia de arquitectura, endpoints, ejecucion, integracion con Node-RED, pruebas y diagramas.
+Esta carpeta explica TODO el modulo OS (el simulador). Esta escrito para alguien que no sabe nada del tema.
 
-## 1. Arquitectura y flujo
-- **Dominios principales**: `Vehicle` (matricula, prioridad, envTag, flags alerta/robo/itv) y `PoliceMessage` (BADGE/ITV/POLICE).
-- **Paso de mensajes**: cola acotada de camaras (`BoundedPriorityBlockingQueue<Vehicle>`) y cola de policia (`LinkedBlockingQueue<PoliceMessage>`). Productores: `VehicleSpawnerService` o `/vehicle/send`; consumidores: workers de `CameraPoolService` -> `PoliceService`.
-- **Validaciones en camara**: etiqueta ambiental, ITV, vehiculo robado/alerta. Ante infraccion se emite `PoliceMessage`.
-- **Procesado en policia**: un worker consume la cola, guarda historico y puede reenviar por log/webhook HTTP (Node-RED).
-- **Configuracion en caliente**: `SimulationConfig` (volatile) y `SimulationState` (synchronized) controlan probabilidades, retrasos de OCR, numero de camaras, intervalo y flag running.
+## 1) Idea general (que hace esto)
+- Simula coches pasando por camaras.
+- Mira si el coche cumple reglas (ITV, etiqueta ambiental, robo).
+- Si hay problema, crea una alerta.
+- Envia la alerta a Node-RED por un webhook.
 
-## 2. Endpoints REST (resumen)
-- `/simulation/start|stop|status` (GET/POST): controla o consulta ejecucion.
-- `/admin/status`: JSON con configuracion activa.
-- `/admin/update`: cambia varios parametros (camaras, probabilidades, delays, intervalo, vehiclesPerCycle).
-- Endpoints individuales: `/admin/cameras`, `/admin/vehicles-per-cycle`, `/admin/vehicle-interval`, `/admin/ocr-delay`, `/admin/steal-prob`, `/admin/itv-prob`.
-- `/vehicle/send`: encola un vehiculo manual.
-- `/camera/status`: tamano de cola y workers activos.
-- `/police/alerts`: historico de alertas procesadas.
+## 2) Flujo sencillo (en palabras simples)
+1) Entra un coche (creado automaticamente o enviado por API).
+2) Se mete en una cola de camaras.
+3) Un hilo de camara lo procesa.
+4) Si hay infraccion, se crea un mensaje de policia.
+5) El mensaje se guarda y se envia a Node-RED.
 
-## 3. Ejecucion local
+## 3) Integracion con Node-RED (bidireccional)
+- Node-RED llama al OS para arrancar, parar y cambiar parametros.
+- El OS envia alertas a Node-RED en `/alerts` por webhook.
+
+## 4) Endpoints REST (lo que puedes llamar)
+
+### Simulacion
+- `POST /simulation/start`
+- `POST /simulation/stop`
+- `GET /simulation/status`
+
+### Configuracion (PUT)
+- `PUT /admin/update` (varios parametros a la vez)
+- `PUT /admin/ocr-delay`
+- `PUT /admin/steal-prob`
+- `PUT /admin/itv-prob`
+- `PUT /admin/cameras`
+- `PUT /admin/vehicles-per-cycle`
+- `PUT /admin/vehicle-interval`
+- `GET /admin/status`
+
+### Vehiculos y alertas
+- `POST /vehicle/send`
+- `GET /police/alerts`
+- `DELETE /police/alerts` (vaciar alertas)
+
+## 5) Arranque rapido
+
 ```bash
-# Arrancar backend
+cd os
 mvn spring-boot:run
+```
 
-# Arrancar simulacion
+Ejemplos rapidos:
+
+```bash
 curl -X POST http://localhost:8080/simulation/start
-
-# Estado de simulacion
 curl http://localhost:8080/simulation/status
-```
-Config por defecto: webhook desactivado en tests; para Node-RED definir `node-red.webhook-url=http://localhost:1880/alerts` en `application.properties` o variable de entorno.
-
-## 4. Integracion Node-RED (email/Telegram)
-- Flujo de ejemplo: `docs/node-red/enviar-email..json`.
-- Nodo HTTP IN `/alerts` recibe `type` (ITV/POLICE), `plate`, `description`, `recipientEmail`, `chatId`.
-- ITV caducada -> email (SMTP Gmail) y Telegram; robado/badge -> Telegram. Configura credenciales SMTP y `chatId` del bot.
-- Prueba rapida:
-```
-curl -X POST http://localhost:1880/alerts \
-  -H "Content-Type: application/json" \
-  -d '{"type":"ITV","plate":"1234ABC","description":"ITV CADUCADA del vehiculo 1234ABC","recipientEmail":"tucorreo@dominio.com","chatId":123456789}'
+curl -X PUT http://localhost:8080/admin/update -H "Content-Type: application/json" \
+  -d "{\"cameraCount\":3,\"stolenProbability\":0.05}"
+curl -X DELETE http://localhost:8080/police/alerts
 ```
 
-## 5. Concurrencia y diseno
-- Colas bloqueantes para backpressure y desacoplo.
-- `SimulationState` sincronizado; `SimulationConfig` con `volatile` para visibilidad.
-- Documentacion detallada: `message-passing-monitoring.md` (colas vs locks) y `monitoring-control.md` (consultar/editar en runtime).
-- Diagramas en este directorio (PlantUML): `class.puml`, `sequence.puml`, `state.puml`, `deployment.puml`, `useCase.puml`.
+## 6) Configuracion basica
+En `src/main/resources/application.properties`:
+- `node-red.webhook-url=http://backend:1880/alerts`
 
-## 6. Pruebas y cobertura
-- Ejecutar: `mvn test`.
-- JaCoCo configurado en `pom.xml` (prepare-agent + report). Reporte: `target/site/jacoco/index.html`.
-- Suites clave: `CameraPoliceIntegrationTest`, `PriorityOrderingTest`, `DomainRulesTest`, servicios, utilidades y repositorios.
+En local puedes usar:
+- `node-red.webhook-url=http://localhost:1880/alerts`
 
-## 7. Estructura
-- `src/main/java/com/crai/os/...`: codigo de dominio, servicios, config.
-- `src/test/java/com/crai/os/...`: pruebas unitarias e integracion.
-- `docs/`: este README, diagramas PlantUML y flujos Node-RED.
-- `pom.xml`: dependencias y plugins (Spring Boot, JaCoCo).
+## 7) Estructura del codigo (explicacion clase por clase)
 
-## 8. Notas de operacion
-- Ajusta `application.properties` o variables para:
-  - `server.port`
-  - `node-red.webhook-url`
-  - Credenciales SMTP en Node-RED para email.
-- En entorno sin Node-RED, deja el webhook vacio para evitar errores de conexion.
+### 7.1 Paquete principal
+- `os/src/main/java/com/crai/os/OsApplication.java`
+  - Es el punto de entrada de Spring Boot.
+  - Arranca la aplicacion y guarda el contexto para tests.
+
+### 7.2 Configuracion
+- `os/src/main/java/com/crai/os/config/AppConfig.java`
+  - Crea beans simples (LoggingUtils y VehicleMapper).
+  - Es un sitio donde declaras objetos compartidos.
+- `os/src/main/java/com/crai/os/config/SimulationConfig.java`
+  - Guarda todos los parametros de simulacion (camaras, delays, probabilidades).
+  - Tiene getters y setters para cambiar valores en caliente.
+  - Guarda la URL del webhook de Node-RED.
+
+### 7.3 Controladores (API REST)
+- `os/src/main/java/com/crai/os/controller/SimulationController.java`
+  - Endpoints para arrancar, parar y ver estado.
+  - Llama a `SimulationService`.
+- `os/src/main/java/com/crai/os/controller/ControlController.java`
+  - Endpoints para cambiar parametros (PUT).
+  - Valida que los valores sean correctos.
+  - Si algo es invalido, devuelve errores.
+- `os/src/main/java/com/crai/os/controller/VehicleController.java`
+  - Recibe un vehiculo por API y lo mete en la cola.
+  - Llama a `CameraPoolService`.
+- `os/src/main/java/com/crai/os/controller/CameraController.java`
+  - Devuelve estado de la cola y numero de camaras activas.
+- `os/src/main/java/com/crai/os/controller/PoliceController.java`
+  - Devuelve alertas procesadas.
+  - Permite vaciar alertas (DELETE).
+
+### 7.4 Modelos (datos simples)
+- `os/src/main/java/com/crai/os/model/Vehicle.java`
+  - Representa un coche: matricula, prioridad, etiqueta, robo, etc.
+  - Implementa Comparable para que los coches con mas prioridad vayan primero.
+- `os/src/main/java/com/crai/os/model/VehicleEvent.java`
+  - Un evento simple con matricula y tiempo.
+- `os/src/main/java/com/crai/os/model/Owner.java`
+  - Informacion basica del propietario (matricula, email, nombre).
+- `os/src/main/java/com/crai/os/model/PoliceMessage.java`
+  - Mensaje de alerta (tipo, matricula, descripcion, email).
+- `os/src/main/java/com/crai/os/model/PoliceMessageFactory.java`
+  - Crea mensajes de alerta con texto ya preparado.
+  - Evita repetir logica en varios sitios.
+- `os/src/main/java/com/crai/os/model/ITVRecord.java`
+  - Guarda la fecha de caducidad ITV de una matricula.
+- `os/src/main/java/com/crai/os/model/ITVStatus.java`
+  - Enum con estados ITV (VALID, EXPIRED, etc).
+- `os/src/main/java/com/crai/os/model/AlertType.java`
+  - Enum con tipos de alerta (POLICE, ITV, BADGE).
+- `os/src/main/java/com/crai/os/model/SimulationState.java`
+  - Guarda si la simulacion esta corriendo o no.
+  - Es sincronizado para evitar problemas entre hilos.
+
+### 7.5 Repositorios (memoria)
+- `os/src/main/java/com/crai/os/repository/ITVRepository.java`
+  - Guarda ITVRecord en memoria (ConcurrentHashMap).
+  - Sirve como base de datos sencilla para la simulacion.
+- `os/src/main/java/com/crai/os/repository/OwnerRepository.java`
+  - Guarda propietarios y matrículas de ejemplo.
+  - Se usa para enviar email en alertas de ITV.
+
+### 7.6 Servicios (logica de negocio)
+- `os/src/main/java/com/crai/os/service/SimulationService.java`
+  - Enciende o apaga la simulacion.
+- `os/src/main/java/com/crai/os/service/VehicleSpawnerService.java`
+  - Crea vehiculos automaticamente cada cierto tiempo.
+  - Solo funciona si la simulacion esta "running".
+- `os/src/main/java/com/crai/os/service/CameraPoolService.java`
+  - Tiene una cola de vehiculos y un pool de hilos (camaras).
+  - Cada hilo saca un vehiculo y aplica reglas.
+  - Si hay problema, genera alerta y la envia.
+- `os/src/main/java/com/crai/os/service/ITVService.java`
+  - Comprueba ITV de un coche.
+  - Si no hay datos, crea un registro aleatorio y lo guarda.
+- `os/src/main/java/com/crai/os/service/PoliceService.java`
+  - Recibe alertas y las guarda.
+  - Envia alertas a Node-RED en segundo plano.
+  - Permite borrar alertas.
+- `os/src/main/java/com/crai/os/service/OCRService.java`
+  - Simula un OCR sencillo (devuelve una matricula fija).
+  - Ahora es un mock para pruebas.
+- `os/src/main/java/com/crai/os/service/AlertFilterService.java`
+  - Decide si una alerta se debe enviar o no (ahora solo POLICE).
+
+### 7.7 Utilidades
+- `os/src/main/java/com/crai/os/utils/BoundedPriorityBlockingQueue.java`
+  - Cola con prioridad y limite de tamaño.
+  - Si esta llena, espera; si esta vacia, espera.
+- `os/src/main/java/com/crai/os/utils/RandomVehicleGenerator.java`
+  - Genera coches aleatorios con probabilidades.
+- `os/src/main/java/com/crai/os/utils/SpanishPlateGenerator.java`
+  - Genera matriculas españolas aleatorias.
+- `os/src/main/java/com/crai/os/utils/VehicleMapper.java`
+  - Convierte un Vehicle en un VehicleEvent.
+- `os/src/main/java/com/crai/os/utils/LoggingUtils.java`
+  - Logger muy simple (System.out).
+
+### 7.8 Excepciones
+- `os/src/main/java/com/crai/os/exception/VehicleQueueException.java`
+  - Se lanza si algo falla al meter un coche en la cola.
+
+## 8) Pruebas
+- Ejecutar: `mvn test`
+- Reporte: `os/target/site/jacoco/index.html`
+
+## 9) Resumen muy corto
+- OS simula coches y genera alertas.
+- Node-RED lo controla y recibe alertas.
+- Todo esta dividido en controladores (API), servicios (logica), modelos (datos) y utilidades.

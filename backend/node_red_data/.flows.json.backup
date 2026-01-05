@@ -680,8 +680,8 @@
         "id": "d42b61f843663589",
         "type": "http request",
         "z": "01df77f7ae4c4f86",
-        "name": "POST /admin/update",
-        "method": "POST",
+        "name": "PUT /admin/update",
+        "method": "PUT",
         "ret": "obj",
         "paytoqs": "ignore",
         "url": "http://os:8080/admin/update",
@@ -692,7 +692,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 1140,
+        "x": 1130,
         "y": 220,
         "wires": [
             [
@@ -996,6 +996,63 @@
         "wires": []
     },
     {
+        "id": "b7f38f3f8a8b6f10",
+        "type": "inject",
+        "z": "01df77f7ae4c4f86",
+        "name": "Clear alerts",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 150,
+        "y": 720,
+        "wires": [
+            [
+                "b13ab7f2e44ef2a2"
+            ]
+        ]
+    },
+    {
+        "id": "b13ab7f2e44ef2a2",
+        "type": "http request",
+        "z": "01df77f7ae4c4f86",
+        "name": "DELETE /police/alerts",
+        "method": "DELETE",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://os:8080/police/alerts",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 440,
+        "y": 720,
+        "wires": [
+            [
+                "f3d8a2f9f8e46d40"
+            ]
+        ]
+    },
+    {
+        "id": "f3d8a2f9f8e46d40",
+        "type": "debug",
+        "z": "01df77f7ae4c4f86",
+        "name": "Clear alerts response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 720,
+        "y": 720,
+        "wires": []
+    },
+    {
         "id": "cdf1c72662bf117f",
         "type": "inject",
         "z": "3bf36f2bd537dee3",
@@ -1156,13 +1213,13 @@
         "z": "3bf36f2bd537dee3",
         "name": "ITV OK (0)",
         "active": true,
-        "tosidebar": false,
+        "tosidebar": true,
         "console": false,
-        "tostatus": true,
+        "tostatus": false,
         "complete": "payload",
         "targetType": "msg",
-        "statusVal": "m,dfb-",
-        "statusType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
         "x": 470,
         "y": 180,
         "wires": []
