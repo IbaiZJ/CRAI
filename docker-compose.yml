@@ -115,7 +115,6 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./db/createCraiDB.sql:/docker-entrypoint-initdb.d/01_createCraiDB.sql:ro
-      - ./db/seed.sql:/docker-entrypoint-initdb.d/02_seed.sql:ro
     networks:
       - app-network
     restart: unless-stopped
