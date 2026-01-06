@@ -199,13 +199,50 @@
         "property": "payload",
         "action": "obj",
         "pretty": false,
-        "x": 350,
+        "x": 330,
+        "y": 1020,
+        "wires": [
+            [
+                "f4e2b1b9c8a9d3e1"
+            ]
+        ]
+    },
+    {
+        "id": "f4e2b1b9c8a9d3e1",
+        "type": "function",
+        "z": "01df77f7ae4c4f86",
+        "name": "Validate Alert Schema",
+        "func": "const schema = {\n    type: \"object\",\n    required: [\"type\", \"plate\", \"description\"],\n    properties: {\n        type: { type: \"string\", enum: [\"ITV\", \"POLICE\", \"BADGE\"] },\n        plate: { type: \"string\" },\n        description: { type: \"string\" },\n        recipientEmail: { type: [\"string\", \"null\"] },\n        chatId: { type: [\"number\", \"string\", \"null\"] }\n    }\n};\n\nconst p = msg.payload || {};\nconst errors = [];\n\nschema.required.forEach((key) => {\n    if (p[key] === undefined) errors.push(`Missing required field: ${key}`);\n});\n\nif (p.type !== undefined && !schema.properties.type.enum.includes(p.type)) {\n    errors.push(`Invalid type: ${p.type}`);\n}\n\n[\"plate\", \"description\"].forEach((key) => {\n    if (p[key] !== undefined && typeof p[key] !== \"string\") {\n        errors.push(`Field ${key} must be a string`);\n    }\n});\n\nif (p.recipientEmail !== undefined && p.recipientEmail !== null && typeof p.recipientEmail !== \"string\") {\n    errors.push(\"recipientEmail must be string or null\");\n}\n\nif (p.chatId !== undefined && p.chatId !== null && typeof p.chatId !== \"number\" && typeof p.chatId !== \"string\") {\n    errors.push(\"chatId must be number, string, or null\");\n}\n\nif (errors.length > 0) {\n    msg.payload = { error: \"Schema validation failed\", details: errors, received: p };\n    return [null, msg];\n}\n\nreturn [msg, null];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
         "y": 1020,
         "wires": [
             [
                 "3280259e0b919d43"
+            ],
+            [
+                "a2f0f51f7d2a4c3e"
             ]
         ]
+    },
+    {
+        "id": "a2f0f51f7d2a4c3e",
+        "type": "debug",
+        "z": "01df77f7ae4c4f86",
+        "name": "Invalid alert",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 750,
+        "y": 940,
+        "wires": []
     },
     {
         "id": "913e446c8e8bbdb9",
@@ -769,7 +806,7 @@
         "checkall": "true",
         "outputs": 3,
         "x": 510,
-        "y": 1020,
+        "y": 1160,
         "wires": [
             [
                 "23932db24f1c5301"
@@ -788,15 +825,16 @@
         "z": "01df77f7ae4c4f86",
         "name": "ITV status",
         "property": "payload.description",
+        "propertyType": "msg",
         "rules": [
             {
                 "t": "cont",
-                "v": "CADUCADA",
+                "v": "expired",
                 "vt": "str"
             },
             {
                 "t": "cont",
-                "v": "proxima",
+                "v": "expiring",
                 "vt": "str"
             },
             {
@@ -804,9 +842,10 @@
             }
         ],
         "checkall": "true",
+        "repair": false,
         "outputs": 3,
-        "x": 710,
-        "y": 1020,
+        "x": 760,
+        "y": 1060,
         "wires": [
             [
                 "b010632ce9ea2afd",
@@ -832,7 +871,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 910,
+        "x": 1030,
         "y": 1020,
         "wires": [
             [
@@ -853,8 +892,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 980,
-        "y": 860,
+        "x": 1120,
+        "y": 820,
         "wires": [
             [
                 "083d998fbb5dde7a"
@@ -927,7 +966,7 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1100,
+        "x": 1200,
         "y": 980,
         "wires": []
     },
@@ -944,7 +983,7 @@
         "tls": false,
         "name": "",
         "dname": "Send email",
-        "x": 1110,
+        "x": 1230,
         "y": 1060,
         "wires": []
     },
