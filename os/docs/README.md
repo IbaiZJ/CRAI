@@ -323,7 +323,17 @@ This simulates **real industrial integration**.
 
 ---
 
-## 10. Testing and Validation
+## 10. Schema validation (message format)
+
+To ensure alerts follow an agreed format between systems, a JSON Schema is provided:
+
+- `os/docs/schemas/police-message.schema.json`
+
+Node-RED validates incoming alerts against this schema before processing.
+
+---
+
+## 11. Testing and Validation
 
 The system includes automated tests:
 
