@@ -788,15 +788,16 @@
         "z": "01df77f7ae4c4f86",
         "name": "ITV status",
         "property": "payload.description",
+        "propertyType": "msg",
         "rules": [
             {
                 "t": "cont",
-                "v": "CADUCADA",
+                "v": "expired",
                 "vt": "str"
             },
             {
                 "t": "cont",
-                "v": "proxima",
+                "v": "expiring",
                 "vt": "str"
             },
             {
@@ -804,6 +805,7 @@
             }
         ],
         "checkall": "true",
+        "repair": false,
         "outputs": 3,
         "x": 710,
         "y": 1020,

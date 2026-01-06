@@ -1007,7 +1007,7 @@
         "onceDelay": 0.1,
         "topic": "",
         "x": 150,
-        "y": 720,
+        "y": 780,
         "wires": [
             [
                 "b13ab7f2e44ef2a2"
@@ -1031,7 +1031,7 @@
         "senderr": false,
         "headers": [],
         "x": 440,
-        "y": 720,
+        "y": 780,
         "wires": [
             [
                 "f3d8a2f9f8e46d40"
@@ -1049,6 +1049,16 @@
         "tostatus": false,
         "complete": "payload",
         "x": 720,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "0f2bc3273b5e7546",
+        "type": "comment",
+        "z": "01df77f7ae4c4f86",
+        "name": "Flow to delete alerts",
+        "info": "",
+        "x": 150,
         "y": 720,
         "wires": []
     },

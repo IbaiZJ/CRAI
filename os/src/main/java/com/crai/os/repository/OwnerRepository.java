@@ -11,25 +11,29 @@ import com.crai.os.model.Owner;
 public class OwnerRepository {
 
     private final Map<String, Owner> owners = new ConcurrentHashMap<>();
+    private final Owner[] rangeOwners;
 
     public OwnerRepository() {
-        // Datos de ejemplo; ampliados para que haya matrículas aleatorias con destinatarios.
-        // Matrículas en formato español (#### + 3 consonantes)
+        // Default owners used for fixed range assignment (0000-9999).
+        rangeOwners = new Owner[] {
+                new Owner("0000AAA", "ibai.zorrilla@alumni.mondragon.edu", "Ibai Zorrilla"),
+                new Owner("0000BBB", "aitor.mirguzurl@alumni.mondragon.edu", "Aitor Murguzur"),
+                new Owner("0000CCC", "alex.zabaleta@alumni.mondragon.edu", "Alex Zabaleta"),
+                new Owner("0000DDD", "aitor.ortiz@alumni.mondragon.edu", "Aitor Ortiz")
+        };
+
+        // Sample owners for specific plates (optional explicit overrides).
         addOwners("Ibai Zorrilla", "ibai.zorrilla@alumni.mondragon.edu",
-                "1234BCD", "2345BCF", "3456BFG", "4567BHK", "5678CLM",
-                "6789DFG", "7890GHJ", "8901JKL", "9012MNP", "0123RST");
+                "1234BCD", "2345BCF", "3456BFG");
 
         addOwners("Aitor Murguzur", "aitor.mirguzurl@alumni.mondragon.edu",
-                "1111BCF", "2222CGH", "3333DFJ", "4444FGK", "5555GLM",
-                "6666HNP", "7777JKL", "8888LMN", "9999PRS", "0000STV");
+                "1111BCF", "2222CGH", "3333DFJ");
 
         addOwners("Alex Zabaleta", "alex.zabaleta@alumni.mondragon.edu",
-                "1357BCH", "2468DFK", "3579GHL", "4680JKP", "5791LMT",
-                "6802NPQ", "7913RST", "8024TVX", "9135WXY", "0246ZTR");
+                "1357BCH", "2468DFK", "3579GHL");
 
         addOwners("Aitor Ortiz", "aitor.ortiz@alumni.mondragon.edu",
-                "1023BCF", "2134CGK", "3245DFL", "4356FGM", "5467GHP",
-                "6578HJK", "7689JLM", "8790LMN", "9801MNP", "0912PRS");
+                "1023BCF", "2134CGK", "3245DFL");
     }
 
     private void addOwners(String name, String email, String... plates) {
@@ -38,12 +42,46 @@ public class OwnerRepository {
         }
     }
 
+    /*
+        0000–2499 → Ibai Zorrilla
+        2500–4999 → Aitor Murguzur
+        5000–7499 → Alex Zabaleta
+        7500–9999 → Aitor Ortiz
+    */
+
     public Owner findByPlate(String plate) {
-        return owners.get(plate);
+        Owner exact = owners.get(plate);
+        if (exact != null) {
+            return exact;
+        }
+
+        int number = parsePlateNumber(plate);
+        if (number < 0) {
+            return null;
+        }
+
+        int bucket = number / 2500; // 0-2499, 2500-4999, 5000-7499, 7500-9999
+        if (bucket < 0 || bucket >= rangeOwners.length) {
+            return null;
+        }
+
+        Owner base = rangeOwners[bucket];
+        return new Owner(plate, base.getEmail(), base.getName());
     }
 
     public void save(Owner owner) {
         owners.put(owner.getPlate(), owner);
+    }
+
+    private int parsePlateNumber(String plate) {
+        if (plate == null || plate.length() < 4) {
+            return -1;
+        }
+        try {
+            return Integer.parseInt(plate.substring(0, 4));
+        } catch (NumberFormatException ex) {
+            return -1;
+        }
     }
 }
 

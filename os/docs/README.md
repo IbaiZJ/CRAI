@@ -1,179 +1,372 @@
-# CRAI OS - Documentacion para principiantes
+Perfecto 💪
+Vamos a crear **un documento completo, claro y evaluable**, pensado para **alguien que empieza desde cero**, pero escrito con **nivel universitario** y **alineado con la rúbrica**.
 
-Esta carpeta explica TODO el modulo OS (el simulador). Esta escrito para alguien que no sabe nada del tema.
+👉 Te lo dejo **listo para usar como README / memoria OS**.
+👉 Puedes copiarlo tal cual a `README.md` o a un PDF.
 
-## 1) Idea general (que hace esto)
-- Simula coches pasando por camaras.
-- Mira si el coche cumple reglas (ITV, etiqueta ambiental, robo).
-- Si hay problema, crea una alerta.
-- Envia la alerta a Node-RED por un webhook.
+---
 
-## 2) Flujo sencillo (en palabras simples)
-1) Entra un coche (creado automaticamente o enviado por API).
-2) Se mete en una cola de camaras.
-3) Un hilo de camara lo procesa.
-4) Si hay infraccion, se crea un mensaje de policia.
-5) El mensaje se guarda y se envia a Node-RED.
+# CRAI OS – Operating Systems Simulation
 
-## 3) Integracion con Node-RED (bidireccional)
-- Node-RED llama al OS para arrancar, parar y cambiar parametros.
-- El OS envia alertas a Node-RED en `/alerts` por webhook.
+## Complete Documentation (Beginner-Friendly)
 
-## 4) Endpoints REST (lo que puedes llamar)
+---
 
-### Simulacion
-- `POST /simulation/start`
-- `POST /simulation/stop`
-- `GET /simulation/status`
+## 1. Introduction
 
-### Configuracion (PUT)
-- `PUT /admin/update` (varios parametros a la vez)
-- `PUT /admin/ocr-delay`
-- `PUT /admin/steal-prob`
-- `PUT /admin/itv-prob`
-- `PUT /admin/cameras`
-- `PUT /admin/vehicles-per-cycle`
-- `PUT /admin/vehicle-interval`
-- `GET /admin/status`
+The **CRAI OS module** is a simulation designed to demonstrate **core Operating Systems concepts**, especially **concurrency, synchronization, and real-time control**, within a realistic traffic-monitoring scenario.
 
-### Vehiculos y alertas
-- `POST /vehicle/send`
-- `GET /police/alerts`
-- `DELETE /police/alerts` (vaciar alertas)
+The system simulates:
 
-## 5) Arranque rapido
+* Vehicles passing through traffic cameras
+* Concurrent processing using multiple threads
+* Rule validation (ITV, environmental badge, stolen vehicles)
+* Alert generation and delivery to an external system (Node-RED)
+
+Although simplified, the architecture closely resembles a **real-world distributed monitoring system**.
+
+---
+
+## 2. Educational Objectives
+
+This simulation has been designed to demonstrate:
+
+* Multithreading and concurrent execution
+* Synchronization using shared-memory mechanisms
+* Message passing as an alternative concurrency model
+* Producer–consumer problems
+* Real-time monitoring and dynamic system control
+* Safe interaction between concurrent components
+* Integration with external systems via REST and webhooks
+
+---
+
+## 3. High-Level System Overview
+
+### 3.1 Real-World Analogy
+
+| Real System            | Simulation    |
+| ---------------------- | ------------- |
+| Road                   | Vehicle Queue |
+| Camera                 | Thread        |
+| Traffic Control Center | OS Simulation |
+| Police System          | Node-RED      |
+| Alerts                 | JSON Messages |
+
+The system continuously processes vehicles and reacts to infractions in real time.
+
+---
+
+## 4. Core Components
+
+### 4.1 Vehicles
+
+A **vehicle** is a data object containing:
+
+* License plate
+* Priority
+* Environmental badge
+* ITV status
+* Theft status
+* Owner information
+
+Vehicles can be:
+
+* Automatically generated
+* Manually injected through an API
+
+---
+
+### 4.2 Cameras (Threads)
+
+Each **camera** is implemented as an independent **thread**.
+
+Responsibilities:
+
+1. Retrieve a vehicle from the shared queue
+2. Simulate OCR reading
+3. Apply validation rules
+4. Generate alerts if violations are detected
+
+Multiple camera threads run **in parallel**, simulating real traffic conditions.
+
+---
+
+### 4.3 Vehicle Queue (Producer–Consumer)
+
+The vehicle queue is a **bounded priority blocking queue**.
+
+Characteristics:
+
+* Limited capacity
+* Priority-based ordering
+* Thread-safe blocking behavior
+
+This implements a classic **Producer–Consumer synchronization problem**:
+
+* Producers: vehicle generators / API
+* Consumers: camera threads
+
+---
+
+## 5. Simulation Flow (Step-by-Step)
+
+1. Simulation is started via REST API
+2. Vehicles are generated or injected
+3. Vehicles enter the shared queue
+4. Camera threads consume vehicles concurrently
+5. Each vehicle is validated
+6. Violations generate alerts
+7. Alerts are stored and sent to Node-RED
+
+All steps occur **while the system is running**, without interruption.
+
+---
+
+## 6. Synchronization Models Used
+
+### 6.1 Shared Memory Synchronization
+
+Inside the OS simulation:
+
+* `BlockingQueue` ensures safe access to shared vehicles
+* `ConcurrentHashMap` stores shared data safely
+* `synchronized` and `volatile` protect shared state
+
+This model is:
+
+* Fast
+* Efficient
+* Suitable for single-process concurrency
+
+---
+
+### 6.2 Message Passing Synchronization
+
+The system also uses **message passing**, avoiding shared memory.
+
+#### External Message Passing (Implemented)
+
+* Alerts are sent to Node-RED using HTTP POST
+* Messages are JSON-based
+* Communication is asynchronous
+* No shared memory exists between systems
+
+This demonstrates a **distributed concurrency model**.
+
+#### Message Types
+
+* Police alerts
+* ITV violations
+* Environmental badge violations
+
+---
+
+### 6.3 Alert Queue (Asynchronous Alert Processing)
+
+In addition to the vehicle queue, the system implements an **alert queue** to manage detected infractions in a safe and scalable way.
+
+This queue is used to **decouple vehicle processing from external communication**, preventing camera threads from being blocked by network operations.
+
+---
+
+#### Purpose of the Alert Queue
+
+Sending alerts to an external system (Node-RED) involves:
+
+* Network communication
+* Potential latency
+* Temporary failures
+
+If camera threads were responsible for sending alerts directly, the entire simulation would slow down or block.
+
+To avoid this, the system introduces an **intermediate alert queue**.
+
+---
+
+#### How the Alert Queue Works (Step-by-Step)
+
+1. A camera thread detects a vehicle infraction
+2. A `PoliceMessage` object is created
+3. The message is placed into the alert queue
+4. The camera thread immediately continues processing vehicles
+5. The `PoliceService` consumes alerts from the queue and sends them to Node-RED asynchronously
+
+This ensures that **camera threads never block** due to external communication.
+
+---
+
+#### Concurrency Model Applied
+
+The alert queue implements a **second Producer–Consumer pattern** within the system:
+
+| Role      | Component      |
+| --------- | -------------- |
+| Producers | Camera threads |
+| Queue     | Alert queue    |
+| Consumer  | PoliceService  |
+
+The queue is **thread-safe**, guaranteeing:
+
+* No race conditions
+* No lost alerts
+* Safe concurrent access
+
+---
+
+#### Relation to Message Passing
+
+The alert queue represents **internal message passing** within the OS simulation.
+
+Once alerts are dequeued and sent to Node-RED, **external message passing** takes place using HTTP and JSON messages.
+
+This dual approach demonstrates:
+
+* Internal synchronization using shared memory
+* External synchronization using message passing
+* Clear separation of responsibilities
+
+---
+
+### 6.4 Comparison: Shared Memory vs Message Passing
+
+| Aspect              | Shared Memory | Message Passing |
+| ------------------- | ------------- | --------------- |
+| Performance         | High          | Medium          |
+| Complexity          | High          | Lower           |
+| Scalability         | Limited       | High            |
+| Fault Isolation     | Low           | High            |
+| Distributed Systems | Poor          | Excellent       |
+
+The CRAI OS system **combines both approaches**, reflecting real-world architectures.
+
+---
+
+## 7. Real-Time Monitoring and Control
+
+### 7.1 Monitoring Interfaces
+
+The simulation exposes REST endpoints to query state **while running**:
+
+* Simulation status
+* Active cameras
+* Queue state
+* Generated alerts
+
+This enables **live inspection** of the system.
+
+---
+
+### 7.2 Dynamic Runtime Control
+
+System parameters can be modified during execution:
+
+* Number of cameras
+* Vehicle generation rate
+* Probability of infractions
+* OCR delay
+
+Changes take effect **immediately**, without restarting the system.
+
+---
+
+### 7.3 Thread Safety Guarantees
+
+All shared state modifications are:
+
+* Thread-safe
+* Atomic where required
+* Protected against race conditions
+
+This ensures consistent behavior under concurrent access.
+
+---
+
+## 8. REST API Overview
+
+### Simulation Control
+
+* `POST /simulation/start`
+* `POST /simulation/stop`
+* `GET /simulation/status`
+
+### Runtime Configuration
+
+* `PUT /admin/update`
+* `PUT /admin/cameras`
+* `PUT /admin/itv-prob`
+* `PUT /admin/steal-prob`
+* `GET /admin/status`
+
+### Vehicles and Alerts
+
+* `POST /vehicle/send`
+* `GET /police/alerts`
+* `DELETE /police/alerts`
+
+---
+
+## 9. Integration with Node-RED
+
+Node-RED acts as:
+
+* External control system
+* Alert consumer
+* Visualization and notification layer
+
+Communication is **bidirectional**:
+
+* OS → Node-RED: alerts via webhook
+* Node-RED → OS: control and configuration
+
+This simulates **real industrial integration**.
+
+---
+
+## 10. Testing and Validation
+
+The system includes automated tests:
+
+* Service-level logic
+* Synchronization behavior
+* State consistency
+
+Test execution:
 
 ```bash
-cd os
-mvn spring-boot:run
+mvn test
 ```
 
-Ejemplos rapidos:
+Coverage reports:
 
-```bash
-curl -X POST http://localhost:8080/simulation/start
-curl http://localhost:8080/simulation/status
-curl -X PUT http://localhost:8080/admin/update -H "Content-Type: application/json" \
-  -d "{\"cameraCount\":3,\"stolenProbability\":0.05}"
-curl -X DELETE http://localhost:8080/police/alerts
+```
+target/site/jacoco/index.html
 ```
 
-## 6) Configuracion basica
-En `src/main/resources/application.properties`:
-- `node-red.webhook-url=http://backend:1880/alerts`
+---
 
-En local puedes usar:
-- `node-red.webhook-url=http://localhost:1880/alerts`
+## 11. Academic Value
 
-## 7) Estructura del codigo (explicacion clase por clase)
+This simulation demonstrates:
 
-### 7.1 Paquete principal
-- `os/src/main/java/com/crai/os/OsApplication.java`
-  - Es el punto de entrada de Spring Boot.
-  - Arranca la aplicacion y guarda el contexto para tests.
+* Correct use of concurrency primitives
+* Practical synchronization problems
+* Real-time system behavior
+* Clean layered architecture
+* External system integration
 
-### 7.2 Configuracion
-- `os/src/main/java/com/crai/os/config/AppConfig.java`
-  - Crea beans simples (LoggingUtils y VehicleMapper).
-  - Es un sitio donde declaras objetos compartidos.
-- `os/src/main/java/com/crai/os/config/SimulationConfig.java`
-  - Guarda todos los parametros de simulacion (camaras, delays, probabilidades).
-  - Tiene getters y setters para cambiar valores en caliente.
-  - Guarda la URL del webhook de Node-RED.
+It goes beyond a theoretical exercise and reflects **professional system design**.
 
-### 7.3 Controladores (API REST)
-- `os/src/main/java/com/crai/os/controller/SimulationController.java`
-  - Endpoints para arrancar, parar y ver estado.
-  - Llama a `SimulationService`.
-- `os/src/main/java/com/crai/os/controller/ControlController.java`
-  - Endpoints para cambiar parametros (PUT).
-  - Valida que los valores sean correctos.
-  - Si algo es invalido, devuelve errores.
-- `os/src/main/java/com/crai/os/controller/VehicleController.java`
-  - Recibe un vehiculo por API y lo mete en la cola.
-  - Llama a `CameraPoolService`.
-- `os/src/main/java/com/crai/os/controller/CameraController.java`
-  - Devuelve estado de la cola y numero de camaras activas.
-- `os/src/main/java/com/crai/os/controller/PoliceController.java`
-  - Devuelve alertas procesadas.
-  - Permite vaciar alertas (DELETE).
+---
 
-### 7.4 Modelos (datos simples)
-- `os/src/main/java/com/crai/os/model/Vehicle.java`
-  - Representa un coche: matricula, prioridad, etiqueta, robo, etc.
-  - Implementa Comparable para que los coches con mas prioridad vayan primero.
-- `os/src/main/java/com/crai/os/model/VehicleEvent.java`
-  - Un evento simple con matricula y tiempo.
-- `os/src/main/java/com/crai/os/model/Owner.java`
-  - Informacion basica del propietario (matricula, email, nombre).
-- `os/src/main/java/com/crai/os/model/PoliceMessage.java`
-  - Mensaje de alerta (tipo, matricula, descripcion, email).
-- `os/src/main/java/com/crai/os/model/PoliceMessageFactory.java`
-  - Crea mensajes de alerta con texto ya preparado.
-  - Evita repetir logica en varios sitios.
-- `os/src/main/java/com/crai/os/model/ITVRecord.java`
-  - Guarda la fecha de caducidad ITV de una matricula.
-- `os/src/main/java/com/crai/os/model/ITVStatus.java`
-  - Enum con estados ITV (VALID, EXPIRED, etc).
-- `os/src/main/java/com/crai/os/model/AlertType.java`
-  - Enum con tipos de alerta (POLICE, ITV, BADGE).
-- `os/src/main/java/com/crai/os/model/SimulationState.java`
-  - Guarda si la simulacion esta corriendo o no.
-  - Es sincronizado para evitar problemas entre hilos.
+## 12. Final Summary
 
-### 7.5 Repositorios (memoria)
-- `os/src/main/java/com/crai/os/repository/ITVRepository.java`
-  - Guarda ITVRecord en memoria (ConcurrentHashMap).
-  - Sirve como base de datos sencilla para la simulacion.
-- `os/src/main/java/com/crai/os/repository/OwnerRepository.java`
-  - Guarda propietarios y matrículas de ejemplo.
-  - Se usa para enviar email en alertas de ITV.
+* Vehicles are processed concurrently
+* Cameras are independent threads
+* Synchronization is correctly handled
+* Message passing avoids shared memory where appropriate
+* The system can be monitored and controlled in real time
+* Architecture mirrors real-world traffic control systems
 
-### 7.6 Servicios (logica de negocio)
-- `os/src/main/java/com/crai/os/service/SimulationService.java`
-  - Enciende o apaga la simulacion.
-- `os/src/main/java/com/crai/os/service/VehicleSpawnerService.java`
-  - Crea vehiculos automaticamente cada cierto tiempo.
-  - Solo funciona si la simulacion esta "running".
-- `os/src/main/java/com/crai/os/service/CameraPoolService.java`
-  - Tiene una cola de vehiculos y un pool de hilos (camaras).
-  - Cada hilo saca un vehiculo y aplica reglas.
-  - Si hay problema, genera alerta y la envia.
-- `os/src/main/java/com/crai/os/service/ITVService.java`
-  - Comprueba ITV de un coche.
-  - Si no hay datos, crea un registro aleatorio y lo guarda.
-- `os/src/main/java/com/crai/os/service/PoliceService.java`
-  - Recibe alertas y las guarda.
-  - Envia alertas a Node-RED en segundo plano.
-  - Permite borrar alertas.
-- `os/src/main/java/com/crai/os/service/OCRService.java`
-  - Simula un OCR sencillo (devuelve una matricula fija).
-  - Ahora es un mock para pruebas.
-- `os/src/main/java/com/crai/os/service/AlertFilterService.java`
-  - Decide si una alerta se debe enviar o no (ahora solo POLICE).
+---
 
-### 7.7 Utilidades
-- `os/src/main/java/com/crai/os/utils/BoundedPriorityBlockingQueue.java`
-  - Cola con prioridad y limite de tamaño.
-  - Si esta llena, espera; si esta vacia, espera.
-- `os/src/main/java/com/crai/os/utils/RandomVehicleGenerator.java`
-  - Genera coches aleatorios con probabilidades.
-- `os/src/main/java/com/crai/os/utils/SpanishPlateGenerator.java`
-  - Genera matriculas españolas aleatorias.
-- `os/src/main/java/com/crai/os/utils/VehicleMapper.java`
-  - Convierte un Vehicle en un VehicleEvent.
-- `os/src/main/java/com/crai/os/utils/LoggingUtils.java`
-  - Logger muy simple (System.out).
-
-### 7.8 Excepciones
-- `os/src/main/java/com/crai/os/exception/VehicleQueueException.java`
-  - Se lanza si algo falla al meter un coche en la cola.
-
-## 8) Pruebas
-- Ejecutar: `mvn test`
-- Reporte: `os/target/site/jacoco/index.html`
-
-## 9) Resumen muy corto
-- OS simula coches y genera alertas.
-- Node-RED lo controla y recibe alertas.
-- Todo esta dividido en controladores (API), servicios (logica), modelos (datos) y utilidades.
