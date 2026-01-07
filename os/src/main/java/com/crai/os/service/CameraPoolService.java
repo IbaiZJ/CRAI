@@ -1,8 +1,11 @@
 package com.crai.os.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -34,6 +37,7 @@ public class CameraPoolService {
     private final PoliceService policeService;
     private final SimulationConfig config;
     private final OwnerRepository ownerRepository;
+    private final List<Future<?>> workers;
 
     private volatile int cameraCount;
     private final ThreadFactory cameraFactory;
@@ -58,15 +62,16 @@ public class CameraPoolService {
             return t;
         };
 
-        this.executor = Executors.newFixedThreadPool(cameraCount, cameraFactory);
+        this.executor = Executors.newCachedThreadPool(cameraFactory);
         this.queue = new BoundedPriorityBlockingQueue<>(config.getCameraQueueCapacity());
+        this.workers = new ArrayList<>();
     }
 
     @PostConstruct
     public void init() {
         log.info("CameraPoolService initialized with {} workers", cameraCount);
         for (int i = 0; i < cameraCount; i++) {
-            executor.submit(this::cameraWorker);
+            workers.add(executor.submit(this::cameraWorker));
         }
     }
 
@@ -94,15 +99,18 @@ public class CameraPoolService {
         }
 
         if (newCount < this.cameraCount) {
-            log.warn("Attempt to reduce camera workers ignored (current={} requested={})", this.cameraCount, newCount);
-            return;
-        }
-
-        int toAdd = newCount - this.cameraCount;
-        log.info("Adding {} new camera workers ({} -> {})", toAdd, this.cameraCount, newCount);
-
-        for (int i = 0; i < toAdd; i++) {
-            executor.submit(this::cameraWorker);
+            int toRemove = this.cameraCount - newCount;
+            log.info("Removing {} camera workers ({} -> {})", toRemove, this.cameraCount, newCount);
+            for (int i = 0; i < toRemove && !workers.isEmpty(); i++) {
+                Future<?> worker = workers.remove(workers.size() - 1);
+                worker.cancel(true);
+            }
+        } else {
+            int toAdd = newCount - this.cameraCount;
+            log.info("Adding {} new camera workers ({} -> {})", toAdd, this.cameraCount, newCount);
+            for (int i = 0; i < toAdd; i++) {
+                workers.add(executor.submit(this::cameraWorker));
+            }
         }
 
         this.cameraCount = newCount;
@@ -111,6 +119,10 @@ public class CameraPoolService {
     private void cameraWorker() {
         while (true) {
             try {
+                if (Thread.currentThread().isInterrupted()) {
+                    log.warn("Camera worker interrupted, exiting");
+                    break;
+                }
                 Vehicle v = queue.take();
                 log.info("Camera captured {} (processing thread={})",
                         v.getPlate(), Thread.currentThread().getName());
