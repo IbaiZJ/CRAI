@@ -84,7 +84,7 @@ services:
       dockerfile: Dockerfile
     container_name: os
     ports:
-      - "6905:8080"
+      - "6906:8080"
     # depends_on:
     #   - node-red
     networks:
@@ -113,7 +113,7 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - ./db/db_data:/data
+      - mysql_data:/var/lib/mysql
       - ./db/createCraiDB.sql:/docker-entrypoint-initdb.d/01_createCraiDB.sql:ro
     networks:
       - app-network

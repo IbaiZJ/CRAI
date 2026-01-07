@@ -6,45 +6,23 @@ import org.junit.jupiter.api.Test;
 class PoliceMessageTest {
 
     @Test
-    void constructorWithThreeArgsCreatesMessageWithEmptyText() {
+    void constructorWithThreeArgsCreatesMessageWithNoRecipientEmail() {
         PoliceMessage msg = new PoliceMessage(AlertType.POLICE, "1234ABC", "Test description");
 
         assertThat(msg.getType()).isEqualTo(AlertType.POLICE);
         assertThat(msg.getPlate()).isEqualTo("1234ABC");
         assertThat(msg.getDescription()).isEqualTo("Test description");
-        assertThat(msg.getMessageText()).isEmpty();
         assertThat(msg.getRecipientEmail()).isNull();
     }
 
     @Test
-    void constructorWithFourArgsCreatesMessageWithText() {
-        PoliceMessage msg = new PoliceMessage(AlertType.BADGE, "5678DEF", "Badge issue", "Message body");
+    void constructorWithFourArgsCreatesMessageWithRecipientEmail() {
+        PoliceMessage msg = new PoliceMessage(AlertType.BADGE, "5678DEF", "Badge issue", "notify@email.com");
 
         assertThat(msg.getType()).isEqualTo(AlertType.BADGE);
         assertThat(msg.getPlate()).isEqualTo("5678DEF");
         assertThat(msg.getDescription()).isEqualTo("Badge issue");
-        assertThat(msg.getMessageText()).isEqualTo("Message body");
-        assertThat(msg.getRecipientEmail()).isNull();
-    }
-
-    @Test
-    void constructorWithFiveArgsCreatesFullMessage() {
-        PoliceMessage msg = new PoliceMessage(AlertType.ITV, "9999XYZ", "ITV expired", "Full message", "test@email.com");
-
-        assertThat(msg.getType()).isEqualTo(AlertType.ITV);
-        assertThat(msg.getPlate()).isEqualTo("9999XYZ");
-        assertThat(msg.getDescription()).isEqualTo("ITV expired");
-        assertThat(msg.getMessageText()).isEqualTo("Full message");
-        assertThat(msg.getRecipientEmail()).isEqualTo("test@email.com");
-    }
-
-    @Test
-    void setMessageTextUpdatesValue() {
-        PoliceMessage msg = new PoliceMessage(AlertType.POLICE, "1234ABC", "Test");
-
-        msg.setMessageText("Updated message");
-
-        assertThat(msg.getMessageText()).isEqualTo("Updated message");
+        assertThat(msg.getRecipientEmail()).isEqualTo("notify@email.com");
     }
 
     @Test
