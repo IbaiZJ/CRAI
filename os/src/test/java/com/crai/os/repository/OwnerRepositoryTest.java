@@ -4,6 +4,8 @@ import com.crai.os.model.Owner;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.lang.reflect.Field;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class OwnerRepositoryTest {
@@ -147,5 +149,20 @@ class OwnerRepositoryTest {
         assertThat(repo.findByPlate("7499XYZ").getName()).isEqualTo("Alex Zabaleta");
         assertThat(repo.findByPlate("7500XYZ").getName()).isEqualTo("Aitor Ortiz");
         assertThat(repo.findByPlate("9999XYZ").getName()).isEqualTo("Aitor Ortiz");
+    }
+
+    @Test
+    void returnsNullWhenBucketOutOfRange() throws Exception {
+        Field field = OwnerRepository.class.getDeclaredField("rangeOwners");
+        field.setAccessible(true);
+        Owner[] original = (Owner[]) field.get(repo);
+        try {
+            field.set(repo, new Owner[] { original[0] });
+
+            Owner owner = repo.findByPlate("3000ABC");
+            assertThat(owner).isNull();
+        } finally {
+            field.set(repo, original);
+        }
     }
 }
