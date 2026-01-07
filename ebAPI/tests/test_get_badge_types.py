@@ -207,6 +207,4 @@ class TestGetBadgeTypes(unittest.TestCase):
         self.assertIn('Y', result)
 
 
-if __name__ == '__main__':
-    unittest.main()
 

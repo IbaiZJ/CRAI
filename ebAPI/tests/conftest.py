@@ -12,8 +12,7 @@ ebapi_root = Path(__file__).parent.parent
 sys.path.insert(0, str(ebapi_root))
 
 # Ensure our local util package wins over any preloaded module named "util".
-if "util" in sys.modules:
-    del sys.modules["util"]
+sys.modules.pop("util", None)
 importlib.invalidate_caches()
 util_pkg = ebapi_root / "util" / "__init__.py"
 spec = importlib.util.spec_from_file_location(
