@@ -128,10 +128,7 @@ public class CameraPoolService {
     }
 
     private void processVehicle(Vehicle v) {
-        if (!validateEnvironmentalBadge(v)) {
-            return;
-        }
-
+        validateEnvironmentalBadge(v);
         validateITV(v);
         checkStolenOrMarked(v);
     }
