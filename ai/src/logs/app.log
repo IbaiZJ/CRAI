@@ -1,0 +1,1056 @@
+[2026-01-05 23:31:42] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-05 23:31:42] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-05 23:31:42] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-05 23:31:42] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.007s)
+[2026-01-05 23:31:42] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-05 23:31:42] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-05 23:31:42] [[32mINFO[0m] [logger.py:120] Inicializando webcam en source=1
+[2026-01-05 23:32:02] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-05 23:32:02] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-05 23:32:02] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-05 23:32:02] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-05 23:32:02] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-05 23:32:02] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-05 23:32:02] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-05 23:32:02] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-05 23:32:02] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-05 23:32:04] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-05 23:32:04] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (21.704s)
+[2026-01-05 23:32:04] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-05 23:32:04] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-05 23:32:04] [[32mINFO[0m] [logger.py:120] Debug mode: False
+[2026-01-05 23:32:04] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-05 23:32:04] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-05 23:32:04] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-05 23:32:04] [[31mERROR[0m] [logger.py:128] 
+Unexpected error: name 'current_fps' is not defined
+Traceback (most recent call last):
+  File "C:\Users\iibai\projects\CRAI\ai\src\main.py", line 302, in main
+    f"FPS: {current_fps}" if show_fps else None,
+            ^^^^^^^^^^^
+NameError: name 'current_fps' is not defined
+[2026-01-05 23:32:04] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-05 23:32:04] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-05 23:32:04] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.000s)
+[2026-01-05 23:32:04] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-05 23:32:04] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-05 23:32:04] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-05 23:32:04] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-05 23:32:04] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.003s)
+[2026-01-05 23:32:39] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-05 23:32:39] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-05 23:32:39] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-05 23:32:39] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.007s)
+[2026-01-05 23:32:39] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-05 23:32:39] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-05 23:32:39] [[32mINFO[0m] [logger.py:120] Inicializando webcam en source=1
+[2026-01-05 23:32:57] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-05 23:32:57] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-05 23:32:57] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-05 23:32:57] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-05 23:32:57] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-05 23:32:57] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-05 23:32:57] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-05 23:32:57] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-05 23:32:57] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-05 23:32:58] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-05 23:32:58] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (19.028s)
+[2026-01-05 23:32:58] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-05 23:32:58] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-05 23:32:58] [[32mINFO[0m] [logger.py:120] Debug mode: False
+[2026-01-05 23:32:58] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-05 23:32:58] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-05 23:32:58] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-05 23:33:20] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-05 23:33:20] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-05 23:33:20] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-05 23:33:20] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-05 23:33:20] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-05 23:33:20] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-05 23:33:20] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-05 23:33:20] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.010s)
+[2026-01-05 23:44:51] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-05 23:44:51] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-05 23:44:51] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-05 23:44:51] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.007s)
+[2026-01-05 23:44:51] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-05 23:44:51] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-05 23:44:51] [[32mINFO[0m] [logger.py:120] Inicializando webcam en source=1
+[2026-01-05 23:45:07] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-05 23:45:07] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-05 23:45:07] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-05 23:45:07] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-05 23:45:07] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-05 23:45:07] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-05 23:45:07] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-05 23:45:07] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-05 23:45:08] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-05 23:45:09] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-05 23:45:09] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (18.489s)
+[2026-01-05 23:45:09] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-05 23:45:09] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-05 23:45:09] [[32mINFO[0m] [logger.py:120] Debug mode: False
+[2026-01-05 23:45:09] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-05 23:45:09] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-05 23:45:09] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-05 23:45:40] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-05 23:45:40] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-05 23:45:40] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-05 23:45:40] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-05 23:45:40] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-05 23:45:40] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-05 23:45:40] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-05 23:45:40] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.011s)
+[2026-01-05 23:47:23] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-05 23:47:23] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-05 23:47:23] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-05 23:47:23] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.006s)
+[2026-01-05 23:47:23] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-05 23:47:23] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-05 23:47:23] [[32mINFO[0m] [logger.py:120] Inicializando webcam en source=1
+[2026-01-05 23:47:39] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-05 23:47:39] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-05 23:47:39] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-05 23:47:39] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-05 23:47:39] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-05 23:47:39] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-05 23:47:39] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-05 23:47:39] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-05 23:47:40] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-05 23:47:41] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-05 23:47:41] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (18.389s)
+[2026-01-05 23:47:41] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-05 23:47:41] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-05 23:47:41] [[32mINFO[0m] [logger.py:120] Debug mode: False
+[2026-01-05 23:47:41] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-05 23:47:41] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-05 23:47:41] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-05 23:47:55] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-05 23:47:55] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-05 23:47:55] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-05 23:47:55] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-05 23:47:55] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-05 23:47:55] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-05 23:47:55] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-05 23:47:55] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.017s)
+[2026-01-06 01:30:26] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-06 01:30:26] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 01:30:26] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 01:30:26] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.010s)
+[2026-01-06 01:30:26] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-06 01:30:26] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-06 01:30:26] [[32mINFO[0m] [logger.py:120] Inicializando webcam en source=1
+[2026-01-06 01:30:45] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-06 01:30:45] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-06 01:30:45] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-06 01:30:45] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-06 01:30:45] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-06 01:30:45] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-06 01:30:45] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-06 01:30:45] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-06 01:30:46] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-06 01:30:48] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-06 01:30:48] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (21.434s)
+[2026-01-06 01:30:48] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-06 01:30:48] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-06 01:30:48] [[32mINFO[0m] [logger.py:120] Debug mode: False
+[2026-01-06 01:30:48] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-06 01:30:48] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-06 01:30:48] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-06 01:31:16] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-06 01:31:16] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-06 01:31:16] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-06 01:31:16] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-06 01:31:16] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-06 01:31:16] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-06 01:31:16] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-06 01:31:16] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.015s)
+[2026-01-06 20:03:01] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-06 20:03:01] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 20:03:01] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 20:03:01] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.022s)
+[2026-01-06 20:03:01] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-06 20:03:01] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-06 20:03:01] [[32mINFO[0m] [logger.py:120] Inicializando webcam en source=1
+[2026-01-06 20:03:01] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-06 20:03:01] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-06 20:03:01] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-06 20:03:01] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-06 20:03:01] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-06 20:03:01] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-06 20:03:01] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-06 20:03:01] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-06 20:03:03] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-06 20:03:05] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-06 20:03:05] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (4.161s)
+[2026-01-06 20:03:05] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-06 20:03:05] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-06 20:03:05] [[32mINFO[0m] [logger.py:120] Debug mode: False
+[2026-01-06 20:03:05] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-06 20:03:05] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-06 20:03:05] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-06 20:03:07] [[32mINFO[0m] [logger.py:120] 
+[Ctrl+C] Keyboard interrupt received
+[2026-01-06 20:03:07] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-06 20:03:07] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-06 20:03:07] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-06 20:03:07] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-06 20:03:07] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-06 20:03:07] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-06 20:03:07] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-06 20:03:07] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.004s)
+[2026-01-06 20:07:20] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-06 20:07:20] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 20:07:20] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 20:07:20] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.007s)
+[2026-01-06 20:07:20] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-06 20:07:20] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-06 20:07:20] [[32mINFO[0m] [logger.py:120] Inicializando webcam en source=1
+[2026-01-06 20:07:38] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-06 20:07:38] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-06 20:07:38] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-06 20:07:39] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-06 20:07:39] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-06 20:07:39] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-06 20:07:39] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-06 20:07:39] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-06 20:07:39] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-06 20:07:41] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-06 20:07:41] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (21.232s)
+[2026-01-06 20:07:41] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-06 20:07:41] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-06 20:07:41] [[32mINFO[0m] [logger.py:120] Debug mode: False
+[2026-01-06 20:07:41] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-06 20:07:41] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-06 20:07:41] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-06 20:07:44] [[31mERROR[0m] [logger.py:128] 
+Unexpected error: cannot access local variable 'plate' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\Users\iibai\projects\CRAI\ai\src\main.py", line 221, in main
+    if (plate['ocr']['success'] and
+        ^^^^^
+UnboundLocalError: cannot access local variable 'plate' where it is not associated with a value
+[2026-01-06 20:07:44] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-06 20:07:44] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-06 20:07:44] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.000s)
+[2026-01-06 20:07:44] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-06 20:07:44] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-06 20:07:44] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-06 20:07:44] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-06 20:07:44] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.006s)
+[2026-01-06 20:08:02] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-06 20:08:02] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 20:08:02] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 20:08:02] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.013s)
+[2026-01-06 20:08:02] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-06 20:08:02] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-06 20:08:02] [[32mINFO[0m] [logger.py:120] Inicializando webcam en source=1
+[2026-01-06 20:08:23] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-06 20:08:23] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-06 20:08:23] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-06 20:08:24] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-06 20:08:24] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-06 20:08:24] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-06 20:08:24] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-06 20:08:24] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-06 20:08:24] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-06 20:08:26] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-06 20:08:26] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (23.855s)
+[2026-01-06 20:08:26] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-06 20:08:26] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-06 20:08:26] [[32mINFO[0m] [logger.py:120] Debug mode: False
+[2026-01-06 20:08:26] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-06 20:08:26] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-06 20:08:26] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-06 20:08:28] [[31mERROR[0m] [logger.py:128] 
+Unexpected error: cannot access local variable 'plate' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\Users\iibai\projects\CRAI\ai\src\main.py", line 221, in main
+    if (plate['ocr']['success'] and
+        ^^^^^
+UnboundLocalError: cannot access local variable 'plate' where it is not associated with a value
+[2026-01-06 20:08:28] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-06 20:08:28] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-06 20:08:28] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-06 20:08:28] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-06 20:08:28] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-06 20:08:28] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-06 20:08:28] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-06 20:08:28] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.008s)
+[2026-01-06 20:09:17] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-06 20:09:17] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 20:09:17] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 20:09:17] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.007s)
+[2026-01-06 20:09:17] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-06 20:09:17] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-06 20:09:17] [[32mINFO[0m] [logger.py:120] Inicializando webcam en source=1
+[2026-01-06 20:09:37] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-06 20:09:37] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-06 20:09:37] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-06 20:09:37] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-06 20:09:37] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-06 20:09:37] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-06 20:09:37] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-06 20:09:37] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-06 20:09:37] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-06 20:09:39] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-06 20:09:39] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (21.910s)
+[2026-01-06 20:09:39] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-06 20:09:39] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-06 20:09:39] [[32mINFO[0m] [logger.py:120] Debug mode: False
+[2026-01-06 20:09:39] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-06 20:09:39] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-06 20:09:39] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-06 20:10:24] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-06 20:10:24] [[32mINFO[0m] [logger.py:120] Total unique plates detected: 9
+[2026-01-06 20:10:24] [[32mINFO[0m] [logger.py:120] 
+============================================================
+Plate           Times    Confidence   Vehicle
+------------------------------------------------------------
+1772LPZ         33       0.90         car
+4772LPZ         8        0.86         car
+0217            3        0.69         car
+02177           3        0.85         car
+4722LPZ         3        0.48         car
+1722LPZ         3        0.59         car
+1772            2        1.00         car
+722LPZ          1        0.41         car
+1712LPZ         1        0.67         car
+============================================================
+
+[2026-01-06 20:10:24] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-06 20:10:24] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-06 20:10:24] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-06 20:10:24] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-06 20:10:24] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-06 20:10:24] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.013s)
+[2026-01-06 20:10:34] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-06 20:10:34] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 20:10:34] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 20:10:34] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.007s)
+[2026-01-06 20:10:34] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-06 20:10:34] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-06 20:10:34] [[32mINFO[0m] [logger.py:120] Inicializando webcam en source=1
+[2026-01-06 20:10:54] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-06 20:10:54] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-06 20:10:54] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-06 20:10:54] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-06 20:10:54] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-06 20:10:54] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-06 20:10:54] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-06 20:10:54] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-06 20:10:55] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-06 20:10:57] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-06 20:10:57] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (22.152s)
+[2026-01-06 20:10:57] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-06 20:10:57] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-06 20:10:57] [[32mINFO[0m] [logger.py:120] Debug mode: False
+[2026-01-06 20:10:57] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-06 20:10:57] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-06 20:10:57] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-06 20:12:00] [[32mINFO[0m] [logger.py:120] 
+[Ctrl+C] Keyboard interrupt received
+[2026-01-06 20:12:00] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-06 20:12:00] [[32mINFO[0m] [logger.py:120] Total unique plates detected: 4
+[2026-01-06 20:12:00] [[32mINFO[0m] [logger.py:120] 
+============================================================
+Plate           Times    Confidence   Vehicle
+------------------------------------------------------------
+8149MLO         63       0.96         car
+1772LPZ         8        0.98         car
+4772LPZ         7        0.68         car
+8149            1        0.71         car
+============================================================
+
+[2026-01-06 20:12:00] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.000s)
+[2026-01-06 20:12:00] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-06 20:12:00] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-06 20:12:00] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-06 20:12:00] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-06 20:12:00] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.005s)
+[2026-01-06 20:12:05] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-06 20:12:05] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 20:12:05] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 20:12:05] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.006s)
+[2026-01-06 20:12:05] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-06 20:12:05] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-06 20:12:05] [[32mINFO[0m] [logger.py:120] Inicializando webcam en source=1
+[2026-01-06 20:12:22] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-06 20:12:22] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-06 20:12:22] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-06 20:12:22] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-06 20:12:22] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-06 20:12:22] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-06 20:12:22] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-06 20:12:22] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-06 20:12:23] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-06 20:12:24] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-06 20:12:24] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (18.608s)
+[2026-01-06 20:12:24] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-06 20:12:24] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-06 20:12:24] [[32mINFO[0m] [logger.py:120] Debug mode: False
+[2026-01-06 20:12:24] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-06 20:12:24] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-06 20:12:24] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-06 20:13:10] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-06 20:13:10] [[32mINFO[0m] [logger.py:120] Total unique plates detected: 3
+[2026-01-06 20:13:10] [[32mINFO[0m] [logger.py:120] 
+============================================================
+Plate           Times    Confidence   Vehicle
+------------------------------------------------------------
+8149MLO         41       0.94         car
+8149HLO         6        0.54         car
+8149            5        0.56         car
+============================================================
+
+[2026-01-06 20:13:10] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-06 20:13:10] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-06 20:13:10] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-06 20:13:10] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-06 20:13:10] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-06 20:13:10] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.013s)
+[2026-01-06 20:32:55] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-06 20:32:55] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 20:32:55] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 20:32:55] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.021s)
+[2026-01-06 20:32:55] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-06 20:32:55] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-06 20:32:55] [[32mINFO[0m] [logger.py:120] Inicializando webcam en source=1
+[2026-01-06 20:33:14] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-06 20:33:14] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-06 20:33:14] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-06 20:33:14] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-06 20:33:14] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-06 20:33:14] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-06 20:33:14] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-06 20:33:14] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-06 20:33:14] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-06 20:33:16] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-06 20:33:16] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (21.342s)
+[2026-01-06 20:33:16] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-06 20:33:16] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-06 20:33:16] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-06 20:33:16] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-06 20:33:16] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-06 20:33:33] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-06 20:33:33] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-06 20:33:33] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-06 20:33:33] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-06 20:33:33] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-06 20:33:33] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-06 20:33:34] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-06 20:33:34] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.018s)
+[2026-01-06 21:41:56] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-06 21:41:56] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 21:41:56] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 21:41:56] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.007s)
+[2026-01-06 21:41:56] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-06 21:41:56] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-06 21:41:56] [[32mINFO[0m] [logger.py:120] Inicializando webcam en source=1
+[2026-01-06 21:42:15] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-06 21:42:15] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-06 21:42:15] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-06 21:42:15] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-06 21:42:15] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-06 21:42:15] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-06 21:42:15] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-06 21:42:15] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-06 21:42:16] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-06 21:42:18] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-06 21:42:18] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (21.524s)
+[2026-01-06 21:42:18] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-06 21:42:18] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-06 21:42:18] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-06 21:42:18] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-06 21:42:18] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-06 21:42:38] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-06 21:42:38] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-06 21:42:38] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-06 21:42:38] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-06 21:42:38] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-06 21:42:38] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-06 21:42:38] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-06 21:42:38] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.014s)
+[2026-01-06 22:11:16] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-06 22:11:16] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 22:11:16] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 22:11:16] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.020s)
+[2026-01-06 22:11:16] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-06 22:11:16] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-06 22:11:16] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-06 22:11:22] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-06 22:11:40] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-06 22:11:40] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-06 22:11:40] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-06 22:11:41] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-06 22:11:41] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-06 22:11:41] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-06 22:11:41] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-06 22:11:41] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-06 22:11:41] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-06 22:11:43] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-06 22:11:43] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (26.979s)
+[2026-01-06 22:11:43] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-06 22:11:43] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-06 22:11:43] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-06 22:11:43] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-06 22:11:43] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-06 22:12:02] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-06 22:12:02] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-06 22:12:02] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-06 22:12:02] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-06 22:12:02] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-06 22:12:02] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-06 22:12:02] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-06 22:12:02] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.016s)
+[2026-01-06 22:29:27] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-06 22:29:27] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 22:29:27] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 22:29:27] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.020s)
+[2026-01-06 22:29:27] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-06 22:29:27] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-06 22:29:27] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-06 22:29:33] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-06 22:29:51] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-06 22:29:51] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-06 22:29:51] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-06 22:29:51] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-06 22:29:51] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-06 22:29:51] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-06 22:29:51] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-06 22:29:51] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-06 22:29:52] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-06 22:29:54] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-06 22:29:54] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (26.567s)
+[2026-01-06 22:29:54] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-06 22:29:54] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-06 22:29:54] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-06 22:29:54] [[32mINFO[0m] [logger.py:120] OCR cache TTL: 2.0s
+[2026-01-06 22:29:54] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-06 22:29:54] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-06 22:30:08] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-06 22:30:08] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-06 22:30:08] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-06 22:30:08] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-06 22:30:08] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-06 22:30:08] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-06 22:30:08] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-06 22:30:08] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.010s)
+[2026-01-06 23:20:34] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-06 23:20:34] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 23:20:34] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 23:20:34] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.056s)
+[2026-01-06 23:20:34] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-06 23:20:34] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-06 23:20:34] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-06 23:20:41] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-06 23:21:00] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-06 23:21:00] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-06 23:21:00] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-06 23:21:00] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-06 23:21:00] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-06 23:21:00] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-06 23:21:00] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-06 23:21:00] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-06 23:21:00] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-06 23:21:02] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-06 23:21:02] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (27.632s)
+[2026-01-06 23:21:02] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-06 23:21:02] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-06 23:21:02] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-06 23:21:02] [[32mINFO[0m] [logger.py:120] OCR cache TTL: 30.0s
+[2026-01-06 23:21:02] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.000s)
+[2026-01-06 23:21:02] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-06 23:21:13] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-06 23:21:13] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-06 23:21:13] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-06 23:21:13] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-06 23:21:13] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-06 23:21:13] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-06 23:21:13] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-06 23:21:13] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.012s)
+[2026-01-06 23:25:51] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-06 23:25:51] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 23:25:51] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 23:25:51] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.008s)
+[2026-01-06 23:25:51] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-06 23:25:51] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-06 23:25:51] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-06 23:25:58] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-06 23:26:19] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-06 23:26:19] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-06 23:26:19] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-06 23:26:19] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-06 23:26:19] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-06 23:26:19] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-06 23:26:19] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-06 23:26:19] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-06 23:26:19] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-06 23:26:21] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-06 23:26:21] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (30.792s)
+[2026-01-06 23:26:21] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-06 23:26:21] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-06 23:26:21] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-06 23:26:21] [[32mINFO[0m] [logger.py:120] OCR cache TTL: 30.0s
+[2026-01-06 23:26:21] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-06 23:26:21] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-06 23:27:40] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-06 23:27:40] [[32mINFO[0m] [logger.py:120] Total unique plates detected: 1
+[2026-01-06 23:27:40] [[32mINFO[0m] [logger.py:120] 
+============================================================
+Plate           Times    Confidence   Vehicle
+------------------------------------------------------------
+MOBG            2        0.29         car
+============================================================
+
+[2026-01-06 23:27:40] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-06 23:27:40] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-06 23:27:40] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-06 23:27:40] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-06 23:27:40] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-06 23:27:40] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.014s)
+[2026-01-06 23:31:57] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-06 23:31:57] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 23:31:57] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 23:31:57] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.009s)
+[2026-01-06 23:31:57] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-06 23:31:57] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-06 23:31:57] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-06 23:32:04] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-06 23:32:23] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-06 23:32:23] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-06 23:32:23] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-06 23:32:23] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-06 23:32:23] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-06 23:32:23] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-06 23:32:23] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-06 23:32:23] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-06 23:32:24] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-06 23:32:25] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-06 23:32:25] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (28.472s)
+[2026-01-06 23:32:25] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-06 23:32:25] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-06 23:32:25] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-06 23:32:25] [[32mINFO[0m] [logger.py:120] OCR cache TTL: 30.0s
+[2026-01-06 23:32:25] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-06 23:32:25] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-06 23:32:54] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-06 23:32:54] [[32mINFO[0m] [logger.py:120] Total unique plates detected: 2
+[2026-01-06 23:32:54] [[32mINFO[0m] [logger.py:120] 
+============================================================
+Plate           Times    Confidence   Vehicle
+------------------------------------------------------------
+0478            4        0.65         car
+3678LFR         1        0.24         car
+============================================================
+
+[2026-01-06 23:32:54] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-06 23:32:54] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-06 23:32:54] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-06 23:32:54] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-06 23:32:54] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-06 23:32:54] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.015s)
+[2026-01-06 23:42:45] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-06 23:42:45] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 23:42:45] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 23:42:45] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.006s)
+[2026-01-06 23:42:45] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-06 23:42:45] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-06 23:42:45] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-06 23:42:51] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-06 23:43:10] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-06 23:43:10] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-06 23:43:10] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-06 23:43:10] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-06 23:43:10] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-06 23:43:10] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-06 23:43:10] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-06 23:43:10] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-06 23:43:11] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-06 23:43:13] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-06 23:43:13] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (27.554s)
+[2026-01-06 23:43:13] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-06 23:43:13] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-06 23:43:13] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-06 23:43:13] [[32mINFO[0m] [logger.py:120] OCR cache TTL: 30.0s
+[2026-01-06 23:43:13] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-06 23:43:13] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-06 23:44:03] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-06 23:44:03] [[32mINFO[0m] [logger.py:120] Total unique plates detected: 1
+[2026-01-06 23:44:03] [[32mINFO[0m] [logger.py:120] 
+============================================================
+Plate           Times    Confidence   Vehicle
+------------------------------------------------------------
+2473LFZ         1        0.87         car
+============================================================
+
+[2026-01-06 23:44:03] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-06 23:44:03] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-06 23:44:03] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-06 23:44:03] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-06 23:44:03] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-06 23:44:03] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.017s)
+[2026-01-06 23:46:23] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-06 23:46:23] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 23:46:23] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 23:46:23] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.007s)
+[2026-01-06 23:46:23] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-06 23:46:23] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-06 23:46:23] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-06 23:46:29] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-06 23:46:47] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-06 23:46:47] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-06 23:46:47] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-06 23:46:47] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-06 23:46:47] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-06 23:46:47] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-06 23:46:47] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-06 23:46:47] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-06 23:46:48] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-06 23:46:49] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-06 23:46:49] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (26.835s)
+[2026-01-06 23:46:49] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-06 23:46:49] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-06 23:46:49] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-06 23:46:49] [[32mINFO[0m] [logger.py:120] OCR cache TTL: 30.0s
+[2026-01-06 23:46:49] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-06 23:46:49] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-06 23:46:53] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-06 23:46:53] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-06 23:46:53] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-06 23:46:53] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-06 23:46:53] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-06 23:46:53] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-06 23:46:53] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-06 23:46:53] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.016s)
+[2026-01-06 23:47:18] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-06 23:47:18] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 23:47:18] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-06 23:47:18] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.007s)
+[2026-01-06 23:47:18] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-06 23:47:18] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-06 23:47:18] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-06 23:47:24] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-06 23:47:42] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-06 23:47:42] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-06 23:47:42] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-06 23:47:42] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-06 23:47:42] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-06 23:47:42] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-06 23:47:42] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-06 23:47:42] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-06 23:47:42] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-06 23:47:44] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-06 23:47:44] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (26.550s)
+[2026-01-06 23:47:44] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-06 23:47:44] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-06 23:47:44] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-06 23:47:44] [[32mINFO[0m] [logger.py:120] OCR cache TTL: 30.0s
+[2026-01-06 23:47:44] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-06 23:47:44] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-06 23:48:23] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-06 23:48:23] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-06 23:48:23] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-06 23:48:23] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-06 23:48:23] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-06 23:48:23] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-06 23:48:23] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-06 23:48:23] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.010s)
+[2026-01-07 08:15:56] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-07 08:15:56] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-07 08:15:56] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-07 08:15:56] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.017s)
+[2026-01-07 08:15:56] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-07 08:15:56] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-07 08:15:56] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-07 08:16:02] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-07 08:16:18] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-07 08:16:18] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-07 08:16:18] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-07 08:16:18] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-07 08:16:18] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-07 08:16:18] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-07 08:16:18] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-07 08:16:18] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-07 08:16:21] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-07 08:16:22] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-07 08:16:22] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (26.274s)
+[2026-01-07 08:16:22] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-07 08:16:22] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-07 08:16:22] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-07 08:16:22] [[32mINFO[0m] [logger.py:120] OCR cache TTL: 30.0s
+[2026-01-07 08:16:22] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-07 08:16:22] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-07 08:18:07] [[32mINFO[0m] [logger.py:120] 
+[Ctrl+C] Keyboard interrupt received
+[2026-01-07 08:18:07] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-07 08:18:07] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-07 08:18:07] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.000s)
+[2026-01-07 08:18:07] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-07 08:18:07] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-07 08:18:07] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-07 08:18:07] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-07 08:18:07] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.008s)
+[2026-01-07 08:18:22] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-07 08:18:22] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-07 08:18:22] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-07 08:18:22] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.006s)
+[2026-01-07 08:18:22] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-07 08:18:22] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-07 08:18:22] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-07 08:18:28] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-07 08:18:44] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-07 08:18:44] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-07 08:18:44] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-07 08:18:44] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-07 08:18:44] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-07 08:18:44] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-07 08:18:44] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-07 08:18:44] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-07 08:18:44] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-07 08:18:45] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-07 08:18:45] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (23.393s)
+[2026-01-07 08:18:45] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-07 08:18:45] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-07 08:18:45] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-07 08:18:45] [[32mINFO[0m] [logger.py:120] OCR cache TTL: 30.0s
+[2026-01-07 08:18:45] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-07 08:18:45] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-07 08:19:24] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-07 08:19:24] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-07 08:19:24] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-07 08:19:24] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-07 08:19:24] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-07 08:19:24] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-07 08:19:24] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-07 08:19:24] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.010s)
+[2026-01-07 08:19:38] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-07 08:19:38] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-07 08:19:38] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-07 08:19:38] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.006s)
+[2026-01-07 08:19:38] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-07 08:19:38] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-07 08:19:38] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-07 08:19:44] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-07 08:20:00] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-07 08:20:00] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-07 08:20:00] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-07 08:20:00] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-07 08:20:00] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-07 08:20:00] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-07 08:20:00] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-07 08:20:00] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-07 08:20:01] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-07 08:20:02] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-07 08:20:02] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (23.732s)
+[2026-01-07 08:20:02] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-07 08:20:02] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-07 08:20:02] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-07 08:20:02] [[32mINFO[0m] [logger.py:120] OCR cache TTL: 30.0s
+[2026-01-07 08:20:02] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-07 08:20:02] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-07 08:23:17] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-07 08:23:17] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-07 08:23:17] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-07 08:23:17] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.008s)
+[2026-01-07 08:23:17] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-07 08:23:17] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-07 08:23:17] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-07 08:23:19] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-07 08:23:21] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-07 08:23:21] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-07 08:23:21] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-07 08:23:21] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-07 08:23:21] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-07 08:23:21] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-07 08:23:21] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-07 08:23:21] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-07 08:23:21] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-07 08:23:24] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-07 08:23:24] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (6.344s)
+[2026-01-07 08:23:24] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-07 08:23:24] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-07 08:23:24] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-07 08:23:24] [[32mINFO[0m] [logger.py:120] OCR cache TTL: 30.0s
+[2026-01-07 08:23:24] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-07 08:23:24] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-07 08:23:39] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-07 08:23:39] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-07 08:23:39] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-07 08:23:39] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-07 08:23:39] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-07 08:23:40] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-07 08:23:40] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-07 08:23:40] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.546s)
+[2026-01-07 08:24:33] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-07 08:24:33] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-07 08:24:33] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-07 08:24:33] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.007s)
+[2026-01-07 08:24:33] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-07 08:24:33] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-07 08:24:33] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-07 08:24:34] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-07 08:24:36] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-07 08:24:36] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-07 08:24:36] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-07 08:24:36] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-07 08:24:36] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-07 08:24:36] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-07 08:24:36] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-07 08:24:36] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-07 08:24:37] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-07 08:24:38] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-07 08:24:38] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (5.264s)
+[2026-01-07 08:24:38] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-07 08:24:38] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-07 08:24:38] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-07 08:24:38] [[32mINFO[0m] [logger.py:120] OCR cache TTL: 30.0s
+[2026-01-07 08:24:38] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-07 08:24:38] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-07 08:24:40] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-07 08:24:40] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-07 08:24:40] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-07 08:24:40] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-07 08:24:40] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-07 08:24:41] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-07 08:24:41] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-07 08:24:41] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.539s)
+[2026-01-07 08:26:07] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-07 08:26:07] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-07 08:26:07] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-07 08:26:07] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.021s)
+[2026-01-07 08:26:07] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-07 08:26:07] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-07 08:26:07] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-07 08:26:13] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-07 08:26:29] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-07 08:26:29] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-07 08:26:29] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-07 08:26:29] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-07 08:26:29] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-07 08:26:29] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-07 08:26:29] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-07 08:26:29] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-07 08:26:31] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-07 08:26:33] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-07 08:26:33] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (25.641s)
+[2026-01-07 08:26:33] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-07 08:26:33] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-07 08:26:33] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-07 08:26:33] [[32mINFO[0m] [logger.py:120] OCR cache TTL: 30.0s
+[2026-01-07 08:26:33] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-07 08:26:33] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-07 08:31:22] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-07 08:31:22] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-07 08:31:22] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-07 08:31:22] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.029s)
+[2026-01-07 08:31:22] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-07 08:31:22] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-07 08:31:22] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-07 08:31:39] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-07 08:32:38] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-07 08:32:38] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-07 08:32:38] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-07 08:32:38] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-07 08:32:38] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-07 08:32:38] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-07 08:32:39] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-07 08:32:39] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-07 08:32:40] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-07 08:32:46] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-07 08:32:46] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (83.605s)
+[2026-01-07 08:32:46] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-07 08:32:46] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-07 08:32:46] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-07 08:32:46] [[32mINFO[0m] [logger.py:120] OCR cache TTL: 30.0s
+[2026-01-07 08:32:46] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.002s)
+[2026-01-07 08:32:46] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-07 08:33:33] [[32mINFO[0m] [logger.py:120] 
+[Ctrl+C] Keyboard interrupt received
+[2026-01-07 08:33:33] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-07 08:33:33] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-07 08:33:33] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-07 08:33:33] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-07 08:33:33] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-07 08:33:33] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-07 08:33:33] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-07 08:33:33] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.004s)
+[2026-01-07 08:36:43] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-07 08:36:43] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-07 08:36:43] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-07 08:36:43] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.006s)
+[2026-01-07 08:36:43] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-07 08:36:43] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-07 08:36:43] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-07 08:36:43] [[33mWARNING[0m] [logger.py:124] ✗ Camera 1 no disponible, buscando alternativas...
+[2026-01-07 08:36:43] [[32mINFO[0m] [logger.py:120] Scanning for available cameras (0-5)...
+[2026-01-07 08:36:44] [[32mINFO[0m] [logger.py:120]   ✓ Camera 0 available
+[2026-01-07 08:36:46] [[32mINFO[0m] [logger.py:120] ✓ Usando camera 0 en su lugar
+[2026-01-07 08:36:49] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-07 08:36:49] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-07 08:36:49] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-07 08:36:49] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-07 08:36:49] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-07 08:36:49] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-07 08:36:49] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-07 08:36:49] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-07 08:36:49] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-07 08:36:51] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-07 08:36:51] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (8.069s)
+[2026-01-07 08:36:51] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-07 08:36:51] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-07 08:36:51] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-07 08:36:51] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-07 08:36:51] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-07 08:36:52] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-07 08:36:52] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-07 08:36:52] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-07 08:36:52] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-07 08:36:52] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-07 08:36:52] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-07 08:36:52] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-07 08:36:52] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.010s)
+[2026-01-07 08:37:12] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-07 08:37:12] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-07 08:37:12] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-07 08:37:12] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.006s)
+[2026-01-07 08:37:12] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-07 08:37:12] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-07 08:37:12] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-07 08:37:18] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-07 08:37:34] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-07 08:37:34] [[32mINFO[0m] [logger.py:120] 2. Loading vehicle detector...
+[2026-01-07 08:37:34] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-07 08:37:34] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-07 08:37:34] [[32mINFO[0m] [logger.py:120] 3. Loading license plate detector...
+[2026-01-07 08:37:34] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-07 08:37:34] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-07 08:37:34] [[32mINFO[0m] [logger.py:120] 4. Initializing OCR...
+[2026-01-07 08:37:34] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-07 08:37:36] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-07 08:37:36] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (23.423s)
+[2026-01-07 08:37:36] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-07 08:37:36] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-07 08:37:36] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-07 08:37:36] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-07 08:37:36] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-07 08:42:33] [[32mINFO[0m] [logger.py:120] 
+[Ctrl+C] Keyboard interrupt received
+[2026-01-07 08:42:33] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-07 08:42:33] [[32mINFO[0m] [logger.py:120] Total unique plates detected: 4
+[2026-01-07 08:42:33] [[32mINFO[0m] [logger.py:120] 
+============================================================
+Plate           Times    Confidence   Vehicle
+------------------------------------------------------------
+SPEED           5        0.97         bus
+5649JSN         2        0.99         bus
+SPEEC           1        0.70         bus
+SREED           1        0.81         bus
+============================================================
+
+[2026-01-07 08:42:33] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-07 08:42:33] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-07 08:42:33] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-07 08:42:33] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-07 08:42:33] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-07 08:42:33] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.006s)
