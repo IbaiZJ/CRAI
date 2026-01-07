@@ -9,6 +9,9 @@ class WebcamVideoStream:
 		# from the stream
         self.stream: cv2.VideoCapture = cv2.VideoCapture(src)
         
+        if not self.stream.isOpened():
+            raise RuntimeError(f"Cannot open camera {src}")
+        
         # set resolution if provided
         if resolution is not None:
             self.stream.set(cv2.CAP_PROP_FRAME_WIDTH, resolution[0])
@@ -19,6 +22,11 @@ class WebcamVideoStream:
             self.stream.set(cv2.CAP_PROP_FPS, framerate)
         
         (self.grabbed, self.frame) = self.stream.read()
+        
+        if not self.grabbed or self.frame is None:
+            self.stream.release()
+            raise RuntimeError(f"Camera {src} opened but cannot read frames")
+        
 		# initialize the variable used to indicate if the thread should
 		# be stopped
         self.stopped: bool = False

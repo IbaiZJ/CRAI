@@ -5,3 +5,17 @@ Traceback (most recent call last):
     f"FPS: {current_fps}" if show_fps else None,
             ^^^^^^^^^^^
 NameError: name 'current_fps' is not defined
+[2026-01-06 20:07:44] [[31mERROR[0m] [logger.py:128] 
+Unexpected error: cannot access local variable 'plate' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\Users\iibai\projects\CRAI\ai\src\main.py", line 221, in main
+    if (plate['ocr']['success'] and
+        ^^^^^
+UnboundLocalError: cannot access local variable 'plate' where it is not associated with a value
+[2026-01-06 20:08:28] [[31mERROR[0m] [logger.py:128] 
+Unexpected error: cannot access local variable 'plate' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\Users\iibai\projects\CRAI\ai\src\main.py", line 221, in main
+    if (plate['ocr']['success'] and
+        ^^^^^
+UnboundLocalError: cannot access local variable 'plate' where it is not associated with a value

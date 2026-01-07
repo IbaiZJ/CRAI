@@ -6,6 +6,7 @@
 # Configuración de cámara
 camera:
   source: 1                    # Índice de la cámara (0=webcam, 1=USB)
+  auto_find: true              # Auto-detectar cámara si source no funciona
   resolution:
     width: 1280
     height: 720
@@ -39,6 +40,7 @@ ocr:
   confidence_threshold: 0.3    # Umbral mínimo para guardar resultado
   min_text_length: 4           # Longitud mínima de texto
   ocr_frequency: 15            # Ejecutar OCR cada N frames
+  cache_ttl: 30.0               # Tiempo de vida del cache en segundos
   
   # Preprocesamiento de imagen
   preprocessing:
@@ -84,18 +86,11 @@ performance:
     width: 640
     height: 480
 
-# Configuración de debug
-debug:
-  enabled: false
-  save_debug_images: false
-  debug_output_dir: "debug_plates"
-  print_timings: false         # Imprimir tiempo de cada operación
-  verbose_ocr: false
 
 # Configuración de logging
 logging:
   enabled: true
-  level: "INFO"                # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  level: "INFO"
   log_to_file: true
   log_to_console: true
   log_dir: "logs"

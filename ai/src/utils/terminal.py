@@ -43,7 +43,5 @@ class Terminal:
         print("\nControls:")
         print("  'q' - Quit")
         print("  's' - Save screenshot")
-        print("  'd' - Toggle debug mode")
         print("  'r' - Reset OCR cache")
-        print("  'c' - Show configuration")
         print("="*60 + "\n")
