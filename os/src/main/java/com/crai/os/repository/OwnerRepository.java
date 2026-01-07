@@ -61,7 +61,7 @@ public class OwnerRepository {
         }
 
         int bucket = number / 2500; // 0-2499, 2500-4999, 5000-7499, 7500-9999
-        if (bucket < 0 || bucket >= rangeOwners.length) {
+        if (bucket >= rangeOwners.length) {
             return null;
         }
 

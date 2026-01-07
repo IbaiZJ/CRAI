@@ -87,6 +87,12 @@ class OwnerRepositoryTest {
     }
 
     @Test
+    void returnsNullForNullPlate() {
+        Owner owner = repo.findByPlate(null);
+        assertThat(owner).isNull();
+    }
+
+    @Test
     void returnsNullForNonNumericPlate() {
         Owner owner = repo.findByPlate("ABCDXYZ");
         assertThat(owner).isNull();
