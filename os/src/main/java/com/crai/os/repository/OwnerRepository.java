@@ -50,6 +50,9 @@ public class OwnerRepository {
     */
 
     public Owner findByPlate(String plate) {
+        if (plate == null) {
+            return null;
+        }
         Owner exact = owners.get(plate);
         if (exact != null) {
             return exact;
