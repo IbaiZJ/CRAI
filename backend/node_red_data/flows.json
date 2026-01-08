@@ -1335,13 +1335,13 @@
         "id": "12c7a84772e29ac3",
         "type": "http in",
         "z": "3bf36f2bd537dee3",
-        "name": "Receive Alert",
+        "name": "Receive plate from IA",
         "url": "/ai/carPlate",
         "method": "post",
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 130,
+        "x": 160,
         "y": 520,
         "wires": [
             [
@@ -1357,7 +1357,7 @@
         "property": "payload",
         "action": "obj",
         "pretty": false,
-        "x": 330,
+        "x": 390,
         "y": 520,
         "wires": [
             [

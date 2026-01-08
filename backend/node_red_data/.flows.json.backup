@@ -1107,7 +1107,7 @@
         "id": "cdf1c72662bf117f",
         "type": "inject",
         "z": "3bf36f2bd537dee3",
-        "name": "Consulta etiqueta",
+        "name": "Consulta ITV",
         "props": [
             {
                 "p": "carPlate",
@@ -1120,7 +1120,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 140,
+        "x": 130,
         "y": 100,
         "wires": [
             [
@@ -1408,7 +1408,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 140,
+        "x": 160,
         "y": 660,
         "wires": [
             [
