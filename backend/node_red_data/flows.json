@@ -1107,7 +1107,7 @@
         "id": "cdf1c72662bf117f",
         "type": "inject",
         "z": "3bf36f2bd537dee3",
-        "name": "Consulta etiqueta",
+        "name": "Consulta ITV",
         "props": [
             {
                 "p": "carPlate",
@@ -1120,7 +1120,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 140,
+        "x": 130,
         "y": 100,
         "wires": [
             [
@@ -1336,11 +1336,7 @@
         "type": "http in",
         "z": "3bf36f2bd537dee3",
         "name": "Receive Alert",
-<<<<<<< Updated upstream
-        "url": "/alerts",
-=======
         "url": "/ai/carPlate",
->>>>>>> Stashed changes
         "method": "post",
         "upload": false,
         "skipBodyParsing": false,
@@ -1364,7 +1360,9 @@
         "x": 330,
         "y": 520,
         "wires": [
-            []
+            [
+                "2109a6490c4b331d"
+            ]
         ]
     },
     {
@@ -1376,5 +1374,120 @@
         "x": 170,
         "y": 440,
         "wires": []
+    },
+    {
+        "id": "2109a6490c4b331d",
+        "type": "debug",
+        "z": "3bf36f2bd537dee3",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "f5824bebafedf1b1",
+        "type": "inject",
+        "z": "3bf36f2bd537dee3",
+        "name": "Consulta etiqueta",
+        "props": [
+            {
+                "p": "carPlate",
+                "v": "0163MRC",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 160,
+        "y": 660,
+        "wires": [
+            [
+                "9d4100f8a1e25a22"
+            ]
+        ]
+    },
+    {
+        "id": "9d4100f8a1e25a22",
+        "type": "function",
+        "z": "3bf36f2bd537dee3",
+        "name": "Construir URL API",
+        "func": "msg.url = \"http://ebAPI:8000/api?car_plate=\" + msg.carPlate;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 660,
+        "wires": [
+            [
+                "c32a1b60e9f49150"
+            ]
+        ]
+    },
+    {
+        "id": "c32a1b60e9f49150",
+        "type": "http request",
+        "z": "3bf36f2bd537dee3",
+        "name": "GET EB",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 680,
+        "y": 660,
+        "wires": [
+            [
+                "174fcd1cd2da9e15"
+            ]
+        ]
+    },
+    {
+        "id": "cf1e1822b51a01a0",
+        "type": "debug",
+        "z": "3bf36f2bd537dee3",
+        "name": "Resultado API",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 1180,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "174fcd1cd2da9e15",
+        "type": "json",
+        "z": "3bf36f2bd537dee3",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 910,
+        "y": 660,
+        "wires": [
+            [
+                "cf1e1822b51a01a0"
+            ]
+        ]
     }
 ]
