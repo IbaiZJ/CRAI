@@ -1480,6 +1480,11 @@
         "name": "Validate plate schema",
         "func": "// Schema + Spanish plate validation\nconst payload = msg.payload;\n\nconst requiredFields = [\n    \"plate\",\n    \"confidence\",\n    \"vehicle_type\",\n    \"timestamp\",\n    \"retries\"\n];\n\nfunction error(message) {\n    msg.statusCode = 400;\n    msg.payload = {\n        error: \"Invalid payload\",\n        message\n    };\n    return [null, msg];\n}\n\n// Required fields\nfor (const field of requiredFields) {\n    if (!(field in payload)) {\n        return error(`Missing field: ${field}`);\n    }\n}\n\n// Plate\nif (typeof payload.plate !== \"string\") {\n    return error(\"plate must be a string\");\n}\n\npayload.plate = payload.plate.toUpperCase();\nconst plateRegex = /^[0-9]{4}[B-DF-HJ-NP-TV-Z]{3}$/;\nif (!plateRegex.test(payload.plate)) {\n    return error(\"plate format must be 4 digits followed by 3 consonant letters (Spanish format)\");\n}\n\n// Confidence\nif (typeof payload.confidence !== \"number\" || payload.confidence < 0 || payload.confidence > 1) {\n    return error(\"confidence must be a number between 0 and 1\");\n}\n\n// Vehicle type\nif (typeof payload.vehicle_type !== \"string\") {\n    return error(\"vehicle_type must be a string\");\n}\n\n// Retries\nif (typeof payload.retries !== \"number\" || payload.retries < 0) {\n    return error(\"retries must be a non-negative number\");\n}\n\n// Timestamp\nif (isNaN(Date.parse(payload.timestamp))) {\n    return error(\"timestamp must be a valid ISO-8601 date\");\n}\n\n// OK\nreturn [msg, null];",
         "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
         "x": 600,
         "y": 500,
         "wires": [
@@ -1499,6 +1504,11 @@
         "name": "OK response",
         "func": "msg.statusCode = 200;\nmsg.payload = {\n    ok: true,\n    message: \"Plate received and validated\",\n    plate: msg.payload.plate\n};\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
         "x": 840,
         "y": 460,
         "wires": [
@@ -1544,6 +1554,56 @@
         "statusType": "auto",
         "x": 780,
         "y": 400,
+        "wires": []
+    },
+    {
+        "id": "a2b5e2a02b555c45",
+        "type": "http in",
+        "z": "3bf36f2bd537dee3",
+        "name": "Receive plate from IA",
+        "url": "/ai/carPlate",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 160,
+        "y": 800,
+        "wires": [
+            [
+                "3a0aca82946447dd"
+            ]
+        ]
+    },
+    {
+        "id": "3a0aca82946447dd",
+        "type": "json",
+        "z": "3bf36f2bd537dee3",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 390,
+        "y": 800,
+        "wires": [
+            [
+                "2720e5331ca51608"
+            ]
+        ]
+    },
+    {
+        "id": "2720e5331ca51608",
+        "type": "debug",
+        "z": "3bf36f2bd537dee3",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 800,
         "wires": []
     }
 ]
