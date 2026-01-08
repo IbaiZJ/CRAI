@@ -1336,7 +1336,11 @@
         "type": "http in",
         "z": "3bf36f2bd537dee3",
         "name": "Receive Alert",
+<<<<<<< Updated upstream
         "url": "/alerts",
+=======
+        "url": "/ai/carPlate",
+>>>>>>> Stashed changes
         "method": "post",
         "upload": false,
         "skipBodyParsing": false,
