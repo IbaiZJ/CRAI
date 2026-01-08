@@ -1,5 +1,6 @@
 package com.crai.os.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -40,5 +41,13 @@ class PoliceControllerTest {
 
         assertSame(alerts, result);
         verify(policeService).getProcessedAlerts();
+    }
+
+    @Test
+    void clearAlertsDelegatesToService() {
+        Object result = controller.clearAlerts();
+
+        verify(policeService).clearAlerts();
+        assertThat(result).isInstanceOf(java.util.Map.class);
     }
 }

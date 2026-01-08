@@ -71,9 +71,11 @@ public class ITVService {
 
             boolean expired = randomGenerator.nextBoolean();
 
+            long oneYearMillis = Duration.ofDays(365).toMillis();
+            long delta = ThreadLocalRandom.current().nextLong(0, oneYearMillis + 1);
             long expiration = expired
-                    ? now - randomGenerator.nextInt(1000 * 60 * 60 * 24 * 365)
-                    : now + randomGenerator.nextInt(1000 * 60 * 60 * 24 * 365);
+                    ? now - delta
+                    : now + delta;
 
             itvRepository.save(new ITVRecord(plate, expiration));
         }

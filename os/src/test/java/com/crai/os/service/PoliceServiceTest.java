@@ -534,4 +534,45 @@ class PoliceServiceTest {
         Thread.sleep(500);
         
     }
+
+    @Test
+    void clearAlertsRemovesAllProcessedAlerts() throws Exception {
+        // Add some alerts
+        policeService.sendAlert(new PoliceMessage(AlertType.POLICE, "CLEAR1", "Alert 1"));
+        policeService.sendAlert(new PoliceMessage(AlertType.BADGE, "CLEAR2", "Alert 2"));
+        policeService.sendAlert(new PoliceMessage(AlertType.ITV, "CLEAR3", "Alert 3"));
+        
+        Thread.sleep(500);
+        
+        // Verify alerts are processed
+        assertThat(policeService.getProcessedAlerts()).hasSize(3);
+        
+        // Clear all alerts
+        policeService.clearAlerts();
+        
+        // Verify both queue and processed list are cleared
+        assertThat(policeService.getProcessedAlerts()).isEmpty();
+    }
+
+    @Test
+    void clearAlertsRemovesQueuedAlerts() throws Exception {
+        // Create a service without initializing to keep alerts in queue
+        SimulationConfig cfg = new SimulationConfig();
+        PoliceService svc = new PoliceService(cfg);
+        // Don't call init, so alerts stay in queue
+        
+        // Add alerts to queue
+        new Thread(() -> {
+            svc.sendAlert(new PoliceMessage(AlertType.POLICE, "Q1", "Queued 1"));
+            svc.sendAlert(new PoliceMessage(AlertType.BADGE, "Q2", "Queued 2"));
+        }).start();
+        
+        Thread.sleep(300);
+        
+        // Clear should remove queued alerts
+        svc.clearAlerts();
+        
+        // Verify cleared
+        assertThat(svc.getProcessedAlerts()).isEmpty();
+    }
 }
