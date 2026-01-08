@@ -50,17 +50,18 @@ Ask to the administrator for all the environment variables.
 4. **Access the services**
    | Service | URL | Description |
    |---------|-----|-------------|
-   | frontend | http://localhost:6901 | Main dashboard |
-   | ai | http://localhost:6902 | AI API |
+   | frontend | http://localhost:6901 | Main web dashboard |
+   | ai | http://localhost:6902 | AI |
    | backend | http://localhost:6903 | Workflow orchestration |
    | ebAPI | http://localhost:6904 | Environmental Badge API |
-   | itvAPI | http://localhost:6905 | ITV Date API |
+   | itvAPI | http://localhost:6905 | ITV API |
    | os | http://localhost:6906 | Software simulation |
    | docs | http://localhost:6910 | Documentation |
 
 ## 📝 License
 
 This project is under the license specified in `LICENSE`
+
 
 
 
