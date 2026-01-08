@@ -2,6 +2,7 @@ import logging
 import cv2
 import os
 import time
+from datetime import datetime
 from video.video_stream import VideoStream
 from video.fps import FPS
 from detectors.vehicle_detector import VehicleDetector
@@ -43,6 +44,11 @@ def main():
         )
         plate_queue.start()
         logger.info("✓ Plate queue initialized")
+        
+        # Create captures directory for saving detected plates
+        captures_dir = os.path.join(dir, 'captures')
+        os.makedirs(captures_dir, exist_ok=True)
+        logger.info(f"✓ Captures directory: {captures_dir}")
         
         logger.info("3. Loading vehicle detector...")
         vehicle_model_path = config.get('vehicle_detector.model_path', 'models/yolov8n.pt')
@@ -149,6 +155,25 @@ def main():
                                                 'confidence': conf,
                                                 'vehicle_type': vehicle['class_name']
                                             }
+                                            
+                                            # Save captures of vehicle and plate
+                                            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                                            
+                                            # Save vehicle image
+                                            vehicle_img = frame[y1:y2, x1:x2]
+                                            if vehicle_img.size > 0:
+                                                vehicle_filename = f"{timestamp}_{text}_vehicle.jpg"
+                                                vehicle_path = os.path.join(captures_dir, vehicle_filename)
+                                                cv2.imwrite(vehicle_path, vehicle_img)
+                                            
+                                            # Save plate image
+                                            if plate_img is not None and plate_img.size > 0:
+                                                plate_filename = f"{timestamp}_{text}_plate.jpg"
+                                                plate_path = os.path.join(captures_dir, plate_filename)
+                                                cv2.imwrite(plate_path, plate_img)
+                                            
+                                            logger.info(f"Captures saved: {vehicle_filename}")
+                                            
                                             # Send plate to queue for API posting
                                             plate_queue.add_plate(
                                                 plate_text=text,
