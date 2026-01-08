@@ -66,6 +66,7 @@ htmlcov/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+UA-DETRAC-DATASET-10K-2/
 
 # ebAPI
 environmentalBadge.txt
@@ -91,3 +92,4 @@ npm-debug.log*
 
 # Datasets
 /data/UA_DETRAC
+
