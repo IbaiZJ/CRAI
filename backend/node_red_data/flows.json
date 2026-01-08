@@ -1330,5 +1330,47 @@
         "x": 460,
         "y": 340,
         "wires": []
+    },
+    {
+        "id": "12c7a84772e29ac3",
+        "type": "http in",
+        "z": "3bf36f2bd537dee3",
+        "name": "Receive Alert",
+        "url": "/alerts",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 520,
+        "wires": [
+            [
+                "8551e1fd36072c45"
+            ]
+        ]
+    },
+    {
+        "id": "8551e1fd36072c45",
+        "type": "json",
+        "z": "3bf36f2bd537dee3",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 330,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3ebee835bef670d9",
+        "type": "comment",
+        "z": "3bf36f2bd537dee3",
+        "name": "Recibe la matricula de la IA",
+        "info": "",
+        "x": 170,
+        "y": 440,
+        "wires": []
     }
 ]
