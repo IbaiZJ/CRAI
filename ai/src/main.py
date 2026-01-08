@@ -10,6 +10,7 @@ from detectors.ocr import PlateReader
 from config.config import Config
 from utils.logger import get_logger, LogSection
 from utils.terminal import Terminal
+from api.plate_queue import PlateQueue
 
 
 def main():
@@ -29,7 +30,21 @@ def main():
         vs = VideoStream(src=camera_source, resolution=resolution, auto_find=auto_find).start()
         logger.info("✓ Camera started successfully")
         
-        logger.info("2. Loading vehicle detector...")
+        logger.info("2. Initializing plate queue...")
+        endpoint_base = config.get('api.endpoint_base_url', 'http://localhost:6903')
+        endpoint_path = config.get('api.car_plate_endpoint', '/ai/carPlate')
+        full_endpoint = f"{endpoint_base}{endpoint_path}"
+        
+        plate_queue = PlateQueue(
+            endpoint_url=full_endpoint,
+            max_retries=config.get('api.max_retries', 3),
+            retry_delay=config.get('api.retry_delay', 2.0),
+            timeout=config.get('api.timeout', 10)
+        )
+        plate_queue.start()
+        logger.info("✓ Plate queue initialized")
+        
+        logger.info("3. Loading vehicle detector...")
         vehicle_model_path = config.get('vehicle_detector.model_path', 'models/yolov8n.pt')
         if not os.path.isabs(vehicle_model_path):
             vehicle_model_path = os.path.join(dir, vehicle_model_path)
@@ -38,7 +53,7 @@ def main():
             conf_threshold=config.get('vehicle_detector.confidence_threshold', 0.5)
         )
         
-        logger.info("3. Loading license plate detector...")
+        logger.info("4. Loading license plate detector...")
         plate_model_path = config.get('plate_detector.model_path', 'models/license_plate_detector.pt')
         if not os.path.isabs(plate_model_path):
             plate_model_path = os.path.join(dir, plate_model_path)
@@ -47,7 +62,7 @@ def main():
             conf_threshold=config.get('plate_detector.confidence_threshold', 0.4)
         )
         
-        logger.info("4. Initializing OCR...")
+        logger.info("5. Initializing OCR...")
         ocr_enabled = config.get('ocr.enabled', True)
         ocr_available = False
         plate_reader = None
@@ -134,6 +149,13 @@ def main():
                                                 'confidence': conf,
                                                 'vehicle_type': vehicle['class_name']
                                             }
+                                            # Send plate to queue for API posting
+                                            plate_queue.add_plate(
+                                                plate_text=text,
+                                                confidence=conf,
+                                                vehicle_type=vehicle['class_name']
+                                            )
+                                            logger.info(f"New plate detected and queued: {text} (conf: {conf:.2f})")
                                         else:
                                             detected_plates[text]['count'] += 1
                                     
@@ -157,7 +179,7 @@ def main():
             
             if show_stats:
                 overlay = frame_display.copy()
-                cv2.rectangle(overlay, (10, 10), (400, 110), (0, 0, 0), -1)
+                cv2.rectangle(overlay, (10, 10), (400, 140), (0, 0, 0), -1)
                 cv2.addWeighted(overlay, 0.6, frame_display, 0.4, 0, frame_display)
                 
                 y_offset = 30
@@ -174,6 +196,12 @@ def main():
                 y_offset += 25
                 cv2.putText(frame_display, f"Unique: {len(detected_plates)}", (20, y_offset), 
                            cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+                y_offset += 25
+                
+                # Show queue stats
+                queue_stats = plate_queue.get_stats()
+                cv2.putText(frame_display, f"Queue: {queue_stats['pending']} | Sent: {queue_stats['sent']}", 
+                           (20, y_offset), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 1)
             
             cv2.imshow(window_name, frame_display)
             
@@ -217,8 +245,15 @@ def main():
             
             table_lines.extend(["=" * 60, ""])
             logger.info("\n".join(table_lines))
+        
+        # Show queue statistics
+        queue_stats = plate_queue.get_stats()
+        logger.info(f"Queue statistics: Sent={queue_stats['sent']}, Failed={queue_stats['failed']}, "
+                   f"Pending={queue_stats['pending']}")
     
     with LogSection(logger, "System cleanup"):
+        logger.info("Stopping plate queue...")
+        plate_queue.stop()
         logger.info("Stopping video stream...")
         vs.stop()
         logger.info("Closing windows...")
