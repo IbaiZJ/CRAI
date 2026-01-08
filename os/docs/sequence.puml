@@ -1,5 +1,5 @@
 @startuml Sequence
-title Flujo principal (vehiculo generado automaticamente)
+title Sequence diagram (CRAI os)
 actor "VehicleSpawnerService" as Spawner
 participant "RandomVehicleGenerator" as Generator
 participant "CameraQueue\n(BoundedPriorityBlockingQueue)" as Queue
