@@ -163,6 +163,11 @@ package utils {
     +take() : E
     +size() : int
   }
+  class LinkedBlockingQueue<E> {
+    +put(E)
+    +take() : E
+    +size() : int
+  }
   class RandomVehicleGenerator {
     +generate(double,double) : Vehicle
   }
@@ -197,12 +202,21 @@ ITVService --> SimulationConfig
 
 PoliceService --> SimulationConfig
 PoliceService --> PoliceMessage
+PoliceService --> LinkedBlockingQueue : queue<PoliceMessage>
 
 ITVRepository --> ITVRecord
 OwnerRepository --> Owner
 PoliceMessageFactory --> PoliceMessage
 RandomVehicleGenerator --> SpanishPlateGenerator
 SpanishPlateGenerator --> Vehicle : plate()
+
+note right of RandomVehicleGenerator
+  Priority rule:
+  3 stolen or alert
+  2 itv fail
+  1 invalid env tag
+  0 normal
+end note
 
 note bottom
   Cola de camaras: BoundedPriorityBlockingQueue<Vehicle> acotada con prioridad (capacidad desde SimulationConfig.cameraQueueCapacity).

@@ -1,21 +1,30 @@
 @startuml Sequence
-title Flujo principal (vehículo generado automáticamente)
+title Sequence diagram (CRAI os)
 actor "VehicleSpawnerService" as Spawner
-participant "CameraQueue\n(PriorityBlockingQueue)" as Queue
+participant "RandomVehicleGenerator" as Generator
+participant "CameraQueue\n(BoundedPriorityBlockingQueue)" as Queue
 participant "CameraWorker\n(CameraPoolService)" as Camera
 participant "ITVService" as ITV
 participant "PoliceService" as Police
+participant "PoliceQueue\n(LinkedBlockingQueue)" as PoliceQueue
 participant "Node-RED\n(Webhook)" as NodeRed
 
+Spawner -> Generator : generate(stolenProb, itvFailProb)
+Generator --> Spawner : Vehicle(priority)
 Spawner -> Queue : put(Vehicle)
-loop Por cada cámara activa
+loop Por cada camara activa
   Queue -> Camera : take()
-  Camera -> ITV : checkItv(vehicle)
+  Camera -> Camera : validar etiqueta ambiental
+  Camera -> ITV : check(plate)
   ITV --> Camera : status
-  Camera -> Police : alertIfNeeded(status, env/stolen)
+  Camera -> Camera : check stolen/alert
+  Camera -> Police : sendAlert(PoliceMessage)
   alt alerta generada
-    Police -> Police : enqueue + procesar
-    Police -> NodeRed : HTTP POST (alerta)
+    Police -> PoliceQueue : put(PoliceMessage)
+    Police -> Police : procesar mensaje
+    opt webhook configurado
+      Police -> NodeRed : HTTP POST (alerta)
+    end
   end
 end
 @enduml
