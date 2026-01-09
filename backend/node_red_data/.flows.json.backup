@@ -240,8 +240,10 @@
         "console": false,
         "tostatus": false,
         "complete": "payload",
-        "x": 750,
-        "y": 940,
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 730,
+        "y": 1080,
         "wires": []
     },
     {
@@ -805,8 +807,8 @@
         ],
         "checkall": "true",
         "outputs": 3,
-        "x": 510,
-        "y": 1160,
+        "x": 790,
+        "y": 1000,
         "wires": [
             [
                 "23932db24f1c5301"
@@ -844,8 +846,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 3,
-        "x": 760,
-        "y": 1060,
+        "x": 980,
+        "y": 980,
         "wires": [
             [
                 "b010632ce9ea2afd",
@@ -871,8 +873,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1030,
-        "y": 1020,
+        "x": 1250,
+        "y": 1040,
         "wires": [
             [
                 "5e22649949e1823c",
@@ -892,8 +894,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1120,
-        "y": 820,
+        "x": 1300,
+        "y": 940,
         "wires": [
             [
                 "083d998fbb5dde7a"
@@ -912,7 +914,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 750,
+        "x": 1150,
         "y": 1140,
         "wires": [
             [
@@ -927,8 +929,8 @@
         "name": "Other alerts",
         "active": true,
         "complete": "payload",
-        "x": 690,
-        "y": 1220,
+        "x": 930,
+        "y": 1200,
         "wires": []
     },
     {
@@ -938,7 +940,7 @@
         "name": "ITV other",
         "active": true,
         "complete": "payload",
-        "x": 900,
+        "x": 1100,
         "y": 1080,
         "wires": []
     },
@@ -949,7 +951,7 @@
         "name": "Telegram error",
         "active": true,
         "complete": "payload",
-        "x": 1740,
+        "x": 2040,
         "y": 1120,
         "wires": []
     },
@@ -966,8 +968,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1200,
-        "y": 980,
+        "x": 1420,
+        "y": 1020,
         "wires": []
     },
     {
@@ -983,8 +985,8 @@
         "tls": false,
         "name": "",
         "dname": "Send email",
-        "x": 1230,
-        "y": 1060,
+        "x": 1430,
+        "y": 1080,
         "wires": []
     },
     {
@@ -995,7 +997,7 @@
         "bot": "6432ebeb5db11b74",
         "haserroroutput": true,
         "outputs": 2,
-        "x": 1480,
+        "x": 1780,
         "y": 1120,
         "wires": [
             [],
@@ -1105,7 +1107,7 @@
         "id": "cdf1c72662bf117f",
         "type": "inject",
         "z": "3bf36f2bd537dee3",
-        "name": "Consulta etiqueta",
+        "name": "Consulta ITV",
         "props": [
             {
                 "p": "carPlate",
@@ -1118,7 +1120,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 140,
+        "x": 130,
         "y": 100,
         "wires": [
             [
@@ -1327,6 +1329,281 @@
         "complete": "payload",
         "x": 460,
         "y": 340,
+        "wires": []
+    },
+    {
+        "id": "3ebee835bef670d9",
+        "type": "comment",
+        "z": "3bf36f2bd537dee3",
+        "name": "Recibe la matricula de la IA",
+        "info": "",
+        "x": 170,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "f5824bebafedf1b1",
+        "type": "inject",
+        "z": "3bf36f2bd537dee3",
+        "name": "Consulta etiqueta",
+        "props": [
+            {
+                "p": "carPlate",
+                "v": "0163MRC",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 160,
+        "y": 660,
+        "wires": [
+            [
+                "9d4100f8a1e25a22"
+            ]
+        ]
+    },
+    {
+        "id": "9d4100f8a1e25a22",
+        "type": "function",
+        "z": "3bf36f2bd537dee3",
+        "name": "Construir URL API",
+        "func": "msg.url = \"http://ebAPI:8000/api?car_plate=\" + msg.carPlate;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 660,
+        "wires": [
+            [
+                "c32a1b60e9f49150"
+            ]
+        ]
+    },
+    {
+        "id": "c32a1b60e9f49150",
+        "type": "http request",
+        "z": "3bf36f2bd537dee3",
+        "name": "GET EB",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 680,
+        "y": 660,
+        "wires": [
+            [
+                "174fcd1cd2da9e15"
+            ]
+        ]
+    },
+    {
+        "id": "cf1e1822b51a01a0",
+        "type": "debug",
+        "z": "3bf36f2bd537dee3",
+        "name": "Resultado API",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 1180,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "174fcd1cd2da9e15",
+        "type": "json",
+        "z": "3bf36f2bd537dee3",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 910,
+        "y": 660,
+        "wires": [
+            [
+                "cf1e1822b51a01a0"
+            ]
+        ]
+    },
+    {
+        "id": "a1f0b1e9d1c00101",
+        "type": "http in",
+        "z": "3bf36f2bd537dee3",
+        "name": "Receive plate from IA",
+        "url": "/ai/carPlate",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 160,
+        "y": 500,
+        "wires": [
+            [
+                "a1f0b1e9d1c00102"
+            ]
+        ]
+    },
+    {
+        "id": "a1f0b1e9d1c00102",
+        "type": "json",
+        "z": "3bf36f2bd537dee3",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 370,
+        "y": 500,
+        "wires": [
+            [
+                "a1f0b1e9d1c00103"
+            ]
+        ]
+    },
+    {
+        "id": "a1f0b1e9d1c00103",
+        "type": "function",
+        "z": "3bf36f2bd537dee3",
+        "name": "Validate plate schema",
+        "func": "// Schema + Spanish plate validation\nconst payload = msg.payload;\n\nconst requiredFields = [\n    \"plate\",\n    \"confidence\",\n    \"vehicle_type\",\n    \"timestamp\",\n    \"retries\"\n];\n\nfunction error(message) {\n    msg.statusCode = 400;\n    msg.payload = {\n        error: \"Invalid payload\",\n        message\n    };\n    return [null, msg];\n}\n\n// Required fields\nfor (const field of requiredFields) {\n    if (!(field in payload)) {\n        return error(`Missing field: ${field}`);\n    }\n}\n\n// Plate\nif (typeof payload.plate !== \"string\") {\n    return error(\"plate must be a string\");\n}\n\npayload.plate = payload.plate.toUpperCase();\nconst plateRegex = /^[0-9]{4}[B-DF-HJ-NP-TV-Z]{3}$/;\nif (!plateRegex.test(payload.plate)) {\n    return error(\"plate format must be 4 digits followed by 3 consonant letters (Spanish format)\");\n}\n\n// Confidence\nif (typeof payload.confidence !== \"number\" || payload.confidence < 0 || payload.confidence > 1) {\n    return error(\"confidence must be a number between 0 and 1\");\n}\n\n// Vehicle type\nif (typeof payload.vehicle_type !== \"string\") {\n    return error(\"vehicle_type must be a string\");\n}\n\n// Retries\nif (typeof payload.retries !== \"number\" || payload.retries < 0) {\n    return error(\"retries must be a non-negative number\");\n}\n\n// Timestamp\nif (isNaN(Date.parse(payload.timestamp))) {\n    return error(\"timestamp must be a valid ISO-8601 date\");\n}\n\n// OK\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 500,
+        "wires": [
+            [
+                "a1f0b1e9d1c00104",
+                "4f3b50fb6d090649"
+            ],
+            [
+                "a1f0b1e9d1c00105"
+            ]
+        ]
+    },
+    {
+        "id": "a1f0b1e9d1c00104",
+        "type": "function",
+        "z": "3bf36f2bd537dee3",
+        "name": "OK response",
+        "func": "msg.statusCode = 200;\nmsg.payload = {\n    ok: true,\n    message: \"Plate received and validated\",\n    plate: msg.payload.plate\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 460,
+        "wires": [
+            [
+                "a1f0b1e9d1c00106"
+            ]
+        ]
+    },
+    {
+        "id": "a1f0b1e9d1c00105",
+        "type": "http response",
+        "z": "3bf36f2bd537dee3",
+        "name": "HTTP 400",
+        "statusCode": "",
+        "headers": {},
+        "x": 840,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "a1f0b1e9d1c00106",
+        "type": "http response",
+        "z": "3bf36f2bd537dee3",
+        "name": "HTTP 200",
+        "statusCode": "",
+        "headers": {},
+        "x": 1050,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "4f3b50fb6d090649",
+        "type": "debug",
+        "z": "3bf36f2bd537dee3",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "a2b5e2a02b555c45",
+        "type": "http in",
+        "z": "3bf36f2bd537dee3",
+        "name": "Receive plate from IA",
+        "url": "/ai/carPlate",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 160,
+        "y": 800,
+        "wires": [
+            [
+                "3a0aca82946447dd"
+            ]
+        ]
+    },
+    {
+        "id": "3a0aca82946447dd",
+        "type": "json",
+        "z": "3bf36f2bd537dee3",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 390,
+        "y": 800,
+        "wires": [
+            [
+                "2720e5331ca51608"
+            ]
+        ]
+    },
+    {
+        "id": "2720e5331ca51608",
+        "type": "debug",
+        "z": "3bf36f2bd537dee3",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 800,
         "wires": []
     }
 ]
