@@ -296,6 +296,30 @@ class PlateReader:
         
         return denoised
     
+    def validate_plate(self, plate: str) -> str | None:
+        """
+        Validate the format of Spanish car plate and convert to uppercase
+        Spanish plates format: 4 digits + 3 consonant letters (no vowels)
+        Example: 1234BCD
+        
+        Args:
+            plate: Plate text to validate
+            
+        Returns:
+            Formatted plate if valid, None otherwise
+        """
+        if not plate:
+            return None
+        
+        # Remove spaces and dashes, convert to uppercase
+        formatted_plate = plate.upper().replace(" ", "").replace("-", "")
+        
+        # Check Spanish plate format: 4 digits + 3 consonants
+        if re.match(r"^\d{4}[BCDFGHJKLMNPRSTVWXYZ]{3}$", formatted_plate):
+            return formatted_plate
+        
+        return None
+    
     def _clean_plate_text(self, text):
         """
         Clean the license plate text
@@ -332,7 +356,15 @@ class PlateReader:
             if char in safe_replacements:
                 cleaned[i] = safe_replacements[char]
         
-        return ''.join(cleaned)
+        result = ''.join(cleaned)
+        
+        # Validate Spanish plate format before returning
+        validated = self.validate_plate(result)
+        if validated:
+            return validated
+        
+        # If not valid Spanish format, return empty string
+        return ""
     
     def get_stable_reading(self, min_occurrences=2):
         """
@@ -428,66 +460,3 @@ class PlateReader:
         self._last_stable = None
         self._cache.clear()
 
-
-# ============================================
-# Alternative class: OCR with Pytesseract
-# ============================================
-
-class PlateReaderTesseract:
-    """
-    License plate reader using Tesseract OCR
-    Lighter alternative than EasyOCR
-    """
-    
-    def __init__(self):
-        """Initialize Tesseract OCR"""
-        try:
-            import pytesseract
-            self.pytesseract = pytesseract
-            print("✓ Tesseract OCR available")
-            self.available = True
-        except ImportError:
-            print("✗ pytesseract is not installed")
-            print("\nInstall with: pip install pytesseract")
-            print("And download Tesseract: https://github.com/UB-Mannheim/tesseract/wiki")
-            self.available = False
-    
-    def read_plate(self, plate_image):
-        """Read license plate text with Tesseract"""
-        if not self.available:
-            return {
-                'text': 'OCR_NOT_AVAILABLE',
-                'confidence': 0.0,
-                'raw_text': '',
-                'success': False
-            }
-        
-        try:
-            # Preprocess
-            gray = cv2.cvtColor(plate_image, cv2.COLOR_BGR2GRAY)
-            _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-            
-            # Configuration for license plates (only alphanumerics)
-            config = '--psm 7 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-            
-            # Run OCR
-            text = self.pytesseract.image_to_string(thresh, config=config)
-            
-            # Clean
-            clean_text = re.sub(r'[^A-Z0-9]', '', text.upper())
-            
-            return {
-                'text': clean_text,
-                'confidence': 0.8,  # Tesseract doesn't give confidence easily
-                'raw_text': text,
-                'success': len(clean_text) > 0
-            }
-            
-        except Exception as e:
-            print(f"Error in Tesseract OCR: {e}")
-            return {
-                'text': '',
-                'confidence': 0.0,
-                'raw_text': '',
-                'success': False
-            }

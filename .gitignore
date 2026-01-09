@@ -92,4 +92,5 @@ npm-debug.log*
 # Datasets
 /data/UA_DETRAC
 
-db/db_data/
+
+db_data/

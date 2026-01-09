@@ -90,7 +90,7 @@ class PlateQueue:
             'vehicle_type': vehicle_type,
             'timestamp': datetime.now().isoformat(),
             'retries': 0
-        }
+        }   
         
         if metadata:
             plate_data['metadata'] = metadata
