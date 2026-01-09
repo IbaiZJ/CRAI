@@ -9,7 +9,8 @@ CREATE TABLE UserType (
 
 
 CREATE TABLE `User` (
-    email VARCHAR(100) PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) UNIQUE,
     nameUser VARCHAR(50) NOT NULL,
     surnameUser VARCHAR(50) NOT NULL,
     birthDate DATE,
