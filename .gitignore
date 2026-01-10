@@ -1,4 +1,32 @@
+# ===========================
+# Operating System Files
+# ===========================
+.DS_Store
+Thumbs.db
+
+# ===========================
+# IDEs and Editors
+# ===========================
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+
+# Eclipse
+.settings/
+.classpath
+.project
+
+# SonarLint
+.sonarlint/
+
+# ===========================
 # Java
+# ===========================
 *.class
 *.jar
 *.war
@@ -7,58 +35,10 @@ target/
 build/
 !.mvn/wrapper/maven-wrapper.jar
 
-# Node
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-dist/
-
-# SonarLint
-.sonarlint/
-
-# IDE - IntelliJ IDEA
-.idea/
-*.iml
-*.iws
-*.ipr
-
-# IDE - VS Code
-.vscode/
-
-# IDE - Eclipse
-.settings/
-.classpath
-.project
-
-# Docker
-.env
-docker-compose.override.yml
-
-# GCP Credentials
-gcp/service-account.json
-
-# Database
-*.db
-
-# Logs
-*.log
-logs/*
-!logs/ssd_training/
-logs/ssd_training/*
-!logs/ssd_training/**/*.v2
-
-# Exceptions: Upload .log files from ai/ folder
-!ai/**/*.log
-!ai/*.log
-
-# OS
-.DS_Store
-Thumbs.db
-
+# ===========================
 # Python
+# ===========================
 __pycache__/
-.pytest_cache/
 *.pyc
 *.pyo
 *.pyd
@@ -66,8 +46,7 @@ __pycache__/
 *.so
 *.egg
 *.egg-info/
-dist/
-build/
+.pytest_cache/
 .coverage
 .coverage.*
 htmlcov/
@@ -79,16 +58,55 @@ htmlcov/
 .dmypy.json
 dmypy.json
 
-# ebAPI
-environmentalBadge.txt
-environmentalBadge.csv
-
-plates_itv.csv
-# node-red
-# Node modules
+# ===========================
+# Node.js
+# ===========================
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+.npm/
 
-# Archivos de configuración local o sensibles
+# ===========================
+# Build & Distribution
+# ===========================
+dist/
+build/
+
+# ===========================
+# Logs
+# ===========================
+*.log
+logs/*
+!logs/ssd_training/
+logs/ssd_training/*
+!logs/ssd_training/**/*.v2
+
+# Exceptions: Upload .log files from ai/ folder
+!ai/**/*.log
+!ai/*.log
+
+# ===========================
+# Docker
+# ===========================
+.env
+docker-compose.override.yml
+
+# ===========================
+# Database
+# ===========================
+*.db
+db_data/
+
+# ===========================
+# GCP Credentials
+# ===========================
+gcp/service-account.json
+
+# ===========================
+# Node-RED
+# ===========================
 .config.nodes.json
 .config.nodes.json.backup
 .config.runtime.json
@@ -97,12 +115,16 @@ node_modules/
 .config.users.json.backup
 flows_cred.json
 flows_cred.json.backup
-package-lock.json
-npm-debug.log*
-.npm/
+
+# ===========================
+# Project Specific Data
+# ===========================
+# ebAPI
+environmentalBadge.txt
+environmentalBadge.csv
+
+# itvAPI
+plates_itv.csv
 
 # Datasets
 /data/UA_DETRAC
-
-
-db_data/
