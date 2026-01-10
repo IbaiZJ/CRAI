@@ -14,10 +14,22 @@ yarn-debug.log*
 yarn-error.log*
 dist/
 
-# IDE
-.vscode/
+# SonarLint
+.sonarlint/
+
+# IDE - IntelliJ IDEA
 .idea/
 *.iml
+*.iws
+*.ipr
+
+# IDE - VS Code
+.vscode/
+
+# IDE - Eclipse
+.settings/
+.classpath
+.project
 
 # Docker
 .env
