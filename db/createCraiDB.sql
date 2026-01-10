@@ -7,60 +7,62 @@ CREATE USER IF NOT EXISTS 'crai_user'@'%' IDENTIFIED BY 'crai_pass';
 GRANT ALL PRIVILEGES ON `crai`.* TO 'crai_user'@'%';
 FLUSH PRIVILEGES;
 
-CREATE TABLE UserType (
-    userTypeId INT AUTO_INCREMENT PRIMARY KEY,
-    nameTyme VARCHAR(50) NOT NULL
-);
-
-
-CREATE TABLE `User` (
+CREATE TABLE userType (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(100) UNIQUE,
-    nameUser VARCHAR(50) NOT NULL,
-    surnameUser VARCHAR(50) NOT NULL,
-    birthDate DATE,
+    nameType VARCHAR(50) NOT NULL
+);
+
+
+CREATE TABLE user (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    name VARCHAR(50),
+    surname VARCHAR(50),
+    fullName VARCHAR(100),
+    picture VARCHAR(255),
+    sub VARCHAR(100),
+    email_verified BOOLEAN,
+    locale VARCHAR(10),
+    iat BIGINT,
+    exp BIGINT,
     userType INT NOT NULL,
-    FOREIGN KEY (userType) REFERENCES UserType(userTypeId)
+
+    FOREIGN KEY (userType) REFERENCES userType(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 
-CREATE TABLE VehicleType (
-    vehicleTypeId INT AUTO_INCREMENT PRIMARY KEY,
-    vehicleTypeName VARCHAR(50) NOT NULL
-);
-
-
-CREATE TABLE Vehicles (
+CREATE TABLE vehicles (
     plate VARCHAR(10) PRIMARY KEY,
     badge VARCHAR(10),
-    idUser VARCHAR(100),
+    userId VARCHAR(100),
     vehicleTypeId INT,
-    FOREIGN KEY (idUser) REFERENCES `User`(email),
-    FOREIGN KEY (vehicleTypeId) REFERENCES VehicleType(vehicleTypeId)
+
+    FOREIGN KEY (userId) REFERENCES user(email) ON DELETE SET NULL ON UPDATE CASCADE,
 );
 
 
-CREATE TABLE StolenVehicle (
-    idRobado INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE stolenVehicle (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     plate VARCHAR(10) NOT NULL UNIQUE,
     stolenDate DATE,
-    FOREIGN KEY (plate) REFERENCES Vehicles(plate)
+
+    FOREIGN KEY (plate) REFERENCES vehicles(plate) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
-CREATE TABLE Camera (
-    cameraId INT AUTO_INCREMENT PRIMARY KEY,
-    locationX FLOAT,
-    locationY FLOAT,
-    badge VARCHAR(10)
+CREATE TABLE camera (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    locationX DECIMAL(9,6),
+    locationY DECIMAL(9,6)
 );
 
 
-CREATE TABLE Detection (
+CREATE TABLE detection (
     id INT AUTO_INCREMENT PRIMARY KEY,
     vehicleId VARCHAR(10) NOT NULL,
     cameraId INT NOT NULL,
     detectionDate DATETIME NOT NULL,
-    FOREIGN KEY (vehicleId) REFERENCES Vehicles(plate),
-    FOREIGN KEY (cameraId) REFERENCES Camera(cameraId)
+
+    FOREIGN KEY (vehicleId) REFERENCES vehicles(plate) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (cameraId) REFERENCES camera(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );

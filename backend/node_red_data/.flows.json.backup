@@ -24,16 +24,152 @@
         "env": []
     },
     {
-        "id": "64608cd93cad35de",
+        "id": "subflow1",
         "type": "subflow",
-        "name": "Web Registration",
-        "info": "",
+        "name": "DB Query with Retry",
         "category": "",
-        "in": [],
-        "out": [],
+        "in": [
+            {
+                "x": 720,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "sf_init_retry"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 1540,
+                "y": 280,
+                "wires": [
+                    {
+                        "id": "sf_format_success",
+                        "port": 0
+                    },
+                    {
+                        "id": "sf_check_retry",
+                        "port": 1
+                    }
+                ]
+            }
+        ],
         "env": [],
         "meta": {},
-        "color": "#DDAA99"
+        "color": "#FDD0A2",
+        "icon": "node-red/db.svg"
+    },
+    {
+        "id": "5028967e272250ae",
+        "type": "subflow",
+        "name": "itvAPI Request with Retry",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 200,
+                "y": 120,
+                "wires": [
+                    {
+                        "id": "be14da8b68865ee6"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 1060,
+                "y": 300,
+                "wires": [
+                    {
+                        "id": "c09f6fc020486f92",
+                        "port": 1
+                    },
+                    {
+                        "id": "e93880496a70372c",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#3FADB5",
+        "icon": "font-awesome/fa-car"
+    },
+    {
+        "id": "e4c4b244ac7b2ae0",
+        "type": "subflow",
+        "name": "ebAPI Request with Retry",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 140,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "4df8f24db0fb5423"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 1100,
+                "y": 340,
+                "wires": [
+                    {
+                        "id": "1cae75a6c93f013b",
+                        "port": 1
+                    },
+                    {
+                        "id": "a70b5c6fb5c18947",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#C7E9C0",
+        "icon": "font-awesome/fa-id-badge"
+    },
+    {
+        "id": "ba5cb54d469c6c3e",
+        "type": "subflow",
+        "name": "Stolen Vehicle Request with Retry",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 240,
+                "y": 200,
+                "wires": []
+            }
+        ],
+        "out": [
+            {
+                "x": 720,
+                "y": 200,
+                "wires": []
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#FFAAAA",
+        "icon": "font-awesome/fa-hand-stop-o"
+    },
+    {
+        "id": "389e871481694f64",
+        "type": "MySQLdatabase",
+        "name": "mysql",
+        "host": "mysql",
+        "port": "3306",
+        "db": "crai",
+        "tz": "",
+        "charset": "UTF8"
     },
     {
         "id": "6432ebeb5db11b74",
@@ -63,102 +199,809 @@
         "verboselogging": false
     },
     {
-        "id": "389e871481694f64",
-        "type": "MySQLdatabase",
-        "name": "mysql",
-        "host": "mysql",
-        "port": "3306",
-        "db": "crai",
-        "tz": "",
-        "charset": "UTF8"
+        "id": "sf_init_retry",
+        "type": "function",
+        "z": "subflow1",
+        "name": "init retry",
+        "func": "msg.retryCount = msg.retryCount || 0;\nmsg.maxRetries = 3;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 860,
+        "y": 160,
+        "wires": [
+            [
+                "cb7d7b5278f27f91"
+            ]
+        ]
     },
     {
-        "id": "53207df66be3ebe9",
-        "type": "http in",
-        "z": "64608cd93cad35de",
-        "name": "/login",
-        "url": "/login",
-        "method": "post",
-        "upload": false,
-        "skipBodyParsing": false,
-        "swaggerDoc": "",
-        "x": 170,
-        "y": 180,
+        "id": "sf_mysql",
+        "type": "mysql",
+        "z": "subflow1",
+        "mydb": "389e871481694f64",
+        "name": "db",
+        "x": 1230,
+        "y": 200,
+        "wires": [
+            [
+                "sf_format_success"
+            ]
+        ]
+    },
+    {
+        "id": "sf_catch",
+        "type": "catch",
+        "z": "subflow1",
+        "name": "",
+        "scope": [
+            "sf_mysql"
+        ],
+        "uncaught": false,
+        "x": 860,
+        "y": 280,
+        "wires": [
+            [
+                "sf_check_retry"
+            ]
+        ]
+    },
+    {
+        "id": "sf_check_retry",
+        "type": "function",
+        "z": "subflow1",
+        "name": "check retry",
+        "func": "msg.retryCount = (msg.retryCount || 0) + 1;\nconst maxRetries = msg.maxRetries || 3;\n\nnode.warn(`Try ${msg.retryCount}/${maxRetries} - Error: ${msg.error.message}`);\n\nif (msg.retryCount <= maxRetries) {\n    node.status({fill: \"yellow\", shape: \"ring\", text: `Reintento ${msg.retryCount}`});\n    return [msg, null];\n} else {\n    node.status({fill: \"red\", shape: \"dot\", text: \"Max reintentos\"});\n    \n    msg.payload = {\n        success: false,\n        error: \"Database temporarily unavailable\",\n        message: msg.error.message,\n        attempts: msg.retryCount,\n        timestamp: new Date().toISOString()\n    };\n    msg.statusCode = 503;\n    msg.headers = {\n        \"Content-Type\": \"application/json\",\n        \"Retry-After\": \"60\"\n    };\n    \n    return [null, msg];\n}",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1110,
+        "y": 280,
+        "wires": [
+            [
+                "2424b0de5f73a073"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "sf_format_success",
+        "type": "function",
+        "z": "subflow1",
+        "name": "format success",
+        "func": "msg.payload = {\n    success: true,\n    data: msg.payload,\n    count: Array.isArray(msg.payload) ? msg.payload.length : 1,\n    timestamp: new Date().toISOString()\n};\n\nmsg.statusCode = 200;\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1400,
+        "y": 220,
         "wires": [
             []
         ]
     },
     {
-        "id": "a0116f693d8e742c",
+        "id": "2424b0de5f73a073",
+        "type": "delay",
+        "z": "subflow1",
+        "name": "wait 1s",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 860,
+        "y": 220,
+        "wires": [
+            [
+                "cb7d7b5278f27f91"
+            ]
+        ]
+    },
+    {
+        "id": "ab5678c4ad8e7bff",
         "type": "comment",
-        "z": "64608cd93cad35de",
+        "z": "subflow1",
+        "name": "DB Query with Retry\\n  Executes SQL queries with automatic retry logic and prepared statements support.\\n  Input:\\n - msg.topic: SQL query string (use ? for placeholders)\\n - msg.params: Array of parameters for prepared statements (optional)\\n  Output:\\n - msg.payload: Formatted response (success or error)\\n - msg.statusCode: HTTP status code (200 or 503)\\n  Features:\\n - Up to 3 retry attempts on failure\\n - 1 second delay between retries\\n - Prepared statements support (SQL injection safe)\\n - Consistent JSON response format\\n - Automatic error handling\\n  Example usage:\\n msg.topic = \"SELECT * FROM users WHERE id = ?\";\\n msg.params = [userId];\\n",
+        "info": "DB Query with Retry\\n\n\nExecutes SQL queries with automatic retry logic and prepared statements support.\\n\n\nInput:\\n\n- msg.topic: SQL query string (use ? for placeholders)\\n\n- msg.params: Array of parameters for prepared statements (optional)\\n\n\nOutput:\\n\n- msg.payload: Formatted response (success or error)\\n\n- msg.statusCode: HTTP status code (200 or 503)\\n\n\nFeatures:\\n\n- Up to 3 retry attempts on failure\\n\n- 1 second delay between retries\\n\n- Prepared statements support (SQL injection safe)\\n\n- Consistent JSON response format\\n\n- Automatic error handling\\n\n\nExample usage:\\n\nmsg.topic = \"SELECT * FROM users WHERE id = ?\";\\n\nmsg.params = [userId];\\n",
+        "x": 350,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "d88d3da60ed9aff5",
+        "type": "status",
+        "z": "subflow1",
+        "name": "monitor db status",
+        "scope": [
+            "sf_mysql"
+        ],
+        "x": 780,
+        "y": 380,
+        "wires": [
+            [
+                "5b644b82a17ab94a"
+            ]
+        ]
+    },
+    {
+        "id": "9b5bc8b0aef1ebdc",
+        "type": "debug",
+        "z": "subflow1",
+        "name": "db status log",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1210,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "5b644b82a17ab94a",
+        "type": "function",
+        "z": "subflow1",
+        "name": "Log DB Status",
+        "func": "const statusInfo = {\n    node: msg.status.source.name || 'mysql',\n    state: msg.status.text,\n    fill: msg.status.fill,\n    shape: msg.status.shape,\n    timestamp: new Date().toISOString()\n};\n\nif (msg.status.fill === 'red') {\n    node.error(JSON.stringify(statusInfo));\n} else if (msg.status.fill === 'yellow') {\n    node.warn(JSON.stringify(statusInfo));\n} else {\n    node.log(JSON.stringify(statusInfo));\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1000,
+        "y": 380,
+        "wires": [
+            [
+                "9b5bc8b0aef1ebdc"
+            ]
+        ]
+    },
+    {
+        "id": "cb7d7b5278f27f91",
+        "type": "function",
+        "z": "subflow1",
+        "name": "prepare params",
+        "func": "if (msg.params) {\n    msg.payload = msg.params;\n    delete msg.params;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1060,
+        "y": 180,
+        "wires": [
+            [
+                "sf_mysql"
+            ]
+        ]
+    },
+    {
+        "id": "be14da8b68865ee6",
+        "type": "function",
+        "z": "5028967e272250ae",
+        "name": "init retry",
+        "func": "msg.retryCount = msg.retryCount || 0;\nmsg.maxRetries = 3;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 120,
+        "wires": [
+            [
+                "599d261ca0141138"
+            ]
+        ]
+    },
+    {
+        "id": "9778024941e5bb5e",
+        "type": "delay",
+        "z": "5028967e272250ae",
+        "name": "wait 1s",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 460,
+        "y": 200,
+        "wires": [
+            [
+                "8e1c2d7c41d14750"
+            ]
+        ]
+    },
+    {
+        "id": "4af1ca2b02a7cc1d",
+        "type": "catch",
+        "z": "5028967e272250ae",
         "name": "",
-        "info": "🌐 1. ¿Qué debe pasar cuando un usuario inicia sesión?\n🔑 Login con credenciales manuales (email/contraseña)\n\nEl front-end envía email + password a un endpoint Node-RED.\n\nNode-RED:\n\nBusca el usuario en la base de datos.\n\nCompara la contraseña con un hash (bcrypt, argon2, etc.).\n\nSi es correcta → genera un JWT o crea sesión.\n\nDevuelve la respuesta al cliente: éxito o error.\n\nEl cliente guarda el token (localStorage / cookie HTTPOnly).\n\nEl token se usa en todas las llamadas posteriores.\n\n🔐 Login con Google (OAuth2)\n\nEste flujo es distinto:\n\nEl usuario hace clic en “Sign in with Google”.\n\nEl front-end redirige a Google.\n\nGoogle devuelve un authorization code a tu backend (Node-RED).\n\nNode-RED intercambia ese código por:\n\naccess token\n\nid token (con los datos del usuario)\n\nNode-RED:\n\nVerifica el id_token (firma JWT de Google).\n\nRevisa si el usuario ya existe (email).\n\nSi no existe → crea uno (auto-signup).\n\nGenera tu propio JWT de sesión interna.\n\nResponde al cliente con tu token.",
-        "x": 180,
+        "scope": [
+            "8e1c2d7c41d14750"
+        ],
+        "uncaught": false,
+        "x": 420,
+        "y": 300,
+        "wires": [
+            [
+                "c09f6fc020486f92"
+            ]
+        ]
+    },
+    {
+        "id": "c09f6fc020486f92",
+        "type": "function",
+        "z": "5028967e272250ae",
+        "name": "check retry",
+        "func": "msg.retryCount = (msg.retryCount || 0) + 1;\nconst maxRetries = msg.maxRetries || 3;\n\nnode.warn(`Try ${msg.retryCount}/${maxRetries} - Error: ${msg.error.message}`);\n\nif (msg.retryCount <= maxRetries) {\n    node.status({fill: \"yellow\", shape: \"ring\", text: `Reintento ${msg.retryCount}`});\n    return [msg, null];\n} else {\n    node.status({fill: \"red\", shape: \"dot\", text: \"Max reintentos\"});\n    \n    msg.payload = {\n        success: false,\n        error: \"Endpoint temporarily unavailable\",\n        message: msg.error.message,\n        attempts: msg.retryCount,\n        timestamp: new Date().toISOString()\n    };\n    msg.statusCode = 503;\n    msg.headers = {\n        \"Content-Type\": \"application/json\",\n        \"Retry-After\": \"60\"\n    };\n    \n    return [null, msg];\n}",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 300,
+        "wires": [
+            [
+                "9778024941e5bb5e"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "e93880496a70372c",
+        "type": "function",
+        "z": "5028967e272250ae",
+        "name": "format success",
+        "func": "msg.payload = {\n    success: true,\n    data: msg.payload,\n    count: Array.isArray(msg.payload) ? msg.payload.length : 1,\n    timestamp: new Date().toISOString()\n};\n\nmsg.statusCode = 200;\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8e1c2d7c41d14750",
+        "type": "http request",
+        "z": "5028967e272250ae",
+        "name": "get itv",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 670,
+        "y": 160,
+        "wires": [
+            [
+                "e93880496a70372c"
+            ]
+        ]
+    },
+    {
+        "id": "599d261ca0141138",
+        "type": "function",
+        "z": "5028967e272250ae",
+        "name": "create URL",
+        "func": "msg.url = \"http://itvapi:8000/api?carPlate=\" + msg.carPlate;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 120,
+        "wires": [
+            [
+                "8e1c2d7c41d14750"
+            ]
+        ]
+    },
+    {
+        "id": "4df8f24db0fb5423",
+        "type": "function",
+        "z": "e4c4b244ac7b2ae0",
+        "name": "init retry",
+        "func": "msg.retryCount = msg.retryCount || 0;\nmsg.maxRetries = 3;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 160,
+        "wires": [
+            [
+                "474747be3ffb9618"
+            ]
+        ]
+    },
+    {
+        "id": "a4acfb541153ef4d",
+        "type": "delay",
+        "z": "e4c4b244ac7b2ae0",
+        "name": "wait 1s",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 440,
+        "y": 240,
+        "wires": [
+            [
+                "a2c06a64e0e0f491"
+            ]
+        ]
+    },
+    {
+        "id": "691524ecfb86413f",
+        "type": "catch",
+        "z": "e4c4b244ac7b2ae0",
+        "name": "",
+        "scope": [
+            "a2c06a64e0e0f491"
+        ],
+        "uncaught": false,
+        "x": 400,
+        "y": 340,
+        "wires": [
+            [
+                "1cae75a6c93f013b"
+            ]
+        ]
+    },
+    {
+        "id": "1cae75a6c93f013b",
+        "type": "function",
+        "z": "e4c4b244ac7b2ae0",
+        "name": "check retry",
+        "func": "msg.retryCount = (msg.retryCount || 0) + 1;\nconst maxRetries = msg.maxRetries || 3;\n\nnode.warn(`Try ${msg.retryCount}/${maxRetries} - Error: ${msg.error.message}`);\n\nif (msg.retryCount <= maxRetries) {\n    node.status({fill: \"yellow\", shape: \"ring\", text: `Reintento ${msg.retryCount}`});\n    return [msg, null];\n} else {\n    node.status({fill: \"red\", shape: \"dot\", text: \"Max reintentos\"});\n    \n    msg.payload = {\n        success: false,\n        error: \"Endpoint temporarily unavailable\",\n        message: msg.error.message,\n        attempts: msg.retryCount,\n        timestamp: new Date().toISOString()\n    };\n    msg.statusCode = 503;\n    msg.headers = {\n        \"Content-Type\": \"application/json\",\n        \"Retry-After\": \"60\"\n    };\n    \n    return [null, msg];\n}",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 340,
+        "wires": [
+            [
+                "a4acfb541153ef4d"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "a70b5c6fb5c18947",
+        "type": "function",
+        "z": "e4c4b244ac7b2ae0",
+        "name": "format success",
+        "func": "msg.payload = {\n    success: true,\n    data: msg.payload,\n    count: Array.isArray(msg.payload) ? msg.payload.length : 1,\n    timestamp: new Date().toISOString()\n};\n\nmsg.statusCode = 200;\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 940,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a2c06a64e0e0f491",
+        "type": "http request",
+        "z": "e4c4b244ac7b2ae0",
+        "name": "get envairomental badge",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 710,
+        "y": 200,
+        "wires": [
+            [
+                "a70b5c6fb5c18947"
+            ]
+        ]
+    },
+    {
+        "id": "474747be3ffb9618",
+        "type": "function",
+        "z": "e4c4b244ac7b2ae0",
+        "name": "create URL",
+        "func": "msg.url = \"http://itvapi:8000/api?carPlate=\" + msg.carPlate;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 160,
+        "wires": [
+            [
+                "a2c06a64e0e0f491"
+            ]
+        ]
+    },
+    {
+        "id": "a1f411e0c8b74b4e",
+        "type": "comment",
+        "z": "a5406ced814d1895",
+        "name": "Vehicles API endpoints\\n \\n Routes:\\n - {GET} /vehicles\\n     • Without query: returns all vehicles with their associated user\\n     • ?userId=x: returns vehicles filtered by user\\n \\n - {GET} /vehicle\\n     • ?plate=XXX: returns a vehicle filtered by its plate\\n     • Validates parameters and returns 400 if missing or invalid\\n",
+        "info": "Vehicles API endpoints\\n\n\\n\nRoutes:\\n\n- {GET} /vehicles\\n\n    • Without query: returns all vehicles with their associated user\\n\n    • ?userId=x: returns vehicles filtered by user\\n\n\\n\n- {GET} /vehicle\\n\n    • ?plate=XXX: returns a vehicle filtered by its plate\\n\n    • Validates parameters and returns 400 if missing or invalid\\n",
+        "x": 300,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "dcf42b3e5bc3e2af",
+        "type": "http in",
+        "z": "a5406ced814d1895",
+        "name": "{get} /vehicle",
+        "url": "/vehicle",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 630,
+        "y": 360,
+        "wires": [
+            [
+                "057bdb3779df26d7"
+            ]
+        ]
+    },
+    {
+        "id": "057bdb3779df26d7",
+        "type": "function",
+        "z": "a5406ced814d1895",
+        "name": "query | ?plate",
+        "func": "const plate = (msg.req.query.plate || \"\").trim();\n\nif (!plate) {\n    msg.payload = {\n        success: false,\n        error: \"Missing required parameter: plate\"\n    };\n\n    msg.statusCode = 400;\n\n    msg.headers = {\n        \"Content-Type\": \"application/json\"\n    };\n\n    return msg;\n}\n\n\nmsg.topic = `\nSELECT *\nFROM vehicles\nWHERE plate = ?\n`;\nmsg.params = [plate];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 360,
+        "wires": [
+            [
+                "8f14f27c6d1d613b"
+            ]
+        ]
+    },
+    {
+        "id": "8f14f27c6d1d613b",
+        "type": "subflow:subflow1",
+        "z": "a5406ced814d1895",
+        "name": "",
+        "x": 1080,
+        "y": 360,
+        "wires": [
+            [
+                "8237221c64f4de03"
+            ]
+        ]
+    },
+    {
+        "id": "8237221c64f4de03",
+        "type": "http response",
+        "z": "a5406ced814d1895",
+        "name": "response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1300,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "b636f8b5a8d4e3b4",
+        "type": "http in",
+        "z": "a5406ced814d1895",
+        "name": "{get} /vehicles",
+        "url": "/vehicles",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 630,
+        "y": 280,
+        "wires": [
+            [
+                "042666a72dee0b6e"
+            ]
+        ]
+    },
+    {
+        "id": "042666a72dee0b6e",
+        "type": "function",
+        "z": "a5406ced814d1895",
+        "name": "query | ?userId",
+        "func": "const userId = (msg.req.query.userId || \"\").trim();\n\nif (userId) {\n    msg.topic = `\n    SELECT v.*, u.*\n    FROM vehicles v\n    JOIN user u ON v.userId = u.id\n    WHERE u.id = ?\n    `;\n    msg.params = [userId];\n}\nelse {\n    msg.topic = `\n    SELECT v.*, u.*\n    FROM vehicles v\n    JOIN user u ON v.userId = u.id\n    `;\n}\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 280,
+        "wires": [
+            [
+                "a2fba7c55e11040e"
+            ]
+        ]
+    },
+    {
+        "id": "a2fba7c55e11040e",
+        "type": "subflow:subflow1",
+        "z": "a5406ced814d1895",
+        "name": "",
+        "x": 1080,
+        "y": 280,
+        "wires": [
+            [
+                "973e57aa8c2a01b8"
+            ]
+        ]
+    },
+    {
+        "id": "973e57aa8c2a01b8",
+        "type": "http response",
+        "z": "a5406ced814d1895",
+        "name": "response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1300,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "652a2e754d3fee05",
+        "type": "function",
+        "z": "a5406ced814d1895",
+        "name": "query",
+        "func": "\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 850,
+        "y": 80,
+        "wires": [
+            [
+                "8d462b8db4568b2b"
+            ]
+        ]
+    },
+    {
+        "id": "8d462b8db4568b2b",
+        "type": "subflow:subflow1",
+        "z": "a5406ced814d1895",
+        "name": "",
+        "x": 1060,
+        "y": 80,
+        "wires": [
+            [
+                "5d1c8bfaf0b77e40"
+            ]
+        ]
+    },
+    {
+        "id": "5d1c8bfaf0b77e40",
+        "type": "http response",
+        "z": "a5406ced814d1895",
+        "name": "response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1280,
         "y": 80,
         "wires": []
     },
     {
-        "id": "e90dde223a7fa16e",
+        "id": "153e541a1d1080bd",
+        "type": "comment",
+        "z": "a5406ced814d1895",
+        "name": "AI API endpoints\\n \\n Routes:\\n - {POST} /ai/carDetected\\n     • Without query: returns all vehicles with their associated user\\n     • ?userId=x: returns vehicles filtered by user\\n",
+        "info": "AI API endpoints\\n\n\\n\nRoutes:\\n\n- {POST} /ai/carDetected\\n\n    • Without query: returns all vehicles with their associated user\\n\n    • ?userId=x: returns vehicles filtered by user\\n\n",
+        "x": 300,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "7e48828d83f90993",
         "type": "http in",
-        "z": "64608cd93cad35de",
-        "name": "/signup",
-        "url": "/signup",
-        "method": "post",
+        "z": "a5406ced814d1895",
+        "name": "{get} /users",
+        "url": "/users",
+        "method": "get",
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 170,
-        "y": 320,
+        "x": 630,
+        "y": 580,
         "wires": [
             []
         ]
     },
     {
-        "id": "c95ef74f78e9ac1f",
-        "type": "mysql",
+        "id": "55fd3c8f3064a791",
+        "type": "http in",
         "z": "a5406ced814d1895",
-        "mydb": "389e871481694f64",
-        "name": "MySQL Docker",
-        "x": 380,
-        "y": 200,
+        "name": "{get} /user",
+        "url": "/user",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 620,
+        "y": 660,
         "wires": [
-            [
-                "8050d46f8bb52965"
-            ]
+            []
         ]
     },
     {
-        "id": "c25f33f2b725608a",
-        "type": "inject",
+        "id": "70860a9cee51494e",
+        "type": "comment",
         "z": "a5406ced814d1895",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "SELECT 1;",
-        "payload": "",
-        "payloadType": "str",
-        "x": 170,
-        "y": 200,
+        "name": "Users API endpoints\\n \\n Routes:\\n - {GET} /users\\n     • Without query: returns all users\\n     • Can optionally support filters in the future (e.g., ?role=admin) \\n - {GET} /user\\n     • ?id=XXX: returns a user filtered by its ID\\n     • Validates parameters and returns 400 if missing or invalid\\n",
+        "info": "Users API endpoints\\n\n\\n\nRoutes:\\n\n- {GET} /users\\n\n    • Without query: returns all users\\n\n    • Can optionally support filters in the future (e.g., ?role=admin)\n\\n\n- {GET} /user\\n\n    • ?id=XXX: returns a user filtered by its ID\\n\n    • Validates parameters and returns 400 if missing or invalid\\n",
+        "x": 300,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "f46e7a93fd85afd9",
+        "type": "comment",
+        "z": "a5406ced814d1895",
+        "name": "Cameras API endpoints\\n \\n Routes:\\n - {GET} /cameras\\n     • Without query: returns all cameras\\n     • Can optionally support filters in the future\\n \\n - {GET} /camera\\n     • ?id=XXX: returns a camera filtered by its ID\\n     • Validates parameters and returns 400 if missing or invalid\\n",
+        "info": "Cameras API endpoints\\n\n\\n\nRoutes:\\n\n- {GET} /cameras\\n\n    • Without query: returns all cameras\\n\n    • Can optionally support filters in the future\\n\n\\n\n- {GET} /camera\\n\n    • ?id=XXX: returns a camera filtered by its ID\\n\n    • Validates parameters and returns 400 if missing or invalid\\n\n",
+        "x": 300,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "14d49179b8edd41d",
+        "type": "http in",
+        "z": "a5406ced814d1895",
+        "name": "{get} /cameras",
+        "url": "/cameras",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 630,
+        "y": 840,
         "wires": [
-            [
-                "c95ef74f78e9ac1f"
-            ]
+            []
         ]
     },
     {
-        "id": "8050d46f8bb52965",
+        "id": "17f834944df8ae28",
+        "type": "http in",
+        "z": "a5406ced814d1895",
+        "name": "{get} /camera",
+        "url": "/camera",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 630,
+        "y": 920,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bed2187aab9a0778",
+        "type": "comment",
+        "z": "a5406ced814d1895",
+        "name": "Detections API endpoints\\n \\n Routes:\\n - GET /detections\\n     • Without query: returns all detections\\n     • ?userId=XXX: returns detections filtered by a specific user\\n     • ?plate=XXX: returns detections filtered by a specific      \\n vehicle plate\\n     • Multiple filters can be combined (?userId=XXX&plate=XXX)\\n \\n - GET /detection\\n     • ?id=XXX: returns a detection filtered by its ID\\n     • Validates parameters and returns 400 if missing or invalid\\n",
+        "info": "Detections API endpoints\\n\n\\n\nRoutes:\\n\n- GET /detections\\n\n    • Without query: returns all detections\\n\n    • ?userId=XXX: returns detections filtered by a specific user\\n\n    • ?plate=XXX: returns detections filtered by a specific \n    \\n vehicle plate\\n\n    • Multiple filters can be combined (?userId=XXX&plate=XXX)\\n\n\\n\n- GET /detection\\n\n    • ?id=XXX: returns a detection filtered by its ID\\n\n    • Validates parameters and returns 400 if missing or invalid\\n\n",
+        "x": 300,
+        "y": 1260,
+        "wires": []
+    },
+    {
+        "id": "545bc25f0207425b",
+        "type": "http in",
+        "z": "a5406ced814d1895",
+        "name": "{get} /detections",
+        "url": "/detections",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 660,
+        "y": 1140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f20d4743bf41cc97",
+        "type": "http in",
+        "z": "a5406ced814d1895",
+        "name": "{get} /detection",
+        "url": "/detection",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 660,
+        "y": 1220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8d29e4e7dba14b6a",
         "type": "debug",
         "z": "a5406ced814d1895",
         "name": "debug 1",
@@ -169,9 +1012,28 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 620,
-        "y": 200,
+        "x": 900,
+        "y": 160,
         "wires": []
+    },
+    {
+        "id": "64d7693526164079",
+        "type": "http in",
+        "z": "a5406ced814d1895",
+        "name": "{post} /ai/carDetected",
+        "url": "/ai/carDetected",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 660,
+        "y": 80,
+        "wires": [
+            [
+                "652a2e754d3fee05",
+                "8d29e4e7dba14b6a"
+            ]
+        ]
     },
     {
         "id": "425769f2630a88db",
@@ -973,40 +1835,6 @@
         "wires": []
     },
     {
-        "id": "5e22649949e1823c",
-        "type": "e-mail",
-        "z": "01df77f7ae4c4f86",
-        "server": "smtp.gmail.com",
-        "port": "587",
-        "authtype": "BASIC",
-        "saslformat": false,
-        "token": "oauth2Response.access_token",
-        "secure": false,
-        "tls": false,
-        "name": "",
-        "dname": "Send email",
-        "x": 1430,
-        "y": 1080,
-        "wires": []
-    },
-    {
-        "id": "083d998fbb5dde7a",
-        "type": "telegram sender",
-        "z": "01df77f7ae4c4f86",
-        "name": "Telegram alerts",
-        "bot": "6432ebeb5db11b74",
-        "haserroroutput": true,
-        "outputs": 2,
-        "x": 1780,
-        "y": 1120,
-        "wires": [
-            [],
-            [
-                "828dab69e9e76a83"
-            ]
-        ]
-    },
-    {
         "id": "c5fab67d44a35626",
         "type": "comment",
         "z": "01df77f7ae4c4f86",
@@ -1101,6 +1929,40 @@
         "info": "",
         "x": 150,
         "y": 720,
+        "wires": []
+    },
+    {
+        "id": "083d998fbb5dde7a",
+        "type": "telegram sender",
+        "z": "01df77f7ae4c4f86",
+        "name": "Telegram alerts",
+        "bot": "6432ebeb5db11b74",
+        "haserroroutput": true,
+        "outputs": 2,
+        "x": 1780,
+        "y": 1120,
+        "wires": [
+            [],
+            [
+                "828dab69e9e76a83"
+            ]
+        ]
+    },
+    {
+        "id": "5e22649949e1823c",
+        "type": "e-mail",
+        "z": "01df77f7ae4c4f86",
+        "server": "smtp.gmail.com",
+        "port": "587",
+        "authtype": "BASIC",
+        "saslformat": false,
+        "token": "oauth2Response.access_token",
+        "secure": false,
+        "tls": false,
+        "name": "",
+        "dname": "Send email",
+        "x": 1430,
+        "y": 1080,
         "wires": []
     },
     {
@@ -1445,9 +2307,10 @@
         "type": "http in",
         "z": "3bf36f2bd537dee3",
         "name": "Receive plate from IA",
-        "url": "/ai/carPlate",
+        "url": "/ai/carPlatee",
         "method": "post",
         "upload": false,
+        "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 160,
         "y": 500,

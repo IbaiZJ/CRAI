@@ -1,4 +1,21 @@
 services:
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: crai
+      MYSQL_USER: crai_user
+      MYSQL_PASSWORD: crai_pass
+    ports:
+      - "6900:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db/createCraiDB.sql:/docker-entrypoint-initdb.d/01_createCraiDB.sql:ro
+    networks:
+      - app-network
+    restart: unless-stopped
+    
   frontend:
     build:
       context: ./frontend
@@ -117,22 +134,6 @@ services:
       - app-network
     restart: unless-stopped
 
-  mysql:
-    image: mysql:8
-    container_name: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: crai
-      MYSQL_USER: crai_user
-      MYSQL_PASSWORD: crai_pass
-    ports:
-      - "3307:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - ./db/createCraiDB.sql:/docker-entrypoint-initdb.d/01_createCraiDB.sql:ro
-    networks:
-      - app-network
-    restart: unless-stopped
 
 networks:
   app-network:
