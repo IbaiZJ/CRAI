@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 from conf.config import settings
 from service.service import plateService
 
@@ -8,6 +8,6 @@ router = APIRouter(
 )
 
 @router.get("")
-async def detect_plate(car_plate: str):
+async def detect_plate(car_plate: str = Query(..., alias="carPlate")):
     result: str = plateService.get_badge_by_plate(car_plate)
     return {"carPlate": car_plate, "badge": result}

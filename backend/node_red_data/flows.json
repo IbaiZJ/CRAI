@@ -8,9 +8,25 @@
         "env": []
     },
     {
+        "id": "e8ee884feb950c22",
+        "type": "tab",
+        "label": "VEHICLE API",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "01df77f7ae4c4f86",
         "type": "tab",
         "label": "OS simulation",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "202119be2ec9a18d",
+        "type": "tab",
+        "label": "AI API",
         "disabled": false,
         "info": "",
         "env": []
@@ -63,7 +79,7 @@
     {
         "id": "5028967e272250ae",
         "type": "subflow",
-        "name": "itvAPI Request with Retry",
+        "name": "itvAPI Request",
         "info": "",
         "category": "",
         "in": [
@@ -79,7 +95,7 @@
         ],
         "out": [
             {
-                "x": 1060,
+                "x": 1040,
                 "y": 300,
                 "wires": [
                     {
@@ -101,7 +117,7 @@
     {
         "id": "e4c4b244ac7b2ae0",
         "type": "subflow",
-        "name": "ebAPI Request with Retry",
+        "name": "ebAPI Request",
         "info": "",
         "category": "",
         "in": [
@@ -117,16 +133,16 @@
         ],
         "out": [
             {
-                "x": 1100,
-                "y": 340,
+                "x": 1080,
+                "y": 280,
                 "wires": [
-                    {
-                        "id": "1cae75a6c93f013b",
-                        "port": 1
-                    },
                     {
                         "id": "a70b5c6fb5c18947",
                         "port": 0
+                    },
+                    {
+                        "id": "1cae75a6c93f013b",
+                        "port": 1
                     }
                 ]
             }
@@ -139,20 +155,20 @@
     {
         "id": "ba5cb54d469c6c3e",
         "type": "subflow",
-        "name": "Stolen Vehicle Request with Retry",
+        "name": "Stolen Vehicle Request",
         "info": "",
         "category": "",
         "in": [
             {
-                "x": 240,
-                "y": 200,
+                "x": 180,
+                "y": 120,
                 "wires": []
             }
         ],
         "out": [
             {
-                "x": 720,
-                "y": 200,
+                "x": 820,
+                "y": 120,
                 "wires": []
             }
         ],
@@ -160,6 +176,63 @@
         "meta": {},
         "color": "#FFAAAA",
         "icon": "font-awesome/fa-hand-stop-o"
+    },
+    {
+        "id": "c67015360647838b",
+        "type": "subflow",
+        "name": "Validate Plate",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 180,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "419fc3604bb7203c"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 720,
+                "y": 200,
+                "wires": [
+                    {
+                        "id": "657dd476bf3abcd6",
+                        "port": 1
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#D8BFD8",
+        "icon": "font-awesome/fa-eye"
+    },
+    {
+        "id": "f4381705983a0fa3",
+        "type": "group",
+        "z": "a5406ced814d1895",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "153e541a1d1080bd",
+            "64d7693526164079",
+            "fd5de55856fc7a3e"
+        ],
+        "x": 74,
+        "y": 19,
+        "w": 822,
+        "h": 202
     },
     {
         "id": "389e871481694f64",
@@ -491,8 +564,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 980,
-        "y": 200,
+        "x": 880,
+        "y": 220,
         "wires": [
             []
         ]
@@ -553,7 +626,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 340,
+        "x": 280,
         "y": 160,
         "wires": [
             [
@@ -671,14 +744,14 @@
         "type": "function",
         "z": "e4c4b244ac7b2ae0",
         "name": "create URL",
-        "func": "msg.url = \"http://itvapi:8000/api?carPlate=\" + msg.carPlate;\n\nreturn msg;",
+        "func": "msg.url = \"http://ebAPI:8000/api?carPlate=\" + msg.carPlate;\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 510,
+        "x": 470,
         "y": 160,
         "wires": [
             [
@@ -687,13 +760,100 @@
         ]
     },
     {
+        "id": "293f49bcccee7340",
+        "type": "subflow:subflow1",
+        "z": "ba5cb54d469c6c3e",
+        "name": "",
+        "x": 580,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bf664aedaff28244",
+        "type": "function",
+        "z": "ba5cb54d469c6c3e",
+        "name": "build request",
+        "func": "\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "419fc3604bb7203c",
+        "type": "function",
+        "z": "c67015360647838b",
+        "name": "Validate",
+        "func": "let plate = msg.carPlate;\n\nif (!plate || typeof plate !== 'string') {\n    msg.payload = null;\n    return msg;\n}\n\nlet formattedPlate = plate.toUpperCase().replace(/\\s/g, '').replace(/-/g, '');\n\nlet regex = /^\\d{4}[BCDFGHJKLMNPRSTVWXYZ]{3}$/;\n\nif (regex.test(formattedPlate)) {\n    msg.payload = formattedPlate;\n} else {\n    msg.payload = null;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 160,
+        "wires": [
+            [
+                "657dd476bf3abcd6"
+            ]
+        ]
+    },
+    {
+        "id": "657dd476bf3abcd6",
+        "type": "switch",
+        "z": "c67015360647838b",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "null"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 550,
+        "y": 160,
+        "wires": [
+            [
+                "80ec0865b24768ac"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "80ec0865b24768ac",
+        "type": "http response",
+        "z": "c67015360647838b",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {},
+        "x": 760,
+        "y": 120,
+        "wires": []
+    },
+    {
         "id": "a1f411e0c8b74b4e",
         "type": "comment",
         "z": "a5406ced814d1895",
         "name": "Vehicles API endpoints\\n \\n Routes:\\n - {GET} /vehicles\\n     • Without query: returns all vehicles with their associated user\\n     • ?userId=x: returns vehicles filtered by user\\n \\n - {GET} /vehicle\\n     • ?plate=XXX: returns a vehicle filtered by its plate\\n     • Validates parameters and returns 400 if missing or invalid\\n",
         "info": "Vehicles API endpoints\\n\n\\n\nRoutes:\\n\n- {GET} /vehicles\\n\n    • Without query: returns all vehicles with their associated user\\n\n    • ?userId=x: returns vehicles filtered by user\\n\n\\n\n- {GET} /vehicle\\n\n    • ?plate=XXX: returns a vehicle filtered by its plate\\n\n    • Validates parameters and returns 400 if missing or invalid\\n",
         "x": 300,
-        "y": 360,
+        "y": 380,
         "wires": []
     },
     {
@@ -707,56 +867,12 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 630,
-        "y": 360,
+        "y": 380,
         "wires": [
             [
-                "057bdb3779df26d7"
+                "9af2debab1e46272"
             ]
         ]
-    },
-    {
-        "id": "057bdb3779df26d7",
-        "type": "function",
-        "z": "a5406ced814d1895",
-        "name": "query | ?plate",
-        "func": "const plate = (msg.req.query.plate || \"\").trim();\n\nif (!plate) {\n    msg.payload = {\n        success: false,\n        error: \"Missing required parameter: plate\"\n    };\n\n    msg.statusCode = 400;\n\n    msg.headers = {\n        \"Content-Type\": \"application/json\"\n    };\n\n    return msg;\n}\n\n\nmsg.topic = `\nSELECT *\nFROM vehicles\nWHERE plate = ?\n`;\nmsg.params = [plate];\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 840,
-        "y": 360,
-        "wires": [
-            [
-                "8f14f27c6d1d613b"
-            ]
-        ]
-    },
-    {
-        "id": "8f14f27c6d1d613b",
-        "type": "subflow:subflow1",
-        "z": "a5406ced814d1895",
-        "name": "",
-        "x": 1080,
-        "y": 360,
-        "wires": [
-            [
-                "8237221c64f4de03"
-            ]
-        ]
-    },
-    {
-        "id": "8237221c64f4de03",
-        "type": "http response",
-        "z": "a5406ced814d1895",
-        "name": "response",
-        "statusCode": "",
-        "headers": {},
-        "x": 1300,
-        "y": 360,
-        "wires": []
     },
     {
         "id": "b636f8b5a8d4e3b4",
@@ -769,108 +885,21 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 630,
-        "y": 280,
+        "y": 300,
         "wires": [
             [
-                "042666a72dee0b6e"
+                "3337e44693b228af"
             ]
         ]
-    },
-    {
-        "id": "042666a72dee0b6e",
-        "type": "function",
-        "z": "a5406ced814d1895",
-        "name": "query | ?userId",
-        "func": "const userId = (msg.req.query.userId || \"\").trim();\n\nif (userId) {\n    msg.topic = `\n    SELECT v.*, u.*\n    FROM vehicles v\n    JOIN user u ON v.userId = u.id\n    WHERE u.id = ?\n    `;\n    msg.params = [userId];\n}\nelse {\n    msg.topic = `\n    SELECT v.*, u.*\n    FROM vehicles v\n    JOIN user u ON v.userId = u.id\n    `;\n}\n\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 840,
-        "y": 280,
-        "wires": [
-            [
-                "a2fba7c55e11040e"
-            ]
-        ]
-    },
-    {
-        "id": "a2fba7c55e11040e",
-        "type": "subflow:subflow1",
-        "z": "a5406ced814d1895",
-        "name": "",
-        "x": 1080,
-        "y": 280,
-        "wires": [
-            [
-                "973e57aa8c2a01b8"
-            ]
-        ]
-    },
-    {
-        "id": "973e57aa8c2a01b8",
-        "type": "http response",
-        "z": "a5406ced814d1895",
-        "name": "response",
-        "statusCode": "",
-        "headers": {},
-        "x": 1300,
-        "y": 280,
-        "wires": []
-    },
-    {
-        "id": "652a2e754d3fee05",
-        "type": "function",
-        "z": "a5406ced814d1895",
-        "name": "query",
-        "func": "\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 870,
-        "y": 80,
-        "wires": [
-            [
-                "8d462b8db4568b2b"
-            ]
-        ]
-    },
-    {
-        "id": "8d462b8db4568b2b",
-        "type": "subflow:subflow1",
-        "z": "a5406ced814d1895",
-        "name": "",
-        "x": 1080,
-        "y": 80,
-        "wires": [
-            [
-                "5d1c8bfaf0b77e40"
-            ]
-        ]
-    },
-    {
-        "id": "5d1c8bfaf0b77e40",
-        "type": "http response",
-        "z": "a5406ced814d1895",
-        "name": "response",
-        "statusCode": "",
-        "headers": {},
-        "x": 1300,
-        "y": 80,
-        "wires": []
     },
     {
         "id": "153e541a1d1080bd",
         "type": "comment",
         "z": "a5406ced814d1895",
+        "g": "f4381705983a0fa3",
         "name": "AI API endpoints\\n \\n Routes:\\n - {POST} /ai/carDetected\\n     • Without query: returns all vehicles with their associated user\\n     • ?userId=x: returns vehicles filtered by user\\n",
         "info": "AI API endpoints\\n\n\\n\nRoutes:\\n\n- {POST} /ai/carDetected\\n\n    • Without query: returns all vehicles with their associated user\\n\n    • ?userId=x: returns vehicles filtered by user\\n\n",
-        "x": 300,
+        "x": 320,
         "y": 120,
         "wires": []
     },
@@ -885,7 +914,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 630,
-        "y": 580,
+        "y": 600,
         "wires": [
             []
         ]
@@ -901,7 +930,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 620,
-        "y": 660,
+        "y": 680,
         "wires": [
             []
         ]
@@ -913,7 +942,7 @@
         "name": "Users API endpoints\\n \\n Routes:\\n - {GET} /users\\n     • Without query: returns all users\\n     • Can optionally support filters in the future (e.g., ?role=admin) \\n - {GET} /user\\n     • ?id=XXX: returns a user filtered by its ID\\n     • Validates parameters and returns 400 if missing or invalid\\n",
         "info": "Users API endpoints\\n\n\\n\nRoutes:\\n\n- {GET} /users\\n\n    • Without query: returns all users\\n\n    • Can optionally support filters in the future (e.g., ?role=admin)\n\\n\n- {GET} /user\\n\n    • ?id=XXX: returns a user filtered by its ID\\n\n    • Validates parameters and returns 400 if missing or invalid\\n",
         "x": 300,
-        "y": 640,
+        "y": 680,
         "wires": []
     },
     {
@@ -923,7 +952,7 @@
         "name": "Cameras API endpoints\\n \\n Routes:\\n - {GET} /cameras\\n     • Without query: returns all cameras\\n     • Can optionally support filters in the future\\n \\n - {GET} /camera\\n     • ?id=XXX: returns a camera filtered by its ID\\n     • Validates parameters and returns 400 if missing or invalid\\n",
         "info": "Cameras API endpoints\\n\n\\n\nRoutes:\\n\n- {GET} /cameras\\n\n    • Without query: returns all cameras\\n\n    • Can optionally support filters in the future\\n\n\\n\n- {GET} /camera\\n\n    • ?id=XXX: returns a camera filtered by its ID\\n\n    • Validates parameters and returns 400 if missing or invalid\\n\n",
         "x": 300,
-        "y": 920,
+        "y": 1140,
         "wires": []
     },
     {
@@ -937,7 +966,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 630,
-        "y": 840,
+        "y": 1040,
         "wires": [
             []
         ]
@@ -953,7 +982,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 630,
-        "y": 920,
+        "y": 1120,
         "wires": [
             []
         ]
@@ -965,7 +994,7 @@
         "name": "Detections API endpoints\\n \\n Routes:\\n - GET /detections\\n     • Without query: returns all detections\\n     • ?userId=XXX: returns detections filtered by a specific user\\n     • ?plate=XXX: returns detections filtered by a specific      \\n vehicle plate\\n     • Multiple filters can be combined (?userId=XXX&plate=XXX)\\n \\n - GET /detection\\n     • ?id=XXX: returns a detection filtered by its ID\\n     • Validates parameters and returns 400 if missing or invalid\\n",
         "info": "Detections API endpoints\\n\n\\n\nRoutes:\\n\n- GET /detections\\n\n    • Without query: returns all detections\\n\n    • ?userId=XXX: returns detections filtered by a specific user\\n\n    • ?plate=XXX: returns detections filtered by a specific \n    \\n vehicle plate\\n\n    • Multiple filters can be combined (?userId=XXX&plate=XXX)\\n\n\\n\n- GET /detection\\n\n    • ?id=XXX: returns a detection filtered by its ID\\n\n    • Validates parameters and returns 400 if missing or invalid\\n\n",
         "x": 300,
-        "y": 1260,
+        "y": 1560,
         "wires": []
     },
     {
@@ -978,8 +1007,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 660,
-        "y": 1140,
+        "x": 640,
+        "y": 1440,
         "wires": [
             []
         ]
@@ -994,8 +1023,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 660,
-        "y": 1220,
+        "x": 640,
+        "y": 1520,
         "wires": [
             []
         ]
@@ -1004,17 +1033,258 @@
         "id": "64d7693526164079",
         "type": "http in",
         "z": "a5406ced814d1895",
+        "g": "f4381705983a0fa3",
         "name": "{post} /ai/carDetected",
         "url": "/ai/carDetected",
         "method": "post",
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 660,
-        "y": 80,
+        "x": 680,
+        "y": 120,
         "wires": [
             [
-                "652a2e754d3fee05"
+                "fd5de55856fc7a3e"
+            ]
+        ]
+    },
+    {
+        "id": "717ca68664d6cd17",
+        "type": "http in",
+        "z": "a5406ced814d1895",
+        "name": "{post} /user",
+        "url": "user",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 630,
+        "y": 760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3c2bb0dc39f42d9d",
+        "type": "http in",
+        "z": "a5406ced814d1895",
+        "name": "{post} /camera",
+        "url": "/camera",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 630,
+        "y": 1200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0223ba7271f1f6a4",
+        "type": "http in",
+        "z": "a5406ced814d1895",
+        "name": "{put} /camera",
+        "url": "/camera",
+        "method": "put",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 630,
+        "y": 1280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "984aec4a5aab2213",
+        "type": "http in",
+        "z": "a5406ced814d1895",
+        "name": "{put} /user",
+        "url": "/user",
+        "method": "put",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 620,
+        "y": 840,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "eef8852c5dc089ca",
+        "type": "http in",
+        "z": "a5406ced814d1895",
+        "name": "{delete} /user",
+        "url": "/user",
+        "method": "delete",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 630,
+        "y": 920,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3337e44693b228af",
+        "type": "link out",
+        "z": "a5406ced814d1895",
+        "name": "link out {get} /vehicles",
+        "mode": "link",
+        "links": [
+            "06a3442ad9baac60"
+        ],
+        "x": 775,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "9af2debab1e46272",
+        "type": "link out",
+        "z": "a5406ced814d1895",
+        "name": "link out {get} /vehicle",
+        "mode": "link",
+        "links": [
+            "2fc71bf10a12ba3c"
+        ],
+        "x": 775,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "fd5de55856fc7a3e",
+        "type": "link out",
+        "z": "a5406ced814d1895",
+        "g": "f4381705983a0fa3",
+        "name": "link out {post} /ai/carDetected",
+        "mode": "link",
+        "links": [
+            "3c6371301443c1f0"
+        ],
+        "x": 855,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "06a3442ad9baac60",
+        "type": "link in",
+        "z": "e8ee884feb950c22",
+        "name": "link in {get} /vehicles",
+        "links": [
+            "3337e44693b228af"
+        ],
+        "x": 185,
+        "y": 100,
+        "wires": [
+            [
+                "d89275c06bca5032"
+            ]
+        ]
+    },
+    {
+        "id": "d89275c06bca5032",
+        "type": "function",
+        "z": "e8ee884feb950c22",
+        "name": "query | ?userId",
+        "func": "const userId = (msg.req.query.userId || \"\").trim();\n\nif (userId) {\n    msg.topic = `\n    SELECT v.*, u.*\n    FROM vehicles v\n    JOIN user u ON v.userId = u.id\n    WHERE u.id = ?\n    `;\n    msg.params = [userId];\n}\nelse {\n    msg.topic = `\n    SELECT v.*, u.*\n    FROM vehicles v\n    JOIN user u ON v.userId = u.id\n    `;\n}\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 100,
+        "wires": [
+            [
+                "c627c7290e5de831"
+            ]
+        ]
+    },
+    {
+        "id": "c627c7290e5de831",
+        "type": "subflow:subflow1",
+        "z": "e8ee884feb950c22",
+        "name": "",
+        "x": 580,
+        "y": 100,
+        "wires": [
+            [
+                "80461df0ad465676"
+            ]
+        ]
+    },
+    {
+        "id": "80461df0ad465676",
+        "type": "http response",
+        "z": "e8ee884feb950c22",
+        "name": "response",
+        "statusCode": "",
+        "headers": {},
+        "x": 800,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "fc5f874a1bb5653d",
+        "type": "function",
+        "z": "e8ee884feb950c22",
+        "name": "query | ?plate",
+        "func": "const plate = (msg.req.query.plate || \"\").trim();\n\nif (!plate) {\n    msg.payload = {\n        success: false,\n        error: \"Missing required parameter: plate\"\n    };\n\n    msg.statusCode = 400;\n\n    msg.headers = {\n        \"Content-Type\": \"application/json\"\n    };\n\n    return msg;\n}\n\n\nmsg.topic = `\nSELECT *\nFROM vehicles\nWHERE plate = ?\n`;\nmsg.params = [plate];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 180,
+        "wires": [
+            [
+                "49c0842a2f0dde18"
+            ]
+        ]
+    },
+    {
+        "id": "49c0842a2f0dde18",
+        "type": "subflow:subflow1",
+        "z": "e8ee884feb950c22",
+        "name": "",
+        "x": 580,
+        "y": 180,
+        "wires": [
+            [
+                "543433e025a0d9dd"
+            ]
+        ]
+    },
+    {
+        "id": "543433e025a0d9dd",
+        "type": "http response",
+        "z": "e8ee884feb950c22",
+        "name": "response",
+        "statusCode": "",
+        "headers": {},
+        "x": 800,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "2fc71bf10a12ba3c",
+        "type": "link in",
+        "z": "e8ee884feb950c22",
+        "name": "link in {get} /vehicle",
+        "links": [
+            "9af2debab1e46272"
+        ],
+        "x": 185,
+        "y": 180,
+        "wires": [
+            [
+                "fc5f874a1bb5653d"
             ]
         ]
     },
@@ -1946,6 +2216,174 @@
         "dname": "Send email",
         "x": 1430,
         "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "3c6371301443c1f0",
+        "type": "link in",
+        "z": "202119be2ec9a18d",
+        "name": "link in {post} /ai/carDetected",
+        "links": [
+            "fd5de55856fc7a3e"
+        ],
+        "x": 165,
+        "y": 140,
+        "wires": [
+            [
+                "a4ad4d30685e17b6",
+                "b3a750abb0e7011f",
+                "5c1dcc36a947aafa"
+            ]
+        ]
+    },
+    {
+        "id": "3bf2383a84bee343",
+        "type": "subflow:5028967e272250ae",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "x": 860,
+        "y": 80,
+        "wires": [
+            [
+                "f19c69b06180c33d"
+            ]
+        ]
+    },
+    {
+        "id": "760ff77b0fe3f459",
+        "type": "subflow:e4c4b244ac7b2ae0",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "x": 860,
+        "y": 200,
+        "wires": [
+            [
+                "860671bb1062bbb8"
+            ]
+        ]
+    },
+    {
+        "id": "4b044c94e63e1986",
+        "type": "subflow:ba5cb54d469c6c3e",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "x": 870,
+        "y": 140,
+        "wires": [
+            [
+                "377a5774b9d1261d"
+            ]
+        ]
+    },
+    {
+        "id": "a4ad4d30685e17b6",
+        "type": "function",
+        "z": "202119be2ec9a18d",
+        "name": "set msg variables",
+        "func": "msg.carPlate = msg.payload.carPlate;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 140,
+        "wires": [
+            [
+                "15426428b3ba1060"
+            ]
+        ]
+    },
+    {
+        "id": "15426428b3ba1060",
+        "type": "subflow:c67015360647838b",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "x": 570,
+        "y": 140,
+        "wires": [
+            [
+                "760ff77b0fe3f459",
+                "3bf2383a84bee343",
+                "4b044c94e63e1986"
+            ]
+        ]
+    },
+    {
+        "id": "b3a750abb0e7011f",
+        "type": "http response",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 330,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "f19c69b06180c33d",
+        "type": "debug",
+        "z": "202119be2ec9a18d",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1120,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "860671bb1062bbb8",
+        "type": "debug",
+        "z": "202119be2ec9a18d",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1120,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "5c1dcc36a947aafa",
+        "type": "debug",
+        "z": "202119be2ec9a18d",
+        "name": "debug ai data",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 360,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "377a5774b9d1261d",
+        "type": "debug",
+        "z": "202119be2ec9a18d",
+        "name": "debug 1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1120,
+        "y": 140,
         "wires": []
     },
     {
