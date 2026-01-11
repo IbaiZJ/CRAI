@@ -162,14 +162,23 @@
             {
                 "x": 180,
                 "y": 120,
-                "wires": []
+                "wires": [
+                    {
+                        "id": "bf664aedaff28244"
+                    }
+                ]
             }
         ],
         "out": [
             {
-                "x": 820,
+                "x": 800,
                 "y": 120,
-                "wires": []
+                "wires": [
+                    {
+                        "id": "293f49bcccee7340",
+                        "port": 0
+                    }
+                ]
             }
         ],
         "env": [],
@@ -764,8 +773,8 @@
         "type": "subflow:subflow1",
         "z": "ba5cb54d469c6c3e",
         "name": "",
-        "x": 580,
-        "y": 160,
+        "x": 600,
+        "y": 120,
         "wires": [
             []
         ]
@@ -775,7 +784,7 @@
         "type": "function",
         "z": "ba5cb54d469c6c3e",
         "name": "build request",
-        "func": "\n\nreturn msg;",
+        "func": "msg.topic = `\nSELECT CASE WHEN EXISTS (\n    SELECT 1 \n    FROM stolenVehicle\n    WHERE plate = ?\n) THEN 1 ELSE 0 END as exist\n`;\nmsg.params = [msg.payload];\n\nreturn msg;\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -783,9 +792,11 @@
         "finalize": "",
         "libs": [],
         "x": 350,
-        "y": 160,
+        "y": 120,
         "wires": [
-            []
+            [
+                "293f49bcccee7340"
+            ]
         ]
     },
     {
@@ -2230,9 +2241,7 @@
         "y": 140,
         "wires": [
             [
-                "a4ad4d30685e17b6",
-                "b3a750abb0e7011f",
-                "5c1dcc36a947aafa"
+                "a4ad4d30685e17b6"
             ]
         ]
     },
@@ -2244,9 +2253,7 @@
         "x": 860,
         "y": 80,
         "wires": [
-            [
-                "f19c69b06180c33d"
-            ]
+            []
         ]
     },
     {
@@ -2257,9 +2264,7 @@
         "x": 860,
         "y": 200,
         "wires": [
-            [
-                "860671bb1062bbb8"
-            ]
+            []
         ]
     },
     {
@@ -2270,9 +2275,7 @@
         "x": 870,
         "y": 140,
         "wires": [
-            [
-                "377a5774b9d1261d"
-            ]
+            []
         ]
     },
     {
@@ -2311,18 +2314,122 @@
         ]
     },
     {
-        "id": "b3a750abb0e7011f",
+        "id": "017813bd7a26e669",
+        "type": "join",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "mode": "custom",
+        "build": "merged",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "useparts": false,
+        "accumulate": false,
+        "timeout": "",
+        "count": "3",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1230,
+        "y": 140,
+        "wires": [
+            [
+                "10fe6fc3c782d876",
+                "f1d1ad09c77a3d3f"
+            ]
+        ]
+    },
+    {
+        "id": "10fe6fc3c782d876",
+        "type": "function",
+        "z": "202119be2ec9a18d",
+        "name": "format final response",
+        "func": "let itvData = msg.payload[0]?.data || null;\nlet ebData = msg.payload[1]?.data || null; \nlet stolenData = msg.payload[2]?.data || null;\n\nmsg.payload = {\n    success: true,\n    carPlate: msg.carPlate,\n    data: {\n        itv: itvData,\n        environmentalBadge: ebData,\n        isStolen: stolenData && stolenData[0]?.exist === 1\n    },\n    timestamp: new Date().toISOString()\n};\n\nmsg.statusCode = 200;\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1440,
+        "y": 140,
+        "wires": [
+            [
+                "0f4eaa7342bbde96"
+            ]
+        ]
+    },
+    {
+        "id": "0f4eaa7342bbde96",
         "type": "http response",
         "z": "202119be2ec9a18d",
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 330,
-        "y": 200,
+        "x": 1650,
+        "y": 140,
         "wires": []
     },
     {
-        "id": "f19c69b06180c33d",
+        "id": "7784bdb168e206dd",
+        "type": "link in",
+        "z": "202119be2ec9a18d",
+        "name": "link in ai itvAPI",
+        "links": [
+            "c6e125705ce544f5",
+            "4e78ce2078cfc774"
+        ],
+        "x": 245,
+        "y": 380,
+        "wires": [
+            [
+                "0bc3d8194f79f14a"
+            ]
+        ]
+    },
+    {
+        "id": "0bc3d8194f79f14a",
+        "type": "function",
+        "z": "202119be2ec9a18d",
+        "name": "get data",
+        "func": "msg.data = msg.payload.data;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 380,
+        "wires": [
+            [
+                "0990d1032ccfe8ea"
+            ]
+        ]
+    },
+    {
+        "id": "0990d1032ccfe8ea",
+        "type": "debug",
+        "z": "202119be2ec9a18d",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "data",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "f1d1ad09c77a3d3f",
         "type": "debug",
         "z": "202119be2ec9a18d",
         "name": "debug 5",
@@ -2333,12 +2440,46 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1120,
+        "x": 1390,
         "y": 80,
         "wires": []
     },
     {
-        "id": "860671bb1062bbb8",
+        "id": "1bc65ec7a9c7e1e0",
+        "type": "link in",
+        "z": "202119be2ec9a18d",
+        "name": "link in ai ebAPI",
+        "links": [],
+        "x": 255,
+        "y": 640,
+        "wires": [
+            [
+                "597d3812cc80a2b4"
+            ]
+        ]
+    },
+    {
+        "id": "597d3812cc80a2b4",
+        "type": "function",
+        "z": "202119be2ec9a18d",
+        "name": "get data",
+        "func": "msg.data = msg.payload.data;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 640,
+        "wires": [
+            [
+                "3d324042df50a578"
+            ]
+        ]
+    },
+    {
+        "id": "3d324042df50a578",
         "type": "debug",
         "z": "202119be2ec9a18d",
         "name": "debug 6",
@@ -2346,44 +2487,25 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1120,
-        "y": 200,
-        "wires": []
-    },
-    {
-        "id": "5c1dcc36a947aafa",
-        "type": "debug",
-        "z": "202119be2ec9a18d",
-        "name": "debug ai data",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
+        "complete": "data",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 360,
-        "y": 280,
+        "x": 640,
+        "y": 600,
         "wires": []
     },
     {
-        "id": "377a5774b9d1261d",
-        "type": "debug",
+        "id": "4e78ce2078cfc774",
+        "type": "link out",
         "z": "202119be2ec9a18d",
-        "name": "debug 1",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1120,
-        "y": 140,
+        "name": "link out ai itv",
+        "mode": "link",
+        "links": [
+            "7784bdb168e206dd"
+        ],
+        "x": 1045,
+        "y": 40,
         "wires": []
     },
     {
