@@ -2230,6 +2230,61 @@
         "wires": []
     },
     {
+        "id": "4fdf231d7224591c",
+        "type": "inject",
+        "z": "01df77f7ae4c4f86",
+        "name": "Get status",
+        "props": [],
+        "repeat": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 1380,
+        "wires": [
+            [
+                "a4823447528ca219"
+            ]
+        ]
+    },
+    {
+        "id": "a4823447528ca219",
+        "type": "http request",
+        "z": "01df77f7ae4c4f86",
+        "name": "GET /simulation/status",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://os:8080/camera/status",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 430,
+        "y": 1380,
+        "wires": [
+            [
+                "3e9f7a3eaf68ef6d"
+            ]
+        ]
+    },
+    {
+        "id": "3e9f7a3eaf68ef6d",
+        "type": "debug",
+        "z": "01df77f7ae4c4f86",
+        "name": "Status response",
+        "active": true,
+        "console": false,
+        "complete": "payload",
+        "x": 680,
+        "y": 1380,
+        "wires": []
+    },
+    {
         "id": "3c6371301443c1f0",
         "type": "link in",
         "z": "202119be2ec9a18d",
@@ -2253,9 +2308,7 @@
         "x": 860,
         "y": 80,
         "wires": [
-            [
-                "017813bd7a26e669"
-            ]
+            []
         ]
     },
     {
@@ -2266,9 +2319,7 @@
         "x": 860,
         "y": 200,
         "wires": [
-            [
-                "017813bd7a26e669"
-            ]
+            []
         ]
     },
     {
@@ -2279,9 +2330,7 @@
         "x": 870,
         "y": 140,
         "wires": [
-            [
-                "017813bd7a26e669"
-            ]
+            []
         ]
     },
     {
@@ -2340,7 +2389,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 1130,
+        "x": 1230,
         "y": 140,
         "wires": [
             [
@@ -2361,7 +2410,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1340,
+        "x": 1440,
         "y": 140,
         "wires": [
             [
@@ -2376,7 +2425,7 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 1550,
+        "x": 1650,
         "y": 140,
         "wires": []
     },
@@ -2386,7 +2435,7 @@
         "z": "202119be2ec9a18d",
         "name": "link in ai itvAPI",
         "links": [
-            "c6e125705ce544f5"
+            "4e78ce2078cfc774"
         ],
         "x": 245,
         "y": 380,
@@ -2412,8 +2461,7 @@
         "y": 380,
         "wires": [
             [
-                "0990d1032ccfe8ea",
-                "1693104a432321d6"
+                "0990d1032ccfe8ea"
             ]
         ]
     },
@@ -2435,17 +2483,6 @@
         "wires": []
     },
     {
-        "id": "1693104a432321d6",
-        "type": "link out",
-        "z": "202119be2ec9a18d",
-        "name": "link out ai itv",
-        "mode": "return",
-        "links": [],
-        "x": 615,
-        "y": 460,
-        "wires": []
-    },
-    {
         "id": "f1d1ad09c77a3d3f",
         "type": "debug",
         "z": "202119be2ec9a18d",
@@ -2457,7 +2494,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1290,
+        "x": 1390,
         "y": 80,
         "wires": []
     },
@@ -2491,21 +2528,9 @@
         "y": 640,
         "wires": [
             [
-                "3d324042df50a578",
-                "8626f59f719f9bea"
+                "3d324042df50a578"
             ]
         ]
-    },
-    {
-        "id": "8626f59f719f9bea",
-        "type": "link out",
-        "z": "202119be2ec9a18d",
-        "name": "link out ai itvAPI",
-        "mode": "return",
-        "links": [],
-        "x": 585,
-        "y": 680,
-        "wires": []
     },
     {
         "id": "3d324042df50a578",
@@ -2522,6 +2547,19 @@
         "statusType": "auto",
         "x": 640,
         "y": 600,
+        "wires": []
+    },
+    {
+        "id": "4e78ce2078cfc774",
+        "type": "link out",
+        "z": "202119be2ec9a18d",
+        "name": "link out ai itv",
+        "mode": "link",
+        "links": [
+            "7784bdb168e206dd"
+        ],
+        "x": 1045,
+        "y": 40,
         "wires": []
     },
     {

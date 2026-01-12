@@ -2230,6 +2230,61 @@
         "wires": []
     },
     {
+        "id": "4fdf231d7224591c",
+        "type": "inject",
+        "z": "01df77f7ae4c4f86",
+        "name": "Get status",
+        "props": [],
+        "repeat": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 1380,
+        "wires": [
+            [
+                "a4823447528ca219"
+            ]
+        ]
+    },
+    {
+        "id": "a4823447528ca219",
+        "type": "http request",
+        "z": "01df77f7ae4c4f86",
+        "name": "GET /camera/status",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://os:8080/camera/status",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 430,
+        "y": 1380,
+        "wires": [
+            [
+                "3e9f7a3eaf68ef6d"
+            ]
+        ]
+    },
+    {
+        "id": "3e9f7a3eaf68ef6d",
+        "type": "debug",
+        "z": "01df77f7ae4c4f86",
+        "name": "Status response",
+        "active": true,
+        "console": false,
+        "complete": "payload",
+        "x": 680,
+        "y": 1380,
+        "wires": []
+    },
+    {
         "id": "3c6371301443c1f0",
         "type": "link in",
         "z": "202119be2ec9a18d",
@@ -2380,7 +2435,6 @@
         "z": "202119be2ec9a18d",
         "name": "link in ai itvAPI",
         "links": [
-            "c6e125705ce544f5",
             "4e78ce2078cfc774"
         ],
         "x": 245,
