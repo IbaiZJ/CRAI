@@ -37,7 +37,7 @@ CREATE TABLE vehicles (
     userId VARCHAR(100),
     vehicleTypeId INT,
 
-    FOREIGN KEY (userId) REFERENCES user(email) ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY (userId) REFERENCES user(email) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 
@@ -62,7 +62,10 @@ CREATE TABLE detection (
     vehicleId VARCHAR(10) NOT NULL,
     cameraId INT NOT NULL,
     detectionDate DATETIME NOT NULL,
+    itvStatus ENUM('valid', 'expired', 'expiring_soon') DEFAULT 'valid',
 
     FOREIGN KEY (vehicleId) REFERENCES vehicles(plate) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (cameraId) REFERENCES camera(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
+
