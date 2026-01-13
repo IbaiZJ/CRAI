@@ -117,6 +117,7 @@ services:
     container_name: os
     ports:
       - "6906:8080"
+      - "9010:9010"
     # depends_on:
     #   - node-red
     networks:
