@@ -1597,7 +1597,7 @@
         "links": [
             "4e78ce2078cfc774"
         ],
-        "x": 165,
+        "x": 305,
         "y": 380,
         "wires": [
             [
@@ -1617,7 +1617,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
+        "x": 540,
         "y": 380,
         "wires": [
             [
@@ -1649,7 +1649,7 @@
         "links": [
             "27d5a649ffbdba76"
         ],
-        "x": 185,
+        "x": 325,
         "y": 680,
         "wires": [
             [
@@ -1669,7 +1669,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 420,
+        "x": 560,
         "y": 680,
         "wires": [
             [
@@ -1696,7 +1696,7 @@
         "links": [
             "9bea688ebe0486c5"
         ],
-        "x": 185,
+        "x": 325,
         "y": 580,
         "wires": [
             [
@@ -1716,7 +1716,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 420,
+        "x": 560,
         "y": 580,
         "wires": [
             [
@@ -1731,7 +1731,7 @@
         "name": "link out 1",
         "mode": "return",
         "links": [],
-        "x": 775,
+        "x": 915,
         "y": 380,
         "wires": []
     },
@@ -1790,7 +1790,7 @@
         "name": "link out 2",
         "mode": "return",
         "links": [],
-        "x": 865,
+        "x": 1005,
         "y": 580,
         "wires": []
     },
@@ -1801,7 +1801,7 @@
         "name": "link out 3",
         "mode": "return",
         "links": [],
-        "x": 865,
+        "x": 1005,
         "y": 680,
         "wires": []
     },
@@ -1817,7 +1817,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 590,
+        "x": 730,
         "y": 580,
         "wires": [
             [
@@ -1837,7 +1837,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 610,
+        "x": 750,
         "y": 680,
         "wires": [
             [
@@ -1872,7 +1872,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 3,
-        "x": 610,
+        "x": 750,
         "y": 380,
         "wires": [
             [
@@ -1900,7 +1900,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 830,
+        "x": 970,
         "y": 320,
         "wires": [
             [
@@ -1921,7 +1921,7 @@
         "tls": false,
         "name": "",
         "dname": "Send email",
-        "x": 1030,
+        "x": 1170,
         "y": 320,
         "wires": []
     },
@@ -1937,7 +1937,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 830,
+        "x": 970,
         "y": 440,
         "wires": [
             [
@@ -1958,9 +1958,26 @@
         "tls": false,
         "name": "",
         "dname": "Send email",
-        "x": 1030,
+        "x": 1170,
         "y": 440,
         "wires": []
+    },
+    {
+        "id": "ca43d8dc1f69228b",
+        "type": "template",
+        "z": "202119be2ec9a18d",
+        "name": "Stolen HTML",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<h1>🚨 STOLEN VEHICLE DETECTED</h1><p><b>Plate:</b> {{templateData.plate}}</p><p><b>Location:</b> {{templateData.location}}</p><p>Please dispatch a unit immediately.</p>",
+        "output": "str",
+        "x": 1535.3333740234375,
+        "y": 302.6666564941406,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "425769f2630a88db",

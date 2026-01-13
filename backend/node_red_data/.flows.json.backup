@@ -244,6 +244,105 @@
         "h": 202
     },
     {
+        "id": "4c4d27d76c251f90",
+        "type": "group",
+        "z": "a5406ced814d1895",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "a1f411e0c8b74b4e",
+            "dcf42b3e5bc3e2af",
+            "b636f8b5a8d4e3b4",
+            "3337e44693b228af",
+            "9af2debab1e46272"
+        ],
+        "x": 54,
+        "y": 231,
+        "w": 762,
+        "h": 298
+    },
+    {
+        "id": "0f3b048bf71e7f96",
+        "type": "group",
+        "z": "a5406ced814d1895",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "7e48828d83f90993",
+            "55fd3c8f3064a791",
+            "70860a9cee51494e",
+            "717ca68664d6cd17",
+            "984aec4a5aab2213",
+            "eef8852c5dc089ca"
+        ],
+        "x": 54,
+        "y": 543,
+        "w": 672,
+        "h": 418
+    },
+    {
+        "id": "17ef12e0aa788ed0",
+        "type": "group",
+        "z": "a5406ced814d1895",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "f46e7a93fd85afd9",
+            "14d49179b8edd41d",
+            "17f834944df8ae28",
+            "3c2bb0dc39f42d9d",
+            "0223ba7271f1f6a4"
+        ],
+        "x": 54,
+        "y": 991,
+        "w": 672,
+        "h": 330
+    },
+    {
+        "id": "b14efd3c54dd8b03",
+        "type": "group",
+        "z": "a5406ced814d1895",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "bed2187aab9a0778",
+            "545bc25f0207425b",
+            "f20d4743bf41cc97"
+        ],
+        "x": 54,
+        "y": 1375,
+        "w": 692,
+        "h": 370
+    },
+    {
         "id": "389e871481694f64",
         "type": "MySQLdatabase",
         "name": "mysql",
@@ -881,6 +980,7 @@
         "id": "a1f411e0c8b74b4e",
         "type": "comment",
         "z": "a5406ced814d1895",
+        "g": "4c4d27d76c251f90",
         "name": "Vehicles API endpoints\\n \\n Routes:\\n - {GET} /vehicles\\n     • Without query: returns all vehicles with their associated user\\n     • ?userId=x: returns vehicles filtered by user\\n \\n - {GET} /vehicle\\n     • ?plate=XXX: returns a vehicle filtered by its plate\\n     • Validates parameters and returns 400 if missing or invalid\\n",
         "info": "Vehicles API endpoints\\n\n\\n\nRoutes:\\n\n- {GET} /vehicles\\n\n    • Without query: returns all vehicles with their associated user\\n\n    • ?userId=x: returns vehicles filtered by user\\n\n\\n\n- {GET} /vehicle\\n\n    • ?plate=XXX: returns a vehicle filtered by its plate\\n\n    • Validates parameters and returns 400 if missing or invalid\\n",
         "x": 300,
@@ -891,6 +991,7 @@
         "id": "dcf42b3e5bc3e2af",
         "type": "http in",
         "z": "a5406ced814d1895",
+        "g": "4c4d27d76c251f90",
         "name": "{get} /vehicle",
         "url": "/vehicle",
         "method": "get",
@@ -909,6 +1010,7 @@
         "id": "b636f8b5a8d4e3b4",
         "type": "http in",
         "z": "a5406ced814d1895",
+        "g": "4c4d27d76c251f90",
         "name": "{get} /vehicles",
         "url": "/vehicles",
         "method": "get",
@@ -938,6 +1040,7 @@
         "id": "7e48828d83f90993",
         "type": "http in",
         "z": "a5406ced814d1895",
+        "g": "0f3b048bf71e7f96",
         "name": "{get} /users",
         "url": "/users",
         "method": "get",
@@ -954,6 +1057,7 @@
         "id": "55fd3c8f3064a791",
         "type": "http in",
         "z": "a5406ced814d1895",
+        "g": "0f3b048bf71e7f96",
         "name": "{get} /user",
         "url": "/user",
         "method": "get",
@@ -970,6 +1074,7 @@
         "id": "70860a9cee51494e",
         "type": "comment",
         "z": "a5406ced814d1895",
+        "g": "0f3b048bf71e7f96",
         "name": "Users API endpoints\\n \\n Routes:\\n - {GET} /users\\n     • Without query: returns all users\\n     • Can optionally support filters in the future (e.g., ?role=admin) \\n - {GET} /user\\n     • ?id=XXX: returns a user filtered by its ID\\n     • Validates parameters and returns 400 if missing or invalid\\n",
         "info": "Users API endpoints\\n\n\\n\nRoutes:\\n\n- {GET} /users\\n\n    • Without query: returns all users\\n\n    • Can optionally support filters in the future (e.g., ?role=admin)\n\\n\n- {GET} /user\\n\n    • ?id=XXX: returns a user filtered by its ID\\n\n    • Validates parameters and returns 400 if missing or invalid\\n",
         "x": 300,
@@ -980,6 +1085,7 @@
         "id": "f46e7a93fd85afd9",
         "type": "comment",
         "z": "a5406ced814d1895",
+        "g": "17ef12e0aa788ed0",
         "name": "Cameras API endpoints\\n \\n Routes:\\n - {GET} /cameras\\n     • Without query: returns all cameras\\n     • Can optionally support filters in the future\\n \\n - {GET} /camera\\n     • ?id=XXX: returns a camera filtered by its ID\\n     • Validates parameters and returns 400 if missing or invalid\\n",
         "info": "Cameras API endpoints\\n\n\\n\nRoutes:\\n\n- {GET} /cameras\\n\n    • Without query: returns all cameras\\n\n    • Can optionally support filters in the future\\n\n\\n\n- {GET} /camera\\n\n    • ?id=XXX: returns a camera filtered by its ID\\n\n    • Validates parameters and returns 400 if missing or invalid\\n\n",
         "x": 300,
@@ -990,6 +1096,7 @@
         "id": "14d49179b8edd41d",
         "type": "http in",
         "z": "a5406ced814d1895",
+        "g": "17ef12e0aa788ed0",
         "name": "{get} /cameras",
         "url": "/cameras",
         "method": "get",
@@ -1006,6 +1113,7 @@
         "id": "17f834944df8ae28",
         "type": "http in",
         "z": "a5406ced814d1895",
+        "g": "17ef12e0aa788ed0",
         "name": "{get} /camera",
         "url": "/camera",
         "method": "get",
@@ -1022,6 +1130,7 @@
         "id": "bed2187aab9a0778",
         "type": "comment",
         "z": "a5406ced814d1895",
+        "g": "b14efd3c54dd8b03",
         "name": "Detections API endpoints\\n \\n Routes:\\n - GET /detections\\n     • Without query: returns all detections\\n     • ?userId=XXX: returns detections filtered by a specific user\\n     • ?plate=XXX: returns detections filtered by a specific      \\n vehicle plate\\n     • Multiple filters can be combined (?userId=XXX&plate=XXX)\\n \\n - GET /detection\\n     • ?id=XXX: returns a detection filtered by its ID\\n     • Validates parameters and returns 400 if missing or invalid\\n",
         "info": "Detections API endpoints\\n\n\\n\nRoutes:\\n\n- GET /detections\\n\n    • Without query: returns all detections\\n\n    • ?userId=XXX: returns detections filtered by a specific user\\n\n    • ?plate=XXX: returns detections filtered by a specific \n    \\n vehicle plate\\n\n    • Multiple filters can be combined (?userId=XXX&plate=XXX)\\n\n\\n\n- GET /detection\\n\n    • ?id=XXX: returns a detection filtered by its ID\\n\n    • Validates parameters and returns 400 if missing or invalid\\n\n",
         "x": 300,
@@ -1032,6 +1141,7 @@
         "id": "545bc25f0207425b",
         "type": "http in",
         "z": "a5406ced814d1895",
+        "g": "b14efd3c54dd8b03",
         "name": "{get} /detections",
         "url": "/detections",
         "method": "get",
@@ -1048,6 +1158,7 @@
         "id": "f20d4743bf41cc97",
         "type": "http in",
         "z": "a5406ced814d1895",
+        "g": "b14efd3c54dd8b03",
         "name": "{get} /detection",
         "url": "/detection",
         "method": "get",
@@ -1083,6 +1194,7 @@
         "id": "717ca68664d6cd17",
         "type": "http in",
         "z": "a5406ced814d1895",
+        "g": "0f3b048bf71e7f96",
         "name": "{post} /user",
         "url": "user",
         "method": "post",
@@ -1099,6 +1211,7 @@
         "id": "3c2bb0dc39f42d9d",
         "type": "http in",
         "z": "a5406ced814d1895",
+        "g": "17ef12e0aa788ed0",
         "name": "{post} /camera",
         "url": "/camera",
         "method": "post",
@@ -1115,6 +1228,7 @@
         "id": "0223ba7271f1f6a4",
         "type": "http in",
         "z": "a5406ced814d1895",
+        "g": "17ef12e0aa788ed0",
         "name": "{put} /camera",
         "url": "/camera",
         "method": "put",
@@ -1131,6 +1245,7 @@
         "id": "984aec4a5aab2213",
         "type": "http in",
         "z": "a5406ced814d1895",
+        "g": "0f3b048bf71e7f96",
         "name": "{put} /user",
         "url": "/user",
         "method": "put",
@@ -1147,6 +1262,7 @@
         "id": "eef8852c5dc089ca",
         "type": "http in",
         "z": "a5406ced814d1895",
+        "g": "0f3b048bf71e7f96",
         "name": "{delete} /user",
         "url": "/user",
         "method": "delete",
@@ -1163,6 +1279,7 @@
         "id": "3337e44693b228af",
         "type": "link out",
         "z": "a5406ced814d1895",
+        "g": "4c4d27d76c251f90",
         "name": "link out {get} /vehicles",
         "mode": "link",
         "links": [
@@ -1176,6 +1293,7 @@
         "id": "9af2debab1e46272",
         "type": "link out",
         "z": "a5406ced814d1895",
+        "g": "4c4d27d76c251f90",
         "name": "link out {get} /vehicle",
         "mode": "link",
         "links": [
@@ -1613,7 +1731,7 @@
         "name": "link out 1",
         "mode": "return",
         "links": [],
-        "x": 1025,
+        "x": 775,
         "y": 380,
         "wires": []
     },
@@ -1758,13 +1876,15 @@
         "y": 380,
         "wires": [
             [
-                "d638c249a8baaf21"
+                "d638c249a8baaf21",
+                "c2a5bce0222e7784"
             ],
             [
                 "c2a5bce0222e7784"
             ],
             [
-                "0302cd37a32dd079"
+                "0302cd37a32dd079",
+                "c2a5bce0222e7784"
             ]
         ]
     },
@@ -2773,6 +2893,342 @@
         "wires": []
     },
     {
+<<<<<<< HEAD
+=======
+        "id": "4fdf231d7224591c",
+        "type": "inject",
+        "z": "01df77f7ae4c4f86",
+        "name": "Get status",
+        "props": [],
+        "repeat": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 1380,
+        "wires": [
+            [
+                "a4823447528ca219"
+            ]
+        ]
+    },
+    {
+        "id": "a4823447528ca219",
+        "type": "http request",
+        "z": "01df77f7ae4c4f86",
+        "name": "GET /camera/status",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://os:8080/camera/status",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 430,
+        "y": 1380,
+        "wires": [
+            [
+                "3e9f7a3eaf68ef6d"
+            ]
+        ]
+    },
+    {
+        "id": "3e9f7a3eaf68ef6d",
+        "type": "debug",
+        "z": "01df77f7ae4c4f86",
+        "name": "Status response",
+        "active": true,
+        "console": false,
+        "complete": "payload",
+        "x": 680,
+        "y": 1380,
+        "wires": []
+    },
+    {
+        "id": "3c6371301443c1f0",
+        "type": "link in",
+        "z": "202119be2ec9a18d",
+        "name": "link in {post} /ai/carDetected",
+        "links": [
+            "fd5de55856fc7a3e"
+        ],
+        "x": 165,
+        "y": 140,
+        "wires": [
+            [
+                "a4ad4d30685e17b6"
+            ]
+        ]
+    },
+    {
+        "id": "3bf2383a84bee343",
+        "type": "subflow:5028967e272250ae",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "x": 860,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "760ff77b0fe3f459",
+        "type": "subflow:e4c4b244ac7b2ae0",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "x": 860,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4b044c94e63e1986",
+        "type": "subflow:ba5cb54d469c6c3e",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "x": 870,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a4ad4d30685e17b6",
+        "type": "function",
+        "z": "202119be2ec9a18d",
+        "name": "set msg variables",
+        "func": "msg.carPlate = msg.payload.carPlate;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 140,
+        "wires": [
+            [
+                "15426428b3ba1060"
+            ]
+        ]
+    },
+    {
+        "id": "15426428b3ba1060",
+        "type": "subflow:c67015360647838b",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "x": 570,
+        "y": 140,
+        "wires": [
+            [
+                "760ff77b0fe3f459",
+                "3bf2383a84bee343",
+                "4b044c94e63e1986"
+            ]
+        ]
+    },
+    {
+        "id": "017813bd7a26e669",
+        "type": "join",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "mode": "custom",
+        "build": "merged",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "useparts": false,
+        "accumulate": false,
+        "timeout": "",
+        "count": "3",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1230,
+        "y": 140,
+        "wires": [
+            [
+                "10fe6fc3c782d876",
+                "f1d1ad09c77a3d3f"
+            ]
+        ]
+    },
+    {
+        "id": "10fe6fc3c782d876",
+        "type": "function",
+        "z": "202119be2ec9a18d",
+        "name": "format final response",
+        "func": "let itvData = msg.payload[0]?.data || null;\nlet ebData = msg.payload[1]?.data || null; \nlet stolenData = msg.payload[2]?.data || null;\n\nmsg.payload = {\n    success: true,\n    carPlate: msg.carPlate,\n    data: {\n        itv: itvData,\n        environmentalBadge: ebData,\n        isStolen: stolenData && stolenData[0]?.exist === 1\n    },\n    timestamp: new Date().toISOString()\n};\n\nmsg.statusCode = 200;\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1440,
+        "y": 140,
+        "wires": [
+            [
+                "0f4eaa7342bbde96"
+            ]
+        ]
+    },
+    {
+        "id": "0f4eaa7342bbde96",
+        "type": "http response",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1650,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "7784bdb168e206dd",
+        "type": "link in",
+        "z": "202119be2ec9a18d",
+        "name": "link in ai itvAPI",
+        "links": [
+            "4e78ce2078cfc774"
+        ],
+        "x": 245,
+        "y": 380,
+        "wires": [
+            [
+                "0bc3d8194f79f14a"
+            ]
+        ]
+    },
+    {
+        "id": "0bc3d8194f79f14a",
+        "type": "function",
+        "z": "202119be2ec9a18d",
+        "name": "get data",
+        "func": "msg.data = msg.payload.data;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 380,
+        "wires": [
+            [
+                "0990d1032ccfe8ea"
+            ]
+        ]
+    },
+    {
+        "id": "0990d1032ccfe8ea",
+        "type": "debug",
+        "z": "202119be2ec9a18d",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "data",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "f1d1ad09c77a3d3f",
+        "type": "debug",
+        "z": "202119be2ec9a18d",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1390,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "1bc65ec7a9c7e1e0",
+        "type": "link in",
+        "z": "202119be2ec9a18d",
+        "name": "link in ai ebAPI",
+        "links": [],
+        "x": 255,
+        "y": 640,
+        "wires": [
+            [
+                "597d3812cc80a2b4"
+            ]
+        ]
+    },
+    {
+        "id": "597d3812cc80a2b4",
+        "type": "function",
+        "z": "202119be2ec9a18d",
+        "name": "get data",
+        "func": "msg.data = msg.payload.data;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 640,
+        "wires": [
+            [
+                "3d324042df50a578"
+            ]
+        ]
+    },
+    {
+        "id": "3d324042df50a578",
+        "type": "debug",
+        "z": "202119be2ec9a18d",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "data",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "4e78ce2078cfc774",
+        "type": "link out",
+        "z": "202119be2ec9a18d",
+        "name": "link out ai itv",
+        "mode": "link",
+        "links": [
+            "7784bdb168e206dd"
+        ],
+        "x": 1045,
+        "y": 40,
+        "wires": []
+    },
+    {
+>>>>>>> 6264cd2656ea5d1443ac5e4c8b2e1dc38c99408e
         "id": "cdf1c72662bf117f",
         "type": "inject",
         "z": "3bf36f2bd537dee3",
