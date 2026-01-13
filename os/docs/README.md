@@ -1,8 +1,35 @@
 # CRAI OS - Operating Systems Simulation
 
-## Complete Documentation (Beginner-Friendly)
+Main entry point for the OS module documentation.
 
-## 1. Introduction
+## Documentation map
+
+- `os/docs/README.md`: main overview and navigation (this file).
+- `os/docs/monitoring-control.md`: runtime monitoring and control endpoints.
+- `os/docs/message-passing-monitoring.md`: message passing model and comparison to monitors/semaphores.
+- `os/docs/schemas/police-message.schema.json`: alert message schema used for validation.
+- `os/docs/sequence.puml`: request-to-alert sequence flow.
+- `os/docs/class.puml`: class diagram of core services and models.
+- `os/docs/state.puml`: simulation state machine.
+- `os/docs/useCase.puml`: use case diagram.
+- `os/docs/deployment.puml`: deployment diagram.
+
+## Table of contents
+
+- [Introduction](#introduction)
+- [Educational objectives](#educational-objectives)
+- [System overview](#system-overview)
+- [Core components](#core-components)
+- [Simulation flow](#simulation-flow)
+- [Concurrency and synchronization](#concurrency-and-synchronization)
+- [Real-time monitoring and control](#real-time-monitoring-and-control)
+- [REST API overview](#rest-api-overview)
+- [Integration with Node-RED](#integration-with-node-red)
+- [Schema validation](#schema-validation)
+- [Testing and validation](#testing-and-validation)
+- [Diagrams](#diagrams)
+
+## Introduction
 
 The **CRAI OS module** is a simulation designed to demonstrate **core Operating Systems concepts**, especially **concurrency, synchronization, and real-time control**, within a realistic traffic-monitoring scenario.
 
@@ -15,7 +42,7 @@ The system simulates:
 
 Although simplified, the architecture closely resembles a **real-world distributed monitoring system**.
 
-## 2. Educational Objectives
+## Educational objectives
 
 This simulation has been designed to demonstrate:
 
@@ -27,9 +54,9 @@ This simulation has been designed to demonstrate:
 - Safe interaction between concurrent components
 - Integration with external systems via REST and webhooks
 
-## 3. High-Level System Overview
+## System overview
 
-### 3.1 Real-World Analogy
+### Real-world analogy
 
 | Real System            | Simulation    |
 | ---------------------- | ------------- |
@@ -41,9 +68,9 @@ This simulation has been designed to demonstrate:
 
 The system continuously processes vehicles and reacts to infractions in real time.
 
-## 4. Core Components
+## Core components
 
-### 4.1 Vehicles
+### Vehicles
 
 A **vehicle** is a data object containing:
 
@@ -59,7 +86,7 @@ Vehicles can be:
 - Automatically generated
 - Manually injected through an API
 
-### 4.2 Cameras (Threads)
+### Cameras (threads)
 
 Each **camera** is implemented as an independent **thread**.
 
@@ -72,7 +99,7 @@ Responsibilities:
 
 Multiple camera threads run **in parallel**, simulating real traffic conditions.
 
-### 4.3 Vehicle Queue (Producer-Consumer)
+### Vehicle queue (producer-consumer)
 
 The vehicle queue is a **bounded priority blocking queue**.
 
@@ -87,7 +114,7 @@ This implements a classic **Producer-Consumer synchronization problem**:
 - Producers: vehicle generators / API
 - Consumers: camera threads
 
-## 5. Simulation Flow (Step-by-Step)
+## Simulation flow
 
 1. Simulation is started via REST API
 2. Vehicles are generated or injected
@@ -99,9 +126,11 @@ This implements a classic **Producer-Consumer synchronization problem**:
 
 All steps occur **while the system is running**, without interruption.
 
-## 6. Synchronization Models Used
+## Concurrency and synchronization
 
-### 6.1 Shared Memory Synchronization
+For detailed explanations, see `os/docs/message-passing-monitoring.md`.
+
+### Shared memory synchronization
 
 Inside the OS simulation:
 
@@ -115,11 +144,11 @@ This model is:
 - Efficient
 - Suitable for single-process concurrency
 
-### 6.2 Message Passing Synchronization
+### Message passing synchronization
 
 The system also uses **message passing**, avoiding shared memory.
 
-#### External Message Passing (Implemented)
+#### External message passing (implemented)
 
 - Alerts are sent to Node-RED using HTTP POST
 - Messages are JSON-based
@@ -128,19 +157,19 @@ The system also uses **message passing**, avoiding shared memory.
 
 This demonstrates a **distributed concurrency model**.
 
-#### Message Types
+#### Message types
 
 - Police alerts
 - ITV violations
 - Environmental badge violations
 
-### 6.3 Alert Queue (Asynchronous Alert Processing)
+### Alert queue (asynchronous alert processing)
 
 In addition to the vehicle queue, the system implements an **alert queue** to manage detected infractions in a safe and scalable way.
 
 This queue is used to **decouple vehicle processing from external communication**, preventing camera threads from being blocked by network operations.
 
-#### Purpose of the Alert Queue
+#### Purpose of the alert queue
 
 Sending alerts to an external system (Node-RED) involves:
 
@@ -152,7 +181,7 @@ If camera threads were responsible for sending alerts directly, the entire simul
 
 To avoid this, the system introduces an **intermediate alert queue**.
 
-#### How the Alert Queue Works (Step-by-Step)
+#### How the alert queue works (step-by-step)
 
 1. A camera thread detects a vehicle infraction
 2. A `PoliceMessage` object is created
@@ -162,7 +191,7 @@ To avoid this, the system introduces an **intermediate alert queue**.
 
 This ensures that **camera threads never block** due to external communication.
 
-#### Concurrency Model Applied
+#### Concurrency model applied
 
 The alert queue implements a **second Producer-Consumer pattern** within the system:
 
@@ -178,7 +207,7 @@ The queue is **thread-safe**, guaranteeing:
 - No lost alerts
 - Safe concurrent access
 
-#### Relation to Message Passing
+#### Relation to message passing
 
 The alert queue represents **internal message passing** within the OS simulation.
 
@@ -190,7 +219,7 @@ This dual approach demonstrates:
 - External synchronization using message passing
 - Clear separation of responsibilities
 
-### 6.4 Comparison: Shared Memory vs Message Passing
+### Comparison: shared memory vs message passing
 
 | Aspect              | Shared Memory | Message Passing |
 | ------------------- | ------------- | --------------- |
@@ -202,9 +231,11 @@ This dual approach demonstrates:
 
 The CRAI OS system **combines both approaches**, reflecting real-world architectures.
 
-## 7. Real-Time Monitoring and Control
+## Real-time monitoring and control
 
-### 7.1 Monitoring Interfaces
+For runtime endpoints and thread-safety guarantees, see `os/docs/monitoring-control.md`.
+
+### Monitoring interfaces
 
 The simulation exposes REST endpoints to query state **while running**:
 
@@ -215,7 +246,7 @@ The simulation exposes REST endpoints to query state **while running**:
 
 This enables **live inspection** of the system.
 
-### 7.2 Dynamic Runtime Control
+### Dynamic runtime control
 
 System parameters can be modified during execution:
 
@@ -226,7 +257,7 @@ System parameters can be modified during execution:
 
 Changes take effect **immediately**, without restarting the system.
 
-### 7.3 Thread Safety Guarantees
+### Thread safety guarantees
 
 All shared state modifications are:
 
@@ -236,15 +267,15 @@ All shared state modifications are:
 
 This ensures consistent behavior under concurrent access.
 
-## 8. REST API Overview
+## REST API overview
 
-### Simulation Control
+### Simulation control
 
 - `POST /simulation/start`
 - `POST /simulation/stop`
 - `GET /simulation/status`
 
-### Runtime Configuration
+### Runtime configuration
 
 - `PUT /admin/update`
 - `PUT /admin/cameras`
@@ -252,13 +283,13 @@ This ensures consistent behavior under concurrent access.
 - `PUT /admin/steal-prob`
 - `GET /admin/status`
 
-### Vehicles and Alerts
+### Vehicles and alerts
 
 - `POST /vehicle/send`
 - `GET /police/alerts`
 - `DELETE /police/alerts`
 
-## 9. Integration with Node-RED
+## Integration with Node-RED
 
 Node-RED acts as:
 
@@ -273,7 +304,7 @@ Communication is **bidirectional**:
 
 This simulates **real industrial integration**.
 
-## 10. Schema Validation (Message Format)
+## Schema validation
 
 To ensure alerts follow an agreed format between systems, a JSON Schema is provided:
 
@@ -281,7 +312,7 @@ To ensure alerts follow an agreed format between systems, a JSON Schema is provi
 
 Node-RED validates incoming alerts against this schema before processing.
 
-## 11. Testing and Validation
+## Testing and validation
 
 The system includes automated tests:
 
@@ -294,3 +325,11 @@ Test execution:
 ```bash
 mvn test
 ```
+
+## Diagrams
+
+- `os/docs/sequence.puml`: sequence flow of vehicles and alerts.
+- `os/docs/class.puml`: core types and service relationships.
+- `os/docs/state.puml`: simulation state transitions.
+- `os/docs/useCase.puml`: user/system interactions.
+- `os/docs/deployment.puml`: runtime deployment layout.
