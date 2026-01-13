@@ -1458,7 +1458,7 @@
         "type": "subflow:5028967e272250ae",
         "z": "202119be2ec9a18d",
         "name": "",
-        "x": 860,
+        "x": 1110,
         "y": 80,
         "wires": [
             [
@@ -1471,7 +1471,7 @@
         "type": "subflow:e4c4b244ac7b2ae0",
         "z": "202119be2ec9a18d",
         "name": "",
-        "x": 860,
+        "x": 1110,
         "y": 200,
         "wires": [
             [
@@ -1484,7 +1484,7 @@
         "type": "subflow:ba5cb54d469c6c3e",
         "z": "202119be2ec9a18d",
         "name": "",
-        "x": 870,
+        "x": 1120,
         "y": 140,
         "wires": [
             [
@@ -1508,7 +1508,7 @@
         "y": 140,
         "wires": [
             [
-                "15426428b3ba1060"
+                "fc4f968d5e62ddee"
             ]
         ]
     },
@@ -1517,7 +1517,7 @@
         "type": "subflow:c67015360647838b",
         "z": "202119be2ec9a18d",
         "name": "",
-        "x": 570,
+        "x": 820,
         "y": 140,
         "wires": [
             [
@@ -1548,7 +1548,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 1370,
+        "x": 1620,
         "y": 140,
         "wires": [
             [
@@ -1568,7 +1568,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1580,
+        "x": 1830,
         "y": 140,
         "wires": [
             [
@@ -1583,7 +1583,7 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 1790,
+        "x": 2040,
         "y": 140,
         "wires": []
     },
@@ -1593,8 +1593,8 @@
         "z": "202119be2ec9a18d",
         "name": "link in ai itvAPI",
         "links": [],
-        "x": 305,
-        "y": 380,
+        "x": 235,
+        "y": 620,
         "wires": [
             [
                 "0bc3d8194f79f14a"
@@ -1613,8 +1613,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 540,
-        "y": 380,
+        "x": 380,
+        "y": 620,
         "wires": [
             [
                 "83ffbc811831ca7f"
@@ -1627,8 +1627,8 @@
         "z": "202119be2ec9a18d",
         "name": "link in ai ebAPI",
         "links": [],
-        "x": 315,
-        "y": 820,
+        "x": 275,
+        "y": 1120,
         "wires": [
             [
                 "597d3812cc80a2b4"
@@ -1647,8 +1647,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
-        "y": 820,
+        "x": 510,
+        "y": 1120,
         "wires": [
             [
                 "1f568359c60ef140"
@@ -1661,8 +1661,8 @@
         "z": "202119be2ec9a18d",
         "name": "link in ai stolen",
         "links": [],
-        "x": 315,
-        "y": 640,
+        "x": 235,
+        "y": 860,
         "wires": [
             [
                 "0d63ff3ea38a9385"
@@ -1681,11 +1681,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
-        "y": 640,
+        "x": 380,
+        "y": 860,
         "wires": [
             [
-                "b2b7ac47288a29f1"
+                "9ad8a477a21ffd10"
             ]
         ]
     },
@@ -1696,8 +1696,8 @@
         "name": "link out 1",
         "mode": "return",
         "links": [],
-        "x": 915,
-        "y": 380,
+        "x": 755,
+        "y": 620,
         "wires": []
     },
     {
@@ -1710,7 +1710,7 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 1080,
+        "x": 1330,
         "y": 80,
         "wires": [
             [
@@ -1728,7 +1728,7 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 1120,
+        "x": 1370,
         "y": 140,
         "wires": [
             [
@@ -1746,7 +1746,7 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 1080,
+        "x": 1330,
         "y": 200,
         "wires": [
             [
@@ -1761,8 +1761,8 @@
         "name": "link out 2",
         "mode": "return",
         "links": [],
-        "x": 995,
-        "y": 640,
+        "x": 1185,
+        "y": 820,
         "wires": []
     },
     {
@@ -1772,27 +1772,27 @@
         "name": "link out 3",
         "mode": "return",
         "links": [],
-        "x": 995,
-        "y": 820,
+        "x": 955,
+        "y": 1120,
         "wires": []
     },
     {
         "id": "b2b7ac47288a29f1",
         "type": "function",
         "z": "202119be2ec9a18d",
-        "name": "function 2",
-        "func": "\nreturn msg;",
+        "name": "query",
+        "func": "msg.topic = `\n    INSERT INTO stolenVehicle (plate, stolenDate) VALUES (?, NOW());\n`;\n\nmsg.payload = [\n    msg.payload.carPlate\n];\n\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
-        "y": 640,
+        "x": 770,
+        "y": 900,
         "wires": [
             [
-                "e24042e13f32bbc3"
+                "37b7ac7dbf8f025c"
             ]
         ]
     },
@@ -1808,8 +1808,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 740,
-        "y": 820,
+        "x": 700,
+        "y": 1120,
         "wires": [
             [
                 "9dcbf4d9252a234e"
@@ -1843,19 +1843,21 @@
         "checkall": "true",
         "repair": false,
         "outputs": 3,
-        "x": 750,
-        "y": 380,
+        "x": 570,
+        "y": 620,
         "wires": [
             [
                 "c2a5bce0222e7784",
-                "d638c249a8baaf21"
+                "d638c249a8baaf21",
+                "02e6c6d6003d168d"
             ],
             [
                 "c2a5bce0222e7784"
             ],
             [
                 "c2a5bce0222e7784",
-                "0302cd37a32dd079"
+                "0302cd37a32dd079",
+                "741d887823023f42"
             ]
         ]
     },
@@ -1871,8 +1873,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 970,
-        "y": 320,
+        "x": 810,
+        "y": 520,
         "wires": [
             [
                 "286dafe17e100276"
@@ -1892,8 +1894,8 @@
         "tls": false,
         "name": "",
         "dname": "Send email",
-        "x": 1390,
-        "y": 320,
+        "x": 1230,
+        "y": 520,
         "wires": []
     },
     {
@@ -1908,8 +1910,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 970,
-        "y": 440,
+        "x": 810,
+        "y": 720,
         "wires": [
             [
                 "4d37fda2831e2cea"
@@ -1929,8 +1931,8 @@
         "tls": false,
         "name": "",
         "dname": "Send email",
-        "x": 1390,
-        "y": 440,
+        "x": 1230,
+        "y": 720,
         "wires": []
     },
     {
@@ -1944,8 +1946,8 @@
         "syntax": "mustache",
         "template": "This is the payload: {{payload}} !",
         "output": "str",
-        "x": 1180,
-        "y": 440,
+        "x": 1020,
+        "y": 720,
         "wires": [
             [
                 "78e2e9c04778396f"
@@ -1961,10 +1963,10 @@
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "This is the payload: {{payload}} !",
+        "template": "<!DOCTYPE html>\n<html lang=\"es\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Aviso Matrícula</title>\n</head>\n<body style=\"margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Arial Black', sans-serif; background-color: #003366;\">\n\n    <div style=\"background-color: white; padding: 40px 20px 80px 20px; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); text-align: center; width: 95%; max-width: 1100px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 20px;\">\n\n        <div style=\"margin-bottom: 50px; margin-top: 150px;\">\n            <img src=\"https://i.ibb.co/4ZwX1Jyx/Gemini-Generated-Image-b6wzqcb6wzqcb6wz-removebg-preview.png\" \n                 alt=\"Logo\" \n                 style=\"width: 350px; height: auto;\">\n        </div>\n\n        <h1 style=\"font-size: clamp(28px, 6vw, 55px); color: #000; margin: 0 0 30px 0; text-transform: uppercase; line-height: 1.1;\">\n            SE HA DETECTADO TU MATRÍCULA\n        </h1>\n\n        <div style=\"font-size: clamp(40px, 9vw, 90px); font-weight: bold; color: #000; margin-bottom: 25px; font-family: 'Courier New', Courier, monospace; letter-spacing: 6px; border: 4px solid #000; padding: 10px 40px; border-radius: 8px; background-color: #fcfcfc;\">\n            MATRICULA\n        </div>\n\n        <p style=\"font-size: clamp(18px, 4vw, 28px); color: #333; margin: 0; font-family: Arial, sans-serif; font-weight: normal;\">\n            tu coche tiene la ITV caducada\n        </p>\n\n    </div>\n\n</body>\n</html>",
         "output": "str",
-        "x": 1180,
-        "y": 320,
+        "x": 1020,
+        "y": 520,
         "wires": [
             [
                 "64d356f3e0280344"
@@ -1977,8 +1979,8 @@
         "z": "202119be2ec9a18d",
         "name": "itvAPI",
         "info": "",
-        "x": 310,
-        "y": 300,
+        "x": 270,
+        "y": 540,
         "wires": []
     },
     {
@@ -1987,8 +1989,8 @@
         "z": "202119be2ec9a18d",
         "name": "Stolen",
         "info": "",
-        "x": 310,
-        "y": 540,
+        "x": 270,
+        "y": 780,
         "wires": []
     },
     {
@@ -1997,8 +1999,268 @@
         "z": "202119be2ec9a18d",
         "name": "ebAPI",
         "info": "",
+        "x": 250,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "306cfda9ca7bff25",
+        "type": "subflow:subflow1",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "x": 620,
+        "y": 400,
+        "wires": [
+            [
+                "d20632fbf82f8c63"
+            ]
+        ]
+    },
+    {
+        "id": "5f42471bc7df0e43",
+        "type": "function",
+        "z": "202119be2ec9a18d",
+        "name": "info save query",
+        "func": "\nmsg.topic = `\n    INSERT IGNORE INTO vehicles (plate) VALUES (?);\n    INSERT IGNORE INTO camera (id) VALUES (?);\n    INSERT INTO detection (vehicleId, cameraId, detectionDate) VALUES (?, ?, NOW());\n`;\n\nmsg.payload = [\n    msg.payload.carPlate,\n    msg.payload.cameraId,\n    msg.payload.carPlate,\n    msg.payload.cameraId\n];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 400,
+        "wires": [
+            [
+                "306cfda9ca7bff25"
+            ]
+        ]
+    },
+    {
+        "id": "d20632fbf82f8c63",
+        "type": "switch",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 810,
+        "y": 400,
+        "wires": [
+            [
+                "5eaa816f31476053"
+            ],
+            [
+                "d08f55b0022566c0"
+            ]
+        ]
+    },
+    {
+        "id": "d08f55b0022566c0",
+        "type": "http response",
+        "z": "202119be2ec9a18d",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1000,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "fc4f968d5e62ddee",
+        "type": "link call",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "links": [
+            "6cb126f8a8177c5d"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 590,
+        "y": 140,
+        "wires": [
+            [
+                "15426428b3ba1060"
+            ]
+        ]
+    },
+    {
+        "id": "6cb126f8a8177c5d",
+        "type": "link in",
+        "z": "202119be2ec9a18d",
+        "name": "link in enter ai to db",
+        "links": [],
+        "x": 235,
+        "y": 400,
+        "wires": [
+            [
+                "5f42471bc7df0e43"
+            ]
+        ]
+    },
+    {
+        "id": "5eaa816f31476053",
+        "type": "link out",
+        "z": "202119be2ec9a18d",
+        "name": "link out 4",
+        "mode": "return",
+        "links": [],
+        "x": 955,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "267a3ae166358a69",
+        "type": "comment",
+        "z": "202119be2ec9a18d",
+        "name": "insert ai data",
+        "info": "",
         "x": 290,
-        "y": 760,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "02e6c6d6003d168d",
+        "type": "function",
+        "z": "202119be2ec9a18d",
+        "name": "query",
+        "func": "msg.topic = `\n    UPDATE detection\n    SET itvStatus = 'expired'\n    WHERE vehicleId = (?);\n`;\n\nmsg.payload = [\n    msg.payload.carPlate\n];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 580,
+        "wires": [
+            [
+                "665881547e02f8d0"
+            ]
+        ]
+    },
+    {
+        "id": "741d887823023f42",
+        "type": "function",
+        "z": "202119be2ec9a18d",
+        "name": "query",
+        "func": "msg.topic = `\n    UPDATE detection\n    SET itvStatus = 'expiring_soon'\n    WHERE vehicleId = (?);\n`;\n\nmsg.payload = [\n    msg.payload.carPlate\n];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 660,
+        "wires": [
+            [
+                "665881547e02f8d0"
+            ]
+        ]
+    },
+    {
+        "id": "665881547e02f8d0",
+        "type": "subflow:subflow1",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "x": 1100,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9ad8a477a21ffd10",
+        "type": "switch",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "property": "stolen",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 570,
+        "y": 860,
+        "wires": [
+            [
+                "e24042e13f32bbc3"
+            ],
+            [
+                "b2b7ac47288a29f1",
+                "2a9e076955729cdd"
+            ]
+        ]
+    },
+    {
+        "id": "37b7ac7dbf8f025c",
+        "type": "subflow:subflow1",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "x": 980,
+        "y": 900,
+        "wires": [
+            [
+                "e24042e13f32bbc3",
+                "313c52e2591f1519"
+            ]
+        ]
+    },
+    {
+        "id": "313c52e2591f1519",
+        "type": "debug",
+        "z": "202119be2ec9a18d",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1210,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "2a9e076955729cdd",
+        "type": "debug",
+        "z": "202119be2ec9a18d",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.carPlate",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 980,
         "wires": []
     },
     {

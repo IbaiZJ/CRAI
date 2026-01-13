@@ -1675,3 +1675,52 @@ Plate           Times    Confidence   Vehicle
 [2026-01-08 10:29:52] [[32mINFO[0m] [logger.py:120] Closing windows...
 [2026-01-08 10:29:52] [[32mINFO[0m] [logger.py:120] System closed successfully
 [2026-01-08 10:29:52] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (5.015s)
+[2026-01-13 11:42:04] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-13 11:42:04] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-13 11:42:05] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\iibai\projects\CRAI\ai\src\config/config.yaml
+[2026-01-13 11:42:05] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.017s)
+[2026-01-13 11:42:05] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-13 11:42:05] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-13 11:42:05] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-13 11:42:11] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-13 11:42:27] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-13 11:42:27] [[32mINFO[0m] [logger.py:120] 2. Initializing plate queue...
+[2026-01-13 11:42:27] [[32mINFO[0m] [logger.py:120] ✓ Plate queue initialized
+[2026-01-13 11:42:27] [[32mINFO[0m] [logger.py:120] ✓ Captures directory: C:\Users\iibai\projects\CRAI\ai\src\captures
+[2026-01-13 11:42:27] [[32mINFO[0m] [logger.py:120] 3. Loading vehicle detector...
+[2026-01-13 11:42:27] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\iibai\projects\CRAI\ai\src\models/yolov8n.pt
+[2026-01-13 11:42:28] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-13 11:42:28] [[32mINFO[0m] [logger.py:120] 4. Loading license plate detector...
+[2026-01-13 11:42:28] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\iibai\projects\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-13 11:42:28] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-13 11:42:28] [[32mINFO[0m] [logger.py:120] 5. Initializing OCR...
+[2026-01-13 11:42:30] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-13 11:42:32] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-13 11:42:32] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (27.070s)
+[2026-01-13 11:42:32] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-13 11:42:32] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-13 11:42:32] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-13 11:42:32] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-13 11:42:32] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-13 11:42:38] [[32mINFO[0m] [logger.py:120] Captures saved: 20260113_114238_6453JSM_vehicle.jpg
+[2026-01-13 11:42:38] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 6453JSM (conf: 0.94)
+[2026-01-13 11:42:42] [[32mINFO[0m] [logger.py:120] Captures saved: 20260113_114242_4453JSM_vehicle.jpg
+[2026-01-13 11:42:42] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 4453JSM (conf: 0.67)
+[2026-01-13 11:43:49] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-13 11:43:49] [[32mINFO[0m] [logger.py:120] Total unique plates detected: 2
+[2026-01-13 11:43:49] [[32mINFO[0m] [logger.py:120] 
+============================================================
+Plate           Times    Confidence   Vehicle
+------------------------------------------------------------
+6453JSM         11       0.94         car
+4453JSM         5        0.67         car
+============================================================
+
+[2026-01-13 11:43:49] [[32mINFO[0m] [logger.py:120] Queue statistics: Sent=0, Failed=2, Pending=0
+[2026-01-13 11:43:49] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-13 11:43:49] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-13 11:43:49] [[32mINFO[0m] [logger.py:120] Stopping plate queue...
+[2026-01-13 11:43:49] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-13 11:43:49] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-13 11:43:49] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-13 11:43:49] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.410s)
