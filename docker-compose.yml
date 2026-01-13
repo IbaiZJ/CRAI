@@ -63,6 +63,21 @@ services:
       - app-network
     restart: unless-stopped
 
+  itvapi:
+    build:
+      context: ./itvAPI
+      dockerfile: Dockerfile
+    container_name: itvAPI
+    ports:
+      - "6905:8000"
+    volumes:
+      - ./itvAPI:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - app-network
+    restart: unless-stopped
+    
   ebapi:
     build:
       context: ./ebAPI
