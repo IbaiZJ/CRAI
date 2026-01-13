@@ -5,14 +5,14 @@ Main entry point for the OS module documentation.
 ## Documentation map
 
 - `os/docs/README.md`: main overview and navigation (this file).
-- `os/docs/monitoring-control.md`: runtime monitoring and control endpoints.
-- `os/docs/message-passing-monitoring.md`: message passing model and comparison to monitors/semaphores.
+- `os/docs/guides/monitoring-control.md`: runtime monitoring and control endpoints.
+- `os/docs/guides/message-passing-monitoring.md`: message passing model and comparison to monitors/semaphores.
 - `os/docs/schemas/police-message.schema.json`: alert message schema used for validation.
-- `os/docs/sequence.puml`: request-to-alert sequence flow.
-- `os/docs/class.puml`: class diagram of core services and models.
-- `os/docs/state.puml`: simulation state machine.
-- `os/docs/useCase.puml`: use case diagram.
-- `os/docs/deployment.puml`: deployment diagram.
+- `os/docs/diagrams/sequence.puml`: request-to-alert sequence flow.
+- `os/docs/diagrams/class.puml`: class diagram of core services and models.
+- `os/docs/diagrams/state.puml`: simulation state machine.
+- `os/docs/diagrams/useCase.puml`: use case diagram.
+- `os/docs/diagrams/deployment.puml`: deployment diagram.
 
 ## Table of contents
 
@@ -128,7 +128,7 @@ All steps occur **while the system is running**, without interruption.
 
 ## Concurrency and synchronization
 
-For detailed explanations, see `os/docs/message-passing-monitoring.md`.
+For detailed explanations, see `os/docs/guides/message-passing-monitoring.md`.
 
 ### Shared memory synchronization
 
@@ -233,7 +233,7 @@ The CRAI OS system **combines both approaches**, reflecting real-world architect
 
 ## Real-time monitoring and control
 
-For runtime endpoints and thread-safety guarantees, see `os/docs/monitoring-control.md`.
+For runtime endpoints and thread-safety guarantees, see `os/docs/guides/monitoring-control.md`.
 
 ### Monitoring interfaces
 
@@ -328,8 +328,8 @@ mvn test
 
 ## Diagrams
 
-- `os/docs/sequence.puml`: sequence flow of vehicles and alerts.
-- `os/docs/class.puml`: core types and service relationships.
-- `os/docs/state.puml`: simulation state transitions.
-- `os/docs/useCase.puml`: user/system interactions.
-- `os/docs/deployment.puml`: runtime deployment layout.
+- `os/docs/diagrams/sequence.puml`: sequence flow of vehicles and alerts.
+- `os/docs/diagrams/class.puml`: core types and service relationships.
+- `os/docs/diagrams/state.puml`: simulation state transitions.
+- `os/docs/diagrams/useCase.puml`: user/system interactions.
+- `os/docs/diagrams/deployment.puml`: runtime deployment layout.
