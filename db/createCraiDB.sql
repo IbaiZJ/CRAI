@@ -2,6 +2,7 @@ drop database if exists `crai`;
 create database `crai`;
 use `crai`;
 
+
 CREATE TABLE userType (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nameType VARCHAR(50) NOT NULL
@@ -20,9 +21,7 @@ CREATE TABLE user (
     locale VARCHAR(10),
     iat BIGINT,
     exp BIGINT,
-    userType INT NOT NULL,
-
-    FOREIGN KEY (userType) REFERENCES userType(id) ON DELETE RESTRICT ON UPDATE CASCADE
+    userType INT NOT NULL
 );
 
 
@@ -30,18 +29,14 @@ CREATE TABLE vehicles (
     plate VARCHAR(10) PRIMARY KEY,
     badge VARCHAR(10),
     userId VARCHAR(100),
-    vehicleTypeId INT,
-
-    FOREIGN KEY (userId) REFERENCES user(email) ON DELETE SET NULL ON UPDATE CASCADE
+    vehicleTypeId INT
 );
 
 
 CREATE TABLE stolenVehicle (
     id INT AUTO_INCREMENT PRIMARY KEY,
     plate VARCHAR(10) NOT NULL UNIQUE,
-    stolenDate DATE,
-
-    FOREIGN KEY (plate) REFERENCES vehicles(plate) ON DELETE CASCADE ON UPDATE CASCADE
+    stolenDate DATE
 );
 
 
@@ -57,10 +52,14 @@ CREATE TABLE detection (
     vehicleId VARCHAR(10) NOT NULL,
     cameraId INT NOT NULL,
     detectionDate DATETIME NOT NULL,
-    itvStatus ENUM('valid', 'expired', 'expiring_soon') DEFAULT 'valid',
-
-    FOREIGN KEY (vehicleId) REFERENCES vehicles(plate) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (cameraId) REFERENCES camera(id) ON DELETE RESTRICT ON UPDATE CASCADE
+    itvStatus ENUM('valid', 'expired', 'expiring_soon') DEFAULT 'valid'
 );
+
+
+ALTER TABLE user ADD FOREIGN KEY (userType) REFERENCES userType(id) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE vehicles ADD FOREIGN KEY (userId) REFERENCES user(email) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE stolenVehicle ADD FOREIGN KEY (plate) REFERENCES vehicles(plate) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE detection ADD FOREIGN KEY (vehicleId) REFERENCES vehicles(plate) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE detection ADD FOREIGN KEY (cameraId) REFERENCES camera(id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 
