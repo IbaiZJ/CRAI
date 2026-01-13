@@ -1,16 +1,18 @@
 @startuml UseCase
-title CRAI Simulation - Casos de uso
-actor Operador as Op
-actor "Sistema externo\n(Node-RED / Postman)" as Ext
-actor Policia as Pol
+title CRAI Simulation - Use Cases
+actor Operator as Op
+actor "External System\n(Node-RED / Postman)" as Ext
+actor Police as Pol
 
 rectangle "CRAI Simulation" {
-  usecase "Arrancar simulación" as UC_Start
-  usecase "Detener simulación" as UC_Stop
-  usecase "Consultar estado" as UC_Status
-  usecase "Ajustar parámetros\n(cámaras, intervalos,\nprobabilidades)" as UC_Admin
-  usecase "Enviar vehículo manual" as UC_Send
-  usecase "Recibir alertas\n(policiales/ITV/ambiental)" as UC_Alerts
+  usecase "Start simulation" as UC_Start
+  usecase "Stop simulation" as UC_Stop
+  usecase "Check status" as UC_Status
+  usecase "Adjust parameters\n(cameras, intervals,\nprobabilities)" as UC_Admin
+  usecase "Send vehicle manually" as UC_Send
+  usecase "Receive alerts\n(police/ITV/badge)" as UC_Alerts
+  usecase "Clear alerts" as UC_Clear
+  usecase "Check camera status" as UC_CamStatus
 }
 
 Op --> UC_Start
@@ -18,7 +20,9 @@ Op --> UC_Stop
 Op --> UC_Status
 Op --> UC_Admin
 Op --> UC_Send
+Op --> UC_CamStatus
 Pol --> UC_Alerts
+Pol --> UC_Clear
 Ext --> UC_Send
-UC_Alerts --> Ext : Webhook Node-RED
+UC_Alerts --> Ext : Node-RED webhook
 @enduml
