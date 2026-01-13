@@ -1449,8 +1449,7 @@
         "y": 140,
         "wires": [
             [
-                "a4ad4d30685e17b6",
-                "f0dce5dbfbc58097"
+                "a4ad4d30685e17b6"
             ]
         ]
     },
@@ -1534,8 +1533,8 @@
         "z": "202119be2ec9a18d",
         "name": "",
         "mode": "custom",
-        "build": "merged",
-        "property": "payload",
+        "build": "array",
+        "property": "payload.success",
         "propertyType": "msg",
         "key": "topic",
         "joiner": "\\n",
@@ -1549,12 +1548,11 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 1380,
+        "x": 1370,
         "y": 140,
         "wires": [
             [
-                "10fe6fc3c782d876",
-                "f1d1ad09c77a3d3f"
+                "10fe6fc3c782d876"
             ]
         ]
     },
@@ -1563,14 +1561,14 @@
         "type": "function",
         "z": "202119be2ec9a18d",
         "name": "format final response",
-        "func": "let itvData = msg.payload[0]?.data || null;\nlet ebData = msg.payload[1]?.data || null; \nlet stolenData = msg.payload[2]?.data || null;\n\nmsg.payload = {\n    success: true,\n    carPlate: msg.carPlate,\n    data: {\n        itv: itvData,\n        environmentalBadge: ebData,\n        isStolen: stolenData && stolenData[0]?.exist === 1\n    },\n    timestamp: new Date().toISOString()\n};\n\nmsg.statusCode = 200;\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;",
+        "func": "const allSuccess = Array.isArray(msg.payload.success) && \n                   msg.payload.success.every(s => s === true);\n\n\nif (allSuccess) {\n    msg.payload = {\n        success: true,\n        carPlate: msg.carPlate,\n        data: {\n            itv: msg.itvAPI,\n            environmentalBadge: msg.ebAPI || null,\n            isStolen: msg.stolen || false\n        },\n        timestamp: new Date().toISOString()\n    };\n    msg.statusCode = 200;\n} else {\n    msg.payload = {\n        success: false,\n        carPlate: msg.carPlate,\n        error: \"Failed\",\n        timestamp: new Date().toISOString()\n    };\n    msg.statusCode = 400;\n}\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1590,
+        "x": 1580,
         "y": 140,
         "wires": [
             [
@@ -1585,7 +1583,7 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 1800,
+        "x": 1790,
         "y": 140,
         "wires": []
     },
@@ -1594,9 +1592,7 @@
         "type": "link in",
         "z": "202119be2ec9a18d",
         "name": "link in ai itvAPI",
-        "links": [
-            "4e78ce2078cfc774"
-        ],
+        "links": [],
         "x": 305,
         "y": 380,
         "wires": [
@@ -1626,31 +1622,13 @@
         ]
     },
     {
-        "id": "f1d1ad09c77a3d3f",
-        "type": "debug",
-        "z": "202119be2ec9a18d",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1540,
-        "y": 80,
-        "wires": []
-    },
-    {
         "id": "1bc65ec7a9c7e1e0",
         "type": "link in",
         "z": "202119be2ec9a18d",
         "name": "link in ai ebAPI",
-        "links": [
-            "27d5a649ffbdba76"
-        ],
-        "x": 325,
-        "y": 680,
+        "links": [],
+        "x": 315,
+        "y": 820,
         "wires": [
             [
                 "597d3812cc80a2b4"
@@ -1662,15 +1640,15 @@
         "type": "function",
         "z": "202119be2ec9a18d",
         "name": "get data",
-        "func": "msg.data = msg.payload.data;\n\nreturn msg;",
+        "func": "msg.data = msg.payload.data;\n\nif (typeof msg.data === 'string') {\n    msg.data = JSON.parse(msg.data);\n}\n\nmsg.ebAPI = msg.data.badge.badge;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 560,
-        "y": 680,
+        "x": 550,
+        "y": 820,
         "wires": [
             [
                 "1f568359c60ef140"
@@ -1678,26 +1656,13 @@
         ]
     },
     {
-        "id": "f0dce5dbfbc58097",
-        "type": "http response",
-        "z": "202119be2ec9a18d",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 290,
-        "y": 220,
-        "wires": []
-    },
-    {
         "id": "7d7dd850ea906d10",
         "type": "link in",
         "z": "202119be2ec9a18d",
         "name": "link in ai stolen",
-        "links": [
-            "9bea688ebe0486c5"
-        ],
-        "x": 325,
-        "y": 580,
+        "links": [],
+        "x": 315,
+        "y": 640,
         "wires": [
             [
                 "0d63ff3ea38a9385"
@@ -1709,15 +1674,15 @@
         "type": "function",
         "z": "202119be2ec9a18d",
         "name": "get data",
-        "func": "msg.data = msg.payload.data;\n\nreturn msg;",
+        "func": "msg.data = msg.payload.data;\nmsg.stolen = msg.data;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 560,
-        "y": 580,
+        "x": 550,
+        "y": 640,
         "wires": [
             [
                 "b2b7ac47288a29f1"
@@ -1748,7 +1713,9 @@
         "x": 1080,
         "y": 80,
         "wires": [
-            []
+            [
+                "017813bd7a26e669"
+            ]
         ]
     },
     {
@@ -1764,7 +1731,9 @@
         "x": 1120,
         "y": 140,
         "wires": [
-            []
+            [
+                "017813bd7a26e669"
+            ]
         ]
     },
     {
@@ -1780,7 +1749,9 @@
         "x": 1080,
         "y": 200,
         "wires": [
-            []
+            [
+                "017813bd7a26e669"
+            ]
         ]
     },
     {
@@ -1790,8 +1761,8 @@
         "name": "link out 2",
         "mode": "return",
         "links": [],
-        "x": 1005,
-        "y": 580,
+        "x": 995,
+        "y": 640,
         "wires": []
     },
     {
@@ -1801,8 +1772,8 @@
         "name": "link out 3",
         "mode": "return",
         "links": [],
-        "x": 1005,
-        "y": 680,
+        "x": 995,
+        "y": 820,
         "wires": []
     },
     {
@@ -1817,8 +1788,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 730,
-        "y": 580,
+        "x": 720,
+        "y": 640,
         "wires": [
             [
                 "e24042e13f32bbc3"
@@ -1837,8 +1808,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 750,
-        "y": 680,
+        "x": 740,
+        "y": 820,
         "wires": [
             [
                 "9dcbf4d9252a234e"
@@ -1876,15 +1847,15 @@
         "y": 380,
         "wires": [
             [
-                "d638c249a8baaf21",
-                "c2a5bce0222e7784"
+                "c2a5bce0222e7784",
+                "d638c249a8baaf21"
             ],
             [
                 "c2a5bce0222e7784"
             ],
             [
-                "0302cd37a32dd079",
-                "c2a5bce0222e7784"
+                "c2a5bce0222e7784",
+                "0302cd37a32dd079"
             ]
         ]
     },
@@ -1893,7 +1864,7 @@
         "type": "function",
         "z": "202119be2ec9a18d",
         "name": "Build email",
-        "func": "const p = msg.payload;\nconst to = \"ibai.zorrilla@alumni.mondragon.edu\";\nmsg.to = to;\nmsg.topic = `🚗 ITV`;\nmsg.payload = `\n<!DOCTYPE html>\n<html lang=\"es\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        \n        body {\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n            min-height: 100vh;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            padding: 20px;\n        }\n        \n        .container {\n            background: white;\n            border-radius: 20px;\n            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);\n            max-width: 600px;\n            width: 100%;\n            overflow: hidden;\n            animation: slideIn 0.5s ease-out;\n        }\n        \n        @keyframes slideIn {\n            from {\n                opacity: 0;\n                transform: translateY(-50px);\n            }\n            to {\n                opacity: 1;\n                transform: translateY(0);\n            }\n        }\n        \n        .header {\n            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);\n            padding: 40px 30px;\n            text-align: center;\n            position: relative;\n            overflow: hidden;\n        }\n        \n        .alert-icon {\n            font-size: 80px;\n            animation: pulse 2s infinite;\n            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);\n        }\n        \n        @keyframes pulse {\n            0%, 100% {\n                transform: scale(1);\n            }\n            50% {\n                transform: scale(1.1);\n            }\n        }\n        \n        .header h1 {\n            color: white;\n            font-size: 32px;\n            margin-top: 20px;\n            font-weight: bold;\n            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);\n        }\n        \n        .content {\n            padding: 40px 30px;\n        }\n        \n        .info-box {\n            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n            border-radius: 15px;\n            padding: 30px;\n            margin-bottom: 30px;\n            color: white;\n            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);\n        }\n        \n        .info-row {\n            display: flex;\n            align-items: center;\n            margin-bottom: 20px;\n        }\n        \n        .info-row:last-child {\n            margin-bottom: 0;\n        }\n        \n        .icon {\n            font-size: 30px;\n            margin-right: 15px;\n            min-width: 40px;\n            text-align: center;\n        }\n        \n        .info-content {\n            flex: 1;\n        }\n        \n        .label {\n            font-size: 12px;\n            text-transform: uppercase;\n            letter-spacing: 1px;\n            opacity: 0.9;\n            margin-bottom: 5px;\n        }\n        \n        .value {\n            font-size: 24px;\n            font-weight: bold;\n        }\n        \n        .location-value {\n            font-size: 20px;\n        }\n        \n        .warning-text {\n            background: #fff3cd;\n            border-left: 4px solid #ffc107;\n            padding: 20px;\n            border-radius: 10px;\n            color: #856404;\n            line-height: 1.6;\n        }\n        \n        .warning-text strong {\n            display: block;\n            margin-bottom: 10px;\n            font-size: 18px;\n        }\n        \n        .footer {\n            text-align: center;\n            padding: 30px;\n            background: #f8f9fa;\n            color: #6c757d;\n            font-size: 14px;\n        }\n        \n        .timestamp {\n            margin-top: 10px;\n            font-style: italic;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <div class=\"header\">\n            <div class=\"alert-icon\">🚨</div>\n            <h1>¡VEHÍCULO DETECTADO!</h1>\n        </div>\n        \n        <div class=\"content\">\n            <div class=\"info-box\">\n                <div class=\"info-row\">\n                    <div class=\"icon\">🚗</div>\n                    <div class=\"info-content\">\n                        <div class=\"label\">Matrícula</div>\n                        <div class=\"value\">4567 KBN</div>\n                    </div>\n                </div>\n                \n                <div class=\"info-row\">\n                    <div class=\"icon\">📍</div>\n                    <div class=\"info-content\">\n                        <div class=\"label\">Ubicación de Detección</div>\n                        <div class=\"value location-value\">Centro Comercial Garbera</div>\n                        <div class=\"label\" style=\"margin-top: 5px;\">Arrasate-Mondragón, Gipuzkoa</div>\n                    </div>\n                </div>\n            </div>\n            \n            <div class=\"warning-text\">\n                <strong>⚠️ Aviso Importante</strong>\n                Su vehículo ha sido detectado por nuestro sistema de reconocimiento de matrículas. Se ha notificado automáticamente a las autoridades competentes. Por favor, NO se acerque al vehículo y contacte inmediatamente con la policía.\n            </div>\n        </div>\n        \n        <div class=\"footer\">\n            Sistema de Detección de Vehículos Robados\n            <div class=\"timestamp\">Detectado el 12 de enero de 2026 a las 14:23</div>\n        </div>\n    </div>\n</body>\n</html>\n`;\n\nreturn msg;\n",
+        "func": "const p = msg.payload;\nconst to = \"ibai.zorrilla@alumni.mondragon.edu\";\nmsg.to = to;\nmsg.topic = `🚗 ITV`;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -1904,7 +1875,7 @@
         "y": 320,
         "wires": [
             [
-                "64d356f3e0280344"
+                "286dafe17e100276"
             ]
         ]
     },
@@ -1921,7 +1892,7 @@
         "tls": false,
         "name": "",
         "dname": "Send email",
-        "x": 1170,
+        "x": 1390,
         "y": 320,
         "wires": []
     },
@@ -1930,7 +1901,7 @@
         "type": "function",
         "z": "202119be2ec9a18d",
         "name": "Build email",
-        "func": "const p = msg.payload;\nconst to = \"alex.zabaleta@alumni.mondragon.edu\";\nmsg.to = to;\nmsg.topic = `🚗 ITV`;\nmsg.payload =\n    `Hello, `;\n\nreturn msg;\n",
+        "func": "const p = msg.payload;\nconst to = \"alex.zabaleta@alumni.mondragon.edu\";\nmsg.to = to;\nmsg.topic = `🚗 ITV`;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -1941,7 +1912,7 @@
         "y": 440,
         "wires": [
             [
-                "78e2e9c04778396f"
+                "4d37fda2831e2cea"
             ]
         ]
     },
@@ -1958,26 +1929,77 @@
         "tls": false,
         "name": "",
         "dname": "Send email",
-        "x": 1170,
+        "x": 1390,
         "y": 440,
         "wires": []
     },
     {
-        "id": "ca43d8dc1f69228b",
+        "id": "4d37fda2831e2cea",
         "type": "template",
         "z": "202119be2ec9a18d",
-        "name": "Stolen HTML",
+        "name": "HTML template",
         "field": "payload",
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "<h1>🚨 STOLEN VEHICLE DETECTED</h1><p><b>Plate:</b> {{templateData.plate}}</p><p><b>Location:</b> {{templateData.location}}</p><p>Please dispatch a unit immediately.</p>",
+        "template": "This is the payload: {{payload}} !",
         "output": "str",
-        "x": 1535.3333740234375,
-        "y": 302.6666564941406,
+        "x": 1180,
+        "y": 440,
         "wires": [
-            []
+            [
+                "78e2e9c04778396f"
+            ]
         ]
+    },
+    {
+        "id": "286dafe17e100276",
+        "type": "template",
+        "z": "202119be2ec9a18d",
+        "name": "HTML template",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "This is the payload: {{payload}} !",
+        "output": "str",
+        "x": 1180,
+        "y": 320,
+        "wires": [
+            [
+                "64d356f3e0280344"
+            ]
+        ]
+    },
+    {
+        "id": "affc7a4aac0f3854",
+        "type": "comment",
+        "z": "202119be2ec9a18d",
+        "name": "itvAPI",
+        "info": "",
+        "x": 310,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "74135882b1d5730a",
+        "type": "comment",
+        "z": "202119be2ec9a18d",
+        "name": "Stolen",
+        "info": "",
+        "x": 310,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "5bb537260f490116",
+        "type": "comment",
+        "z": "202119be2ec9a18d",
+        "name": "ebAPI",
+        "info": "",
+        "x": 290,
+        "y": 760,
+        "wires": []
     },
     {
         "id": "425769f2630a88db",
