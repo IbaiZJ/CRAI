@@ -1,25 +1,25 @@
 # Synchronization via message passing
 
-Este documento explica como resolvemos sincronizacion usando paso de mensajes (colas) en lugar de memoria compartida, y compara con un enfoque de monitores/semáforos.
+This document explains how we solve synchronization using message passing (queues) instead of shared memory, and compares it with a monitor/semaphore approach.
 
-## Problema resuelto con colas
-- **Contexto**: multiple productores generan `Vehicle` y varios consumidores (cámaras) los procesan respetando prioridades. En lugar de locks, usamos una cola acotada con prioridad.
-- **Mensajes**:
+## Problem solved with queues
+- **Context**: multiple producers generate `Vehicle` and several consumers (cameras) process them respecting priorities. Instead of locks, we use a bounded priority queue.
+- **Messages**:
   - `Vehicle`: `plate`, `priority`, `envTag`, `stolen`, `alertVehicle`, `itvFail`.
-  - `PoliceMessage`: `type` (`BADGE`, `ITV`, `POLICE`), `plate`, `description`, `messageText`, opcional `recipientEmail`.
-- **Patrón de comunicación**:
-  1) Productor (`VehicleSpawnerService` o `/vehicle/send`) → `BoundedPriorityBlockingQueue<Vehicle>` (cámaras).  
-  2) Worker de cámara → `LinkedBlockingQueue<PoliceMessage>` (policía).  
-  3) Worker de policía → log/webhook HTTP.
-- **Sincronización sin memoria compartida**: la exclusión y el orden los garantizan las operaciones bloqueantes `put/take` de las colas; no se comparte estado mutable entre etapas, solo mensajes inmutables.
-- **Backpressure**: la cola acotada bloquea productores si está llena, evitando desbordes y marcando el ritmo a los consumidores.
+  - `PoliceMessage`: `type` (`BADGE`, `ITV`, `POLICE`), `plate`, `description`, `messageText`, optional `recipientEmail`.
+- **Communication pattern**:
+  1) Producer (`VehicleSpawnerService` or `/vehicle/send`) -> `BoundedPriorityBlockingQueue<Vehicle>` (cameras).
+  2) Camera worker -> `LinkedBlockingQueue<PoliceMessage>` (police).
+  3) Police worker -> log/HTTP webhook.
+- **Synchronization without shared memory**: exclusion and ordering are guaranteed by blocking `put/take` operations on the queues; no mutable state is shared between stages, only immutable messages.
+- **Backpressure**: the bounded queue blocks producers when full, preventing overflows and setting the pace for consumers.
 
-## Comparativa con monitores/semáforos
-- **Ventajas (colas)**: desacoplo entre etapas, backpressure incorporada, menos riesgo de deadlocks, fácil escalar número de workers.
-- **Desventajas**: overhead de copias/colas y latencia si se llenan; menos control fino de regiones críticas individuales.
-- **Cuándo usar**: pasos entre hilos/servicios independientes → colas; protección puntual de estado compartido → monitores (`synchronized`) o semáforos.
+## Comparison with monitors/semaphores
+- **Advantages (queues)**: decoupling between stages, built-in backpressure, lower deadlock risk, easy to scale worker count.
+- **Disadvantages**: overhead from copies/queues and latency if they fill; less fine-grained control of individual critical regions.
+- **When to use**: stages between independent threads/services -> queues; targeted protection of shared state -> monitors (`synchronized`) or semaphores.
 
-## Referencias en el código
-- Colas: `CameraPoolService` usa `BoundedPriorityBlockingQueue<Vehicle>`; `PoliceService` usa `LinkedBlockingQueue<PoliceMessage>`.
-- Mensajes: clases `Vehicle` y `PoliceMessage`.
-- Integración externa: `/alerts` (Node-RED) consume `PoliceMessage` serializado (ver flujo `docs/node-red/enviar-email..json`).
+## Code references
+- Queues: `CameraPoolService` uses `BoundedPriorityBlockingQueue<Vehicle>`; `PoliceService` uses `LinkedBlockingQueue<PoliceMessage>`.
+- Messages: `Vehicle` and `PoliceMessage` classes.
+- External integration: `/alerts` (Node-RED) consumes serialized `PoliceMessage` (see flow `docs/node-red/enviar-email..json`).

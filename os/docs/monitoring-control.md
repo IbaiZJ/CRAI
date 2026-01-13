@@ -1,25 +1,25 @@
-# Monitorizacion y control en tiempo real
+# Real-time monitoring and control
 
-Interfaces y garantias de concurrencia para consultar y modificar la simulacion mientras está en marcha.
+Concurrency guarantees and interfaces to query or modify the simulation while it is running.
 
-## Consultar estado
-- `GET/POST /simulation/status`: devuelve texto `Running` o `Stopped` consultando `SimulationState` (métodos `synchronized`).
-- `GET /admin/status`: JSON con `ocrDelayMs`, `stolenProbability`, `itvFailProbability`, `cameraCount`.
-- `GET /camera/status`: tamaño de la cola y número de cámaras activas.
-- `GET /police/alerts`: histórico procesado en `PoliceService` (copiado inmutable).
+## Query state
+- `GET/POST /simulation/status`: returns `Running` or `Stopped` by consulting `SimulationState` (methods are `synchronized`).
+- `GET /admin/status`: JSON with `ocrDelayMs`, `stolenProbability`, `itvFailProbability`, `cameraCount`.
+- `GET /camera/status`: queue size and active camera count.
+- `GET /police/alerts`: processed history in `PoliceService` (immutable copy).
 
-## Modificar parámetros en runtime
-- `POST /simulation/start` / `/simulation/stop`: cambian `running` de `SimulationState` de forma thread-safe.
-- `POST /admin/update`: admite varios campos en un cuerpo JSON (`cameraCount`, probabilidades, delays, intervalos). Valida rangos antes de aplicar.
-- Endpoints específicos: `/admin/cameras`, `/admin/vehicles-per-cycle`, `/admin/vehicle-interval`, `/admin/ocr-delay`, `/admin/steal-prob`, `/admin/itv-prob`.
-- `POST /vehicle/send`: inserta un `Vehicle` manual en la cola prioritaria (no comparte memoria directa, solo mensajes).
+## Modify parameters at runtime
+- `POST /simulation/start` / `/simulation/stop`: toggles `running` in `SimulationState` in a thread-safe way.
+- `POST /admin/update`: accepts multiple fields in a JSON body (`cameraCount`, probabilities, delays, intervals). Validates ranges before applying.
+- Specific endpoints: `/admin/cameras`, `/admin/vehicles-per-cycle`, `/admin/vehicle-interval`, `/admin/ocr-delay`, `/admin/steal-prob`, `/admin/itv-prob`.
+- `POST /vehicle/send`: inserts a manual `Vehicle` into the priority queue (no direct shared memory, only messages).
 
-## Garantías de seguridad de hilo
-- `SimulationState`: métodos `synchronized` para `running`.
-- `SimulationConfig`: campos `volatile` para visibilidad inmediata entre hilos de cámara/policía/spawner.
-- Colas bloqueantes: `BoundedPriorityBlockingQueue<Vehicle>` y `LinkedBlockingQueue<PoliceMessage>` evitan compartir estructuras internas y dan backpressure.
-- Históricos: `PoliceService` expone listas copiadas (`List.copyOf`) para evitar fugas de estado mutable.
+## Thread-safety guarantees
+- `SimulationState`: `synchronized` methods for `running`.
+- `SimulationConfig`: `volatile` fields for immediate visibility across camera/police/spawner threads.
+- Blocking queues: `BoundedPriorityBlockingQueue<Vehicle>` and `LinkedBlockingQueue<PoliceMessage>` avoid sharing internal structures and provide backpressure.
+- Histories: `PoliceService` exposes copied lists (`List.copyOf`) to prevent mutable state leaks.
 
-## Integración externa
-- Webhook opcional a Node-RED (`node-red.webhook-url`), que recibe las alertas `PoliceMessage` y puede reenviar por email/Telegram.
-- Endpoints aceptan GET/POST para facilitar nodos `http request` e `inject` de Node-RED.
+## External integration
+- Optional webhook to Node-RED (`node-red.webhook-url`), which receives `PoliceMessage` alerts and can forward them by email/Telegram.
+- Endpoints accept GET/POST to simplify Node-RED `http request` and `inject` nodes.
