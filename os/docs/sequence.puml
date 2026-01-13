@@ -1,30 +1,67 @@
 @startuml Sequence
-title Sequence diagram (CRAI os)
-actor "VehicleSpawnerService" as Spawner
+title Sequence diagram (CRAI OS) - Threaded flow
+
+actor "Operator / External System" as Operator
+participant "SimulationController" as SimController
+participant "SimulationService" as SimService
+participant "VehicleSpawnerService" as Spawner
 participant "RandomVehicleGenerator" as Generator
-participant "CameraQueue\n(BoundedPriorityBlockingQueue)" as Queue
+participant "CameraQueue\n(BoundedPriorityBlockingQueue)" as CameraQueue
 participant "CameraWorker\n(CameraPoolService)" as Camera
 participant "ITVService" as ITV
 participant "PoliceService" as Police
 participant "PoliceQueue\n(LinkedBlockingQueue)" as PoliceQueue
 participant "Node-RED\n(Webhook)" as NodeRed
 
-Spawner -> Generator : generate(stolenProb, itvFailProb)
-Generator --> Spawner : Vehicle(priority)
-Spawner -> Queue : put(Vehicle)
-loop Por cada camara activa
-  Queue -> Camera : take()
-  Camera -> Camera : validar etiqueta ambiental
+== Start / Stop ==
+Operator -> SimController : start()
+SimController -> SimService : startSimulation()
+
+opt stop
+  Operator -> SimController : stop()
+  SimController -> SimService : stopSimulation()
+end
+
+== Spawner thread ==
+loop every vehicle interval
+  Spawner -> SimService : isRunning()
+  alt running
+    Spawner -> Generator : generate(stolenProb, itvFailProb)
+    Generator --> Spawner : Vehicle
+    Spawner -> CameraQueue : put(Vehicle)
+  else stopped
+    Spawner --> Spawner : skip cycle
+  end
+end
+
+== Camera worker thread(s) ==
+loop for each camera worker
+  CameraQueue -> Camera : take()
+  Camera -> Camera : validate environmental tag
   Camera -> ITV : check(plate)
   ITV --> Camera : status
   Camera -> Camera : check stolen/alert
-  Camera -> Police : sendAlert(PoliceMessage)
-  alt alerta generada
-    Police -> PoliceQueue : put(PoliceMessage)
-    Police -> Police : procesar mensaje
-    opt webhook configurado
-      Police -> NodeRed : HTTP POST (alerta)
-    end
+
+  alt invalid badge
+    Camera -> Police : sendAlert(BADGE)
+  end
+
+  alt ITV not valid
+    Camera -> Police : sendAlert(ITV)
+  end
+
+  alt stolen or alert vehicle
+    Camera -> Police : sendAlert(POLICE)
   end
 end
+
+== Police worker thread ==
+loop forever
+  PoliceQueue -> Police : take()
+  Police -> Police : store processed alert
+  opt webhook configured
+    Police -> NodeRed : HTTP POST (alert)
+  end
+end
+
 @enduml
