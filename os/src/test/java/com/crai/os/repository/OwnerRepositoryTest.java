@@ -198,4 +198,49 @@ class OwnerRepositoryTest {
         assertThat(owner).isNotNull();
         assertThat(owner.getName()).isEqualTo("Ibai Zorrilla");
     }
+
+    @Test
+    void parsePlateNumberWithValidPlate() throws Exception {
+        // Direct test of parsePlateNumber to ensure all branches are covered
+        java.lang.reflect.Method method = OwnerRepository.class.getDeclaredMethod("parsePlateNumber", String.class);
+        method.setAccessible(true);
+
+        // Valid numeric plate
+        int result = (int) method.invoke(repo, "1234ABC");
+        assertThat(result).isEqualTo(1234);
+    }
+
+    @Test
+    void parsePlateNumberWithInvalidNumeric() throws Exception {
+        java.lang.reflect.Method method = OwnerRepository.class.getDeclaredMethod("parsePlateNumber", String.class);
+        method.setAccessible(true);
+
+        // Invalid numeric (non-numeric characters in first 4 positions)
+        int result = (int) method.invoke(repo, "ABCDXYZ");
+        assertThat(result).isEqualTo(-1);
+    }
+
+    @Test
+    void parsePlateNumberWithNullExplicit() throws Exception {
+        java.lang.reflect.Method method = OwnerRepository.class.getDeclaredMethod("parsePlateNumber", String.class);
+        method.setAccessible(true);
+
+        // Explicitly test null case
+        int result = (int) method.invoke(repo, new Object[]{null});
+        assertThat(result).isEqualTo(-1);
+    }
+
+    @Test
+    void parsePlateNumberWithLengthLessThanFour() throws Exception {
+        java.lang.reflect.Method method = OwnerRepository.class.getDeclaredMethod("parsePlateNumber", String.class);
+        method.setAccessible(true);
+
+        // Length exactly 3
+        int result = (int) method.invoke(repo, "123");
+        assertThat(result).isEqualTo(-1);
+
+        // Length exactly 0
+        result = (int) method.invoke(repo, "");
+        assertThat(result).isEqualTo(-1);
+    }
 }

@@ -88,4 +88,59 @@ class RandomVehicleGeneratorTest {
         RandomVehicleGenerator instance = constructor.newInstance();
         assertThat(instance).isNotNull();
     }
+
+    @Test
+    void isValidEnvTagWithValidTags() throws Exception {
+        java.lang.reflect.Method method = RandomVehicleGenerator.class.getDeclaredMethod("isValidEnvTag", String.class);
+        method.setAccessible(true);
+
+        // Test all valid tags
+        assertThat((boolean) method.invoke(null, "C")).isTrue();
+        assertThat((boolean) method.invoke(null, "ECO")).isTrue();
+        assertThat((boolean) method.invoke(null, "0")).isTrue();
+    }
+
+    @Test
+    void isValidEnvTagWithInvalidTags() throws Exception {
+        java.lang.reflect.Method method = RandomVehicleGenerator.class.getDeclaredMethod("isValidEnvTag", String.class);
+        method.setAccessible(true);
+
+        // Test invalid tags
+        assertThat((boolean) method.invoke(null, "B")).isFalse();
+        assertThat((boolean) method.invoke(null, "A")).isFalse();
+        assertThat((boolean) method.invoke(null, "INVALID")).isFalse();
+    }
+
+    @Test
+    void isValidEnvTagWithNullAndLowercase() throws Exception {
+        java.lang.reflect.Method method = RandomVehicleGenerator.class.getDeclaredMethod("isValidEnvTag", String.class);
+        method.setAccessible(true);
+
+        // Test null
+        assertThat((boolean) method.invoke(null, new Object[]{null})).isFalse();
+
+        // Test lowercase variants (should work due to toUpperCase())
+        assertThat((boolean) method.invoke(null, "c")).isTrue();
+        assertThat((boolean) method.invoke(null, "eco")).isTrue();
+    }
+
+    @Test
+    void computePriorityWithDifferentScenarios() throws Exception {
+        java.lang.reflect.Method method = RandomVehicleGenerator.class.getDeclaredMethod("computePriority", boolean.class, boolean.class, boolean.class, String.class);
+        method.setAccessible(true);
+
+        // Stolen or alert → priority 3
+        assertThat((int) method.invoke(null, true, false, false, "C")).isEqualTo(3);
+        assertThat((int) method.invoke(null, false, true, false, "C")).isEqualTo(3);
+        
+        // ITV fail (not stolen/alert) → priority 2
+        assertThat((int) method.invoke(null, false, false, true, "C")).isEqualTo(2);
+        
+        // Invalid env tag (not stolen/alert/itv) → priority 1
+        assertThat((int) method.invoke(null, false, false, false, "INVALID")).isEqualTo(1);
+        assertThat((int) method.invoke(null, false, false, false, null)).isEqualTo(1);
+        
+        // Normal (all valid) → priority 0
+        assertThat((int) method.invoke(null, false, false, false, "C")).isEqualTo(0);
+    }
 }
