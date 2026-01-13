@@ -1,5 +1,5 @@
 @startuml Class
-title CRAI OS - Diagrama de clases (simulacion y colas)
+title CRAI OS - Class Diagram (Simulation and Queues)
 
 package config {
   class SimulationConfig {
@@ -56,6 +56,7 @@ package controller {
   }
   class PoliceController {
     +getAlerts()
+    +clearAlerts()
   }
 }
 
@@ -80,13 +81,10 @@ package model {
     -type : AlertType
     -plate : String
     -description : String
-    -messageText : String
     -recipientEmail : String
     +getType()
     +getPlate()
     +getDescription()
-    +getMessageText()
-    +setMessageText(String)
     +getRecipientEmail()
     +setRecipientEmail(String)
   }
@@ -99,6 +97,7 @@ package model {
     -expirationTimestamp : long
     +isExpired()
     +getExpirationTimestamp()
+    +getPlate()
   }
   class ITVStatus
   class AlertType
@@ -151,19 +150,12 @@ package service {
   class PoliceService {
     +sendAlert(PoliceMessage)
     +getProcessedAlerts()
-  }
-  class AlertFilterService {
-    +shouldSend(AlertType)
+    +clearAlerts()
   }
 }
 
 package utils {
   class BoundedPriorityBlockingQueue<E> {
-    +put(E)
-    +take() : E
-    +size() : int
-  }
-  class LinkedBlockingQueue<E> {
     +put(E)
     +take() : E
     +size() : int
@@ -175,6 +167,8 @@ package utils {
     +generate() : String
   }
 }
+
+class "LinkedBlockingQueue<PoliceMessage>" as PoliceQueue <<java.util.concurrent>>
 
 SimulationController --> SimulationService
 ControlController --> SimulationConfig
@@ -193,7 +187,7 @@ VehicleSpawnerService --> RandomVehicleGenerator : generate()
 CameraPoolService --> SimulationConfig
 CameraPoolService --> ITVService
 CameraPoolService --> OwnerRepository
-CameraPoolService --> PoliceService : alert(PoliceMessage)
+CameraPoolService --> PoliceService : sendAlert(PoliceMessage)
 CameraPoolService --> BoundedPriorityBlockingQueue : queue<Vehicle>
 CameraPoolService --> PoliceMessageFactory
 
@@ -202,7 +196,7 @@ ITVService --> SimulationConfig
 
 PoliceService --> SimulationConfig
 PoliceService --> PoliceMessage
-PoliceService --> LinkedBlockingQueue : queue<PoliceMessage>
+PoliceService --> PoliceQueue : queue<PoliceMessage>
 
 ITVRepository --> ITVRecord
 OwnerRepository --> Owner
@@ -219,8 +213,8 @@ note right of RandomVehicleGenerator
 end note
 
 note bottom
-  Cola de camaras: BoundedPriorityBlockingQueue<Vehicle> acotada con prioridad (capacidad desde SimulationConfig.cameraQueueCapacity).
-  Cola de alertas: LinkedBlockingQueue<PoliceMessage> acotada FIFO dentro de PoliceService (capacidad desde SimulationConfig.policeQueueCapacity).
+  Camera queue: bounded priority queue (capacity from SimulationConfig.cameraQueueCapacity).
+  Police queue: bounded LinkedBlockingQueue (capacity from SimulationConfig.policeQueueCapacity).
 end note
 
 @enduml

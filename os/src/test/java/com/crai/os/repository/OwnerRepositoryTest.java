@@ -87,6 +87,24 @@ class OwnerRepositoryTest {
     }
 
     @Test
+    void returnsNullForShorterPlate() {
+        Owner owner = repo.findByPlate("12");
+        assertThat(owner).isNull();
+    }
+
+    @Test
+    void returnsNullForSingleCharPlate() {
+        Owner owner = repo.findByPlate("1");
+        assertThat(owner).isNull();
+    }
+
+    @Test
+    void returnsNullForEmptyPlate() {
+        Owner owner = repo.findByPlate("");
+        assertThat(owner).isNull();
+    }
+
+    @Test
     void returnsNullForNullPlate() {
         Owner owner = repo.findByPlate(null);
         assertThat(owner).isNull();
@@ -170,5 +188,14 @@ class OwnerRepositoryTest {
         } finally {
             field.set(repo, original);
         }
+    }
+
+    @Test
+    void returnValueWhenPlateExactlyFourCharacters() {
+        // Test with exactly 4 characters which should parse the first 4 chars
+        Owner owner = repo.findByPlate("1234");
+        // 1234 falls in range 0-2499, so should return Ibai Zorrilla
+        assertThat(owner).isNotNull();
+        assertThat(owner.getName()).isEqualTo("Ibai Zorrilla");
     }
 }

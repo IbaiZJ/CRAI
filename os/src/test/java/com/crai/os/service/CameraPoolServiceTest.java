@@ -192,8 +192,50 @@ class CameraPoolServiceTest {
         CameraPoolService service = new CameraPoolService(config, itvService, policeService, ownerRepository);
         service.init();
 
-        // Try to reduce - should be ignored
+        // Try to reduce - should execute the reduction logic
         service.resizeCameraPool(1);
+    }
+
+    @Test
+    void resizeCameraPoolReducesWorkersSuccessfully() throws Exception {
+        // Set up config with 5 workers initially
+        config.setCameraCount(5);
+        ITVService itvService = new ITVService(itvRepository, config);
+        CameraPoolService service = new CameraPoolService(config, itvService, policeService, ownerRepository);
+        service.init();
+
+        // Get the workers list via reflection to verify reduction
+        Field workersField = CameraPoolService.class.getDeclaredField("workers");
+        workersField.setAccessible(true);
+        List<?> workers = (List<?>) workersField.get(service);
+        
+        int initialSize = workers.size();
+        assertThat(initialSize).isEqualTo(5);
+
+        // Reduce to 2 workers
+        service.resizeCameraPool(2);
+
+        // Verify workers were removed
+        int finalSize = workers.size();
+        assertThat(finalSize).isEqualTo(2);
+    }
+
+    @Test
+    void resizeCameraPoolHandlesEmptyWorkersList() throws Exception {
+        ITVService itvService = new ITVService(itvRepository, config);
+        CameraPoolService service = new CameraPoolService(config, itvService, policeService, ownerRepository);
+        service.init();
+
+        // Get the workers list and clear it to simulate edge case
+        Field workersField = CameraPoolService.class.getDeclaredField("workers");
+        workersField.setAccessible(true);
+        List<?> workers = (List<?>) workersField.get(service);
+        workers.clear();
+
+        // Try to reduce when workers list is empty - should handle gracefully
+        service.resizeCameraPool(1);
+
+        // No exception means success
     }
 
     @Test
