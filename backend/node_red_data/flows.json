@@ -505,59 +505,6 @@
         "wires": []
     },
     {
-        "id": "d88d3da60ed9aff5",
-        "type": "status",
-        "z": "subflow1",
-        "name": "monitor db status",
-        "scope": [
-            "sf_mysql"
-        ],
-        "x": 780,
-        "y": 380,
-        "wires": [
-            [
-                "5b644b82a17ab94a"
-            ]
-        ]
-    },
-    {
-        "id": "9b5bc8b0aef1ebdc",
-        "type": "debug",
-        "z": "subflow1",
-        "name": "db status log",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1210,
-        "y": 380,
-        "wires": []
-    },
-    {
-        "id": "5b644b82a17ab94a",
-        "type": "function",
-        "z": "subflow1",
-        "name": "Log DB Status",
-        "func": "const statusInfo = {\n    node: msg.status.source.name || 'mysql',\n    state: msg.status.text,\n    fill: msg.status.fill,\n    shape: msg.status.shape,\n    timestamp: new Date().toISOString()\n};\n\nif (msg.status.fill === 'red') {\n    node.error(JSON.stringify(statusInfo));\n} else if (msg.status.fill === 'yellow') {\n    node.warn(JSON.stringify(statusInfo));\n} else {\n    node.log(JSON.stringify(statusInfo));\n}\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1000,
-        "y": 380,
-        "wires": [
-            [
-                "9b5bc8b0aef1ebdc"
-            ]
-        ]
-    },
-    {
         "id": "cb7d7b5278f27f91",
         "type": "function",
         "z": "subflow1",
@@ -574,6 +521,59 @@
         "wires": [
             [
                 "sf_mysql"
+            ]
+        ]
+    },
+    {
+        "id": "d88d3da60ed9aff5",
+        "type": "status",
+        "z": "subflow1",
+        "name": "monitor db status",
+        "scope": [
+            "sf_mysql"
+        ],
+        "x": 860,
+        "y": 420,
+        "wires": [
+            [
+                "5b644b82a17ab94a"
+            ]
+        ]
+    },
+    {
+        "id": "9b5bc8b0aef1ebdc",
+        "type": "debug",
+        "z": "subflow1",
+        "name": "db status log",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1290,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "5b644b82a17ab94a",
+        "type": "function",
+        "z": "subflow1",
+        "name": "Log DB Status",
+        "func": "const statusInfo = {\n    node: msg.status.source.name || 'mysql',\n    state: msg.status.text,\n    fill: msg.status.fill,\n    shape: msg.status.shape,\n    timestamp: new Date().toISOString()\n};\n\nif (msg.status.fill === 'red') {\n    node.error(JSON.stringify(statusInfo));\n} else if (msg.status.fill === 'yellow') {\n    node.warn(JSON.stringify(statusInfo));\n} else {\n    node.log(JSON.stringify(statusInfo));\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1080,
+        "y": 420,
+        "wires": [
+            [
+                "9b5bc8b0aef1ebdc"
             ]
         ]
     },
@@ -885,7 +885,7 @@
         "type": "function",
         "z": "ba5cb54d469c6c3e",
         "name": "build request",
-        "func": "msg.topic = `\nSELECT CASE WHEN EXISTS (\n    SELECT 1 \n    FROM stolenVehicle\n    WHERE plate = ?\n) THEN 1 ELSE 0 END as exist\n`;\nmsg.params = [msg.payload];\n\nreturn msg;\n\n",
+        "func": "msg.topic = `\nSELECT CASE WHEN EXISTS (\n    SELECT 1 \n    FROM stolenVehicle\n    WHERE plate = ?\n) THEN 1 ELSE 0 END as exist\n`;\nmsg.payload = [msg.carPlate];\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1497,7 +1497,7 @@
         "type": "function",
         "z": "202119be2ec9a18d",
         "name": "set msg variables",
-        "func": "msg.carPlate = msg.payload.carPlate;\n\nreturn msg;",
+        "func": "msg.carPlate = msg.payload.carPlate;\nmsg.cameraId = msg.payload.cameraId\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1508,22 +1508,7 @@
         "y": 140,
         "wires": [
             [
-                "fc4f968d5e62ddee"
-            ]
-        ]
-    },
-    {
-        "id": "15426428b3ba1060",
-        "type": "subflow:c67015360647838b",
-        "z": "202119be2ec9a18d",
-        "name": "",
-        "x": 820,
-        "y": 140,
-        "wires": [
-            [
-                "760ff77b0fe3f459",
-                "3bf2383a84bee343",
-                "4b044c94e63e1986"
+                "15426428b3ba1060"
             ]
         ]
     },
@@ -1594,7 +1579,7 @@
         "name": "link in ai itvAPI",
         "links": [],
         "x": 235,
-        "y": 620,
+        "y": 660,
         "wires": [
             [
                 "0bc3d8194f79f14a"
@@ -1614,7 +1599,7 @@
         "finalize": "",
         "libs": [],
         "x": 380,
-        "y": 620,
+        "y": 660,
         "wires": [
             [
                 "83ffbc811831ca7f"
@@ -1627,8 +1612,8 @@
         "z": "202119be2ec9a18d",
         "name": "link in ai ebAPI",
         "links": [],
-        "x": 275,
-        "y": 1120,
+        "x": 235,
+        "y": 1060,
         "wires": [
             [
                 "597d3812cc80a2b4"
@@ -1647,11 +1632,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 510,
-        "y": 1120,
+        "x": 380,
+        "y": 1060,
         "wires": [
             [
-                "1f568359c60ef140"
+                "380d61e6d2a98b84"
             ]
         ]
     },
@@ -1662,7 +1647,7 @@
         "name": "link in ai stolen",
         "links": [],
         "x": 235,
-        "y": 860,
+        "y": 900,
         "wires": [
             [
                 "0d63ff3ea38a9385"
@@ -1682,7 +1667,7 @@
         "finalize": "",
         "libs": [],
         "x": 380,
-        "y": 860,
+        "y": 900,
         "wires": [
             [
                 "9ad8a477a21ffd10"
@@ -1696,8 +1681,8 @@
         "name": "link out 1",
         "mode": "return",
         "links": [],
-        "x": 755,
-        "y": 620,
+        "x": 1275,
+        "y": 660,
         "wires": []
     },
     {
@@ -1761,8 +1746,8 @@
         "name": "link out 2",
         "mode": "return",
         "links": [],
-        "x": 1185,
-        "y": 820,
+        "x": 1175,
+        "y": 860,
         "wires": []
     },
     {
@@ -1772,8 +1757,8 @@
         "name": "link out 3",
         "mode": "return",
         "links": [],
-        "x": 955,
-        "y": 1120,
+        "x": 935,
+        "y": 1060,
         "wires": []
     },
     {
@@ -1781,7 +1766,7 @@
         "type": "function",
         "z": "202119be2ec9a18d",
         "name": "query",
-        "func": "msg.topic = `\n    INSERT INTO stolenVehicle (plate, stolenDate) VALUES (?, NOW());\n`;\n\nmsg.payload = [\n    msg.payload.carPlate\n];\n\n\nreturn msg;",
+        "func": "msg.topic = `\n    INSERT INTO stolenVehicle (plate, stolenDate) VALUES (?, NOW());\n`;\n\nmsg.payload = [\n    msg.carPlate\n];\n\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1789,30 +1774,10 @@
         "finalize": "",
         "libs": [],
         "x": 770,
-        "y": 900,
+        "y": 940,
         "wires": [
             [
                 "37b7ac7dbf8f025c"
-            ]
-        ]
-    },
-    {
-        "id": "1f568359c60ef140",
-        "type": "function",
-        "z": "202119be2ec9a18d",
-        "name": "function 3",
-        "func": "\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 700,
-        "y": 1120,
-        "wires": [
-            [
-                "9dcbf4d9252a234e"
             ]
         ]
     },
@@ -1844,10 +1809,9 @@
         "repair": false,
         "outputs": 3,
         "x": 570,
-        "y": 620,
+        "y": 660,
         "wires": [
             [
-                "c2a5bce0222e7784",
                 "d638c249a8baaf21",
                 "02e6c6d6003d168d"
             ],
@@ -1855,7 +1819,6 @@
                 "c2a5bce0222e7784"
             ],
             [
-                "c2a5bce0222e7784",
                 "0302cd37a32dd079",
                 "741d887823023f42"
             ]
@@ -1874,7 +1837,7 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 520,
+        "y": 560,
         "wires": [
             [
                 "286dafe17e100276"
@@ -1895,7 +1858,7 @@
         "name": "",
         "dname": "Send email",
         "x": 1230,
-        "y": 520,
+        "y": 560,
         "wires": []
     },
     {
@@ -1911,7 +1874,7 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 720,
+        "y": 760,
         "wires": [
             [
                 "4d37fda2831e2cea"
@@ -1932,7 +1895,7 @@
         "name": "",
         "dname": "Send email",
         "x": 1230,
-        "y": 720,
+        "y": 760,
         "wires": []
     },
     {
@@ -1947,7 +1910,7 @@
         "template": "This is the payload: {{payload}} !",
         "output": "str",
         "x": 1020,
-        "y": 720,
+        "y": 760,
         "wires": [
             [
                 "78e2e9c04778396f"
@@ -1966,7 +1929,7 @@
         "template": "<!DOCTYPE html>\n<html lang=\"es\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Aviso Matrícula</title>\n</head>\n<body style=\"margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Arial Black', sans-serif; background-color: #003366;\">\n\n    <div style=\"background-color: white; padding: 40px 20px 80px 20px; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); text-align: center; width: 95%; max-width: 1100px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 20px;\">\n\n        <div style=\"margin-bottom: 50px; margin-top: 150px;\">\n            <img src=\"https://i.ibb.co/4ZwX1Jyx/Gemini-Generated-Image-b6wzqcb6wzqcb6wz-removebg-preview.png\" \n                 alt=\"Logo\" \n                 style=\"width: 350px; height: auto;\">\n        </div>\n\n        <h1 style=\"font-size: clamp(28px, 6vw, 55px); color: #000; margin: 0 0 30px 0; text-transform: uppercase; line-height: 1.1;\">\n            SE HA DETECTADO TU MATRÍCULA\n        </h1>\n\n        <div style=\"font-size: clamp(40px, 9vw, 90px); font-weight: bold; color: #000; margin-bottom: 25px; font-family: 'Courier New', Courier, monospace; letter-spacing: 6px; border: 4px solid #000; padding: 10px 40px; border-radius: 8px; background-color: #fcfcfc;\">\n            MATRICULA\n        </div>\n\n        <p style=\"font-size: clamp(18px, 4vw, 28px); color: #333; margin: 0; font-family: Arial, sans-serif; font-weight: normal;\">\n            tu coche tiene la ITV caducada\n        </p>\n\n    </div>\n\n</body>\n</html>",
         "output": "str",
         "x": 1020,
-        "y": 520,
+        "y": 560,
         "wires": [
             [
                 "64d356f3e0280344"
@@ -1980,7 +1943,7 @@
         "name": "itvAPI",
         "info": "",
         "x": 270,
-        "y": 540,
+        "y": 580,
         "wires": []
     },
     {
@@ -1990,7 +1953,7 @@
         "name": "Stolen",
         "info": "",
         "x": 270,
-        "y": 780,
+        "y": 820,
         "wires": []
     },
     {
@@ -1999,20 +1962,21 @@
         "z": "202119be2ec9a18d",
         "name": "ebAPI",
         "info": "",
-        "x": 250,
-        "y": 1060,
+        "x": 270,
+        "y": 1000,
         "wires": []
     },
     {
         "id": "306cfda9ca7bff25",
         "type": "subflow:subflow1",
         "z": "202119be2ec9a18d",
-        "name": "",
-        "x": 620,
-        "y": 400,
+        "name": "DB Query camera",
+        "x": 710,
+        "y": 420,
         "wires": [
             [
-                "d20632fbf82f8c63"
+                "2166cdd0fc670a11",
+                "fe6a4880e5b568ca"
             ]
         ]
     },
@@ -2020,16 +1984,16 @@
         "id": "5f42471bc7df0e43",
         "type": "function",
         "z": "202119be2ec9a18d",
-        "name": "info save query",
-        "func": "\nmsg.topic = `\n    INSERT IGNORE INTO vehicles (plate) VALUES (?);\n    INSERT IGNORE INTO camera (id) VALUES (?);\n    INSERT INTO detection (vehicleId, cameraId, detectionDate) VALUES (?, ?, NOW());\n`;\n\nmsg.payload = [\n    msg.payload.carPlate,\n    msg.payload.cameraId,\n    msg.payload.carPlate,\n    msg.payload.cameraId\n];\n\nreturn msg;",
+        "name": "info save query camera",
+        "func": "\nmsg.topic = `\n    INSERT IGNORE INTO camera (id) VALUES (?);\n`;\n\nmsg.payload = [\n    msg.cameraId,\n];\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
-        "y": 400,
+        "x": 450,
+        "y": 420,
         "wires": [
             [
                 "306cfda9ca7bff25"
@@ -2041,7 +2005,7 @@
         "type": "switch",
         "z": "202119be2ec9a18d",
         "name": "",
-        "property": "payload.success",
+        "property": "success",
         "propertyType": "msg",
         "rules": [
             {
@@ -2054,8 +2018,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 810,
-        "y": 400,
+        "x": 1370,
+        "y": 420,
         "wires": [
             [
                 "5eaa816f31476053"
@@ -2074,27 +2038,9 @@
         "headers": {
             "Content-Type": "application/json"
         },
-        "x": 1000,
-        "y": 440,
+        "x": 1560,
+        "y": 460,
         "wires": []
-    },
-    {
-        "id": "fc4f968d5e62ddee",
-        "type": "link call",
-        "z": "202119be2ec9a18d",
-        "name": "",
-        "links": [
-            "6cb126f8a8177c5d"
-        ],
-        "linkType": "static",
-        "timeout": "30",
-        "x": 590,
-        "y": 140,
-        "wires": [
-            [
-                "15426428b3ba1060"
-            ]
-        ]
     },
     {
         "id": "6cb126f8a8177c5d",
@@ -2103,10 +2049,10 @@
         "name": "link in enter ai to db",
         "links": [],
         "x": 235,
-        "y": 400,
+        "y": 420,
         "wires": [
             [
-                "5f42471bc7df0e43"
+                "de87bb36c7b4efe4"
             ]
         ]
     },
@@ -2117,8 +2063,8 @@
         "name": "link out 4",
         "mode": "return",
         "links": [],
-        "x": 955,
-        "y": 360,
+        "x": 1515,
+        "y": 380,
         "wires": []
     },
     {
@@ -2136,15 +2082,15 @@
         "type": "function",
         "z": "202119be2ec9a18d",
         "name": "query",
-        "func": "msg.topic = `\n    UPDATE detection\n    SET itvStatus = 'expired'\n    WHERE vehicleId = (?);\n`;\n\nmsg.payload = [\n    msg.payload.carPlate\n];\n\nreturn msg;",
+        "func": "msg.topic = `\n    UPDATE detection\n    SET itvStatus = 'expired'\n    WHERE vehicleId = (?);\n`;\n\nmsg.payload = [\n    msg.carPlate\n];\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 870,
-        "y": 580,
+        "x": 850,
+        "y": 620,
         "wires": [
             [
                 "665881547e02f8d0"
@@ -2156,15 +2102,15 @@
         "type": "function",
         "z": "202119be2ec9a18d",
         "name": "query",
-        "func": "msg.topic = `\n    UPDATE detection\n    SET itvStatus = 'expiring_soon'\n    WHERE vehicleId = (?);\n`;\n\nmsg.payload = [\n    msg.payload.carPlate\n];\n\nreturn msg;",
+        "func": "msg.topic = `\n    UPDATE detection\n    SET itvStatus = 'expiring_soon'\n    WHERE vehicleId = (?);\n`;\n\nmsg.payload = [\n    msg.carPlate\n];\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 870,
-        "y": 660,
+        "x": 850,
+        "y": 700,
         "wires": [
             [
                 "665881547e02f8d0"
@@ -2177,9 +2123,11 @@
         "z": "202119be2ec9a18d",
         "name": "",
         "x": 1100,
-        "y": 620,
+        "y": 660,
         "wires": [
-            []
+            [
+                "c2a5bce0222e7784"
+            ]
         ]
     },
     {
@@ -2192,27 +2140,26 @@
         "rules": [
             {
                 "t": "eq",
-                "v": "1",
-                "vt": "num"
+                "v": "0",
+                "vt": "str"
             },
             {
                 "t": "eq",
-                "v": "0",
-                "vt": "num"
+                "v": "1",
+                "vt": "str"
             }
         ],
         "checkall": "true",
         "repair": false,
         "outputs": 2,
         "x": 570,
-        "y": 860,
+        "y": 900,
         "wires": [
             [
                 "e24042e13f32bbc3"
             ],
             [
-                "b2b7ac47288a29f1",
-                "2a9e076955729cdd"
+                "b2b7ac47288a29f1"
             ]
         ]
     },
@@ -2222,46 +2169,194 @@
         "z": "202119be2ec9a18d",
         "name": "",
         "x": 980,
-        "y": 900,
+        "y": 940,
         "wires": [
             [
-                "e24042e13f32bbc3",
-                "313c52e2591f1519"
+                "e24042e13f32bbc3"
             ]
         ]
     },
     {
-        "id": "313c52e2591f1519",
-        "type": "debug",
+        "id": "380d61e6d2a98b84",
+        "type": "function",
         "z": "202119be2ec9a18d",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1210,
-        "y": 900,
-        "wires": []
+        "name": "query",
+        "func": "msg.topic = `\n    UPDATE vehicles \n    SET badge = (?)\n    WHERE plate = (?);\n`;\n\nmsg.payload = [\n    msg.ebAPI,\n    msg.carPlate\n];\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 1060,
+        "wires": [
+            [
+                "679d8f74cb6d4981"
+            ]
+        ]
     },
     {
-        "id": "2a9e076955729cdd",
-        "type": "debug",
+        "id": "679d8f74cb6d4981",
+        "type": "subflow:subflow1",
         "z": "202119be2ec9a18d",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload.carPlate",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
+        "name": "",
+        "x": 760,
+        "y": 1060,
+        "wires": [
+            [
+                "9dcbf4d9252a234e"
+            ]
+        ]
+    },
+    {
+        "id": "fc4f968d5e62ddee",
+        "type": "link call",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "links": [
+            "6cb126f8a8177c5d"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 810,
+        "y": 140,
+        "wires": [
+            [
+                "760ff77b0fe3f459",
+                "3bf2383a84bee343",
+                "4b044c94e63e1986"
+            ]
+        ]
+    },
+    {
+        "id": "15426428b3ba1060",
+        "type": "subflow:c67015360647838b",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "x": 580,
+        "y": 140,
+        "wires": [
+            [
+                "fc4f968d5e62ddee"
+            ]
+        ]
+    },
+    {
+        "id": "de87bb36c7b4efe4",
+        "type": "function",
+        "z": "202119be2ec9a18d",
+        "name": "info save query vehicles",
+        "func": "\nmsg.topic = `\n    INSERT IGNORE INTO vehicles (plate) VALUES (?);\n`;\n\nmsg.payload = [\n    msg.carPlate\n];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 360,
+        "wires": [
+            [
+                "7dcb447f1fa4567f"
+            ]
+        ]
+    },
+    {
+        "id": "fe6a4880e5b568ca",
+        "type": "function",
+        "z": "202119be2ec9a18d",
+        "name": "info save query detection",
+        "func": "\nmsg.topic = `\n    INSERT INTO detection (vehicleId, cameraId, detectionDate) VALUES (?, ?, NOW());\n`;\n\nmsg.payload = [\n    msg.carPlate,\n    msg.cameraId\n];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 480,
+        "wires": [
+            [
+                "9c458169013d3ab3"
+            ]
+        ]
+    },
+    {
+        "id": "9c458169013d3ab3",
+        "type": "subflow:subflow1",
+        "z": "202119be2ec9a18d",
+        "name": "DB Query detection",
         "x": 710,
-        "y": 980,
-        "wires": []
+        "y": 480,
+        "wires": [
+            [
+                "2166cdd0fc670a11"
+            ]
+        ]
+    },
+    {
+        "id": "7dcb447f1fa4567f",
+        "type": "subflow:subflow1",
+        "z": "202119be2ec9a18d",
+        "name": "DB Query vehicles",
+        "x": 710,
+        "y": 360,
+        "wires": [
+            [
+                "2166cdd0fc670a11",
+                "5f42471bc7df0e43"
+            ]
+        ]
+    },
+    {
+        "id": "2166cdd0fc670a11",
+        "type": "join",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "mode": "custom",
+        "build": "array",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "useparts": false,
+        "accumulate": false,
+        "timeout": "",
+        "count": "3",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 970,
+        "y": 420,
+        "wires": [
+            [
+                "58af4323a3541344"
+            ]
+        ]
+    },
+    {
+        "id": "58af4323a3541344",
+        "type": "function",
+        "z": "202119be2ec9a18d",
+        "name": "check success",
+        "func": "const allSuccess = Array.isArray(msg.payload.success) && \n                   msg.payload.success.every(s => s === true);\n\nmsg.success = allSuccess;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1160,
+        "y": 420,
+        "wires": [
+            [
+                "d20632fbf82f8c63"
+            ]
+        ]
     },
     {
         "id": "425769f2630a88db",
