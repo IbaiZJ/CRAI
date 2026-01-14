@@ -101,9 +101,11 @@ public class CameraPoolService {
         if (newCount < this.cameraCount) {
             int toRemove = this.cameraCount - newCount;
             log.info("Removing {} camera workers ({} -> {})", toRemove, this.cameraCount, newCount);
-            for (int i = 0; i < toRemove && !workers.isEmpty(); i++) {
+            int removed = 0;
+            while (removed < toRemove && !workers.isEmpty()) {
                 Future<?> worker = workers.remove(workers.size() - 1);
                 worker.cancel(true);
+                removed++;
             }
         } else {
             int toAdd = newCount - this.cameraCount;
@@ -117,22 +119,15 @@ public class CameraPoolService {
     }
 
     private void cameraWorker() {
-        boolean shouldContinue = true;
-        while (shouldContinue) {
+        while (!Thread.currentThread().isInterrupted()) {
             try {
-                if (Thread.currentThread().isInterrupted()) {
-                    log.warn("Camera worker interrupted, exiting");
-                    shouldContinue = false;
-                } else {
-                    Vehicle v = queue.take();
-                    log.info("Camera captured {} (processing thread={})",
-                            v.getPlate(), Thread.currentThread().getName());
-                    processVehicle(v);
-                }
+                Vehicle v = queue.take();
+                log.info("Camera captured {} (processing thread={})",
+                        v.getPlate(), Thread.currentThread().getName());
+                processVehicle(v);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 log.warn("Camera worker interrupted, exiting");
-                shouldContinue = false;
             } catch (Exception e) {
                 log.error("Error processing vehicle in camera worker", e);
             }
