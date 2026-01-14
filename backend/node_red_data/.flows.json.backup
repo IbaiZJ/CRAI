@@ -8,17 +8,17 @@
         "env": []
     },
     {
-        "id": "e8ee884feb950c22",
+        "id": "202119be2ec9a18d",
         "type": "tab",
-        "label": "VEHICLE API",
+        "label": "AI API",
         "disabled": false,
         "info": "",
         "env": []
     },
     {
-        "id": "202119be2ec9a18d",
+        "id": "e8ee884feb950c22",
         "type": "tab",
-        "label": "AI API",
+        "label": "VEHICLE API",
         "disabled": false,
         "info": "",
         "env": []
@@ -35,6 +35,14 @@
         "id": "3bf36f2bd537dee3",
         "type": "tab",
         "label": "Backend",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "f8c26a4d4d10435f",
+        "type": "tab",
+        "label": "USERS API",
         "disabled": false,
         "info": "",
         "env": []
@@ -238,7 +246,7 @@
             "64d7693526164079",
             "fd5de55856fc7a3e"
         ],
-        "x": 74,
+        "x": 54,
         "y": 19,
         "w": 822,
         "h": 202
@@ -287,11 +295,16 @@
             "70860a9cee51494e",
             "717ca68664d6cd17",
             "984aec4a5aab2213",
-            "eef8852c5dc089ca"
+            "eef8852c5dc089ca",
+            "3cf97939c1d3da7d",
+            "43520e59f0c2418d",
+            "65f0fa9e24a711f5",
+            "1bd34d9ff0bd9b1d",
+            "c3d224b3dbe00893"
         ],
         "x": 54,
         "y": 543,
-        "w": 672,
+        "w": 762,
         "h": 418
     },
     {
@@ -312,11 +325,15 @@
             "14d49179b8edd41d",
             "17f834944df8ae28",
             "3c2bb0dc39f42d9d",
-            "0223ba7271f1f6a4"
+            "0223ba7271f1f6a4",
+            "dab8b6de71939f7a",
+            "f7194d1f7d06ef41",
+            "1c16542d2b7b3fec",
+            "7e1190277ffbde70"
         ],
         "x": 54,
         "y": 991,
-        "w": 672,
+        "w": 762,
         "h": 330
     },
     {
@@ -335,11 +352,13 @@
         "nodes": [
             "bed2187aab9a0778",
             "545bc25f0207425b",
-            "f20d4743bf41cc97"
+            "f20d4743bf41cc97",
+            "fbe9dfc3d59bf34c",
+            "ab118b18065e07d8"
         ],
         "x": 54,
         "y": 1375,
-        "w": 692,
+        "w": 782,
         "h": 370
     },
     {
@@ -1032,7 +1051,7 @@
         "g": "f4381705983a0fa3",
         "name": "AI API endpoints\\n \\n Routes:\\n - {POST} /ai/carDetected\\n     • Without query: returns all vehicles with their associated user\\n     • ?userId=x: returns vehicles filtered by user\\n",
         "info": "AI API endpoints\\n\n\\n\nRoutes:\\n\n- {POST} /ai/carDetected\\n\n    • Without query: returns all vehicles with their associated user\\n\n    • ?userId=x: returns vehicles filtered by user\\n\n",
-        "x": 320,
+        "x": 300,
         "y": 120,
         "wires": []
     },
@@ -1050,7 +1069,9 @@
         "x": 630,
         "y": 600,
         "wires": [
-            []
+            [
+                "3cf97939c1d3da7d"
+            ]
         ]
     },
     {
@@ -1067,7 +1088,9 @@
         "x": 620,
         "y": 680,
         "wires": [
-            []
+            [
+                "43520e59f0c2418d"
+            ]
         ]
     },
     {
@@ -1106,7 +1129,9 @@
         "x": 630,
         "y": 1040,
         "wires": [
-            []
+            [
+                "dab8b6de71939f7a"
+            ]
         ]
     },
     {
@@ -1123,7 +1148,9 @@
         "x": 630,
         "y": 1120,
         "wires": [
-            []
+            [
+                "f7194d1f7d06ef41"
+            ]
         ]
     },
     {
@@ -1151,7 +1178,9 @@
         "x": 640,
         "y": 1440,
         "wires": [
-            []
+            [
+                "fbe9dfc3d59bf34c"
+            ]
         ]
     },
     {
@@ -1168,7 +1197,9 @@
         "x": 640,
         "y": 1520,
         "wires": [
-            []
+            [
+                "ab118b18065e07d8"
+            ]
         ]
     },
     {
@@ -1182,7 +1213,7 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 680,
+        "x": 660,
         "y": 120,
         "wires": [
             [
@@ -1204,7 +1235,9 @@
         "x": 630,
         "y": 760,
         "wires": [
-            []
+            [
+                "65f0fa9e24a711f5"
+            ]
         ]
     },
     {
@@ -1221,7 +1254,9 @@
         "x": 630,
         "y": 1200,
         "wires": [
-            []
+            [
+                "1c16542d2b7b3fec"
+            ]
         ]
     },
     {
@@ -1238,7 +1273,9 @@
         "x": 630,
         "y": 1280,
         "wires": [
-            []
+            [
+                "7e1190277ffbde70"
+            ]
         ]
     },
     {
@@ -1255,7 +1292,9 @@
         "x": 620,
         "y": 840,
         "wires": [
-            []
+            [
+                "1bd34d9ff0bd9b1d"
+            ]
         ]
     },
     {
@@ -1272,7 +1311,9 @@
         "x": 630,
         "y": 920,
         "wires": [
-            []
+            [
+                "c3d224b3dbe00893"
+            ]
         ]
     },
     {
@@ -1313,129 +1354,151 @@
         "links": [
             "3c6371301443c1f0"
         ],
-        "x": 855,
+        "x": 835,
         "y": 120,
         "wires": []
     },
     {
-        "id": "06a3442ad9baac60",
-        "type": "link in",
-        "z": "e8ee884feb950c22",
-        "name": "link in {get} /vehicles",
+        "id": "3cf97939c1d3da7d",
+        "type": "link out",
+        "z": "a5406ced814d1895",
+        "g": "0f3b048bf71e7f96",
+        "name": "link out {get} /users",
+        "mode": "link",
         "links": [
-            "3337e44693b228af"
+            "2c83a153cf0c54e7"
         ],
-        "x": 185,
-        "y": 100,
-        "wires": [
-            [
-                "d89275c06bca5032"
-            ]
-        ]
-    },
-    {
-        "id": "d89275c06bca5032",
-        "type": "function",
-        "z": "e8ee884feb950c22",
-        "name": "query | ?userId",
-        "func": "const userId = (msg.req.query.userId || \"\").trim();\n\nif (userId) {\n    msg.topic = `\n    SELECT v.*, u.*\n    FROM vehicles v\n    JOIN user u ON v.userId = u.id\n    WHERE u.id = ?\n    `;\n    msg.params = [userId];\n}\nelse {\n    msg.topic = `\n    SELECT v.*, u.*\n    FROM vehicles v\n    JOIN user u ON v.userId = u.id\n    `;\n}\n\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 340,
-        "y": 100,
-        "wires": [
-            [
-                "c627c7290e5de831"
-            ]
-        ]
-    },
-    {
-        "id": "c627c7290e5de831",
-        "type": "subflow:subflow1",
-        "z": "e8ee884feb950c22",
-        "name": "",
-        "x": 580,
-        "y": 100,
-        "wires": [
-            [
-                "80461df0ad465676"
-            ]
-        ]
-    },
-    {
-        "id": "80461df0ad465676",
-        "type": "http response",
-        "z": "e8ee884feb950c22",
-        "name": "response",
-        "statusCode": "",
-        "headers": {},
-        "x": 800,
-        "y": 100,
+        "x": 775,
+        "y": 600,
         "wires": []
     },
     {
-        "id": "fc5f874a1bb5653d",
-        "type": "function",
-        "z": "e8ee884feb950c22",
-        "name": "query | ?plate",
-        "func": "const plate = (msg.req.query.plate || \"\").trim();\n\nif (!plate) {\n    msg.payload = {\n        success: false,\n        error: \"Missing required parameter: plate\"\n    };\n\n    msg.statusCode = 400;\n\n    msg.headers = {\n        \"Content-Type\": \"application/json\"\n    };\n\n    return msg;\n}\n\n\nmsg.topic = `\nSELECT *\nFROM vehicles\nWHERE plate = ?\n`;\nmsg.params = [plate];\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 340,
-        "y": 180,
-        "wires": [
-            [
-                "49c0842a2f0dde18"
-            ]
-        ]
-    },
-    {
-        "id": "49c0842a2f0dde18",
-        "type": "subflow:subflow1",
-        "z": "e8ee884feb950c22",
-        "name": "",
-        "x": 580,
-        "y": 180,
-        "wires": [
-            [
-                "543433e025a0d9dd"
-            ]
-        ]
-    },
-    {
-        "id": "543433e025a0d9dd",
-        "type": "http response",
-        "z": "e8ee884feb950c22",
-        "name": "response",
-        "statusCode": "",
-        "headers": {},
-        "x": 800,
-        "y": 180,
+        "id": "43520e59f0c2418d",
+        "type": "link out",
+        "z": "a5406ced814d1895",
+        "g": "0f3b048bf71e7f96",
+        "name": "link out {get} /user",
+        "mode": "link",
+        "links": [
+            "a9fe5d6bc617c32d"
+        ],
+        "x": 775,
+        "y": 680,
         "wires": []
     },
     {
-        "id": "2fc71bf10a12ba3c",
-        "type": "link in",
-        "z": "e8ee884feb950c22",
-        "name": "link in {get} /vehicle",
+        "id": "65f0fa9e24a711f5",
+        "type": "link out",
+        "z": "a5406ced814d1895",
+        "g": "0f3b048bf71e7f96",
+        "name": "link out {post} /user",
+        "mode": "link",
         "links": [
-            "9af2debab1e46272"
+            "171a20db82e1afc0"
         ],
-        "x": 185,
-        "y": 180,
-        "wires": [
-            [
-                "fc5f874a1bb5653d"
-            ]
-        ]
+        "x": 775,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "1bd34d9ff0bd9b1d",
+        "type": "link out",
+        "z": "a5406ced814d1895",
+        "g": "0f3b048bf71e7f96",
+        "name": "link out {put} /user",
+        "mode": "link",
+        "links": [
+            "f22eb1fab4818fe6"
+        ],
+        "x": 775,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "c3d224b3dbe00893",
+        "type": "link out",
+        "z": "a5406ced814d1895",
+        "g": "0f3b048bf71e7f96",
+        "name": "link out {delete} /user",
+        "mode": "link",
+        "links": [
+            "7380345780d93e87"
+        ],
+        "x": 775,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "dab8b6de71939f7a",
+        "type": "link out",
+        "z": "a5406ced814d1895",
+        "g": "17ef12e0aa788ed0",
+        "name": "link out {get} /cameras",
+        "mode": "link",
+        "links": [],
+        "x": 775,
+        "y": 1040,
+        "wires": []
+    },
+    {
+        "id": "f7194d1f7d06ef41",
+        "type": "link out",
+        "z": "a5406ced814d1895",
+        "g": "17ef12e0aa788ed0",
+        "name": "link out {get} /camera",
+        "mode": "link",
+        "links": [],
+        "x": 775,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "1c16542d2b7b3fec",
+        "type": "link out",
+        "z": "a5406ced814d1895",
+        "g": "17ef12e0aa788ed0",
+        "name": "link out {post} /camera",
+        "mode": "link",
+        "links": [],
+        "x": 775,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "7e1190277ffbde70",
+        "type": "link out",
+        "z": "a5406ced814d1895",
+        "g": "17ef12e0aa788ed0",
+        "name": "link out {put} /camera",
+        "mode": "link",
+        "links": [],
+        "x": 775,
+        "y": 1280,
+        "wires": []
+    },
+    {
+        "id": "fbe9dfc3d59bf34c",
+        "type": "link out",
+        "z": "a5406ced814d1895",
+        "g": "b14efd3c54dd8b03",
+        "name": "link out {get} /detections",
+        "mode": "link",
+        "links": [],
+        "x": 795,
+        "y": 1440,
+        "wires": []
+    },
+    {
+        "id": "ab118b18065e07d8",
+        "type": "link out",
+        "z": "a5406ced814d1895",
+        "g": "b14efd3c54dd8b03",
+        "name": "link out {get} /detection",
+        "mode": "link",
+        "links": [],
+        "x": 795,
+        "y": 1520,
+        "wires": []
     },
     {
         "id": "3c6371301443c1f0",
@@ -1488,8 +1551,7 @@
         "y": 140,
         "wires": [
             [
-                "ba320ac5972979f4",
-                "1592841d0f0e52a5"
+                "ba320ac5972979f4"
             ]
         ]
     },
@@ -1538,8 +1600,7 @@
         "y": 140,
         "wires": [
             [
-                "10fe6fc3c782d876",
-                "5eeb85493b9f2c92"
+                "10fe6fc3c782d876"
             ]
         ]
     },
@@ -2361,37 +2422,124 @@
         ]
     },
     {
-        "id": "5eeb85493b9f2c92",
-        "type": "debug",
-        "z": "202119be2ec9a18d",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload.success",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1750,
-        "y": 60,
+        "id": "06a3442ad9baac60",
+        "type": "link in",
+        "z": "e8ee884feb950c22",
+        "name": "link in {get} /vehicles",
+        "links": [
+            "3337e44693b228af"
+        ],
+        "x": 185,
+        "y": 100,
+        "wires": [
+            [
+                "d89275c06bca5032"
+            ]
+        ]
+    },
+    {
+        "id": "d89275c06bca5032",
+        "type": "function",
+        "z": "e8ee884feb950c22",
+        "name": "query | ?userId",
+        "func": "const userId = (msg.req.query.userId || \"\").trim();\n\nif (userId) {\n    msg.topic = `\n    SELECT v.*, u.*\n    FROM vehicles v\n    JOIN user u ON v.userId = u.id\n    WHERE u.id = ?\n    `;\n    msg.params = [userId];\n}\nelse {\n    msg.topic = `\n    SELECT v.*\n    FROM vehicles v\n    `;\n}\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 100,
+        "wires": [
+            [
+                "c627c7290e5de831"
+            ]
+        ]
+    },
+    {
+        "id": "c627c7290e5de831",
+        "type": "subflow:subflow1",
+        "z": "e8ee884feb950c22",
+        "name": "",
+        "x": 580,
+        "y": 100,
+        "wires": [
+            [
+                "80461df0ad465676"
+            ]
+        ]
+    },
+    {
+        "id": "80461df0ad465676",
+        "type": "http response",
+        "z": "e8ee884feb950c22",
+        "name": "response",
+        "statusCode": "",
+        "headers": {},
+        "x": 800,
+        "y": 100,
         "wires": []
     },
     {
-        "id": "1592841d0f0e52a5",
-        "type": "debug",
-        "z": "202119be2ec9a18d",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1410,
-        "y": 20,
+        "id": "fc5f874a1bb5653d",
+        "type": "function",
+        "z": "e8ee884feb950c22",
+        "name": "query | ?plate",
+        "func": "const plate = (msg.req.query.plate || \"\").trim();\n\nif (!plate) {\n    msg.payload = {\n        success: false,\n        error: \"Missing required parameter: plate\"\n    };\n\n    msg.statusCode = 400;\n\n    msg.headers = {\n        \"Content-Type\": \"application/json\"\n    };\n\n    return msg;\n}\n\n\nmsg.topic = `\nSELECT *\nFROM vehicles\nWHERE plate = ?\n`;\nmsg.params = [plate];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 180,
+        "wires": [
+            [
+                "49c0842a2f0dde18"
+            ]
+        ]
+    },
+    {
+        "id": "49c0842a2f0dde18",
+        "type": "subflow:subflow1",
+        "z": "e8ee884feb950c22",
+        "name": "",
+        "x": 580,
+        "y": 180,
+        "wires": [
+            [
+                "543433e025a0d9dd"
+            ]
+        ]
+    },
+    {
+        "id": "543433e025a0d9dd",
+        "type": "http response",
+        "z": "e8ee884feb950c22",
+        "name": "response",
+        "statusCode": "",
+        "headers": {},
+        "x": 800,
+        "y": 180,
         "wires": []
+    },
+    {
+        "id": "2fc71bf10a12ba3c",
+        "type": "link in",
+        "z": "e8ee884feb950c22",
+        "name": "link in {get} /vehicle",
+        "links": [
+            "9af2debab1e46272"
+        ],
+        "x": 185,
+        "y": 180,
+        "wires": [
+            [
+                "fc5f874a1bb5653d"
+            ]
+        ]
     },
     {
         "id": "425769f2630a88db",
@@ -2746,7 +2894,7 @@
         "once": false,
         "onceDelay": "",
         "topic": "",
-        "payload": "0.1",
+        "payload": "100",
         "payloadType": "num",
         "x": 130,
         "y": 280,
@@ -3846,5 +3994,75 @@
         "x": 600,
         "y": 800,
         "wires": []
+    },
+    {
+        "id": "2c83a153cf0c54e7",
+        "type": "link in",
+        "z": "f8c26a4d4d10435f",
+        "name": "link in 1",
+        "links": [
+            "3cf97939c1d3da7d"
+        ],
+        "x": 195,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a9fe5d6bc617c32d",
+        "type": "link in",
+        "z": "f8c26a4d4d10435f",
+        "name": "link in 2",
+        "links": [
+            "43520e59f0c2418d"
+        ],
+        "x": 195,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "171a20db82e1afc0",
+        "type": "link in",
+        "z": "f8c26a4d4d10435f",
+        "name": "link in 3",
+        "links": [
+            "65f0fa9e24a711f5"
+        ],
+        "x": 195,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f22eb1fab4818fe6",
+        "type": "link in",
+        "z": "f8c26a4d4d10435f",
+        "name": "link in 4",
+        "links": [
+            "1bd34d9ff0bd9b1d"
+        ],
+        "x": 195,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7380345780d93e87",
+        "type": "link in",
+        "z": "f8c26a4d4d10435f",
+        "name": "link in 5",
+        "links": [
+            "c3d224b3dbe00893"
+        ],
+        "x": 195,
+        "y": 580,
+        "wires": [
+            []
+        ]
     }
 ]
