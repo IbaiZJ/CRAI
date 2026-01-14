@@ -2746,7 +2746,7 @@
         "once": false,
         "onceDelay": "",
         "topic": "",
-        "payload": "100",
+        "payload": "0.1",
         "payloadType": "num",
         "x": 130,
         "y": 280,
@@ -2927,11 +2927,11 @@
                 "tot": "json"
             }
         ],
-        "x": 890,
+        "x": 870,
         "y": 220,
         "wires": [
             [
-                "d42b61f843663589"
+                "dd1fa28d539d3884"
             ]
         ]
     },
@@ -2951,7 +2951,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 1130,
+        "x": 1430,
         "y": 220,
         "wires": [
             [
@@ -2979,7 +2979,7 @@
         "active": true,
         "tosidebar": true,
         "complete": "true",
-        "x": 1400,
+        "x": 1680,
         "y": 220,
         "wires": []
     },
@@ -3322,6 +3322,26 @@
         "x": 1430,
         "y": 1080,
         "wires": []
+    },
+    {
+        "id": "dd1fa28d539d3884",
+        "type": "function",
+        "z": "01df77f7ae4c4f86",
+        "name": "Validate update schema",
+        "func": "const p = msg.payload;\n\n// Helper\nfunction isNumber(n) {\n    return typeof n === \"number\" && !isNaN(n);\n}\n\n// Required fields\nconst required = [\n    \"cameraCount\",\n    \"stolenProbability\",\n    \"itvFailProbability\",\n    \"vehiclesPerCycle\",\n    \"vehicleIntervalMs\",\n    \"ocrDelayMs\"\n];\n\n// Check presence\nfor (const k of required) {\n    if (p[k] === undefined) {\n        node.error(`Missing required field: ${k}`, msg);\n        return null;\n    }\n}\n\n// Check types and ranges\nif (!Number.isInteger(p.cameraCount) || p.cameraCount < 1)\n    return node.error(\"cameraCount must be an integer >= 1\", msg);\n\nif (!isNumber(p.stolenProbability) || p.stolenProbability < 0 || p.stolenProbability > 1)\n    return node.error(\"stolenProbability must be between 0 and 1\", msg);\n\nif (!isNumber(p.itvFailProbability) || p.itvFailProbability < 0 || p.itvFailProbability > 1)\n    return node.error(\"itvFailProbability must be between 0 and 1\", msg);\n\nif (!Number.isInteger(p.vehiclesPerCycle) || p.vehiclesPerCycle < 1)\n    return node.error(\"vehiclesPerCycle must be an integer >= 1\", msg);\n\nif (!Number.isInteger(p.vehicleIntervalMs) || p.vehicleIntervalMs < 0)\n    return node.error(\"vehicleIntervalMs must be >= 0\", msg);\n\nif (!Number.isInteger(p.ocrDelayMs) || p.ocrDelayMs < 0)\n    return node.error(\"ocrDelayMs must be >= 0\", msg);\n\n// If everything is OK\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1170,
+        "y": 220,
+        "wires": [
+            [
+                "d42b61f843663589"
+            ]
+        ]
     },
     {
         "id": "cdf1c72662bf117f",
