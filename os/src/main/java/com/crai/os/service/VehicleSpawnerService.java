@@ -3,11 +3,15 @@ package com.crai.os.service;
 import com.crai.os.model.Vehicle;
 import com.crai.os.config.SimulationConfig;
 import com.crai.os.utils.RandomVehicleGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
 public class VehicleSpawnerService {
+
+    private static final Logger log = LoggerFactory.getLogger(VehicleSpawnerService.class);
 
     private final CameraPoolService cameraPoolService;
     private final SimulationConfig config;
@@ -38,10 +42,11 @@ public class VehicleSpawnerService {
                     config.getStolenProbability(),
                     config.getItvFailProbability());
 
-            System.out.println("Generando vehiculo aleatorio: " + v);
+            log.info("Generando vehiculo aleatorio: {}", v);
 
             cameraPoolService.enqueueVehicle(v);
         }
     }
 }
+
 
