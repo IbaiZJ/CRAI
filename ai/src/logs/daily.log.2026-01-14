@@ -1,0 +1,876 @@
+[2026-01-14 08:07:38] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-14 08:07:38] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 08:07:38] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 08:07:38] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.033s)
+[2026-01-14 08:07:38] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-14 08:07:38] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-14 08:07:38] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-14 08:08:00] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-14 08:08:46] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-14 08:08:46] [[32mINFO[0m] [logger.py:120] 2. Initializing plate queue...
+[2026-01-14 08:08:46] [[32mINFO[0m] [logger.py:120] ✓ Plate queue initialized
+[2026-01-14 08:08:46] [[32mINFO[0m] [logger.py:120] ✓ Captures directory: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\captures
+[2026-01-14 08:08:46] [[32mINFO[0m] [logger.py:120] 3. Loading YOLO vehicle detector...
+[2026-01-14 08:08:46] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/yolov8n.pt
+[2026-01-14 08:08:46] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-14 08:08:46] [[32mINFO[0m] [logger.py:120] 4. Loading license plate detector...
+[2026-01-14 08:08:46] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-14 08:08:47] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-14 08:08:47] [[32mINFO[0m] [logger.py:120] 5. Initializing OCR...
+[2026-01-14 08:08:57] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-14 08:09:00] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-14 08:09:00] [[32mINFO[0m] [logger.py:120] 6. Loading SSD custom model...
+[2026-01-14 08:09:55] [[32mINFO[0m] [logger.py:120] Found SSD model: ssd_mobilenet_best.keras
+[2026-01-14 08:09:55] [[32mINFO[0m] [logger.py:120] Loading SSD from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_mobilenet_best.keras
+[2026-01-14 08:09:55] [[32mINFO[0m] [logger.py:120] Building SSD MobileNetV2 architecture...
+[2026-01-14 08:09:57] [[32mINFO[0m] [logger.py:120] ✓ MobileNetV2 backbone loaded with ImageNet weights
+[2026-01-14 08:09:57] [[32mINFO[0m] [logger.py:120] Model built: 2,626,684 parameters
+[2026-01-14 08:09:57] [[32mINFO[0m] [logger.py:120]   Input: (None, 180, 320, 3)
+[2026-01-14 08:09:57] [[32mINFO[0m] [logger.py:120]   Output boxes: (None, 4880, 4)
+[2026-01-14 08:09:57] [[32mINFO[0m] [logger.py:120]   Output classes: (None, 4880, 1)
+[2026-01-14 08:09:57] [[32mINFO[0m] [logger.py:120] Attempting to load detection weights from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_mobilenet_best.keras
+[2026-01-14 08:09:58] [[33mWARNING[0m] [logger.py:124] Error loading weights: Layer detect_0_box_conv weight shape (3, 3, 192, 16) is not compatible with provided weight shape (3, 3, 192, 4).
+[2026-01-14 08:09:58] [[33mWARNING[0m] [logger.py:124] Continuing with untrained detection heads...
+[2026-01-14 08:09:58] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.85
+[2026-01-14 08:09:58] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 08:09:58] [[32mINFO[0m] [logger.py:120] ✓ SSD custom model loaded successfully
+[2026-01-14 08:09:58] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (139.576s)
+[2026-01-14 08:09:58] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-14 08:09:58] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-14 08:09:58] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-14 08:09:58] [[32mINFO[0m] [logger.py:120] SSD available: True
+[2026-01-14 08:09:58] [[32mINFO[0m] [logger.py:120] OCR frequency: every 3 frames
+[2026-01-14 08:09:58] [[32mINFO[0m] [logger.py:120] Press 'M' to toggle between YOLO+OCR and SSD Custom modes
+[2026-01-14 08:09:58] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.009s)
+[2026-01-14 08:09:58] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-14 08:09:59] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_080959_1927JXK_vehicle.jpg
+[2026-01-14 08:09:59] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 1927JXK (conf: 0.98)
+[2026-01-14 08:10:11] [[32mINFO[0m] [logger.py:120] Switched to mode: SSD Custom
+[2026-01-14 08:10:22] [[32mINFO[0m] [logger.py:120] Switched to mode: YOLO + OCR
+[2026-01-14 08:10:25] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_081025_4927JXK_vehicle.jpg
+[2026-01-14 08:10:25] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 4927JXK (conf: 0.54)
+[2026-01-14 08:12:22] [[32mINFO[0m] [logger.py:120] Switched to mode: SSD Custom
+[2026-01-14 08:12:23] [[32mINFO[0m] [logger.py:120] Switched to mode: YOLO + OCR
+[2026-01-14 08:12:38] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_081238_4453JSM_vehicle.jpg
+[2026-01-14 08:12:38] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 4453JSM (conf: 0.58)
+[2026-01-14 08:16:05] [[32mINFO[0m] [logger.py:120] Switched to mode: SSD Custom
+[2026-01-14 08:16:08] [[32mINFO[0m] [logger.py:120] Switched to mode: YOLO + OCR
+[2026-01-14 08:18:42] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_081842_0354FXR_vehicle.jpg
+[2026-01-14 08:18:42] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 0354FXR (conf: 0.44)
+[2026-01-14 08:19:01] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_081901_6727JJH_vehicle.jpg
+[2026-01-14 08:19:01] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 6727JJH (conf: 0.57)
+[2026-01-14 08:19:07] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_081907_6727JJM_vehicle.jpg
+[2026-01-14 08:19:07] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 6727JJM (conf: 0.83)
+[2026-01-14 08:19:12] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_081912_6727JJW_vehicle.jpg
+[2026-01-14 08:19:12] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 6727JJW (conf: 0.31)
+[2026-01-14 08:19:25] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_081925_5385DVK_vehicle.jpg
+[2026-01-14 08:19:25] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 5385DVK (conf: 0.53)
+[2026-01-14 08:19:27] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_081927_0385DVK_vehicle.jpg
+[2026-01-14 08:19:27] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 0385DVK (conf: 0.94)
+[2026-01-14 08:19:29] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_081929_6385DVK_vehicle.jpg
+[2026-01-14 08:19:29] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 6385DVK (conf: 0.81)
+[2026-01-14 08:19:47] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_081947_0725DZH_vehicle.jpg
+[2026-01-14 08:19:47] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 0725DZH (conf: 0.23)
+[2026-01-14 08:19:54] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_081954_6205DVK_vehicle.jpg
+[2026-01-14 08:19:54] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 6205DVK (conf: 0.46)
+[2026-01-14 08:20:18] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_082018_3719HXM_vehicle.jpg
+[2026-01-14 08:20:18] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 3719HXM (conf: 0.43)
+[2026-01-14 08:20:30] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-14 08:20:30] [[32mINFO[0m] [logger.py:120] Total unique plates detected: 13
+[2026-01-14 08:20:30] [[32mINFO[0m] [logger.py:120] 
+============================================================
+Plate           Times    Confidence   Vehicle
+------------------------------------------------------------
+1927JXK         154      0.98         car
+4453JSM         27       0.58         car
+6727JJH         12       0.57         car
+6385DVK         8        0.81         car
+5385DVK         5        0.53         car
+6727JJM         4        0.83         car
+4927JXK         1        0.54         car
+0354FXR         1        0.44         car
+6727JJW         1        0.31         car
+0385DVK         1        0.94         car
+============================================================
+
+[2026-01-14 08:20:30] [[32mINFO[0m] [logger.py:120] Queue statistics: Sent=0, Failed=7, Pending=5
+[2026-01-14 08:20:30] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.002s)
+[2026-01-14 08:20:30] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-14 08:20:30] [[32mINFO[0m] [logger.py:120] Stopping plate queue...
+[2026-01-14 08:20:33] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-14 08:20:33] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-14 08:20:33] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-14 08:20:33] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (2.105s)
+[2026-01-14 08:47:40] [[32mINFO[0m] [logger.py:120] Building SSD MobileNetV2 architecture...
+[2026-01-14 08:47:41] [[32mINFO[0m] [logger.py:120] ✓ MobileNetV2 backbone loaded with ImageNet weights
+[2026-01-14 08:47:41] [[32mINFO[0m] [logger.py:120] Model built: 2,626,684 parameters
+[2026-01-14 08:47:41] [[32mINFO[0m] [logger.py:120]   Input: (None, 180, 320, 3)
+[2026-01-14 08:47:41] [[32mINFO[0m] [logger.py:120]   Output boxes: (None, 4880, 4)
+[2026-01-14 08:47:41] [[32mINFO[0m] [logger.py:120]   Output classes: (None, 4880, 1)
+[2026-01-14 08:47:41] [[32mINFO[0m] [logger.py:120] Attempting to load detection weights from: ..\notebooks\models\ssd_mobilenet_best.keras
+[2026-01-14 08:47:41] [[33mWARNING[0m] [logger.py:124] Error loading weights: Layer detect_0_box_conv weight shape (3, 3, 192, 16) is not compatible with provided weight shape (3, 3, 192, 4).
+[2026-01-14 08:47:41] [[33mWARNING[0m] [logger.py:124] ============================================================
+[2026-01-14 08:47:41] [[33mWARNING[0m] [logger.py:124] WEIGHT MISMATCH DETECTED
+[2026-01-14 08:47:41] [[33mWARNING[0m] [logger.py:124] ============================================================
+[2026-01-14 08:47:41] [[33mWARNING[0m] [logger.py:124] The saved model weights are incompatible with the current architecture.
+[2026-01-14 08:47:41] [[33mWARNING[0m] [logger.py:124] Expected: Box heads (16 filters), Class heads (4 filters)
+[2026-01-14 08:47:41] [[33mWARNING[0m] [logger.py:124] Saved:    Box heads (4 filters), Class heads (16 filters)
+[2026-01-14 08:47:41] [[33mWARNING[0m] [logger.py:124] 
+[2026-01-14 08:47:41] [[33mWARNING[0m] [logger.py:124] SOLUTION OPTIONS:
+[2026-01-14 08:47:41] [[33mWARNING[0m] [logger.py:124] 1. Use YOLO detector instead (recommended, works well)
+[2026-01-14 08:47:41] [[33mWARNING[0m] [logger.py:124] 2. Re-train SSD from notebook with correct architecture
+[2026-01-14 08:47:41] [[33mWARNING[0m] [logger.py:124] 3. Continue with untrained SSD (poor detection quality)
+[2026-01-14 08:47:41] [[33mWARNING[0m] [logger.py:124] ============================================================
+[2026-01-14 08:47:41] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.5
+[2026-01-14 08:47:41] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 08:47:41] [[33mWARNING[0m] [logger.py:124] ⚠ SSD detection heads are UNTRAINED - results will be unreliable!
+[2026-01-14 08:47:41] [[33mWARNING[0m] [logger.py:124] ⚠ Recommend using YOLO detector instead, or retrain SSD model.
+[2026-01-14 08:50:06] [[32mINFO[0m] [logger.py:120] Building SSD MobileNetV2 architecture...
+[2026-01-14 08:50:07] [[32mINFO[0m] [logger.py:120] ✓ MobileNetV2 backbone loaded with ImageNet weights
+[2026-01-14 08:50:07] [[32mINFO[0m] [logger.py:120] Model built: 2,626,684 parameters
+[2026-01-14 08:50:07] [[32mINFO[0m] [logger.py:120]   Input: (None, 180, 320, 3)
+[2026-01-14 08:50:07] [[32mINFO[0m] [logger.py:120]   Output boxes: (None, 4880, 4)
+[2026-01-14 08:50:07] [[32mINFO[0m] [logger.py:120]   Output classes: (None, 4880, 1)
+[2026-01-14 08:50:07] [[32mINFO[0m] [logger.py:120] Attempting to load detection weights from: ..\notebooks\models\ssd_mobilenet_best.keras
+[2026-01-14 08:50:07] [[33mWARNING[0m] [logger.py:124] Error loading weights: Layer detect_0_box_conv weight shape (3, 3, 192, 16) is not compatible with provided weight shape (3, 3, 192, 4).
+[2026-01-14 08:50:07] [[33mWARNING[0m] [logger.py:124] ============================================================
+[2026-01-14 08:50:07] [[33mWARNING[0m] [logger.py:124] WEIGHT MISMATCH DETECTED
+[2026-01-14 08:50:07] [[33mWARNING[0m] [logger.py:124] ============================================================
+[2026-01-14 08:50:07] [[33mWARNING[0m] [logger.py:124] The saved model weights are incompatible with the current architecture.
+[2026-01-14 08:50:07] [[33mWARNING[0m] [logger.py:124] Expected: Box heads (16 filters), Class heads (4 filters)
+[2026-01-14 08:50:07] [[33mWARNING[0m] [logger.py:124] Saved:    Box heads (4 filters), Class heads (16 filters)
+[2026-01-14 08:50:07] [[33mWARNING[0m] [logger.py:124] 
+[2026-01-14 08:50:07] [[33mWARNING[0m] [logger.py:124] SOLUTION OPTIONS:
+[2026-01-14 08:50:07] [[33mWARNING[0m] [logger.py:124] 1. Use YOLO detector instead (recommended, works well)
+[2026-01-14 08:50:07] [[33mWARNING[0m] [logger.py:124] 2. Re-train SSD from notebook with correct architecture
+[2026-01-14 08:50:07] [[33mWARNING[0m] [logger.py:124] 3. Continue with untrained SSD (poor detection quality)
+[2026-01-14 08:50:07] [[33mWARNING[0m] [logger.py:124] ============================================================
+[2026-01-14 08:50:07] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.5
+[2026-01-14 08:50:07] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 08:50:07] [[33mWARNING[0m] [logger.py:124] ⚠ SSD detection heads are UNTRAINED - results will be unreliable!
+[2026-01-14 08:50:07] [[33mWARNING[0m] [logger.py:124] ⚠ Recommend using YOLO detector instead, or retrain SSD model.
+[2026-01-14 08:59:34] [[32mINFO[0m] [logger.py:120] Building SSD MobileNetV2 architecture...
+[2026-01-14 08:59:35] [[32mINFO[0m] [logger.py:120] ✓ MobileNetV2 backbone loaded with ImageNet weights
+[2026-01-14 08:59:35] [[32mINFO[0m] [logger.py:120] Model built: 2,626,684 parameters
+[2026-01-14 08:59:35] [[32mINFO[0m] [logger.py:120]   Input: (None, 180, 320, 3)
+[2026-01-14 08:59:35] [[32mINFO[0m] [logger.py:120]   Output boxes: (None, 4880, 4)
+[2026-01-14 08:59:35] [[32mINFO[0m] [logger.py:120]   Output classes: (None, 4880, 1)
+[2026-01-14 08:59:35] [[32mINFO[0m] [logger.py:120] Attempting to load detection weights from: ..\notebooks\models\ssd_mobilenet_best.keras
+[2026-01-14 08:59:35] [[33mWARNING[0m] [logger.py:124] Error loading weights: Layer detect_0_box_conv weight shape (3, 3, 192, 16) is not compatible with provided weight shape (3, 3, 192, 4).
+[2026-01-14 08:59:35] [[33mWARNING[0m] [logger.py:124] ============================================================
+[2026-01-14 08:59:35] [[33mWARNING[0m] [logger.py:124] ⚠️  NO SE PUDIERON CARGAR LOS PESOS ENTRENADOS
+[2026-01-14 08:59:35] [[33mWARNING[0m] [logger.py:124]    El modelo usará pesos aleatorios (ImageNet para backbone)
+[2026-01-14 08:59:35] [[33mWARNING[0m] [logger.py:124]    Para entrenar el modelo:
+[2026-01-14 08:59:35] [[33mWARNING[0m] [logger.py:124]    1. Ejecuta el notebook: ai/notebooks/crai.ipynb
+[2026-01-14 08:59:35] [[33mWARNING[0m] [logger.py:124]    2. Entrena el modelo completo
+[2026-01-14 08:59:35] [[33mWARNING[0m] [logger.py:124]    3. Ejecuta la celda 'GUARDAR MODELO COMPATIBLE'
+[2026-01-14 08:59:35] [[33mWARNING[0m] [logger.py:124] ============================================================
+[2026-01-14 08:59:35] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.5
+[2026-01-14 08:59:35] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 09:00:26] [[32mINFO[0m] [logger.py:120] Building SSD MobileNetV2 architecture...
+[2026-01-14 09:00:27] [[32mINFO[0m] [logger.py:120] ✓ MobileNetV2 backbone loaded with ImageNet weights
+[2026-01-14 09:00:28] [[32mINFO[0m] [logger.py:120] Model built: 2,626,684 parameters
+[2026-01-14 09:00:28] [[32mINFO[0m] [logger.py:120]   Input: (None, 180, 320, 3)
+[2026-01-14 09:00:28] [[32mINFO[0m] [logger.py:120]   Output boxes: (None, 4880, 4)
+[2026-01-14 09:00:28] [[32mINFO[0m] [logger.py:120]   Output classes: (None, 4880, 1)
+[2026-01-14 09:00:28] [[32mINFO[0m] [logger.py:120] Attempting to load detection weights from: ..\notebooks\models\ssd_mobilenet_best.keras
+[2026-01-14 09:00:28] [[33mWARNING[0m] [logger.py:124] Error loading weights: Layer detect_0_box_conv weight shape (3, 3, 192, 16) is not compatible with provided weight shape (3, 3, 192, 4).
+[2026-01-14 09:00:28] [[33mWARNING[0m] [logger.py:124] ============================================================
+[2026-01-14 09:00:28] [[33mWARNING[0m] [logger.py:124] ⚠️  NO SE PUDIERON CARGAR LOS PESOS ENTRENADOS
+[2026-01-14 09:00:28] [[33mWARNING[0m] [logger.py:124]    El modelo usará pesos aleatorios (ImageNet para backbone)
+[2026-01-14 09:00:28] [[33mWARNING[0m] [logger.py:124]    Para entrenar el modelo:
+[2026-01-14 09:00:28] [[33mWARNING[0m] [logger.py:124]    1. Ejecuta el notebook: ai/notebooks/crai.ipynb
+[2026-01-14 09:00:28] [[33mWARNING[0m] [logger.py:124]    2. Entrena el modelo completo
+[2026-01-14 09:00:28] [[33mWARNING[0m] [logger.py:124]    3. Ejecuta la celda 'GUARDAR MODELO COMPATIBLE'
+[2026-01-14 09:00:28] [[33mWARNING[0m] [logger.py:124] ============================================================
+[2026-01-14 09:00:28] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.5
+[2026-01-14 09:00:28] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 12:31:41] [[32mINFO[0m] [logger.py:120] Building SSD MobileNetV2 architecture...
+[2026-01-14 12:31:42] [[32mINFO[0m] [logger.py:120] ✓ MobileNetV2 backbone loaded with ImageNet weights
+[2026-01-14 12:31:42] [[32mINFO[0m] [logger.py:120] Model built: 2,626,684 parameters
+[2026-01-14 12:31:42] [[32mINFO[0m] [logger.py:120]   Input: (None, 180, 320, 3)
+[2026-01-14 12:31:42] [[32mINFO[0m] [logger.py:120]   Output boxes: (None, 4880, 4)
+[2026-01-14 12:31:42] [[32mINFO[0m] [logger.py:120]   Output classes: (None, 4880, 1)
+[2026-01-14 12:31:42] [[32mINFO[0m] [logger.py:120] Loading trained weights from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.weights.h5
+[2026-01-14 12:31:42] [[33mWARNING[0m] [logger.py:124] Could not load weights from C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.weights.h5: `by_name` only supports loading legacy '.h5' or '.hdf5' files. Received: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.weights.h5
+[2026-01-14 12:31:42] [[32mINFO[0m] [logger.py:120] Loading trained weights from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_vehicle_detector.weights.h5
+[2026-01-14 12:31:42] [[33mWARNING[0m] [logger.py:124] Could not load weights from C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_vehicle_detector.weights.h5: `by_name` only supports loading legacy '.h5' or '.hdf5' files. Received: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_vehicle_detector.weights.h5
+[2026-01-14 12:31:42] [[32mINFO[0m] [logger.py:120] Attempting to load detection weights from: ..\notebooks\models\ssd_mobilenet_best.keras
+[2026-01-14 12:31:42] [[33mWARNING[0m] [logger.py:124] Error loading weights: Layer detect_0_box_conv weight shape (3, 3, 192, 16) is not compatible with provided weight shape (3, 3, 192, 4).
+[2026-01-14 12:31:42] [[33mWARNING[0m] [logger.py:124] ============================================================
+[2026-01-14 12:31:42] [[33mWARNING[0m] [logger.py:124] ⚠️  NO SE PUDIERON CARGAR LOS PESOS ENTRENADOS
+[2026-01-14 12:31:42] [[33mWARNING[0m] [logger.py:124]    El modelo usará pesos aleatorios (ImageNet para backbone)
+[2026-01-14 12:31:42] [[33mWARNING[0m] [logger.py:124]    Para entrenar el modelo:
+[2026-01-14 12:31:42] [[33mWARNING[0m] [logger.py:124]    1. Ejecuta el notebook: ai/notebooks/crai.ipynb
+[2026-01-14 12:31:42] [[33mWARNING[0m] [logger.py:124]    2. Entrena el modelo completo
+[2026-01-14 12:31:42] [[33mWARNING[0m] [logger.py:124]    3. Ejecuta la celda 'GUARDAR MODELO COMPATIBLE'
+[2026-01-14 12:31:42] [[33mWARNING[0m] [logger.py:124] ============================================================
+[2026-01-14 12:31:42] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.5
+[2026-01-14 12:31:42] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 12:32:13] [[32mINFO[0m] [logger.py:120] Building SSD MobileNetV2 architecture...
+[2026-01-14 12:32:14] [[32mINFO[0m] [logger.py:120] ✓ MobileNetV2 backbone loaded with ImageNet weights
+[2026-01-14 12:32:14] [[32mINFO[0m] [logger.py:120] Model built: 2,626,684 parameters
+[2026-01-14 12:32:14] [[32mINFO[0m] [logger.py:120]   Input: (None, 180, 320, 3)
+[2026-01-14 12:32:14] [[32mINFO[0m] [logger.py:120]   Output boxes: (None, 4880, 4)
+[2026-01-14 12:32:14] [[32mINFO[0m] [logger.py:120]   Output classes: (None, 4880, 1)
+[2026-01-14 12:32:14] [[32mINFO[0m] [logger.py:120] Loading trained weights from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.weights.h5
+[2026-01-14 12:32:14] [[33mWARNING[0m] [logger.py:124] Could not load weights from C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.weights.h5: `by_name` only supports loading legacy '.h5' or '.hdf5' files. Received: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.weights.h5
+[2026-01-14 12:32:14] [[32mINFO[0m] [logger.py:120] Loading trained weights from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_vehicle_detector.weights.h5
+[2026-01-14 12:32:14] [[33mWARNING[0m] [logger.py:124] Could not load weights from C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_vehicle_detector.weights.h5: `by_name` only supports loading legacy '.h5' or '.hdf5' files. Received: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_vehicle_detector.weights.h5
+[2026-01-14 12:32:14] [[32mINFO[0m] [logger.py:120] Attempting to load detection weights from: models\ssd_vehicle_detector.keras
+[2026-01-14 12:32:14] [[32mINFO[0m] [logger.py:120] ✓ Loaded 0 detection head layers from .keras file
+[2026-01-14 12:32:14] [[33mWARNING[0m] [logger.py:124] Could not load weights from .keras file
+[2026-01-14 12:32:14] [[33mWARNING[0m] [logger.py:124] ============================================================
+[2026-01-14 12:32:14] [[33mWARNING[0m] [logger.py:124] ⚠️  NO SE PUDIERON CARGAR LOS PESOS ENTRENADOS
+[2026-01-14 12:32:14] [[33mWARNING[0m] [logger.py:124]    El modelo usará pesos aleatorios (ImageNet para backbone)
+[2026-01-14 12:32:14] [[33mWARNING[0m] [logger.py:124]    Para entrenar el modelo:
+[2026-01-14 12:32:14] [[33mWARNING[0m] [logger.py:124]    1. Ejecuta el notebook: ai/notebooks/crai.ipynb
+[2026-01-14 12:32:14] [[33mWARNING[0m] [logger.py:124]    2. Entrena el modelo completo
+[2026-01-14 12:32:14] [[33mWARNING[0m] [logger.py:124]    3. Ejecuta la celda 'GUARDAR MODELO COMPATIBLE'
+[2026-01-14 12:32:14] [[33mWARNING[0m] [logger.py:124] ============================================================
+[2026-01-14 12:32:14] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.5
+[2026-01-14 12:32:14] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 12:32:36] [[32mINFO[0m] [logger.py:120] Building SSD MobileNetV2 architecture...
+[2026-01-14 12:32:37] [[32mINFO[0m] [logger.py:120] ✓ MobileNetV2 backbone loaded with ImageNet weights
+[2026-01-14 12:32:37] [[32mINFO[0m] [logger.py:120] Model built: 2,626,684 parameters
+[2026-01-14 12:32:37] [[32mINFO[0m] [logger.py:120]   Input: (None, 180, 320, 3)
+[2026-01-14 12:32:37] [[32mINFO[0m] [logger.py:120]   Output boxes: (None, 4880, 4)
+[2026-01-14 12:32:37] [[32mINFO[0m] [logger.py:120]   Output classes: (None, 4880, 1)
+[2026-01-14 12:32:37] [[32mINFO[0m] [logger.py:120] Loading trained weights from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.weights.h5
+[2026-01-14 12:32:37] [[33mWARNING[0m] [logger.py:124] Could not load weights from C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.weights.h5: `by_name` only supports loading legacy '.h5' or '.hdf5' files. Received: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.weights.h5
+[2026-01-14 12:32:37] [[32mINFO[0m] [logger.py:120] Loading trained weights from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_vehicle_detector.weights.h5
+[2026-01-14 12:32:37] [[33mWARNING[0m] [logger.py:124] Could not load weights from C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_vehicle_detector.weights.h5: `by_name` only supports loading legacy '.h5' or '.hdf5' files. Received: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_vehicle_detector.weights.h5
+[2026-01-14 12:32:37] [[32mINFO[0m] [logger.py:120] Attempting to load detection weights from: models\ssd_vehicle_detector.keras
+[2026-01-14 12:32:37] [[32mINFO[0m] [logger.py:120] ✓ Loaded 0 detection head layers from .keras file
+[2026-01-14 12:32:37] [[33mWARNING[0m] [logger.py:124] Could not load weights from .keras file
+[2026-01-14 12:32:37] [[33mWARNING[0m] [logger.py:124] ============================================================
+[2026-01-14 12:32:37] [[33mWARNING[0m] [logger.py:124] ⚠️  NO SE PUDIERON CARGAR LOS PESOS ENTRENADOS
+[2026-01-14 12:32:37] [[33mWARNING[0m] [logger.py:124]    El modelo usará pesos aleatorios (ImageNet para backbone)
+[2026-01-14 12:32:37] [[33mWARNING[0m] [logger.py:124]    Para entrenar el modelo:
+[2026-01-14 12:32:37] [[33mWARNING[0m] [logger.py:124]    1. Ejecuta el notebook: ai/notebooks/crai.ipynb
+[2026-01-14 12:32:37] [[33mWARNING[0m] [logger.py:124]    2. Entrena el modelo completo
+[2026-01-14 12:32:37] [[33mWARNING[0m] [logger.py:124]    3. Ejecuta la celda 'GUARDAR MODELO COMPATIBLE'
+[2026-01-14 12:32:37] [[33mWARNING[0m] [logger.py:124] ============================================================
+[2026-01-14 12:32:37] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.5
+[2026-01-14 12:32:37] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 12:33:10] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-14 12:33:10] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 12:33:10] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 12:33:10] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.020s)
+[2026-01-14 12:33:10] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-14 12:33:10] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-14 12:33:10] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-14 12:33:18] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-14 12:33:42] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-14 12:33:42] [[32mINFO[0m] [logger.py:120] 2. Initializing plate queue...
+[2026-01-14 12:33:42] [[32mINFO[0m] [logger.py:120] ✓ Plate queue initialized
+[2026-01-14 12:33:42] [[32mINFO[0m] [logger.py:120] ✓ Captures directory: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\captures
+[2026-01-14 12:33:42] [[32mINFO[0m] [logger.py:120] 3. Loading YOLO vehicle detector...
+[2026-01-14 12:33:42] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/yolov8n.pt
+[2026-01-14 12:33:42] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-14 12:33:42] [[32mINFO[0m] [logger.py:120] 4. Loading license plate detector...
+[2026-01-14 12:33:42] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-14 12:33:42] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-14 12:33:42] [[32mINFO[0m] [logger.py:120] 5. Initializing OCR...
+[2026-01-14 12:33:44] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-14 12:33:46] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-14 12:33:46] [[32mINFO[0m] [logger.py:120] 6. Loading SSD custom model...
+[2026-01-14 12:33:51] [[32mINFO[0m] [logger.py:120] Found SSD model: ssd_mobilenet_best.keras
+[2026-01-14 12:33:51] [[32mINFO[0m] [logger.py:120] Loading SSD from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_mobilenet_best.keras
+[2026-01-14 12:33:51] [[32mINFO[0m] [logger.py:120] Building SSD MobileNetV2 architecture...
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120] ✓ MobileNetV2 backbone loaded with ImageNet weights
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120] Model built: 2,626,684 parameters
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120]   Input: (None, 180, 320, 3)
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120]   Output boxes: (None, 4880, 4)
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120]   Output classes: (None, 4880, 1)
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120] Loading trained weights from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.weights.h5
+[2026-01-14 12:33:52] [[33mWARNING[0m] [logger.py:124] Could not load weights from C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.weights.h5: `by_name` only supports loading legacy '.h5' or '.hdf5' files. Received: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.weights.h5
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120] Loading trained weights from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_vehicle_detector.weights.h5
+[2026-01-14 12:33:52] [[33mWARNING[0m] [logger.py:124] Could not load weights from C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_vehicle_detector.weights.h5: `by_name` only supports loading legacy '.h5' or '.hdf5' files. Received: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_vehicle_detector.weights.h5
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120] Attempting to load detection weights from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_mobilenet_best.keras
+[2026-01-14 12:33:52] [[33mWARNING[0m] [logger.py:124] Error loading weights: Layer detect_0_box_conv weight shape (3, 3, 192, 16) is not compatible with provided weight shape (3, 3, 192, 4).
+[2026-01-14 12:33:52] [[33mWARNING[0m] [logger.py:124] ============================================================
+[2026-01-14 12:33:52] [[33mWARNING[0m] [logger.py:124] ⚠️  NO SE PUDIERON CARGAR LOS PESOS ENTRENADOS
+[2026-01-14 12:33:52] [[33mWARNING[0m] [logger.py:124]    El modelo usará pesos aleatorios (ImageNet para backbone)
+[2026-01-14 12:33:52] [[33mWARNING[0m] [logger.py:124]    Para entrenar el modelo:
+[2026-01-14 12:33:52] [[33mWARNING[0m] [logger.py:124]    1. Ejecuta el notebook: ai/notebooks/crai.ipynb
+[2026-01-14 12:33:52] [[33mWARNING[0m] [logger.py:124]    2. Entrena el modelo completo
+[2026-01-14 12:33:52] [[33mWARNING[0m] [logger.py:124]    3. Ejecuta la celda 'GUARDAR MODELO COMPATIBLE'
+[2026-01-14 12:33:52] [[33mWARNING[0m] [logger.py:124] ============================================================
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.85
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120] ✓ SSD custom model loaded successfully
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (42.180s)
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120] SSD available: True
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120] OCR frequency: every 3 frames
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120] Press 'M' to toggle between YOLO+OCR and SSD Custom modes
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-14 12:33:52] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-14 12:34:22] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_123422_0868LRB_vehicle.jpg
+[2026-01-14 12:34:22] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 0868LRB (conf: 0.47)
+[2026-01-14 12:34:37] [[32mINFO[0m] [logger.py:120] Switched to mode: SSD Custom
+[2026-01-14 12:34:57] [[32mINFO[0m] [logger.py:120] Switched to mode: YOLO + OCR
+[2026-01-14 12:35:15] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-14 12:35:15] [[32mINFO[0m] [logger.py:120] Total unique plates detected: 1
+[2026-01-14 12:35:15] [[32mINFO[0m] [logger.py:120] 
+============================================================
+Plate           Times    Confidence   Vehicle
+------------------------------------------------------------
+0868LRB         49       0.47         car
+============================================================
+
+[2026-01-14 12:35:15] [[32mINFO[0m] [logger.py:120] Queue statistics: Sent=0, Failed=1, Pending=0
+[2026-01-14 12:35:15] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.002s)
+[2026-01-14 12:35:15] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-14 12:35:15] [[32mINFO[0m] [logger.py:120] Stopping plate queue...
+[2026-01-14 12:35:15] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-14 12:35:15] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-14 12:35:15] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-14 12:35:15] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.491s)
+[2026-01-14 12:38:46] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 12:38:47] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 12:38:47] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.5
+[2026-01-14 12:38:47] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 12:39:38] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 12:39:39] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 12:39:39] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.3
+[2026-01-14 12:39:39] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 12:40:34] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 12:40:35] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 12:40:35] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.3
+[2026-01-14 12:40:35] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 12:42:20] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-14 12:42:20] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 12:42:20] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 12:42:20] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.013s)
+[2026-01-14 12:42:20] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-14 12:42:20] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-14 12:42:20] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-14 12:42:28] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-14 12:42:52] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-14 12:42:52] [[32mINFO[0m] [logger.py:120] 2. Initializing plate queue...
+[2026-01-14 12:42:52] [[32mINFO[0m] [logger.py:120] ✓ Plate queue initialized
+[2026-01-14 12:42:52] [[32mINFO[0m] [logger.py:120] ✓ Captures directory: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\captures
+[2026-01-14 12:42:52] [[32mINFO[0m] [logger.py:120] 3. Loading YOLO vehicle detector...
+[2026-01-14 12:42:52] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/yolov8n.pt
+[2026-01-14 12:42:52] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-14 12:42:52] [[32mINFO[0m] [logger.py:120] 4. Loading license plate detector...
+[2026-01-14 12:42:52] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-14 12:42:52] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-14 12:42:52] [[32mINFO[0m] [logger.py:120] 5. Initializing OCR...
+[2026-01-14 12:42:53] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-14 12:42:55] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-14 12:42:55] [[32mINFO[0m] [logger.py:120] 6. Loading SSD custom model...
+[2026-01-14 12:42:59] [[32mINFO[0m] [logger.py:120] Found SSD model: ssd_mobilenet_best.keras
+[2026-01-14 12:42:59] [[32mINFO[0m] [logger.py:120] Loading SSD from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_mobilenet_best.keras
+[2026-01-14 12:42:59] [[32mINFO[0m] [logger.py:120] Loading complete model from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_mobilenet_best.keras
+[2026-01-14 12:42:59] [[33mWARNING[0m] [logger.py:124] Could not load .keras model: Could not locate class 'SSDModel'. Make sure custom classes and functions are decorated with `@keras.saving.register_keras_serializable()`. If they are already decorated, make sure they are all imported so that the decorator is run before trying to load them. Full object config: {'module': None, 'class_name': 'SSDModel', 'config': {'name': 'ssd_model_1', 'trainable': True, 'dtype': {'module': 'keras', 'class_name': 'DTypePolicy', 'config': {'name': 'float32'}, 'registered_name': None}}, 'registered_name': 'SSDModel', 'compile_config': None}
+[2026-01-14 12:42:59] [[32mINFO[0m] [logger.py:120] Loading complete model from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.keras
+[2026-01-14 12:43:01] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 12:43:01] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.85
+[2026-01-14 12:43:01] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 12:43:01] [[32mINFO[0m] [logger.py:120] ✓ SSD custom model loaded successfully
+[2026-01-14 12:43:01] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (41.016s)
+[2026-01-14 12:43:01] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-14 12:43:01] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-14 12:43:01] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-14 12:43:01] [[32mINFO[0m] [logger.py:120] SSD available: True
+[2026-01-14 12:43:01] [[32mINFO[0m] [logger.py:120] OCR frequency: every 3 frames
+[2026-01-14 12:43:01] [[32mINFO[0m] [logger.py:120] Press 'M' to toggle between YOLO+OCR and SSD Custom modes
+[2026-01-14 12:43:01] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-14 12:43:01] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-14 12:43:01] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_124301_0868LRB_vehicle.jpg
+[2026-01-14 12:43:01] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 0868LRB (conf: 0.96)
+[2026-01-14 12:43:17] [[32mINFO[0m] [logger.py:120] Switched to mode: SSD Custom
+[2026-01-14 12:45:09] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-14 12:45:09] [[32mINFO[0m] [logger.py:120] Total unique plates detected: 1
+[2026-01-14 12:45:09] [[32mINFO[0m] [logger.py:120] 
+============================================================
+Plate           Times    Confidence   Vehicle
+------------------------------------------------------------
+0868LRB         15       0.96         car
+============================================================
+
+[2026-01-14 12:45:09] [[32mINFO[0m] [logger.py:120] Queue statistics: Sent=0, Failed=1, Pending=0
+[2026-01-14 12:45:09] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-14 12:45:09] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-14 12:45:09] [[32mINFO[0m] [logger.py:120] Stopping plate queue...
+[2026-01-14 12:45:10] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-14 12:45:10] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-14 12:45:10] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-14 12:45:10] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.934s)
+[2026-01-14 12:45:43] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-14 12:45:43] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 12:45:43] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 12:45:43] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.006s)
+[2026-01-14 12:45:43] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-14 12:45:43] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-14 12:45:43] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-14 12:45:51] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-14 12:46:15] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-14 12:46:15] [[32mINFO[0m] [logger.py:120] 2. Initializing plate queue...
+[2026-01-14 12:46:15] [[32mINFO[0m] [logger.py:120] ✓ Plate queue initialized
+[2026-01-14 12:46:15] [[32mINFO[0m] [logger.py:120] ✓ Captures directory: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\captures
+[2026-01-14 12:46:15] [[32mINFO[0m] [logger.py:120] 3. Loading YOLO vehicle detector...
+[2026-01-14 12:46:15] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/yolov8n.pt
+[2026-01-14 12:46:15] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-14 12:46:15] [[32mINFO[0m] [logger.py:120] 4. Loading license plate detector...
+[2026-01-14 12:46:15] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-14 12:46:15] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-14 12:46:15] [[32mINFO[0m] [logger.py:120] 5. Initializing OCR...
+[2026-01-14 12:46:15] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-14 12:46:17] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-14 12:46:17] [[32mINFO[0m] [logger.py:120] 6. Loading SSD custom model...
+[2026-01-14 12:46:22] [[32mINFO[0m] [logger.py:120] Found SSD model: ssd_mobilenet_best.keras
+[2026-01-14 12:46:22] [[32mINFO[0m] [logger.py:120] Loading SSD from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_mobilenet_best.keras
+[2026-01-14 12:46:22] [[32mINFO[0m] [logger.py:120] Loading complete model from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_mobilenet_best.keras
+[2026-01-14 12:46:22] [[33mWARNING[0m] [logger.py:124] Could not load .keras model: Could not locate class 'SSDModel'. Make sure custom classes and functions are decorated with `@keras.saving.register_keras_serializable()`. If they are already decorated, make sure they are all imported so that the decorator is run before trying to load them. Full object config: {'module': None, 'class_name': 'SSDModel', 'config': {'name': 'ssd_model_1', 'trainable': True, 'dtype': {'module': 'keras', 'class_name': 'DTypePolicy', 'config': {'name': 'float32'}, 'registered_name': None}}, 'registered_name': 'SSDModel', 'compile_config': None}
+[2026-01-14 12:46:22] [[32mINFO[0m] [logger.py:120] Loading complete model from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.keras
+[2026-01-14 12:46:23] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 12:46:23] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.85
+[2026-01-14 12:46:23] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 12:46:23] [[32mINFO[0m] [logger.py:120] ✓ SSD custom model loaded successfully
+[2026-01-14 12:46:23] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (40.230s)
+[2026-01-14 12:46:23] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-14 12:46:23] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-14 12:46:23] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-14 12:46:23] [[32mINFO[0m] [logger.py:120] SSD available: True
+[2026-01-14 12:46:23] [[32mINFO[0m] [logger.py:120] OCR frequency: every 3 frames
+[2026-01-14 12:46:23] [[32mINFO[0m] [logger.py:120] Press 'M' to toggle between YOLO+OCR and SSD Custom modes
+[2026-01-14 12:46:23] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-14 12:46:23] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-14 12:46:55] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_124655_2364LNK_vehicle.jpg
+[2026-01-14 12:46:55] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 2364LNK (conf: 0.71)
+[2026-01-14 12:46:57] [[32mINFO[0m] [logger.py:120] 
+[Ctrl+C] Keyboard interrupt received
+[2026-01-14 12:46:57] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-14 12:46:57] [[32mINFO[0m] [logger.py:120] Total unique plates detected: 1
+[2026-01-14 12:46:57] [[32mINFO[0m] [logger.py:120] 
+============================================================
+Plate           Times    Confidence   Vehicle
+------------------------------------------------------------
+2364LNK         2        0.71         car
+============================================================
+
+[2026-01-14 12:46:57] [[32mINFO[0m] [logger.py:120] Queue statistics: Sent=0, Failed=0, Pending=0
+[2026-01-14 12:46:57] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-14 12:46:57] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-14 12:46:57] [[32mINFO[0m] [logger.py:120] Stopping plate queue...
+[2026-01-14 12:47:01] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-14 12:47:01] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-14 12:47:01] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-14 12:47:01] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (3.294s)
+[2026-01-14 12:48:35] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 12:48:36] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 12:48:36] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.3
+[2026-01-14 12:48:36] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 12:49:11] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-14 12:49:11] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 12:49:11] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 12:49:11] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.081s)
+[2026-01-14 12:49:11] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-14 12:49:11] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-14 12:49:11] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-14 12:49:19] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-14 12:49:44] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-14 12:49:44] [[32mINFO[0m] [logger.py:120] 2. Initializing plate queue...
+[2026-01-14 12:49:44] [[32mINFO[0m] [logger.py:120] ✓ Plate queue initialized
+[2026-01-14 12:49:44] [[32mINFO[0m] [logger.py:120] ✓ Captures directory: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\captures
+[2026-01-14 12:49:44] [[32mINFO[0m] [logger.py:120] 3. Loading YOLO vehicle detector...
+[2026-01-14 12:49:44] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/yolov8n.pt
+[2026-01-14 12:49:44] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-14 12:49:44] [[32mINFO[0m] [logger.py:120] 4. Loading license plate detector...
+[2026-01-14 12:49:44] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-14 12:49:44] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-14 12:49:44] [[32mINFO[0m] [logger.py:120] 5. Initializing OCR...
+[2026-01-14 12:49:45] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-14 12:49:46] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-14 12:49:46] [[32mINFO[0m] [logger.py:120] 6. Loading SSD custom model...
+[2026-01-14 12:49:51] [[32mINFO[0m] [logger.py:120] Found SSD model: ssd_vehicle_detector.keras
+[2026-01-14 12:49:51] [[32mINFO[0m] [logger.py:120] Loading SSD from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.keras
+[2026-01-14 12:49:51] [[32mINFO[0m] [logger.py:120] Loading complete model from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.keras
+[2026-01-14 12:49:52] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 12:49:52] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.27
+[2026-01-14 12:49:52] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 12:49:52] [[32mINFO[0m] [logger.py:120] ✓ SSD custom model loaded successfully
+[2026-01-14 12:49:52] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (41.500s)
+[2026-01-14 12:49:52] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-14 12:49:52] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-14 12:49:52] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-14 12:49:52] [[32mINFO[0m] [logger.py:120] SSD available: True
+[2026-01-14 12:49:52] [[32mINFO[0m] [logger.py:120] OCR frequency: every 3 frames
+[2026-01-14 12:49:52] [[32mINFO[0m] [logger.py:120] Press 'M' to toggle between YOLO+OCR and SSD Custom modes
+[2026-01-14 12:49:52] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-14 12:49:52] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-14 12:49:58] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_124958_2364LNK_vehicle.jpg
+[2026-01-14 12:49:58] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 2364LNK (conf: 0.90)
+[2026-01-14 12:50:03] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_125003_0868LRB_vehicle.jpg
+[2026-01-14 12:50:03] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 0868LRB (conf: 0.16)
+[2026-01-14 12:50:12] [[32mINFO[0m] [logger.py:120] Switched to mode: SSD Custom
+[2026-01-14 12:51:31] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-14 12:51:31] [[32mINFO[0m] [logger.py:120] Total unique plates detected: 2
+[2026-01-14 12:51:31] [[32mINFO[0m] [logger.py:120] 
+============================================================
+Plate           Times    Confidence   Vehicle
+------------------------------------------------------------
+0868LRB         20       0.16         car
+2364LNK         4        0.90         car
+============================================================
+
+[2026-01-14 12:51:31] [[32mINFO[0m] [logger.py:120] Queue statistics: Sent=0, Failed=2, Pending=0
+[2026-01-14 12:51:31] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-14 12:51:31] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-14 12:51:31] [[32mINFO[0m] [logger.py:120] Stopping plate queue...
+[2026-01-14 12:51:31] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-14 12:51:31] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-14 12:51:31] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-14 12:51:31] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.361s)
+[2026-01-14 15:36:17] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-14 15:36:17] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 15:36:17] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 15:36:17] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.045s)
+[2026-01-14 15:36:17] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-14 15:36:17] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-14 15:36:17] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-14 15:36:26] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-14 15:36:49] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-14 15:36:49] [[32mINFO[0m] [logger.py:120] 2. Initializing plate queue...
+[2026-01-14 15:36:49] [[32mINFO[0m] [logger.py:120] ✓ Plate queue initialized
+[2026-01-14 15:36:49] [[32mINFO[0m] [logger.py:120] ✓ Captures directory: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\captures
+[2026-01-14 15:36:49] [[32mINFO[0m] [logger.py:120] 3. Loading YOLO vehicle detector...
+[2026-01-14 15:36:49] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/yolov8n.pt
+[2026-01-14 15:36:49] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-14 15:36:50] [[32mINFO[0m] [logger.py:120] 4. Loading license plate detector...
+[2026-01-14 15:36:50] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-14 15:36:50] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-14 15:36:50] [[32mINFO[0m] [logger.py:120] 5. Initializing OCR...
+[2026-01-14 15:36:58] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-14 15:37:00] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-14 15:37:00] [[32mINFO[0m] [logger.py:120] 6. Loading SSD custom model...
+[2026-01-14 15:37:29] [[32mINFO[0m] [logger.py:120] Found SSD model: ssd_vehicle_detector.keras
+[2026-01-14 15:37:29] [[32mINFO[0m] [logger.py:120] Loading SSD from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.keras
+[2026-01-14 15:37:29] [[32mINFO[0m] [logger.py:120] Loading complete model from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.keras
+[2026-01-14 15:37:31] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 15:37:31] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.27
+[2026-01-14 15:37:31] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 15:37:31] [[32mINFO[0m] [logger.py:120] ✓ SSD custom model loaded successfully
+[2026-01-14 15:37:31] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (74.016s)
+[2026-01-14 15:37:31] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-14 15:37:31] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-14 15:37:31] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-14 15:37:31] [[32mINFO[0m] [logger.py:120] SSD available: True
+[2026-01-14 15:37:31] [[32mINFO[0m] [logger.py:120] OCR frequency: every 3 frames
+[2026-01-14 15:37:31] [[32mINFO[0m] [logger.py:120] Press 'M' to toggle between YOLO+OCR and SSD Custom modes
+[2026-01-14 15:37:31] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.002s)
+[2026-01-14 15:37:31] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-14 15:37:32] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_153732_1927JXK_vehicle.jpg
+[2026-01-14 15:37:32] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 1927JXK (conf: 0.71)
+[2026-01-14 15:37:38] [[32mINFO[0m] [logger.py:120] Switched to mode: SSD Custom
+[2026-01-14 15:38:10] [[32mINFO[0m] [logger.py:120] Switched to mode: YOLO + OCR
+[2026-01-14 15:38:14] [[32mINFO[0m] [logger.py:120] Switched to mode: SSD Custom
+[2026-01-14 15:38:15] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-14 15:38:15] [[32mINFO[0m] [logger.py:120] Total unique plates detected: 1
+[2026-01-14 15:38:15] [[32mINFO[0m] [logger.py:120] 
+============================================================
+Plate           Times    Confidence   Vehicle
+------------------------------------------------------------
+1927JXK         11       0.71         car
+============================================================
+
+[2026-01-14 15:38:15] [[32mINFO[0m] [logger.py:120] Queue statistics: Sent=0, Failed=1, Pending=0
+[2026-01-14 15:38:15] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-14 15:38:15] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-14 15:38:15] [[32mINFO[0m] [logger.py:120] Stopping plate queue...
+[2026-01-14 15:38:16] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-14 15:38:16] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-14 15:38:16] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-14 15:38:16] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.882s)
+[2026-01-14 15:38:41] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-14 15:38:41] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 15:38:41] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 15:38:41] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.042s)
+[2026-01-14 15:38:41] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-14 15:38:41] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-14 15:38:41] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-14 15:38:49] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-14 15:39:12] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-14 15:39:12] [[32mINFO[0m] [logger.py:120] 2. Initializing plate queue...
+[2026-01-14 15:39:12] [[32mINFO[0m] [logger.py:120] ✓ Plate queue initialized
+[2026-01-14 15:39:12] [[32mINFO[0m] [logger.py:120] ✓ Captures directory: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\captures
+[2026-01-14 15:39:12] [[32mINFO[0m] [logger.py:120] 3. Loading YOLO vehicle detector...
+[2026-01-14 15:39:12] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/yolov8n.pt
+[2026-01-14 15:39:12] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-14 15:39:12] [[32mINFO[0m] [logger.py:120] 4. Loading license plate detector...
+[2026-01-14 15:39:12] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-14 15:39:12] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-14 15:39:12] [[32mINFO[0m] [logger.py:120] 5. Initializing OCR...
+[2026-01-14 15:39:12] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-14 15:39:14] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-14 15:39:14] [[32mINFO[0m] [logger.py:120] 6. Loading SSD custom model...
+[2026-01-14 15:39:19] [[32mINFO[0m] [logger.py:120] Found SSD model: ssd_vehicle_detector.keras
+[2026-01-14 15:39:19] [[32mINFO[0m] [logger.py:120] Loading SSD from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.keras
+[2026-01-14 15:39:19] [[32mINFO[0m] [logger.py:120] Loading complete model from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.keras
+[2026-01-14 15:39:20] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 15:39:20] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.1
+[2026-01-14 15:39:20] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 15:39:20] [[32mINFO[0m] [logger.py:120] ✓ SSD custom model loaded successfully
+[2026-01-14 15:39:20] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (39.326s)
+[2026-01-14 15:39:20] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-14 15:39:20] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-14 15:39:20] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-14 15:39:20] [[32mINFO[0m] [logger.py:120] SSD available: True
+[2026-01-14 15:39:20] [[32mINFO[0m] [logger.py:120] OCR frequency: every 3 frames
+[2026-01-14 15:39:20] [[32mINFO[0m] [logger.py:120] Press 'M' to toggle between YOLO+OCR and SSD Custom modes
+[2026-01-14 15:39:20] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.002s)
+[2026-01-14 15:39:20] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-14 15:39:36] [[32mINFO[0m] [logger.py:120] Switched to mode: SSD Custom
+[2026-01-14 15:39:55] [[32mINFO[0m] [logger.py:120] Switched to mode: YOLO + OCR
+[2026-01-14 15:40:00] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-14 15:40:00] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-14 15:40:00] [[32mINFO[0m] [logger.py:120] Queue statistics: Sent=0, Failed=0, Pending=0
+[2026-01-14 15:40:00] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-14 15:40:00] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-14 15:40:00] [[32mINFO[0m] [logger.py:120] Stopping plate queue...
+[2026-01-14 15:40:00] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-14 15:40:00] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-14 15:40:00] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-14 15:40:00] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.462s)
+[2026-01-14 21:02:43] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-14 21:02:43] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 21:02:43] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 21:02:43] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.070s)
+[2026-01-14 21:02:43] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-14 21:02:43] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-14 21:02:43] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-14 21:02:52] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-14 21:03:18] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-14 21:03:18] [[32mINFO[0m] [logger.py:120] 2. Initializing plate queue...
+[2026-01-14 21:03:18] [[32mINFO[0m] [logger.py:120] ✓ Plate queue initialized
+[2026-01-14 21:03:18] [[32mINFO[0m] [logger.py:120] ✓ Captures directory: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\captures
+[2026-01-14 21:03:18] [[32mINFO[0m] [logger.py:120] 3. Loading YOLO vehicle detector...
+[2026-01-14 21:03:18] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/yolov8n.pt
+[2026-01-14 21:03:18] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-14 21:03:18] [[32mINFO[0m] [logger.py:120] 4. Loading license plate detector...
+[2026-01-14 21:03:18] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-14 21:03:18] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-14 21:03:18] [[32mINFO[0m] [logger.py:120] 5. Initializing OCR...
+[2026-01-14 21:03:28] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-14 21:03:31] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-14 21:03:31] [[32mINFO[0m] [logger.py:120] 6. Loading SSD custom model...
+[2026-01-14 21:04:11] [[32mINFO[0m] [logger.py:120] Found SSD model: ssd_vehicle_detector.keras
+[2026-01-14 21:04:11] [[32mINFO[0m] [logger.py:120] Loading SSD from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_vehicle_detector.keras
+[2026-01-14 21:04:11] [[32mINFO[0m] [logger.py:120] Loading complete model from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_vehicle_detector.keras
+[2026-01-14 21:04:13] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 21:04:13] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.1
+[2026-01-14 21:04:13] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 21:04:13] [[32mINFO[0m] [logger.py:120] ✓ SSD custom model loaded successfully
+[2026-01-14 21:04:13] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (90.680s)
+[2026-01-14 21:04:13] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-14 21:04:13] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-14 21:04:13] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-14 21:04:13] [[32mINFO[0m] [logger.py:120] SSD available: True
+[2026-01-14 21:04:13] [[32mINFO[0m] [logger.py:120] OCR frequency: every 3 frames
+[2026-01-14 21:04:13] [[32mINFO[0m] [logger.py:120] Press 'M' to toggle between YOLO+OCR and SSD Custom modes
+[2026-01-14 21:04:13] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.002s)
+[2026-01-14 21:04:13] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-14 21:04:20] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_210420_0411KMT_vehicle.jpg
+[2026-01-14 21:04:20] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 0411KMT (conf: 0.40)
+[2026-01-14 21:04:27] [[32mINFO[0m] [logger.py:120] Switched to mode: SSD Custom
+[2026-01-14 21:04:36] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-14 21:04:36] [[32mINFO[0m] [logger.py:120] Total unique plates detected: 1
+[2026-01-14 21:04:36] [[32mINFO[0m] [logger.py:120] 
+============================================================
+Plate           Times    Confidence   Vehicle
+------------------------------------------------------------
+0411KMT         5        0.40         truck
+============================================================
+
+[2026-01-14 21:04:36] [[32mINFO[0m] [logger.py:120] Queue statistics: Sent=0, Failed=1, Pending=0
+[2026-01-14 21:04:36] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-14 21:04:36] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-14 21:04:36] [[32mINFO[0m] [logger.py:120] Stopping plate queue...
+[2026-01-14 21:04:37] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-14 21:04:37] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-14 21:04:37] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-14 21:04:37] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.576s)
+[2026-01-14 21:04:57] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-14 21:04:57] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 21:04:57] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 21:04:57] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.037s)
+[2026-01-14 21:04:57] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-14 21:04:57] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-14 21:04:57] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-14 21:05:05] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-14 21:05:29] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-14 21:05:29] [[32mINFO[0m] [logger.py:120] 2. Initializing plate queue...
+[2026-01-14 21:05:29] [[32mINFO[0m] [logger.py:120] ✓ Plate queue initialized
+[2026-01-14 21:05:29] [[32mINFO[0m] [logger.py:120] ✓ Captures directory: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\captures
+[2026-01-14 21:05:29] [[32mINFO[0m] [logger.py:120] 3. Loading YOLO vehicle detector...
+[2026-01-14 21:05:29] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/yolov8n.pt
+[2026-01-14 21:05:29] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-14 21:05:29] [[32mINFO[0m] [logger.py:120] 4. Loading license plate detector...
+[2026-01-14 21:05:29] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-14 21:05:29] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-14 21:05:29] [[32mINFO[0m] [logger.py:120] 5. Initializing OCR...
+[2026-01-14 21:05:29] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-14 21:05:31] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-14 21:05:31] [[32mINFO[0m] [logger.py:120] 6. Loading SSD custom model...
+[2026-01-14 21:05:36] [[32mINFO[0m] [logger.py:120] Found SSD model: ssd_vehicle_detector.keras
+[2026-01-14 21:05:36] [[32mINFO[0m] [logger.py:120] Loading SSD from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_vehicle_detector.keras
+[2026-01-14 21:05:36] [[32mINFO[0m] [logger.py:120] Loading complete model from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\notebooks\models\ssd_vehicle_detector.keras
+[2026-01-14 21:05:38] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 21:05:38] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.3
+[2026-01-14 21:05:38] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 21:05:38] [[32mINFO[0m] [logger.py:120] ✓ SSD custom model loaded successfully
+[2026-01-14 21:05:38] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (41.043s)
+[2026-01-14 21:05:38] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-14 21:05:38] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-14 21:05:38] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-14 21:05:38] [[32mINFO[0m] [logger.py:120] SSD available: True
+[2026-01-14 21:05:38] [[32mINFO[0m] [logger.py:120] OCR frequency: every 3 frames
+[2026-01-14 21:05:38] [[32mINFO[0m] [logger.py:120] Press 'M' to toggle between YOLO+OCR and SSD Custom modes
+[2026-01-14 21:05:38] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-14 21:05:38] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-14 21:05:42] [[32mINFO[0m] [logger.py:120] Captures saved: 20260114_210542_0411KMT_vehicle.jpg
+[2026-01-14 21:05:42] [[32mINFO[0m] [logger.py:120] New plate detected and queued: 0411KMT (conf: 0.46)
+[2026-01-14 21:05:44] [[32mINFO[0m] [logger.py:120] Switched to mode: SSD Custom
+[2026-01-14 21:06:42] [[32mINFO[0m] [logger.py:120] Switched to mode: YOLO + OCR
+[2026-01-14 21:06:51] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-14 21:06:51] [[32mINFO[0m] [logger.py:120] Total unique plates detected: 1
+[2026-01-14 21:06:51] [[32mINFO[0m] [logger.py:120] 
+============================================================
+Plate           Times    Confidence   Vehicle
+------------------------------------------------------------
+0411KMT         1        0.46         truck
+============================================================
+
+[2026-01-14 21:06:51] [[32mINFO[0m] [logger.py:120] Queue statistics: Sent=0, Failed=1, Pending=0
+[2026-01-14 21:06:51] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.002s)
+[2026-01-14 21:06:51] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-14 21:06:51] [[32mINFO[0m] [logger.py:120] Stopping plate queue...
+[2026-01-14 21:06:52] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-14 21:06:52] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-14 21:06:52] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-14 21:06:52] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.677s)
+[2026-01-14 21:07:44] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-14 21:07:44] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 21:07:44] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\config/config.yaml
+[2026-01-14 21:07:44] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.018s)
+[2026-01-14 21:07:44] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-14 21:07:44] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-14 21:07:44] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-14 21:07:54] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-14 21:08:19] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-14 21:08:19] [[32mINFO[0m] [logger.py:120] 2. Initializing plate queue...
+[2026-01-14 21:08:19] [[32mINFO[0m] [logger.py:120] ✓ Plate queue initialized
+[2026-01-14 21:08:19] [[32mINFO[0m] [logger.py:120] ✓ Captures directory: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\captures
+[2026-01-14 21:08:19] [[32mINFO[0m] [logger.py:120] 3. Loading YOLO vehicle detector...
+[2026-01-14 21:08:19] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/yolov8n.pt
+[2026-01-14 21:08:19] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-14 21:08:19] [[32mINFO[0m] [logger.py:120] 4. Loading license plate detector...
+[2026-01-14 21:08:19] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-14 21:08:19] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-14 21:08:19] [[32mINFO[0m] [logger.py:120] 5. Initializing OCR...
+[2026-01-14 21:08:20] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-14 21:08:22] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-14 21:08:22] [[32mINFO[0m] [logger.py:120] 6. Loading SSD custom model...
+[2026-01-14 21:08:28] [[32mINFO[0m] [logger.py:120] Found SSD model: ssd_vehicle_detector.keras
+[2026-01-14 21:08:28] [[32mINFO[0m] [logger.py:120] Loading SSD from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.keras
+[2026-01-14 21:08:28] [[32mINFO[0m] [logger.py:120] Loading complete model from: C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\models\ssd_vehicle_detector.keras
+[2026-01-14 21:08:29] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 21:08:29] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.3
+[2026-01-14 21:08:29] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 21:08:29] [[32mINFO[0m] [logger.py:120] ✓ SSD custom model loaded successfully
+[2026-01-14 21:08:29] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (45.026s)
+[2026-01-14 21:08:29] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-14 21:08:29] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-14 21:08:29] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-14 21:08:29] [[32mINFO[0m] [logger.py:120] SSD available: True
+[2026-01-14 21:08:29] [[32mINFO[0m] [logger.py:120] OCR frequency: every 3 frames
+[2026-01-14 21:08:29] [[32mINFO[0m] [logger.py:120] Press 'M' to toggle between YOLO+OCR and SSD Custom modes
+[2026-01-14 21:08:29] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.002s)
+[2026-01-14 21:08:29] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-14 21:09:24] [[32mINFO[0m] [logger.py:120] Switched to mode: SSD Custom
+[2026-01-14 21:10:06] [[32mINFO[0m] [logger.py:120] Switched to mode: YOLO + OCR
+[2026-01-14 21:10:13] [[32mINFO[0m] [logger.py:120] Switched to mode: SSD Custom
+[2026-01-14 21:10:21] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-14 21:10:21] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-14 21:10:21] [[32mINFO[0m] [logger.py:120] Queue statistics: Sent=0, Failed=0, Pending=0
+[2026-01-14 21:10:21] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-14 21:10:21] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-14 21:10:21] [[32mINFO[0m] [logger.py:120] Stopping plate queue...
+[2026-01-14 21:10:22] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-14 21:10:22] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-14 21:10:22] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-14 21:10:22] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.711s)
+[2026-01-14 21:12:03] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 21:12:04] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 21:12:04] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.3
+[2026-01-14 21:12:04] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 21:13:18] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 21:13:19] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 21:13:19] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.3
+[2026-01-14 21:13:19] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 21:13:40] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 21:13:41] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 21:13:41] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.55
+[2026-01-14 21:13:41] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 21:14:19] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 21:14:20] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 21:14:20] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.3
+[2026-01-14 21:14:20] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 21:14:21] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 21:14:22] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 21:14:22] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.4
+[2026-01-14 21:14:22] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 21:14:23] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 21:14:23] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 21:14:23] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.45
+[2026-01-14 21:14:23] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 21:14:24] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 21:14:25] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 21:14:25] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.5
+[2026-01-14 21:14:25] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 21:15:06] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 21:15:06] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 21:15:06] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.35
+[2026-01-14 21:15:06] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 21:15:08] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 21:15:08] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 21:15:08] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.2
+[2026-01-14 21:15:08] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 21:15:38] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 21:15:39] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 21:15:39] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.35
+[2026-01-14 21:15:39] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 21:15:40] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 21:15:41] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 21:15:41] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.2
+[2026-01-14 21:15:41] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 21:16:22] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 21:16:23] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 21:16:23] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.1
+[2026-01-14 21:16:23] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 21:43:07] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 21:43:09] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 21:43:09] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.1
+[2026-01-14 21:43:09] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 21:45:02] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 21:45:03] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 21:45:03] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.1
+[2026-01-14 21:45:03] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 21:59:14] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 21:59:15] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 21:59:15] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.1
+[2026-01-14 21:59:15] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 22:00:28] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 22:00:28] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 22:00:28] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.25
+[2026-01-14 22:00:28] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
+[2026-01-14 22:01:26] [[32mINFO[0m] [logger.py:120] Loading complete model from: models\ssd_vehicle_detector.keras
+[2026-01-14 22:01:27] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-14 22:01:27] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.26
+[2026-01-14 22:01:27] [[32mINFO[0m] [logger.py:120] Generated 4880 anchor boxes
