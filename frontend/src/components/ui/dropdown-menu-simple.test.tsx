@@ -20,7 +20,7 @@ describe('DropdownMenu', () => {
     expect(screen.getByRole('button')).toBeInTheDocument()
   })
 
-  it('should render with multiple items', () => {
+  it('should render with menu items', () => {
     render(
       <DropdownMenu>
         <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
@@ -57,7 +57,7 @@ describe('DropdownMenu', () => {
     expect(screen.getByRole('button')).toBeInTheDocument()
   })
 
-  it('should accept custom className', () => {
+  it('should accept custom className on trigger', () => {
     render(
       <DropdownMenu>
         <DropdownMenuTrigger className="custom">Menu</DropdownMenuTrigger>
@@ -81,5 +81,3 @@ describe('DropdownMenu', () => {
     expect(screen.getByRole('button')).toHaveAttribute('aria-haspopup', 'menu')
   })
 })
-
-
