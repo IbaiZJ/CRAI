@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SimulationUpdateRequest",
+  "description": "Schema for updating runtime parameters of the OS simulation",
+  "type": "object",
+  "properties": {
+    "cameraCount": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number of active camera worker threads"
+    },
+    "stolenProbability": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Probability that a vehicle is marked as stolen"
+    },
+    "itvFailProbability": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Probability that a vehicle fails the ITV inspection"
+    },
+    "vehiclesPerCycle": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number of vehicles generated per simulation cycle"
+    },
+    "vehicleIntervalMs": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Interval in milliseconds between vehicle generation cycles"
+    },
+    "ocrDelayMs": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Simulated OCR processing delay in milliseconds"
+    }
+  },
+  "required": [
+    "cameraCount",
+    "stolenProbability",
+    "itvFailProbability",
+    "vehiclesPerCycle",
+    "vehicleIntervalMs",
+    "ocrDelayMs"
+  ],
+  "additionalProperties": false
+}
