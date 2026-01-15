@@ -11,7 +11,7 @@ const mockVehicles = [
   { plate: 'MNO-2345', badge: 'VEH-006', userId: 4, itv: '2024-01-01' }, // Expired
 ];
 
-global.fetch = vi.fn(() =>
+globalThis.fetch = vi.fn(() =>
   Promise.resolve({
     ok: true,
     json: () => Promise.resolve(mockVehicles),
