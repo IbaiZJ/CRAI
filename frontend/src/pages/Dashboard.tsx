@@ -22,10 +22,11 @@ export default function Dashboard() {
     { label: "Dashboard" },
   ];
 
-  const name = useMemo(
-    () => user?.fullName || user?.name || user?.surname,
-    [user]
-  );
+  const name = useMemo(() => {
+    if (user?.fullName) return user.fullName;
+    if (user?.name) return user.name;
+    return user?.surname || 'Guest';
+  }, [user]);
 
   return (
     <Layout breadcrumbs={breadcrumbs}>

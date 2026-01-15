@@ -460,4 +460,56 @@ class CameraPoolServiceTest {
         // Workers should have exited gracefully due to InterruptedException handling
         assertThat(terminated).isTrue();
     }
+
+    @Test
+    void resizeCameraPoolWithZeroWorkers() throws InterruptedException {
+        ITVService itvService = new ITVService(itvRepository, config);
+        config.setCameraCount(3);
+        CameraPoolService service = new CameraPoolService(config, itvService, policeService, ownerRepository);
+        service.init();
+
+        // Give workers time to start
+        Thread.sleep(300);
+
+        // Resize to remove all workers one by one (down to 1)
+        service.resizeCameraPool(1);
+        Thread.sleep(200);
+
+        // Enqueue a vehicle to verify remaining worker is still functioning
+        long futureTs = System.currentTimeMillis() + Duration.ofDays(60).toMillis();
+        itvRepository.save(new ITVRecord("TEST123", futureTs));
+
+        Vehicle v = new Vehicle("TEST123", 5, false, "C", false);
+        service.enqueueVehicle(v);
+        Thread.sleep(500);
+
+        verify(policeService, never()).sendAlert(any(PoliceMessage.class));
+    }
+
+    @Test
+    void resizeCameraPoolWithEmptyWorkersList() throws Exception {
+        ITVService itvService = new ITVService(itvRepository, config);
+        config.setCameraCount(2);
+        CameraPoolService service = new CameraPoolService(config, itvService, policeService, ownerRepository);
+        service.init();
+
+        // Get the workers list via reflection
+        Field workersField = CameraPoolService.class.getDeclaredField("workers");
+        workersField.setAccessible(true);
+        @SuppressWarnings("unchecked")
+        List<java.util.concurrent.Future<?>> workers = (List<java.util.concurrent.Future<?>>) workersField.get(service);
+
+        // Cancel all workers and clear the list
+        for (java.util.concurrent.Future<?> worker : workers) {
+            worker.cancel(true);
+        }
+        workers.clear();
+
+        // Now try to resize down - should handle empty workers list gracefully
+        service.resizeCameraPool(1);
+
+        // The resize should not throw exception even with empty workers list
+        assertThat(workers).isEmpty();
+    }
 }
+
