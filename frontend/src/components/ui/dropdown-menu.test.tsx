@@ -5,6 +5,9 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioItem,
+  DropdownMenuRadioGroup,
 } from './dropdown-menu'
 
 describe('DropdownMenu', () => {
