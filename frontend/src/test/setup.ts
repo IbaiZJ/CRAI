@@ -80,3 +80,16 @@ if (typeof globalThis !== 'undefined') {
     unobserve() {}
   } as any;
 }
+
+// Mock IntersectionObserver for framer-motion
+if (typeof globalThis !== 'undefined') {
+  globalThis.IntersectionObserver = class IntersectionObserver {
+    constructor() {}
+    disconnect() {}
+    observe() {}
+    takeRecords() {
+      return [];
+    }
+    unobserve() {}
+  } as any;
+}
