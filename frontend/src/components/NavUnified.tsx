@@ -43,7 +43,12 @@ export function NavUnified({ items, label = "Navigation" }: Readonly<{ items: Re
   
   const [openItems, setOpenItems] = useState<Record<string, boolean>>(() => {
     const saved = localStorage.getItem('sidebar-collapsible-state')
-    return saved ? JSON.parse(saved) : {}
+    if (!saved) return {}
+    try {
+      return JSON.parse(saved)
+    } catch {
+      return {}
+    }
   })
 
   const toggleItem = (title: string, isOpen: boolean) => {

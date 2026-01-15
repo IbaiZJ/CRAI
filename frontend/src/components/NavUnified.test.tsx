@@ -485,7 +485,7 @@ describe('NavUnified', () => {
       expect(screen.getByText('Sub')).toBeInTheDocument();
     });
 
-    it('handles malformed localStorage data', () => {
+    it('handles malformed localStorage data gracefully', () => {
       localStorage.setItem('sidebar-collapsible-state', 'invalid json');
 
       const items: UnifiedNavItem[] = [
@@ -499,8 +499,10 @@ describe('NavUnified', () => {
         },
       ];
 
-      // Should not crash
-      expect(() => renderWithProviders(<NavUnified items={items} />)).not.toThrow();
+      // Component should render despite malformed data
+      // The useState will catch the error and use default empty object
+      renderWithProviders(<NavUnified items={items} />);
+      expect(screen.getByText('Item')).toBeInTheDocument();
     });
 
     it('handles item with empty actions array', () => {
