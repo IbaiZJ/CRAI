@@ -8,6 +8,30 @@
         "env": []
     },
     {
+        "id": "54a5f4090ccc656e",
+        "type": "tab",
+        "label": "DETECTION API",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "79143eea6c544edc",
+        "type": "tab",
+        "label": "CAMERA API",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "f8c26a4d4d10435f",
+        "type": "tab",
+        "label": "USERS API",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "202119be2ec9a18d",
         "type": "tab",
         "label": "AI API",
@@ -27,22 +51,6 @@
         "id": "01df77f7ae4c4f86",
         "type": "tab",
         "label": "OS simulation",
-        "disabled": false,
-        "info": "",
-        "env": []
-    },
-    {
-        "id": "3bf36f2bd537dee3",
-        "type": "tab",
-        "label": "Backend",
-        "disabled": false,
-        "info": "",
-        "env": []
-    },
-    {
-        "id": "f8c26a4d4d10435f",
-        "type": "tab",
-        "label": "USERS API",
         "disabled": false,
         "info": "",
         "env": []
@@ -232,67 +240,52 @@
         "id": "f4381705983a0fa3",
         "type": "group",
         "z": "a5406ced814d1895",
+        "name": "AI API",
         "style": {
-            "stroke": "#999999",
-            "stroke-opacity": "1",
-            "fill": "none",
-            "fill-opacity": "1",
-            "label": true,
-            "label-position": "nw",
-            "color": "#a4a4a4"
+            "fill": "#ff0000",
+            "label": true
         },
         "nodes": [
-            "153e541a1d1080bd",
             "64d7693526164079",
             "fd5de55856fc7a3e"
         ],
-        "x": 54,
+        "x": 34,
         "y": 19,
-        "w": 822,
-        "h": 202
+        "w": 342,
+        "h": 82
     },
     {
         "id": "4c4d27d76c251f90",
         "type": "group",
         "z": "a5406ced814d1895",
+        "name": "VEHICLE API",
         "style": {
-            "stroke": "#999999",
-            "stroke-opacity": "1",
-            "fill": "none",
-            "fill-opacity": "1",
-            "label": true,
-            "label-position": "nw",
-            "color": "#a4a4a4"
+            "fill": "#92d04f",
+            "label": true
         },
         "nodes": [
-            "a1f411e0c8b74b4e",
             "dcf42b3e5bc3e2af",
             "b636f8b5a8d4e3b4",
             "3337e44693b228af",
             "9af2debab1e46272"
         ],
-        "x": 54,
-        "y": 231,
-        "w": 762,
-        "h": 298
+        "x": 34,
+        "y": 139,
+        "w": 282,
+        "h": 162
     },
     {
         "id": "0f3b048bf71e7f96",
         "type": "group",
         "z": "a5406ced814d1895",
+        "name": "USER API",
         "style": {
-            "stroke": "#999999",
-            "stroke-opacity": "1",
-            "fill": "none",
-            "fill-opacity": "1",
-            "label": true,
-            "label-position": "nw",
-            "color": "#a4a4a4"
+            "fill": "#ffff00",
+            "label": true
         },
         "nodes": [
             "7e48828d83f90993",
             "55fd3c8f3064a791",
-            "70860a9cee51494e",
             "717ca68664d6cd17",
             "984aec4a5aab2213",
             "eef8852c5dc089ca",
@@ -302,26 +295,21 @@
             "1bd34d9ff0bd9b1d",
             "c3d224b3dbe00893"
         ],
-        "x": 54,
-        "y": 543,
-        "w": 762,
-        "h": 418
+        "x": 474,
+        "y": 39,
+        "w": 282,
+        "h": 402
     },
     {
         "id": "17ef12e0aa788ed0",
         "type": "group",
         "z": "a5406ced814d1895",
+        "name": "CAMERA API",
         "style": {
-            "stroke": "#999999",
-            "stroke-opacity": "1",
-            "fill": "none",
-            "fill-opacity": "1",
-            "label": true,
-            "label-position": "nw",
-            "color": "#a4a4a4"
+            "fill": "#0070c0",
+            "label": true
         },
         "nodes": [
-            "f46e7a93fd85afd9",
             "14d49179b8edd41d",
             "17f834944df8ae28",
             "3c2bb0dc39f42d9d",
@@ -331,15 +319,35 @@
             "1c16542d2b7b3fec",
             "7e1190277ffbde70"
         ],
-        "x": 54,
-        "y": 991,
-        "w": 762,
-        "h": 330
+        "x": 34,
+        "y": 339,
+        "w": 282,
+        "h": 322
     },
     {
         "id": "b14efd3c54dd8b03",
         "type": "group",
         "z": "a5406ced814d1895",
+        "name": "DETECTION API",
+        "style": {
+            "fill": "#777777",
+            "label": true
+        },
+        "nodes": [
+            "545bc25f0207425b",
+            "f20d4743bf41cc97",
+            "fbe9dfc3d59bf34c",
+            "ab118b18065e07d8"
+        ],
+        "x": 474,
+        "y": 479,
+        "w": 302,
+        "h": 162
+    },
+    {
+        "id": "a5bb6b872c5b0ad7",
+        "type": "group",
+        "z": "01df77f7ae4c4f86",
         "style": {
             "stroke": "#999999",
             "stroke-opacity": "1",
@@ -350,16 +358,100 @@
             "color": "#a4a4a4"
         },
         "nodes": [
-            "bed2187aab9a0778",
-            "545bc25f0207425b",
-            "f20d4743bf41cc97",
-            "fbe9dfc3d59bf34c",
-            "ab118b18065e07d8"
+            "4c8d0361725eece2",
+            "21d064adab7e1d12",
+            "617d73211d9ab6d6",
+            "8d0feca90923d603",
+            "705f751f87d540e9",
+            "0ce25c0ebed1c7f8",
+            "fadc77b0ffb80ac9",
+            "4c419ee0f4fc4c76",
+            "c53384464d1f2b48",
+            "a353a44162b3fbf9",
+            "a1af7ab4f98ea557",
+            "d5df394e5a180987",
+            "c336750601b0fd7c",
+            "d42b61f843663589",
+            "234531cdf842e239",
+            "0acc76bc0ed23af1",
+            "63b140e5befc811a",
+            "c5fab67d44a35626",
+            "dd1fa28d539d3884"
         ],
-        "x": 54,
-        "y": 1375,
-        "w": 782,
-        "h": 370
+        "x": 34,
+        "y": 19,
+        "w": 1752,
+        "h": 342
+    },
+    {
+        "id": "2815bddc50c82a5c",
+        "type": "group",
+        "z": "01df77f7ae4c4f86",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "913e446c8e8bbdb9",
+            "c104fda7ab33b14a",
+            "16f3110a960393a3",
+            "5352a749c4a0aa68",
+            "02e426d4974b32e1",
+            "938afc576a02ecb0",
+            "b2478287e61643e3",
+            "4ff83d29a5f1f9f0",
+            "ee68c22b68c46794",
+            "c75b2307c72af870",
+            "b7f38f3f8a8b6f10",
+            "b13ab7f2e44ef2a2",
+            "f3d8a2f9f8e46d40",
+            "0f2bc3273b5e7546"
+        ],
+        "x": 34,
+        "y": 419,
+        "w": 832,
+        "h": 402
+    },
+    {
+        "id": "17ae7c0aadc6f6e9",
+        "type": "group",
+        "z": "01df77f7ae4c4f86",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "425769f2630a88db",
+            "b03480a384c272e8",
+            "f4e2b1b9c8a9d3e1",
+            "a2f0f51f7d2a4c3e",
+            "3280259e0b919d43",
+            "23932db24f1c5301",
+            "b010632ce9ea2afd",
+            "77b28f5d31012cb5",
+            "6309be18cf01aebf",
+            "f9cdcebade72552e",
+            "e90899417993a3aa",
+            "828dab69e9e76a83",
+            "5ecdb5ab132aad75",
+            "a964a6cfbad38ca7",
+            "083d998fbb5dde7a",
+            "5e22649949e1823c"
+        ],
+        "x": 34,
+        "y": 839,
+        "w": 2132,
+        "h": 402
     },
     {
         "id": "389e871481694f64",
@@ -996,17 +1088,6 @@
         "wires": []
     },
     {
-        "id": "a1f411e0c8b74b4e",
-        "type": "comment",
-        "z": "a5406ced814d1895",
-        "g": "4c4d27d76c251f90",
-        "name": "Vehicles API endpoints\\n \\n Routes:\\n - {GET} /vehicles\\n     • Without query: returns all vehicles with their associated user\\n     • ?userId=x: returns vehicles filtered by user\\n \\n - {GET} /vehicle\\n     • ?plate=XXX: returns a vehicle filtered by its plate\\n     • Validates parameters and returns 400 if missing or invalid\\n",
-        "info": "Vehicles API endpoints\\n\n\\n\nRoutes:\\n\n- {GET} /vehicles\\n\n    • Without query: returns all vehicles with their associated user\\n\n    • ?userId=x: returns vehicles filtered by user\\n\n\\n\n- {GET} /vehicle\\n\n    • ?plate=XXX: returns a vehicle filtered by its plate\\n\n    • Validates parameters and returns 400 if missing or invalid\\n",
-        "x": 300,
-        "y": 380,
-        "wires": []
-    },
-    {
         "id": "dcf42b3e5bc3e2af",
         "type": "http in",
         "z": "a5406ced814d1895",
@@ -1017,8 +1098,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 630,
-        "y": 380,
+        "x": 130,
+        "y": 260,
         "wires": [
             [
                 "9af2debab1e46272"
@@ -1036,24 +1117,13 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 630,
-        "y": 300,
+        "x": 130,
+        "y": 180,
         "wires": [
             [
                 "3337e44693b228af"
             ]
         ]
-    },
-    {
-        "id": "153e541a1d1080bd",
-        "type": "comment",
-        "z": "a5406ced814d1895",
-        "g": "f4381705983a0fa3",
-        "name": "AI API endpoints\\n \\n Routes:\\n - {POST} /ai/carDetected\\n     • Without query: returns all vehicles with their associated user\\n     • ?userId=x: returns vehicles filtered by user\\n",
-        "info": "AI API endpoints\\n\n\\n\nRoutes:\\n\n- {POST} /ai/carDetected\\n\n    • Without query: returns all vehicles with their associated user\\n\n    • ?userId=x: returns vehicles filtered by user\\n\n",
-        "x": 300,
-        "y": 120,
-        "wires": []
     },
     {
         "id": "7e48828d83f90993",
@@ -1066,8 +1136,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 630,
-        "y": 600,
+        "x": 570,
+        "y": 80,
         "wires": [
             [
                 "3cf97939c1d3da7d"
@@ -1085,35 +1155,13 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 620,
-        "y": 680,
+        "x": 560,
+        "y": 160,
         "wires": [
             [
                 "43520e59f0c2418d"
             ]
         ]
-    },
-    {
-        "id": "70860a9cee51494e",
-        "type": "comment",
-        "z": "a5406ced814d1895",
-        "g": "0f3b048bf71e7f96",
-        "name": "Users API endpoints\\n \\n Routes:\\n - {GET} /users\\n     • Without query: returns all users\\n     • Can optionally support filters in the future (e.g., ?role=admin) \\n - {GET} /user\\n     • ?id=XXX: returns a user filtered by its ID\\n     • Validates parameters and returns 400 if missing or invalid\\n",
-        "info": "Users API endpoints\\n\n\\n\nRoutes:\\n\n- {GET} /users\\n\n    • Without query: returns all users\\n\n    • Can optionally support filters in the future (e.g., ?role=admin)\n\\n\n- {GET} /user\\n\n    • ?id=XXX: returns a user filtered by its ID\\n\n    • Validates parameters and returns 400 if missing or invalid\\n",
-        "x": 300,
-        "y": 680,
-        "wires": []
-    },
-    {
-        "id": "f46e7a93fd85afd9",
-        "type": "comment",
-        "z": "a5406ced814d1895",
-        "g": "17ef12e0aa788ed0",
-        "name": "Cameras API endpoints\\n \\n Routes:\\n - {GET} /cameras\\n     • Without query: returns all cameras\\n     • Can optionally support filters in the future\\n \\n - {GET} /camera\\n     • ?id=XXX: returns a camera filtered by its ID\\n     • Validates parameters and returns 400 if missing or invalid\\n",
-        "info": "Cameras API endpoints\\n\n\\n\nRoutes:\\n\n- {GET} /cameras\\n\n    • Without query: returns all cameras\\n\n    • Can optionally support filters in the future\\n\n\\n\n- {GET} /camera\\n\n    • ?id=XXX: returns a camera filtered by its ID\\n\n    • Validates parameters and returns 400 if missing or invalid\\n\n",
-        "x": 300,
-        "y": 1140,
-        "wires": []
     },
     {
         "id": "14d49179b8edd41d",
@@ -1126,8 +1174,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 630,
-        "y": 1040,
+        "x": 130,
+        "y": 380,
         "wires": [
             [
                 "dab8b6de71939f7a"
@@ -1145,24 +1193,13 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 630,
-        "y": 1120,
+        "x": 130,
+        "y": 460,
         "wires": [
             [
                 "f7194d1f7d06ef41"
             ]
         ]
-    },
-    {
-        "id": "bed2187aab9a0778",
-        "type": "comment",
-        "z": "a5406ced814d1895",
-        "g": "b14efd3c54dd8b03",
-        "name": "Detections API endpoints\\n \\n Routes:\\n - GET /detections\\n     • Without query: returns all detections\\n     • ?userId=XXX: returns detections filtered by a specific user\\n     • ?plate=XXX: returns detections filtered by a specific      \\n vehicle plate\\n     • Multiple filters can be combined (?userId=XXX&plate=XXX)\\n \\n - GET /detection\\n     • ?id=XXX: returns a detection filtered by its ID\\n     • Validates parameters and returns 400 if missing or invalid\\n",
-        "info": "Detections API endpoints\\n\n\\n\nRoutes:\\n\n- GET /detections\\n\n    • Without query: returns all detections\\n\n    • ?userId=XXX: returns detections filtered by a specific user\\n\n    • ?plate=XXX: returns detections filtered by a specific \n    \\n vehicle plate\\n\n    • Multiple filters can be combined (?userId=XXX&plate=XXX)\\n\n\\n\n- GET /detection\\n\n    • ?id=XXX: returns a detection filtered by its ID\\n\n    • Validates parameters and returns 400 if missing or invalid\\n\n",
-        "x": 300,
-        "y": 1560,
-        "wires": []
     },
     {
         "id": "545bc25f0207425b",
@@ -1175,8 +1212,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 640,
-        "y": 1440,
+        "x": 580,
+        "y": 520,
         "wires": [
             [
                 "fbe9dfc3d59bf34c"
@@ -1194,8 +1231,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 640,
-        "y": 1520,
+        "x": 580,
+        "y": 600,
         "wires": [
             [
                 "ab118b18065e07d8"
@@ -1213,8 +1250,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 660,
-        "y": 120,
+        "x": 160,
+        "y": 60,
         "wires": [
             [
                 "fd5de55856fc7a3e"
@@ -1232,8 +1269,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 630,
-        "y": 760,
+        "x": 570,
+        "y": 240,
         "wires": [
             [
                 "65f0fa9e24a711f5"
@@ -1251,8 +1288,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 630,
-        "y": 1200,
+        "x": 130,
+        "y": 540,
         "wires": [
             [
                 "1c16542d2b7b3fec"
@@ -1270,8 +1307,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 630,
-        "y": 1280,
+        "x": 130,
+        "y": 620,
         "wires": [
             [
                 "7e1190277ffbde70"
@@ -1289,8 +1326,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 620,
-        "y": 840,
+        "x": 560,
+        "y": 320,
         "wires": [
             [
                 "1bd34d9ff0bd9b1d"
@@ -1308,8 +1345,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 630,
-        "y": 920,
+        "x": 570,
+        "y": 400,
         "wires": [
             [
                 "c3d224b3dbe00893"
@@ -1326,8 +1363,8 @@
         "links": [
             "06a3442ad9baac60"
         ],
-        "x": 775,
-        "y": 300,
+        "x": 275,
+        "y": 180,
         "wires": []
     },
     {
@@ -1340,8 +1377,8 @@
         "links": [
             "2fc71bf10a12ba3c"
         ],
-        "x": 775,
-        "y": 380,
+        "x": 275,
+        "y": 260,
         "wires": []
     },
     {
@@ -1354,8 +1391,8 @@
         "links": [
             "3c6371301443c1f0"
         ],
-        "x": 835,
-        "y": 120,
+        "x": 335,
+        "y": 60,
         "wires": []
     },
     {
@@ -1368,8 +1405,8 @@
         "links": [
             "2c83a153cf0c54e7"
         ],
-        "x": 775,
-        "y": 600,
+        "x": 715,
+        "y": 80,
         "wires": []
     },
     {
@@ -1382,8 +1419,8 @@
         "links": [
             "a9fe5d6bc617c32d"
         ],
-        "x": 775,
-        "y": 680,
+        "x": 715,
+        "y": 160,
         "wires": []
     },
     {
@@ -1396,8 +1433,8 @@
         "links": [
             "171a20db82e1afc0"
         ],
-        "x": 775,
-        "y": 760,
+        "x": 715,
+        "y": 240,
         "wires": []
     },
     {
@@ -1410,8 +1447,8 @@
         "links": [
             "f22eb1fab4818fe6"
         ],
-        "x": 775,
-        "y": 840,
+        "x": 715,
+        "y": 320,
         "wires": []
     },
     {
@@ -1424,8 +1461,8 @@
         "links": [
             "7380345780d93e87"
         ],
-        "x": 775,
-        "y": 920,
+        "x": 715,
+        "y": 400,
         "wires": []
     },
     {
@@ -1435,9 +1472,11 @@
         "g": "17ef12e0aa788ed0",
         "name": "link out {get} /cameras",
         "mode": "link",
-        "links": [],
-        "x": 775,
-        "y": 1040,
+        "links": [
+            "69467e37549dfa93"
+        ],
+        "x": 275,
+        "y": 380,
         "wires": []
     },
     {
@@ -1447,9 +1486,11 @@
         "g": "17ef12e0aa788ed0",
         "name": "link out {get} /camera",
         "mode": "link",
-        "links": [],
-        "x": 775,
-        "y": 1120,
+        "links": [
+            "2b413649b22cc486"
+        ],
+        "x": 275,
+        "y": 460,
         "wires": []
     },
     {
@@ -1459,9 +1500,11 @@
         "g": "17ef12e0aa788ed0",
         "name": "link out {post} /camera",
         "mode": "link",
-        "links": [],
-        "x": 775,
-        "y": 1200,
+        "links": [
+            "cfa19015a9bf580f"
+        ],
+        "x": 275,
+        "y": 540,
         "wires": []
     },
     {
@@ -1471,9 +1514,11 @@
         "g": "17ef12e0aa788ed0",
         "name": "link out {put} /camera",
         "mode": "link",
-        "links": [],
-        "x": 775,
-        "y": 1280,
+        "links": [
+            "df2097ae09145bbe"
+        ],
+        "x": 275,
+        "y": 620,
         "wires": []
     },
     {
@@ -1483,9 +1528,11 @@
         "g": "b14efd3c54dd8b03",
         "name": "link out {get} /detections",
         "mode": "link",
-        "links": [],
-        "x": 795,
-        "y": 1440,
+        "links": [
+            "16f9ae8245a9bb53"
+        ],
+        "x": 735,
+        "y": 520,
         "wires": []
     },
     {
@@ -1495,10 +1542,1359 @@
         "g": "b14efd3c54dd8b03",
         "name": "link out {get} /detection",
         "mode": "link",
-        "links": [],
-        "x": 795,
-        "y": 1520,
+        "links": [
+            "1542af2f23d6eaf0"
+        ],
+        "x": 735,
+        "y": 600,
         "wires": []
+    },
+    {
+        "id": "16f9ae8245a9bb53",
+        "type": "link in",
+        "z": "54a5f4090ccc656e",
+        "name": "link in 10",
+        "links": [
+            "fbe9dfc3d59bf34c"
+        ],
+        "x": 185,
+        "y": 120,
+        "wires": [
+            [
+                "b37c9fc0a5318cee"
+            ]
+        ]
+    },
+    {
+        "id": "1542af2f23d6eaf0",
+        "type": "link in",
+        "z": "54a5f4090ccc656e",
+        "name": "link in 11",
+        "links": [
+            "ab118b18065e07d8"
+        ],
+        "x": 185,
+        "y": 280,
+        "wires": [
+            [
+                "bf40e027e3fe48e1"
+            ]
+        ]
+    },
+    {
+        "id": "b37c9fc0a5318cee",
+        "type": "function",
+        "z": "54a5f4090ccc656e",
+        "name": "query",
+        "func": "msg.topic = `\n    SELECT *\n    FROM detection;\n`;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 120,
+        "wires": [
+            [
+                "dc334da054e126f8"
+            ]
+        ]
+    },
+    {
+        "id": "dc334da054e126f8",
+        "type": "subflow:subflow1",
+        "z": "54a5f4090ccc656e",
+        "name": "",
+        "x": 520,
+        "y": 120,
+        "wires": [
+            [
+                "7776dcec5b8f2ab1"
+            ]
+        ]
+    },
+    {
+        "id": "7776dcec5b8f2ab1",
+        "type": "switch",
+        "z": "54a5f4090ccc656e",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 750,
+        "y": 120,
+        "wires": [
+            [
+                "8004457e4ad10cdd"
+            ],
+            [
+                "ae6a4bdb816f7f00"
+            ]
+        ]
+    },
+    {
+        "id": "ae6a4bdb816f7f00",
+        "type": "http response",
+        "z": "54a5f4090ccc656e",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 940,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "8004457e4ad10cdd",
+        "type": "http response",
+        "z": "54a5f4090ccc656e",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 930,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "bf40e027e3fe48e1",
+        "type": "function",
+        "z": "54a5f4090ccc656e",
+        "name": "query",
+        "func": "const detectionId = msg.req.params.id || msg.req.query.id;\n\nif (!detectionId) {\n    msg.payload = { \n        success: false,\n        error: \"ID de detección es obligatorio\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    SELECT * \n    FROM detection \n    WHERE id = ?\n`;\n\nmsg.params = [detectionId];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 280,
+        "wires": [
+            [
+                "125e8a8f70b2c77a"
+            ]
+        ]
+    },
+    {
+        "id": "cca5d034cad9cd51",
+        "type": "subflow:subflow1",
+        "z": "54a5f4090ccc656e",
+        "name": "",
+        "x": 740,
+        "y": 280,
+        "wires": [
+            [
+                "41745bb45f8cb694"
+            ]
+        ]
+    },
+    {
+        "id": "41745bb45f8cb694",
+        "type": "switch",
+        "z": "54a5f4090ccc656e",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 970,
+        "y": 280,
+        "wires": [
+            [
+                "6cd78465ca354ae9"
+            ],
+            [
+                "7d52e8adbecb0b27"
+            ]
+        ]
+    },
+    {
+        "id": "7d52e8adbecb0b27",
+        "type": "http response",
+        "z": "54a5f4090ccc656e",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1160,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "6cd78465ca354ae9",
+        "type": "http response",
+        "z": "54a5f4090ccc656e",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1150,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "125e8a8f70b2c77a",
+        "type": "switch",
+        "z": "54a5f4090ccc656e",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 490,
+        "y": 280,
+        "wires": [
+            [
+                "cca5d034cad9cd51"
+            ],
+            [
+                "7d52e8adbecb0b27"
+            ]
+        ]
+    },
+    {
+        "id": "69467e37549dfa93",
+        "type": "link in",
+        "z": "79143eea6c544edc",
+        "name": "link in 6",
+        "links": [
+            "dab8b6de71939f7a"
+        ],
+        "x": 165,
+        "y": 120,
+        "wires": [
+            [
+                "9c7a616838530a21"
+            ]
+        ]
+    },
+    {
+        "id": "2b413649b22cc486",
+        "type": "link in",
+        "z": "79143eea6c544edc",
+        "name": "link in 7",
+        "links": [
+            "f7194d1f7d06ef41"
+        ],
+        "x": 165,
+        "y": 260,
+        "wires": [
+            [
+                "9743f5a103531ca4"
+            ]
+        ]
+    },
+    {
+        "id": "cfa19015a9bf580f",
+        "type": "link in",
+        "z": "79143eea6c544edc",
+        "name": "link in 8",
+        "links": [
+            "1c16542d2b7b3fec"
+        ],
+        "x": 165,
+        "y": 400,
+        "wires": [
+            [
+                "66ec3ebf7b5fc195"
+            ]
+        ]
+    },
+    {
+        "id": "df2097ae09145bbe",
+        "type": "link in",
+        "z": "79143eea6c544edc",
+        "name": "link in 9",
+        "links": [
+            "7e1190277ffbde70"
+        ],
+        "x": 165,
+        "y": 540,
+        "wires": [
+            [
+                "b9d39ebc84bcd3a4"
+            ]
+        ]
+    },
+    {
+        "id": "9743f5a103531ca4",
+        "type": "function",
+        "z": "79143eea6c544edc",
+        "name": "query",
+        "func": "const cameraId = msg.req.params.id || msg.req.query.id;\n\nif (!cameraId) {\n    msg.payload = { \n        success: false,\n        error: \"ID de cámara es obligatorio\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    SELECT * \n    FROM camera \n    WHERE id = ?\n`;\n\nmsg.params = [cameraId];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 260,
+        "wires": [
+            [
+                "48c81f139312f354"
+            ]
+        ]
+    },
+    {
+        "id": "e0dfc90d7c0bedd0",
+        "type": "subflow:subflow1",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "x": 720,
+        "y": 260,
+        "wires": [
+            [
+                "e0cd172ccb500f79"
+            ]
+        ]
+    },
+    {
+        "id": "e0cd172ccb500f79",
+        "type": "switch",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 950,
+        "y": 260,
+        "wires": [
+            [
+                "d9074c5397503046"
+            ],
+            [
+                "595cf62f71d17225"
+            ]
+        ]
+    },
+    {
+        "id": "595cf62f71d17225",
+        "type": "http response",
+        "z": "79143eea6c544edc",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1140,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "d9074c5397503046",
+        "type": "http response",
+        "z": "79143eea6c544edc",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1130,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "48c81f139312f354",
+        "type": "switch",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 470,
+        "y": 260,
+        "wires": [
+            [
+                "e0dfc90d7c0bedd0"
+            ],
+            [
+                "595cf62f71d17225"
+            ]
+        ]
+    },
+    {
+        "id": "9c7a616838530a21",
+        "type": "function",
+        "z": "79143eea6c544edc",
+        "name": "query",
+        "func": "msg.topic = `\n    SELECT *\n    FROM camera;\n`;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 120,
+        "wires": [
+            [
+                "915fd82c8c37c2f5"
+            ]
+        ]
+    },
+    {
+        "id": "915fd82c8c37c2f5",
+        "type": "subflow:subflow1",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "x": 500,
+        "y": 120,
+        "wires": [
+            [
+                "cd0549f750d8d1a6"
+            ]
+        ]
+    },
+    {
+        "id": "cd0549f750d8d1a6",
+        "type": "switch",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 730,
+        "y": 120,
+        "wires": [
+            [
+                "3fb4bd6b7ababeed"
+            ],
+            [
+                "a1fbe629e0d40695"
+            ]
+        ]
+    },
+    {
+        "id": "a1fbe629e0d40695",
+        "type": "http response",
+        "z": "79143eea6c544edc",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 920,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "3fb4bd6b7ababeed",
+        "type": "http response",
+        "z": "79143eea6c544edc",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 910,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "66ec3ebf7b5fc195",
+        "type": "function",
+        "z": "79143eea6c544edc",
+        "name": "query",
+        "func": "const cameraData = msg.payload;\n\nif (cameraData.locationX === undefined || cameraData.locationY === undefined) {\n    msg.payload = {\n        success: false,\n        error: \"locationX y locationY son obligatorios\"\n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    INSERT INTO camera (\n        locationX, \n        locationY\n    ) VALUES (?, ?)\n`;\n\nmsg.params = [\n    cameraData.locationX,\n    cameraData.locationY\n];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 400,
+        "wires": [
+            [
+                "d3320321eafb7ef0"
+            ]
+        ]
+    },
+    {
+        "id": "6cc972f6e6ef3a7f",
+        "type": "subflow:subflow1",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "x": 720,
+        "y": 400,
+        "wires": [
+            [
+                "b43b125b39e5daf0"
+            ]
+        ]
+    },
+    {
+        "id": "b43b125b39e5daf0",
+        "type": "switch",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 950,
+        "y": 400,
+        "wires": [
+            [
+                "c7f75ba3e7d2cad8"
+            ],
+            [
+                "d5f099ac6de3132e"
+            ]
+        ]
+    },
+    {
+        "id": "d5f099ac6de3132e",
+        "type": "http response",
+        "z": "79143eea6c544edc",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1140,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "c7f75ba3e7d2cad8",
+        "type": "http response",
+        "z": "79143eea6c544edc",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1130,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "d3320321eafb7ef0",
+        "type": "switch",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 470,
+        "y": 400,
+        "wires": [
+            [
+                "6cc972f6e6ef3a7f"
+            ],
+            [
+                "d5f099ac6de3132e"
+            ]
+        ]
+    },
+    {
+        "id": "b9d39ebc84bcd3a4",
+        "type": "function",
+        "z": "79143eea6c544edc",
+        "name": "query",
+        "func": "const cameraData = msg.payload;\nconst cameraId = msg.req.params.id || msg.req.query.id;\n\nif (!cameraId) {\n    msg.payload = { \n        success: false,\n        error: \"ID de cámara es obligatorio\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nlet fields = [];\nlet params = [];\n\nif (cameraData.locationX !== undefined) {\n    fields.push('locationX = ?');\n    params.push(cameraData.locationX);\n}\nif (cameraData.locationY !== undefined) {\n    fields.push('locationY = ?');\n    params.push(cameraData.locationY);\n}\n\nif (fields.length === 0) {\n    msg.payload = { \n        success: false,\n        error: \"No hay campos para actualizar\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    UPDATE camera \n    SET ${fields.join(', ')}\n    WHERE id = ?\n`;\n\nparams.push(cameraId);\nmsg.params = params;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 540,
+        "wires": [
+            [
+                "678bf909fd07b78f"
+            ]
+        ]
+    },
+    {
+        "id": "0fecdd6501ce0a50",
+        "type": "subflow:subflow1",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "x": 720,
+        "y": 540,
+        "wires": [
+            [
+                "c92d0256edc72bf1"
+            ]
+        ]
+    },
+    {
+        "id": "c92d0256edc72bf1",
+        "type": "switch",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 950,
+        "y": 540,
+        "wires": [
+            [
+                "305c46671da720cf"
+            ],
+            [
+                "e096933ceecf50d9"
+            ]
+        ]
+    },
+    {
+        "id": "e096933ceecf50d9",
+        "type": "http response",
+        "z": "79143eea6c544edc",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1140,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "305c46671da720cf",
+        "type": "http response",
+        "z": "79143eea6c544edc",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1130,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "678bf909fd07b78f",
+        "type": "switch",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 470,
+        "y": 540,
+        "wires": [
+            [
+                "0fecdd6501ce0a50"
+            ],
+            [
+                "e096933ceecf50d9"
+            ]
+        ]
+    },
+    {
+        "id": "2c83a153cf0c54e7",
+        "type": "link in",
+        "z": "f8c26a4d4d10435f",
+        "name": "link in 1",
+        "links": [
+            "3cf97939c1d3da7d"
+        ],
+        "x": 195,
+        "y": 100,
+        "wires": [
+            [
+                "43a5bddffcb9a077"
+            ]
+        ]
+    },
+    {
+        "id": "a9fe5d6bc617c32d",
+        "type": "link in",
+        "z": "f8c26a4d4d10435f",
+        "name": "link in 2",
+        "links": [
+            "43520e59f0c2418d"
+        ],
+        "x": 195,
+        "y": 240,
+        "wires": [
+            [
+                "c2166757387247a5"
+            ]
+        ]
+    },
+    {
+        "id": "171a20db82e1afc0",
+        "type": "link in",
+        "z": "f8c26a4d4d10435f",
+        "name": "link in 3",
+        "links": [
+            "65f0fa9e24a711f5"
+        ],
+        "x": 195,
+        "y": 380,
+        "wires": [
+            [
+                "bde9754e460e21b3"
+            ]
+        ]
+    },
+    {
+        "id": "f22eb1fab4818fe6",
+        "type": "link in",
+        "z": "f8c26a4d4d10435f",
+        "name": "link in 4",
+        "links": [
+            "1bd34d9ff0bd9b1d"
+        ],
+        "x": 195,
+        "y": 520,
+        "wires": [
+            [
+                "01b38e770ff9316f"
+            ]
+        ]
+    },
+    {
+        "id": "7380345780d93e87",
+        "type": "link in",
+        "z": "f8c26a4d4d10435f",
+        "name": "link in 5",
+        "links": [
+            "c3d224b3dbe00893"
+        ],
+        "x": 195,
+        "y": 660,
+        "wires": [
+            [
+                "5b28219205330464"
+            ]
+        ]
+    },
+    {
+        "id": "43a5bddffcb9a077",
+        "type": "function",
+        "z": "f8c26a4d4d10435f",
+        "name": "query",
+        "func": "msg.topic = `\n    SELECT *\n    FROM user;\n`;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 100,
+        "wires": [
+            [
+                "f912b62d792c394a"
+            ]
+        ]
+    },
+    {
+        "id": "f912b62d792c394a",
+        "type": "subflow:subflow1",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "x": 540,
+        "y": 100,
+        "wires": [
+            [
+                "f2c7ecf29065afc8"
+            ]
+        ]
+    },
+    {
+        "id": "f2c7ecf29065afc8",
+        "type": "switch",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 770,
+        "y": 100,
+        "wires": [
+            [
+                "0b299c3309a0fc2d"
+            ],
+            [
+                "49eeb9c6d4912d62"
+            ]
+        ]
+    },
+    {
+        "id": "49eeb9c6d4912d62",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 960,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "0b299c3309a0fc2d",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 950,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "c2166757387247a5",
+        "type": "function",
+        "z": "f8c26a4d4d10435f",
+        "name": "query | ?userId | ?carPlate",
+        "func": "const userId = (msg.req.query.userId || \"\").trim();\nconst carPlate = (msg.req.query.carPlate || \"\").trim();\n\nlet query = `SELECT u.* FROM user u`;\nlet conditions = [];\nlet params = [];\n\nif (carPlate) {\n    query += ` INNER JOIN vehicles v ON u.email = v.userId`;\n    conditions.push(`v.plate = ?`);\n    params.push(carPlate);\n}\n\nif (userId) {\n    conditions.push(`u.id = ?`);\n    params.push(userId);\n}\n\nif (conditions.length > 0) {\n    query += ` WHERE ` + conditions.join(' AND ');\n}\n\nmsg.topic = query;\nmsg.params = params;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 240,
+        "wires": [
+            [
+                "1765a3f615b36248"
+            ]
+        ]
+    },
+    {
+        "id": "1765a3f615b36248",
+        "type": "subflow:subflow1",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "x": 680,
+        "y": 240,
+        "wires": [
+            [
+                "e50a149b4d5e629d"
+            ]
+        ]
+    },
+    {
+        "id": "e50a149b4d5e629d",
+        "type": "switch",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 910,
+        "y": 240,
+        "wires": [
+            [
+                "9c40ca6fecbe2b67"
+            ],
+            [
+                "bbecbd1dfa34e297"
+            ]
+        ]
+    },
+    {
+        "id": "bbecbd1dfa34e297",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1100,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "9c40ca6fecbe2b67",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1090,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "bde9754e460e21b3",
+        "type": "function",
+        "z": "f8c26a4d4d10435f",
+        "name": "query",
+        "func": "const userData = msg.payload;\n\nif (!userData.email || !userData.userType) {\n    msg.payload = { \n        success: false,\n        error: \"Email y userType son obligatorios\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    INSERT INTO user (\n        email, name, surname, fullName, picture, \n        sub, email_verified, locale, iat, exp, userType\n    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\n`;\n\nmsg.params = [\n    userData.email,\n    userData.name || null,\n    userData.surname || null,\n    userData.fullName || null,\n    userData.picture || null,\n    userData.sub || null,\n    userData.email_verified || false,\n    userData.locale || null,\n    userData.iat || null,\n    userData.exp || null,\n    userData.userType\n];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 380,
+        "wires": [
+            [
+                "df2eb5a7cb79c138"
+            ]
+        ]
+    },
+    {
+        "id": "7add54ca51bac6bb",
+        "type": "subflow:subflow1",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "x": 760,
+        "y": 380,
+        "wires": [
+            [
+                "1eb2f98b9be1c9ba"
+            ]
+        ]
+    },
+    {
+        "id": "1eb2f98b9be1c9ba",
+        "type": "switch",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 990,
+        "y": 380,
+        "wires": [
+            [
+                "afc1bd319295aab6"
+            ],
+            [
+                "d77c913fb0fb2c2a"
+            ]
+        ]
+    },
+    {
+        "id": "d77c913fb0fb2c2a",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1180,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "afc1bd319295aab6",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1170,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "df2eb5a7cb79c138",
+        "type": "switch",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 510,
+        "y": 380,
+        "wires": [
+            [
+                "7add54ca51bac6bb"
+            ],
+            [
+                "d77c913fb0fb2c2a"
+            ]
+        ]
+    },
+    {
+        "id": "01b38e770ff9316f",
+        "type": "function",
+        "z": "f8c26a4d4d10435f",
+        "name": "query",
+        "func": "const userData = msg.payload;\nconst userId = msg.req.params.id || msg.req.query.id; // ID desde URL\n\nif (!userId) {\n    msg.payload = { \n        success: false,\n        error: \"ID de usuario es obligatorio\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nlet fields = [];\nlet params = [];\n\nif (userData.email !== undefined) {\n    fields.push('email = ?');\n    params.push(userData.email);\n}\nif (userData.name !== undefined) {\n    fields.push('name = ?');\n    params.push(userData.name);\n}\nif (userData.surname !== undefined) {\n    fields.push('surname = ?');\n    params.push(userData.surname);\n}\nif (userData.fullName !== undefined) {\n    fields.push('fullName = ?');\n    params.push(userData.fullName);\n}\nif (userData.picture !== undefined) {\n    fields.push('picture = ?');\n    params.push(userData.picture);\n}\nif (userData.sub !== undefined) {\n    fields.push('sub = ?');\n    params.push(userData.sub);\n}\nif (userData.email_verified !== undefined) {\n    fields.push('email_verified = ?');\n    params.push(userData.email_verified);\n}\nif (userData.locale !== undefined) {\n    fields.push('locale = ?');\n    params.push(userData.locale);\n}\nif (userData.iat !== undefined) {\n    fields.push('iat = ?');\n    params.push(userData.iat);\n}\nif (userData.exp !== undefined) {\n    fields.push('exp = ?');\n    params.push(userData.exp);\n}\nif (userData.userType !== undefined) {\n    fields.push('userType = ?');\n    params.push(userData.userType);\n}\n\nif (fields.length === 0) {\n    msg.payload = { \n        success: false,\n        error: \"No hay campos para actualizar\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    UPDATE user \n    SET ${fields.join(', ')}\n    WHERE id = ?\n`;\n\nparams.push(userId);\nmsg.params = params;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 520,
+        "wires": [
+            [
+                "cb152d078d8f14a9"
+            ]
+        ]
+    },
+    {
+        "id": "2de182a74d865037",
+        "type": "subflow:subflow1",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "x": 760,
+        "y": 520,
+        "wires": [
+            [
+                "e8a7006c3d0b088a"
+            ]
+        ]
+    },
+    {
+        "id": "e8a7006c3d0b088a",
+        "type": "switch",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 990,
+        "y": 520,
+        "wires": [
+            [
+                "e0122dfa58ca8387"
+            ],
+            [
+                "34b3fdc72d138444"
+            ]
+        ]
+    },
+    {
+        "id": "34b3fdc72d138444",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1180,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "e0122dfa58ca8387",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1170,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "cb152d078d8f14a9",
+        "type": "switch",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 510,
+        "y": 520,
+        "wires": [
+            [
+                "2de182a74d865037"
+            ],
+            [
+                "34b3fdc72d138444"
+            ]
+        ]
+    },
+    {
+        "id": "5b28219205330464",
+        "type": "function",
+        "z": "f8c26a4d4d10435f",
+        "name": "query",
+        "func": "const userId = msg.req.params.id || msg.req.query.id; // ID desde URL\n\nif (!userId) {\n    msg.payload = {\n        success: false,\n        error: \"ID de usuario es obligatorio\"\n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    DELETE FROM user \n    WHERE id = ?\n`;\n\nmsg.params = [userId];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 660,
+        "wires": [
+            [
+                "93b1c6b91b4c91dc"
+            ]
+        ]
+    },
+    {
+        "id": "d780f8c895824467",
+        "type": "subflow:subflow1",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "x": 760,
+        "y": 660,
+        "wires": [
+            [
+                "9963a640ed4b09b9"
+            ]
+        ]
+    },
+    {
+        "id": "9963a640ed4b09b9",
+        "type": "switch",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 990,
+        "y": 660,
+        "wires": [
+            [
+                "e38f021280238360"
+            ],
+            [
+                "a45e34ae90cd5e7f"
+            ]
+        ]
+    },
+    {
+        "id": "a45e34ae90cd5e7f",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1180,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "e38f021280238360",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1170,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "93b1c6b91b4c91dc",
+        "type": "switch",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 510,
+        "y": 660,
+        "wires": [
+            [
+                "d780f8c895824467"
+            ],
+            [
+                "a45e34ae90cd5e7f"
+            ]
+        ]
     },
     {
         "id": "3c6371301443c1f0",
@@ -1508,7 +2904,7 @@
         "links": [
             "fd5de55856fc7a3e"
         ],
-        "x": 165,
+        "x": 155,
         "y": 140,
         "wires": [
             [
@@ -2422,6 +3818,16 @@
         ]
     },
     {
+        "id": "577893dc1b65d892",
+        "type": "comment",
+        "z": "202119be2ec9a18d",
+        "name": "This is the flow that is execute when de camera detects vehicles",
+        "info": "",
+        "x": 370,
+        "y": 60,
+        "wires": []
+    },
+    {
         "id": "06a3442ad9baac60",
         "type": "link in",
         "z": "e8ee884feb950c22",
@@ -2545,6 +3951,7 @@
         "id": "425769f2630a88db",
         "type": "http in",
         "z": "01df77f7ae4c4f86",
+        "g": "17ae7c0aadc6f6e9",
         "name": "Receive Alert",
         "url": "/alerts",
         "method": "post",
@@ -2563,6 +3970,7 @@
         "id": "b03480a384c272e8",
         "type": "json",
         "z": "01df77f7ae4c4f86",
+        "g": "17ae7c0aadc6f6e9",
         "name": "Parse JSON",
         "property": "payload",
         "action": "obj",
@@ -2579,6 +3987,7 @@
         "id": "f4e2b1b9c8a9d3e1",
         "type": "function",
         "z": "01df77f7ae4c4f86",
+        "g": "17ae7c0aadc6f6e9",
         "name": "Validate Alert Schema",
         "func": "const schema = {\n    type: \"object\",\n    required: [\"type\", \"plate\", \"description\"],\n    properties: {\n        type: { type: \"string\", enum: [\"ITV\", \"POLICE\", \"BADGE\"] },\n        plate: { type: \"string\" },\n        description: { type: \"string\" },\n        recipientEmail: { type: [\"string\", \"null\"] },\n        chatId: { type: [\"number\", \"string\", \"null\"] }\n    }\n};\n\nconst p = msg.payload || {};\nconst errors = [];\n\nschema.required.forEach((key) => {\n    if (p[key] === undefined) errors.push(`Missing required field: ${key}`);\n});\n\nif (p.type !== undefined && !schema.properties.type.enum.includes(p.type)) {\n    errors.push(`Invalid type: ${p.type}`);\n}\n\n[\"plate\", \"description\"].forEach((key) => {\n    if (p[key] !== undefined && typeof p[key] !== \"string\") {\n        errors.push(`Field ${key} must be a string`);\n    }\n});\n\nif (p.recipientEmail !== undefined && p.recipientEmail !== null && typeof p.recipientEmail !== \"string\") {\n    errors.push(\"recipientEmail must be string or null\");\n}\n\nif (p.chatId !== undefined && p.chatId !== null && typeof p.chatId !== \"number\" && typeof p.chatId !== \"string\") {\n    errors.push(\"chatId must be number, string, or null\");\n}\n\nif (errors.length > 0) {\n    msg.payload = { error: \"Schema validation failed\", details: errors, received: p };\n    return [null, msg];\n}\n\nreturn [msg, null];\n",
         "outputs": 2,
@@ -2602,6 +4011,7 @@
         "id": "a2f0f51f7d2a4c3e",
         "type": "debug",
         "z": "01df77f7ae4c4f86",
+        "g": "17ae7c0aadc6f6e9",
         "name": "Invalid alert",
         "active": true,
         "tosidebar": true,
@@ -2618,6 +4028,7 @@
         "id": "913e446c8e8bbdb9",
         "type": "inject",
         "z": "01df77f7ae4c4f86",
+        "g": "2815bddc50c82a5c",
         "name": "Start simulation",
         "props": [],
         "repeat": "",
@@ -2637,6 +4048,7 @@
         "id": "c104fda7ab33b14a",
         "type": "inject",
         "z": "01df77f7ae4c4f86",
+        "g": "2815bddc50c82a5c",
         "name": "Stop simulation",
         "props": [],
         "repeat": "",
@@ -2656,6 +4068,7 @@
         "id": "16f3110a960393a3",
         "type": "inject",
         "z": "01df77f7ae4c4f86",
+        "g": "2815bddc50c82a5c",
         "name": "Get status",
         "props": [],
         "repeat": "",
@@ -2675,6 +4088,7 @@
         "id": "5352a749c4a0aa68",
         "type": "http request",
         "z": "01df77f7ae4c4f86",
+        "g": "2815bddc50c82a5c",
         "name": "POST /simulation/start",
         "method": "POST",
         "ret": "txt",
@@ -2699,6 +4113,7 @@
         "id": "02e426d4974b32e1",
         "type": "http request",
         "z": "01df77f7ae4c4f86",
+        "g": "2815bddc50c82a5c",
         "name": "POST /simulation/stop",
         "method": "POST",
         "ret": "txt",
@@ -2723,6 +4138,7 @@
         "id": "938afc576a02ecb0",
         "type": "http request",
         "z": "01df77f7ae4c4f86",
+        "g": "2815bddc50c82a5c",
         "name": "GET /simulation/status",
         "method": "GET",
         "ret": "txt",
@@ -2747,6 +4163,7 @@
         "id": "b2478287e61643e3",
         "type": "debug",
         "z": "01df77f7ae4c4f86",
+        "g": "2815bddc50c82a5c",
         "name": "Start response",
         "active": true,
         "console": false,
@@ -2759,6 +4176,7 @@
         "id": "4ff83d29a5f1f9f0",
         "type": "debug",
         "z": "01df77f7ae4c4f86",
+        "g": "2815bddc50c82a5c",
         "name": "Stop response",
         "active": true,
         "console": false,
@@ -2771,6 +4189,7 @@
         "id": "ee68c22b68c46794",
         "type": "debug",
         "z": "01df77f7ae4c4f86",
+        "g": "2815bddc50c82a5c",
         "name": "Status response",
         "active": true,
         "console": false,
@@ -2783,6 +4202,7 @@
         "id": "4c8d0361725eece2",
         "type": "inject",
         "z": "01df77f7ae4c4f86",
+        "g": "a5bb6b872c5b0ad7",
         "name": "",
         "props": [
             {
@@ -2808,6 +4228,7 @@
         "id": "21d064adab7e1d12",
         "type": "inject",
         "z": "01df77f7ae4c4f86",
+        "g": "a5bb6b872c5b0ad7",
         "name": "",
         "props": [
             {
@@ -2833,6 +4254,7 @@
         "id": "617d73211d9ab6d6",
         "type": "inject",
         "z": "01df77f7ae4c4f86",
+        "g": "a5bb6b872c5b0ad7",
         "name": "",
         "props": [
             {
@@ -2858,6 +4280,7 @@
         "id": "8d0feca90923d603",
         "type": "inject",
         "z": "01df77f7ae4c4f86",
+        "g": "a5bb6b872c5b0ad7",
         "name": "",
         "props": [
             {
@@ -2883,6 +4306,7 @@
         "id": "705f751f87d540e9",
         "type": "inject",
         "z": "01df77f7ae4c4f86",
+        "g": "a5bb6b872c5b0ad7",
         "name": "",
         "props": [
             {
@@ -2908,6 +4332,7 @@
         "id": "0ce25c0ebed1c7f8",
         "type": "inject",
         "z": "01df77f7ae4c4f86",
+        "g": "a5bb6b872c5b0ad7",
         "name": "",
         "props": [
             {
@@ -2933,6 +4358,7 @@
         "id": "fadc77b0ffb80ac9",
         "type": "change",
         "z": "01df77f7ae4c4f86",
+        "g": "a5bb6b872c5b0ad7",
         "name": "Set flow.cameraCount",
         "rules": [
             {
@@ -2955,6 +4381,7 @@
         "id": "4c419ee0f4fc4c76",
         "type": "change",
         "z": "01df77f7ae4c4f86",
+        "g": "a5bb6b872c5b0ad7",
         "name": "Set flow.stolenProbability",
         "rules": [
             {
@@ -2977,6 +4404,7 @@
         "id": "c53384464d1f2b48",
         "type": "change",
         "z": "01df77f7ae4c4f86",
+        "g": "a5bb6b872c5b0ad7",
         "name": "Set flow.itvFailProbability",
         "rules": [
             {
@@ -2999,6 +4427,7 @@
         "id": "a353a44162b3fbf9",
         "type": "change",
         "z": "01df77f7ae4c4f86",
+        "g": "a5bb6b872c5b0ad7",
         "name": "Set flow.vehiclesPerCycle",
         "rules": [
             {
@@ -3021,6 +4450,7 @@
         "id": "a1af7ab4f98ea557",
         "type": "change",
         "z": "01df77f7ae4c4f86",
+        "g": "a5bb6b872c5b0ad7",
         "name": "Set flow.vehicleIntervalMs",
         "rules": [
             {
@@ -3043,6 +4473,7 @@
         "id": "d5df394e5a180987",
         "type": "change",
         "z": "01df77f7ae4c4f86",
+        "g": "a5bb6b872c5b0ad7",
         "name": "Set flow.ocrDelayMs",
         "rules": [
             {
@@ -3065,6 +4496,7 @@
         "id": "c336750601b0fd7c",
         "type": "change",
         "z": "01df77f7ae4c4f86",
+        "g": "a5bb6b872c5b0ad7",
         "name": "Set headers",
         "rules": [
             {
@@ -3087,6 +4519,7 @@
         "id": "d42b61f843663589",
         "type": "http request",
         "z": "01df77f7ae4c4f86",
+        "g": "a5bb6b872c5b0ad7",
         "name": "PUT /admin/update",
         "method": "PUT",
         "ret": "obj",
@@ -3111,6 +4544,7 @@
         "id": "234531cdf842e239",
         "type": "debug",
         "z": "01df77f7ae4c4f86",
+        "g": "a5bb6b872c5b0ad7",
         "name": "Payload -> update",
         "active": true,
         "tosidebar": true,
@@ -3123,6 +4557,7 @@
         "id": "0acc76bc0ed23af1",
         "type": "debug",
         "z": "01df77f7ae4c4f86",
+        "g": "a5bb6b872c5b0ad7",
         "name": "Response",
         "active": true,
         "tosidebar": true,
@@ -3135,6 +4570,7 @@
         "id": "63b140e5befc811a",
         "type": "function",
         "z": "01df77f7ae4c4f86",
+        "g": "a5bb6b872c5b0ad7",
         "name": "Change parameters",
         "func": "msg.headers = { \"Content-Type\": \"application/json\" };\n\nconst defaults = {\n  cameraCount: 3,\n  stolenProbability: 0.05,\n  itvFailProbability: 0.30,\n  vehiclesPerCycle: 1,\n  vehicleIntervalMs: 2000,\n  ocrDelayMs: 200\n};\n\n// toma valor de msg.<k> si viene del inject, si no el último en flow, si no el default\n[\"cameraCount\",\"stolenProbability\",\"itvFailProbability\",\"vehiclesPerCycle\",\"vehicleIntervalMs\",\"ocrDelayMs\"]\n  .forEach(k => {\n    if (msg[k] !== undefined) flow.set(k, msg[k]);\n  });\n\nmsg.payload = {\n  cameraCount: flow.get(\"cameraCount\") ?? defaults.cameraCount,\n  stolenProbability: flow.get(\"stolenProbability\") ?? defaults.stolenProbability,\n  itvFailProbability: flow.get(\"itvFailProbability\") ?? defaults.itvFailProbability,\n  vehiclesPerCycle: flow.get(\"vehiclesPerCycle\") ?? defaults.vehiclesPerCycle,\n  vehicleIntervalMs: flow.get(\"vehicleIntervalMs\") ?? defaults.vehicleIntervalMs,\n  ocrDelayMs: flow.get(\"ocrDelayMs\") ?? defaults.ocrDelayMs\n};\n\nreturn msg;\n",
         "outputs": 1,
@@ -3156,6 +4592,7 @@
         "id": "3280259e0b919d43",
         "type": "switch",
         "z": "01df77f7ae4c4f86",
+        "g": "17ae7c0aadc6f6e9",
         "name": "type",
         "property": "payload.type",
         "rules": [
@@ -3193,6 +4630,7 @@
         "id": "23932db24f1c5301",
         "type": "switch",
         "z": "01df77f7ae4c4f86",
+        "g": "17ae7c0aadc6f6e9",
         "name": "ITV status",
         "property": "payload.description",
         "propertyType": "msg",
@@ -3233,6 +4671,7 @@
         "id": "b010632ce9ea2afd",
         "type": "function",
         "z": "01df77f7ae4c4f86",
+        "g": "17ae7c0aadc6f6e9",
         "name": "Build email",
         "func": "const p = msg.payload;\nconst to = p.recipientEmail || \"u0400412775@gmail.com\";\nmsg.to = to;\nmsg.topic = `🚗 Aviso ITV • ${p.plate}`;\nmsg.payload =\n    `Hello,\n\nWe have updates about your vehicle ${p.plate}:\n\n• ITV status: ${p.description}\n• License plate: ${p.plate}\n• Date: ${new Date().toLocaleString()}\n\nIf your ITV has expired or is about to expire, book an appointment as soon as possible to avoid fines and ensure your safety.\n\nThanks,\nCRAI Team`;\n\nreturn msg;\n",
         "outputs": 1,
@@ -3254,6 +4693,7 @@
         "id": "77b28f5d31012cb5",
         "type": "function",
         "z": "01df77f7ae4c4f86",
+        "g": "17ae7c0aadc6f6e9",
         "name": "Build Telegram (ITV)",
         "func": "const p = msg.payload;\nconst chatId = p.chatId || 1143392395;\nmsg.payload = {\n    chatId,\n    type: 'message',\n    content: `🚦 ITV Notice\\n\\nLicense plate: ${p.plate}\\nStatus: ${p.description}\\n\\nIf it has expired or is close to expiring, book an appointment as soon as possible.`\n};\nreturn msg;\n",
         "outputs": 1,
@@ -3274,6 +4714,7 @@
         "id": "6309be18cf01aebf",
         "type": "function",
         "z": "01df77f7ae4c4f86",
+        "g": "17ae7c0aadc6f6e9",
         "name": "Build Telegram (POLICE)",
         "func": "const p = msg.payload;\nconst chatId = p.chatId || 1143392395;\nmsg.payload = {\n    chatId,\n    type: 'message',\n    content: `🚨 Police Alert\\n\\nLicense plate: ${p.plate}\\nReason: ${p.description}\\n\\nCheck the vehicle status immediately.`\n};\nreturn msg;\n",
         "outputs": 1,
@@ -3294,6 +4735,7 @@
         "id": "f9cdcebade72552e",
         "type": "debug",
         "z": "01df77f7ae4c4f86",
+        "g": "17ae7c0aadc6f6e9",
         "name": "Other alerts",
         "active": true,
         "complete": "payload",
@@ -3305,6 +4747,7 @@
         "id": "e90899417993a3aa",
         "type": "debug",
         "z": "01df77f7ae4c4f86",
+        "g": "17ae7c0aadc6f6e9",
         "name": "ITV other",
         "active": true,
         "complete": "payload",
@@ -3316,6 +4759,7 @@
         "id": "828dab69e9e76a83",
         "type": "debug",
         "z": "01df77f7ae4c4f86",
+        "g": "17ae7c0aadc6f6e9",
         "name": "Telegram error",
         "active": true,
         "complete": "payload",
@@ -3327,6 +4771,7 @@
         "id": "5ecdb5ab132aad75",
         "type": "debug",
         "z": "01df77f7ae4c4f86",
+        "g": "17ae7c0aadc6f6e9",
         "name": "debug 2",
         "active": true,
         "tosidebar": true,
@@ -3344,6 +4789,7 @@
         "id": "c5fab67d44a35626",
         "type": "comment",
         "z": "01df77f7ae4c4f86",
+        "g": "a5bb6b872c5b0ad7",
         "name": "Flow to adjust parameters",
         "info": "ES\nEste flujo ajusta parametros de simulacion (camaras, probabilidades, ritmo) desde varios injects, los guarda en flow, construye un payload con defaults si falta algun valor y lo envia por HTTP POST a /admin/update, mostrando el payload y la respuesta en debug.\n\nEN \nThis flow updates simulation parameters (cameras, probabilities, pacing) via inject nodes, stores them in flow, builds a payload with defaults when a value is missing, and sends it by HTTP POST to /admin/update, showing both the payload and the response in the debug panel.",
         "x": 170,
@@ -3354,6 +4800,7 @@
         "id": "c75b2307c72af870",
         "type": "comment",
         "z": "01df77f7ae4c4f86",
+        "g": "2815bddc50c82a5c",
         "name": "Flow to start / stop simulations",
         "info": "",
         "x": 180,
@@ -3364,6 +4811,7 @@
         "id": "a964a6cfbad38ca7",
         "type": "comment",
         "z": "01df77f7ae4c4f86",
+        "g": "17ae7c0aadc6f6e9",
         "name": "This flow represent how to manage the alerts",
         "info": "ES\nEste flujo recibe alertas por POST /alerts, parsea el JSON y enruta por tipo. Si es ITV y está caducada o próxima, construye y envía un email y un aviso por Telegram; si es POLICE, envía un aviso por Telegram. El resto de alertas se muestran en debug.\n\nEN \nThis flow receives alerts via POST /alerts, parses the JSON, and routes by type. If it is ITV and expired or near expiry, it builds and sends an email and a Telegram notice; if it is POLICE, it sends a Telegram alert. Any other alerts are shown in debug.",
         "x": 230,
@@ -3374,6 +4822,7 @@
         "id": "b7f38f3f8a8b6f10",
         "type": "inject",
         "z": "01df77f7ae4c4f86",
+        "g": "2815bddc50c82a5c",
         "name": "Clear alerts",
         "props": [],
         "repeat": "",
@@ -3393,6 +4842,7 @@
         "id": "b13ab7f2e44ef2a2",
         "type": "http request",
         "z": "01df77f7ae4c4f86",
+        "g": "2815bddc50c82a5c",
         "name": "DELETE /police/alerts",
         "method": "DELETE",
         "ret": "obj",
@@ -3417,6 +4867,7 @@
         "id": "f3d8a2f9f8e46d40",
         "type": "debug",
         "z": "01df77f7ae4c4f86",
+        "g": "2815bddc50c82a5c",
         "name": "Clear alerts response",
         "active": true,
         "tosidebar": true,
@@ -3431,6 +4882,7 @@
         "id": "0f2bc3273b5e7546",
         "type": "comment",
         "z": "01df77f7ae4c4f86",
+        "g": "2815bddc50c82a5c",
         "name": "Flow to delete alerts",
         "info": "",
         "x": 150,
@@ -3441,6 +4893,7 @@
         "id": "083d998fbb5dde7a",
         "type": "telegram sender",
         "z": "01df77f7ae4c4f86",
+        "g": "17ae7c0aadc6f6e9",
         "name": "Telegram alerts",
         "bot": "6432ebeb5db11b74",
         "haserroroutput": true,
@@ -3458,6 +4911,7 @@
         "id": "5e22649949e1823c",
         "type": "e-mail",
         "z": "01df77f7ae4c4f86",
+        "g": "17ae7c0aadc6f6e9",
         "server": "smtp.gmail.com",
         "port": "587",
         "authtype": "BASIC",
@@ -3475,6 +4929,7 @@
         "id": "dd1fa28d539d3884",
         "type": "function",
         "z": "01df77f7ae4c4f86",
+        "g": "a5bb6b872c5b0ad7",
         "name": "Validate update schema",
         "func": "const p = msg.payload;\n\n// Helper\nfunction isNumber(n) {\n    return typeof n === \"number\" && !isNaN(n);\n}\n\n// Required fields\nconst required = [\n    \"cameraCount\",\n    \"stolenProbability\",\n    \"itvFailProbability\",\n    \"vehiclesPerCycle\",\n    \"vehicleIntervalMs\",\n    \"ocrDelayMs\"\n];\n\n// Check presence\nfor (const k of required) {\n    if (p[k] === undefined) {\n        node.error(`Missing required field: ${k}`, msg);\n        return null;\n    }\n}\n\n// Check types and ranges\nif (!Number.isInteger(p.cameraCount) || p.cameraCount < 1)\n    return node.error(\"cameraCount must be an integer >= 1\", msg);\n\nif (!isNumber(p.stolenProbability) || p.stolenProbability < 0 || p.stolenProbability > 1)\n    return node.error(\"stolenProbability must be between 0 and 1\", msg);\n\nif (!isNumber(p.itvFailProbability) || p.itvFailProbability < 0 || p.itvFailProbability > 1)\n    return node.error(\"itvFailProbability must be between 0 and 1\", msg);\n\nif (!Number.isInteger(p.vehiclesPerCycle) || p.vehiclesPerCycle < 1)\n    return node.error(\"vehiclesPerCycle must be an integer >= 1\", msg);\n\nif (!Number.isInteger(p.vehicleIntervalMs) || p.vehicleIntervalMs < 0)\n    return node.error(\"vehicleIntervalMs must be >= 0\", msg);\n\nif (!Number.isInteger(p.ocrDelayMs) || p.ocrDelayMs < 0)\n    return node.error(\"ocrDelayMs must be >= 0\", msg);\n\n// If everything is OK\nreturn msg;\n",
         "outputs": 1,
@@ -3489,580 +4944,6 @@
             [
                 "d42b61f843663589"
             ]
-        ]
-    },
-    {
-        "id": "cdf1c72662bf117f",
-        "type": "inject",
-        "z": "3bf36f2bd537dee3",
-        "name": "Consulta ITV",
-        "props": [
-            {
-                "p": "carPlate",
-                "v": "0163MRC",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "x": 130,
-        "y": 100,
-        "wires": [
-            [
-                "9b43f1756f746aa6"
-            ]
-        ]
-    },
-    {
-        "id": "9b43f1756f746aa6",
-        "type": "function",
-        "z": "3bf36f2bd537dee3",
-        "name": "Construir URL API",
-        "func": "msg.url = \"http://itvapi:8000/api?carPlate=\" + msg.carPlate;\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 430,
-        "y": 100,
-        "wires": [
-            [
-                "045b96f1a06e805e"
-            ]
-        ]
-    },
-    {
-        "id": "045b96f1a06e805e",
-        "type": "http request",
-        "z": "3bf36f2bd537dee3",
-        "name": "GET ITV",
-        "method": "GET",
-        "ret": "txt",
-        "paytoqs": "ignore",
-        "url": "",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 680,
-        "y": 100,
-        "wires": [
-            [
-                "d601febbf8cec9c0"
-            ]
-        ]
-    },
-    {
-        "id": "3e9aa4386d37b161",
-        "type": "debug",
-        "z": "3bf36f2bd537dee3",
-        "name": "Resultado API",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "x": 1180,
-        "y": 100,
-        "wires": []
-    },
-    {
-        "id": "d601febbf8cec9c0",
-        "type": "json",
-        "z": "3bf36f2bd537dee3",
-        "name": "",
-        "property": "payload",
-        "action": "",
-        "pretty": false,
-        "x": 910,
-        "y": 100,
-        "wires": [
-            [
-                "a1b2c3d4e5f60789",
-                "3e9aa4386d37b161"
-            ]
-        ]
-    },
-    {
-        "id": "a1b2c3d4e5f60789",
-        "type": "switch",
-        "z": "3bf36f2bd537dee3",
-        "name": "ITV decision",
-        "property": "payload.itv_date",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "0",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "1",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "warning",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "none",
-                "vt": "str"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 5,
-        "x": 170,
-        "y": 200,
-        "wires": [
-            [
-                "b0b1b2b3b4b5b6b7"
-            ],
-            [
-                "c0c1c2c3c4c5c6c7"
-            ],
-            [
-                "d0d1d2d3d4d5d6d7"
-            ],
-            [
-                "e0e1e2e3e4e5e6e7"
-            ],
-            [
-                "f0f1f2f3f4f5f6f7"
-            ]
-        ]
-    },
-    {
-        "id": "b0b1b2b3b4b5b6b7",
-        "type": "debug",
-        "z": "3bf36f2bd537dee3",
-        "name": "ITV OK (0)",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 470,
-        "y": 180,
-        "wires": []
-    },
-    {
-        "id": "c0c1c2c3c4c5c6c7",
-        "type": "debug",
-        "z": "3bf36f2bd537dee3",
-        "name": "ITV caducada (1)",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "x": 490,
-        "y": 220,
-        "wires": []
-    },
-    {
-        "id": "d0d1d2d3d4d5d6d7",
-        "type": "debug",
-        "z": "3bf36f2bd537dee3",
-        "name": "ITV warning",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "x": 470,
-        "y": 260,
-        "wires": []
-    },
-    {
-        "id": "e0e1e2e3e4e5e6e7",
-        "type": "debug",
-        "z": "3bf36f2bd537dee3",
-        "name": "ITV none",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "x": 460,
-        "y": 300,
-        "wires": []
-    },
-    {
-        "id": "f0f1f2f3f4f5f6f7",
-        "type": "debug",
-        "z": "3bf36f2bd537dee3",
-        "name": "ITV other",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "x": 460,
-        "y": 340,
-        "wires": []
-    },
-    {
-        "id": "3ebee835bef670d9",
-        "type": "comment",
-        "z": "3bf36f2bd537dee3",
-        "name": "Recibe la matricula de la IA",
-        "info": "",
-        "x": 170,
-        "y": 440,
-        "wires": []
-    },
-    {
-        "id": "f5824bebafedf1b1",
-        "type": "inject",
-        "z": "3bf36f2bd537dee3",
-        "name": "Consulta etiqueta",
-        "props": [
-            {
-                "p": "carPlate",
-                "v": "0163MRC",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "x": 160,
-        "y": 660,
-        "wires": [
-            [
-                "9d4100f8a1e25a22"
-            ]
-        ]
-    },
-    {
-        "id": "9d4100f8a1e25a22",
-        "type": "function",
-        "z": "3bf36f2bd537dee3",
-        "name": "Construir URL API",
-        "func": "msg.url = \"http://ebAPI:8000/api?car_plate=\" + msg.carPlate;\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 430,
-        "y": 660,
-        "wires": [
-            [
-                "c32a1b60e9f49150"
-            ]
-        ]
-    },
-    {
-        "id": "c32a1b60e9f49150",
-        "type": "http request",
-        "z": "3bf36f2bd537dee3",
-        "name": "GET EB",
-        "method": "GET",
-        "ret": "txt",
-        "paytoqs": "ignore",
-        "url": "",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 680,
-        "y": 660,
-        "wires": [
-            [
-                "174fcd1cd2da9e15"
-            ]
-        ]
-    },
-    {
-        "id": "cf1e1822b51a01a0",
-        "type": "debug",
-        "z": "3bf36f2bd537dee3",
-        "name": "Resultado API",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "x": 1180,
-        "y": 660,
-        "wires": []
-    },
-    {
-        "id": "174fcd1cd2da9e15",
-        "type": "json",
-        "z": "3bf36f2bd537dee3",
-        "name": "",
-        "property": "payload",
-        "action": "",
-        "pretty": false,
-        "x": 910,
-        "y": 660,
-        "wires": [
-            [
-                "cf1e1822b51a01a0"
-            ]
-        ]
-    },
-    {
-        "id": "a1f0b1e9d1c00101",
-        "type": "http in",
-        "z": "3bf36f2bd537dee3",
-        "name": "Receive plate from IA",
-        "url": "/ai/carPlatee",
-        "method": "post",
-        "upload": false,
-        "skipBodyParsing": false,
-        "swaggerDoc": "",
-        "x": 160,
-        "y": 500,
-        "wires": [
-            [
-                "a1f0b1e9d1c00102"
-            ]
-        ]
-    },
-    {
-        "id": "a1f0b1e9d1c00102",
-        "type": "json",
-        "z": "3bf36f2bd537dee3",
-        "name": "Parse JSON",
-        "property": "payload",
-        "action": "obj",
-        "pretty": false,
-        "x": 370,
-        "y": 500,
-        "wires": [
-            [
-                "a1f0b1e9d1c00103"
-            ]
-        ]
-    },
-    {
-        "id": "a1f0b1e9d1c00103",
-        "type": "function",
-        "z": "3bf36f2bd537dee3",
-        "name": "Validate plate schema",
-        "func": "// Schema + Spanish plate validation\nconst payload = msg.payload;\n\nconst requiredFields = [\n    \"plate\",\n    \"confidence\",\n    \"vehicle_type\",\n    \"timestamp\",\n    \"retries\"\n];\n\nfunction error(message) {\n    msg.statusCode = 400;\n    msg.payload = {\n        error: \"Invalid payload\",\n        message\n    };\n    return [null, msg];\n}\n\n// Required fields\nfor (const field of requiredFields) {\n    if (!(field in payload)) {\n        return error(`Missing field: ${field}`);\n    }\n}\n\n// Plate\nif (typeof payload.plate !== \"string\") {\n    return error(\"plate must be a string\");\n}\n\npayload.plate = payload.plate.toUpperCase();\nconst plateRegex = /^[0-9]{4}[B-DF-HJ-NP-TV-Z]{3}$/;\nif (!plateRegex.test(payload.plate)) {\n    return error(\"plate format must be 4 digits followed by 3 consonant letters (Spanish format)\");\n}\n\n// Confidence\nif (typeof payload.confidence !== \"number\" || payload.confidence < 0 || payload.confidence > 1) {\n    return error(\"confidence must be a number between 0 and 1\");\n}\n\n// Vehicle type\nif (typeof payload.vehicle_type !== \"string\") {\n    return error(\"vehicle_type must be a string\");\n}\n\n// Retries\nif (typeof payload.retries !== \"number\" || payload.retries < 0) {\n    return error(\"retries must be a non-negative number\");\n}\n\n// Timestamp\nif (isNaN(Date.parse(payload.timestamp))) {\n    return error(\"timestamp must be a valid ISO-8601 date\");\n}\n\n// OK\nreturn [msg, null];",
-        "outputs": 2,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 600,
-        "y": 500,
-        "wires": [
-            [
-                "a1f0b1e9d1c00104",
-                "4f3b50fb6d090649"
-            ],
-            [
-                "a1f0b1e9d1c00105"
-            ]
-        ]
-    },
-    {
-        "id": "a1f0b1e9d1c00104",
-        "type": "function",
-        "z": "3bf36f2bd537dee3",
-        "name": "OK response",
-        "func": "msg.statusCode = 200;\nmsg.payload = {\n    ok: true,\n    message: \"Plate received and validated\",\n    plate: msg.payload.plate\n};\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 840,
-        "y": 460,
-        "wires": [
-            [
-                "a1f0b1e9d1c00106"
-            ]
-        ]
-    },
-    {
-        "id": "a1f0b1e9d1c00105",
-        "type": "http response",
-        "z": "3bf36f2bd537dee3",
-        "name": "HTTP 400",
-        "statusCode": "",
-        "headers": {},
-        "x": 840,
-        "y": 540,
-        "wires": []
-    },
-    {
-        "id": "a1f0b1e9d1c00106",
-        "type": "http response",
-        "z": "3bf36f2bd537dee3",
-        "name": "HTTP 200",
-        "statusCode": "",
-        "headers": {},
-        "x": 1050,
-        "y": 460,
-        "wires": []
-    },
-    {
-        "id": "4f3b50fb6d090649",
-        "type": "debug",
-        "z": "3bf36f2bd537dee3",
-        "name": "debug 3",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 780,
-        "y": 400,
-        "wires": []
-    },
-    {
-        "id": "a2b5e2a02b555c45",
-        "type": "http in",
-        "z": "3bf36f2bd537dee3",
-        "name": "Receive plate from IA",
-        "url": "/ai/carPlate",
-        "method": "post",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 160,
-        "y": 800,
-        "wires": [
-            [
-                "3a0aca82946447dd"
-            ]
-        ]
-    },
-    {
-        "id": "3a0aca82946447dd",
-        "type": "json",
-        "z": "3bf36f2bd537dee3",
-        "name": "Parse JSON",
-        "property": "payload",
-        "action": "obj",
-        "pretty": false,
-        "x": 390,
-        "y": 800,
-        "wires": [
-            [
-                "2720e5331ca51608"
-            ]
-        ]
-    },
-    {
-        "id": "2720e5331ca51608",
-        "type": "debug",
-        "z": "3bf36f2bd537dee3",
-        "name": "debug 4",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 600,
-        "y": 800,
-        "wires": []
-    },
-    {
-        "id": "2c83a153cf0c54e7",
-        "type": "link in",
-        "z": "f8c26a4d4d10435f",
-        "name": "link in 1",
-        "links": [
-            "3cf97939c1d3da7d"
-        ],
-        "x": 195,
-        "y": 100,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "a9fe5d6bc617c32d",
-        "type": "link in",
-        "z": "f8c26a4d4d10435f",
-        "name": "link in 2",
-        "links": [
-            "43520e59f0c2418d"
-        ],
-        "x": 195,
-        "y": 220,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "171a20db82e1afc0",
-        "type": "link in",
-        "z": "f8c26a4d4d10435f",
-        "name": "link in 3",
-        "links": [
-            "65f0fa9e24a711f5"
-        ],
-        "x": 195,
-        "y": 340,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "f22eb1fab4818fe6",
-        "type": "link in",
-        "z": "f8c26a4d4d10435f",
-        "name": "link in 4",
-        "links": [
-            "1bd34d9ff0bd9b1d"
-        ],
-        "x": 195,
-        "y": 460,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "7380345780d93e87",
-        "type": "link in",
-        "z": "f8c26a4d4d10435f",
-        "name": "link in 5",
-        "links": [
-            "c3d224b3dbe00893"
-        ],
-        "x": 195,
-        "y": 580,
-        "wires": [
-            []
         ]
     }
 ]
