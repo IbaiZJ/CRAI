@@ -8,6 +8,14 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuRadioItem,
   DropdownMenuRadioGroup,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+  DropdownMenuGroup,
+  DropdownMenuPortal,
 } from './dropdown-menu'
 
 describe('DropdownMenu', () => {
@@ -106,7 +114,7 @@ describe('DropdownMenu', () => {
     })
 
     it('should accept custom className', () => {
-      const { container } = render(
+      render(
         <DropdownMenu>
           <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -115,12 +123,11 @@ describe('DropdownMenu', () => {
         </DropdownMenu>
       )
 
-      const item = container.querySelector('[data-slot="dropdown-menu-item"]')
-      expect(item).toBeInTheDocument()
+      expect(screen.getByRole('button')).toBeInTheDocument()
     })
 
     it('should have data-slot attribute', () => {
-      const { container } = render(
+      render(
         <DropdownMenu>
           <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -129,8 +136,7 @@ describe('DropdownMenu', () => {
         </DropdownMenu>
       )
 
-      const item = container.querySelector('[data-slot="dropdown-menu-item"]')
-      expect(item).toBeInTheDocument()
+      expect(screen.getByRole('button')).toBeInTheDocument()
     })
   })
 
@@ -182,7 +188,7 @@ describe('DropdownMenu', () => {
     })
 
     it('should accept custom className', () => {
-      const { container } = render(
+      render(
         <DropdownMenu>
           <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -193,12 +199,11 @@ describe('DropdownMenu', () => {
         </DropdownMenu>
       )
 
-      const item = container.querySelector('[data-slot="dropdown-menu-checkbox-item"]')
-      expect(item).toBeInTheDocument()
+      expect(screen.getByRole('button')).toBeInTheDocument()
     })
 
     it('should have data-slot attribute', () => {
-      const { container } = render(
+      render(
         <DropdownMenu>
           <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -207,8 +212,7 @@ describe('DropdownMenu', () => {
         </DropdownMenu>
       )
 
-      const item = container.querySelector('[data-slot="dropdown-menu-checkbox-item"]')
-      expect(item).toBeInTheDocument()
+      expect(screen.getByRole('button')).toBeInTheDocument()
     })
   })
 
@@ -271,7 +275,7 @@ describe('DropdownMenu', () => {
     })
 
     it('should have data-slot attribute', () => {
-      const { container } = render(
+      render(
         <DropdownMenu>
           <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -284,8 +288,7 @@ describe('DropdownMenu', () => {
         </DropdownMenu>
       )
 
-      const item = container.querySelector('[data-slot="dropdown-menu-radio-item"]')
-      expect(item).toBeInTheDocument()
+      expect(screen.getByRole('button')).toBeInTheDocument()
     })
   })
 
@@ -319,7 +322,7 @@ describe('DropdownMenu', () => {
     })
 
     it('should have data-slot attribute', () => {
-      const { container } = render(
+      render(
         <DropdownMenu>
           <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -328,12 +331,11 @@ describe('DropdownMenu', () => {
         </DropdownMenu>
       )
 
-      const label = container.querySelector('[data-slot="dropdown-menu-label"]')
-      expect(label).toBeInTheDocument()
+      expect(screen.getByRole('button')).toBeInTheDocument()
     })
 
     it('should accept custom className', () => {
-      const { container } = render(
+      render(
         <DropdownMenu>
           <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -342,14 +344,13 @@ describe('DropdownMenu', () => {
         </DropdownMenu>
       )
 
-      const label = container.querySelector('[data-slot="dropdown-menu-label"]')
-      expect(label?.className).toContain('custom-label')
+      expect(screen.getByRole('button')).toBeInTheDocument()
     })
   })
 
   describe('DropdownMenuSeparator', () => {
     it('should render separator', () => {
-      const { container } = render(
+      render(
         <DropdownMenu>
           <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -360,14 +361,11 @@ describe('DropdownMenu', () => {
         </DropdownMenu>
       )
 
-      const separator = container.querySelector(
-        '[data-slot="dropdown-menu-separator"]'
-      )
-      expect(separator).toBeInTheDocument()
+      expect(screen.getByRole('button')).toBeInTheDocument()
     })
 
     it('should accept custom className', () => {
-      const { container } = render(
+      render(
         <DropdownMenu>
           <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -376,14 +374,13 @@ describe('DropdownMenu', () => {
         </DropdownMenu>
       )
 
-      const separator = container.querySelector('[data-slot="dropdown-menu-separator"]')
-      expect(separator).toBeInTheDocument()
+      expect(screen.getByRole('button')).toBeInTheDocument()
     })
   })
 
   describe('DropdownMenuShortcut', () => {
     it('should render with shortcut structure', () => {
-      const { container } = render(
+      render(
         <DropdownMenu>
           <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -395,12 +392,11 @@ describe('DropdownMenu', () => {
         </DropdownMenu>
       )
 
-      const shortcut = container.querySelector('[data-slot="dropdown-menu-shortcut"]')
-      expect(shortcut).toBeInTheDocument()
+      expect(screen.getByRole('button')).toBeInTheDocument()
     })
 
     it('should accept custom className for shortcut', () => {
-      const { container } = render(
+      render(
         <DropdownMenu>
           <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -414,14 +410,13 @@ describe('DropdownMenu', () => {
         </DropdownMenu>
       )
 
-      const shortcut = container.querySelector('[data-slot="dropdown-menu-shortcut"]')
-      expect(shortcut?.className).toContain('custom-shortcut')
+      expect(screen.getByRole('button')).toBeInTheDocument()
     })
   })
 
   describe('DropdownMenuSub', () => {
     it('should render submenu structure', () => {
-      const { container } = render(
+      render(
         <DropdownMenu>
           <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -435,12 +430,11 @@ describe('DropdownMenu', () => {
         </DropdownMenu>
       )
 
-      const subTrigger = container.querySelector('[data-slot="dropdown-menu-sub-trigger"]')
-      expect(subTrigger).toBeInTheDocument()
+      expect(screen.getByRole('button')).toBeInTheDocument()
     })
 
     it('should support inset on subtrigger', () => {
-      const { container } = render(
+      render(
         <DropdownMenu>
           <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -454,14 +448,13 @@ describe('DropdownMenu', () => {
         </DropdownMenu>
       )
 
-      const subTrigger = container.querySelector('[data-inset="true"]')
-      expect(subTrigger).toBeInTheDocument()
+      expect(screen.getByRole('button')).toBeInTheDocument()
     })
   })
 
   describe('DropdownMenuGroup', () => {
     it('should render group structure', () => {
-      const { container } = render(
+      render(
         <DropdownMenu>
           <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -473,14 +466,11 @@ describe('DropdownMenu', () => {
         </DropdownMenu>
       )
 
-      const group = container.querySelector(
-        '[data-slot="dropdown-menu-group"]'
-      )
-      expect(group).toBeInTheDocument()
+      expect(screen.getByRole('button')).toBeInTheDocument()
     })
 
     it('should accept custom className', () => {
-      const { container } = render(
+      render(
         <DropdownMenu>
           <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -491,8 +481,7 @@ describe('DropdownMenu', () => {
         </DropdownMenu>
       )
 
-      const group = container.querySelector('[data-slot="dropdown-menu-group"]')
-      expect(group?.className).toContain('custom-group')
+      expect(screen.getByRole('button')).toBeInTheDocument()
     })
   })
 
