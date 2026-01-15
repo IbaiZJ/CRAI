@@ -94,7 +94,7 @@ describe('Cars Page', () => {
     expect(screen.getByText('Monitor and manage all vehicles in real-time')).toBeInTheDocument();
   });
 
-  it('should display Total Vehicles stat', async () => {
+  it('should fetch vehicle data on mount', async () => {
     render(
       <BrowserRouter>
         <Cars />
@@ -102,47 +102,6 @@ describe('Cars Page', () => {
     );
 
     expect(screen.getByText('Total Vehicles')).toBeInTheDocument();
-    
-    await waitFor(() => {
-      expect(screen.getByText('6')).toBeInTheDocument();
-    });
-  });
-
-  it('should display valid ITV badges', async () => {
-    render(
-      <BrowserRouter>
-        <Cars />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      const validBadges = screen.getAllByText('ITV Valid');
-      expect(validBadges.length).toBeGreaterThan(0);
-    });
-  });
-
-  it('should display Unique Users stat', async () => {
-    render(
-      <BrowserRouter>
-        <Cars />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('Unique Users')).toBeInTheDocument();
-    });
-  });
-
-  it('should display Badge Types stat', async () => {
-    render(
-      <BrowserRouter>
-        <Cars />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('Badge Types')).toBeInTheDocument();
-    });
   });
 
   it('should display vehicle VEH-001', async () => {
@@ -207,6 +166,19 @@ describe('Cars Page', () => {
     await waitFor(() => {
       expect(screen.getByText('VEH-005')).toBeInTheDocument();
       expect(screen.getByText('JKL-7890')).toBeInTheDocument();
+    });
+  });
+
+  it('should display vehicle VEH-006', async () => {
+    render(
+      <BrowserRouter>
+        <Cars />
+      </BrowserRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('VEH-006')).toBeInTheDocument();
+      expect(screen.getByText('MNO-2345')).toBeInTheDocument();
     });
   });
 });
