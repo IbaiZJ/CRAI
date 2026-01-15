@@ -67,3 +67,16 @@ vi.mock('@react-oauth/google', () => ({
   GoogleLogin: vi.fn(() => null),
   useGoogleLogin: vi.fn(() => vi.fn()),
 }));
+
+// Mock IntersectionObserver for framer-motion
+if (typeof globalThis !== 'undefined') {
+  globalThis.IntersectionObserver = class IntersectionObserver {
+    constructor() {}
+    disconnect() {}
+    observe() {}
+    takeRecords() {
+      return [];
+    }
+    unobserve() {}
+  } as any;
+}
