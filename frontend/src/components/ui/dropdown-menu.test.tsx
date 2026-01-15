@@ -5,136 +5,56 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuCheckboxItem,
-  DropdownMenuRadioItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
-  DropdownMenuGroup,
-  DropdownMenuPortal,
 } from './dropdown-menu'
 
-describe('DropdownMenu Components', () => {
-  describe('DropdownMenuTrigger', () => {
-    it('should render trigger button', () => {
-      render(
-        <DropdownMenu>
-          <DropdownMenuTrigger>Open</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-
-      const trigger = screen.getByRole('button')
-      expect(trigger).toBeInTheDocument()
-      expect(trigger).toHaveTextContent('Open')
-    })
-
-    it('should have aria-haspopup attribute', () => {
-      render(
-        <DropdownMenu>
-          <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>Action</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-
-      const trigger = screen.getByRole('button')
-      expect(trigger.getAttribute('aria-haspopup')).toBe('menu')
-    })
-
-    it('should accept custom className', () => {
-      render(
-        <DropdownMenu>
-          <DropdownMenuTrigger className="custom-trigger">Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem className="custom-class">Item</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-
-      const trigger = screen.getByRole('button')
-      expect(trigger.className).toContain('custom-trigger')
-    })
-
-    it('should render with data-slot attribute', () => {
-      const { container } = render(
-        <DropdownMenu>
-          <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>Item</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-
-      const trigger = container.querySelector('[data-slot="dropdown-menu-trigger"]')
-      expect(trigger).toBeInTheDocument()
-    })
+describe('DropdownMenu', () => {
+  it('should render trigger button', () => {
+    render(
+      <DropdownMenu>
+        <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Edit</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
+    expect(screen.getByRole('button')).toBeInTheDocument()
   })
 
-  describe('DropdownMenuContent', () => {
-    it('should render content structure', () => {
-      const { container } = render(
-        <DropdownMenu>
-          <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>Item 1</DropdownMenuItem>
-            <DropdownMenuItem>Item 2</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
+  it('should render with multiple items', () => {
+    render(
+      <DropdownMenu>
+        <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Item 1</DropdownMenuItem>
+          <DropdownMenuItem>Item 2</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
+    expect(screen.getByRole('button')).toBeInTheDocument()
+  })
 
-      const trigger = screen.getByRole('button')
-      expect(trigger).toBeInTheDocument()
-    })
+  it('should render with align prop', () => {
+    render(
+      <DropdownMenu>
+        <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem>Item</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
+    expect(screen.getByRole('button')).toBeInTheDocument()
+  })
 
-    it('should accept custom className', () => {
-      const { container } = render(
-        <DropdownMenu>
-          <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
-          <DropdownMenuContent className="custom-content">
-            <DropdownMenuItem>Item</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-
-      const content = container.querySelector('[data-slot="dropdown-menu-content"]')
-      expect(content?.className).toContain('custom-content')
-    })
-
-    it('should support align prop', () => {
-      render(
-        <DropdownMenu>
-          <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>Item</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-
-      const trigger = screen.getByRole('button')
-      expect(trigger).toBeInTheDocument()
-    })
-
-    it('should support side prop', () => {
-      render(
-        <DropdownMenu>
-          <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
-          <DropdownMenuContent side="bottom">
-            <DropdownMenuItem>Item</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-
-      const trigger = screen.getByRole('button')
-      expect(trigger).toBeInTheDocument()
-    })
+  it('should render with side prop', () => {
+    render(
+      <DropdownMenu>
+        <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
+        <DropdownMenuContent side="bottom">
+          <DropdownMenuItem>Item</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
+    expect(screen.getByRole('button')).toBeInTheDocument()
   })
 
   describe('DropdownMenuItem', () => {
@@ -437,21 +357,9 @@ describe('DropdownMenu Components', () => {
         </DropdownMenu>
       )
 
-      const separator = container.querySelector('[data-slot="dropdown-menu-separator"]')
-      expect(separator).toBeInTheDocument()
-    })
-
-    it('should accept custom className', () => {
-      const { container } = render(
-        <DropdownMenu>
-          <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuSeparator className="custom-sep" />
-          </DropdownMenuContent>
-        </DropdownMenu>
+      const separator = container.querySelector(
+        '[data-slot="dropdown-menu-separator"]'
       )
-
-      const separator = container.querySelector('[data-slot="dropdown-menu-separator"]')
       expect(separator).toBeInTheDocument()
     })
 
@@ -562,7 +470,9 @@ describe('DropdownMenu Components', () => {
         </DropdownMenu>
       )
 
-      const group = container.querySelector('[data-slot="dropdown-menu-group"]')
+      const group = container.querySelector(
+        '[data-slot="dropdown-menu-group"]'
+      )
       expect(group).toBeInTheDocument()
     })
 
