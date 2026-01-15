@@ -454,6 +454,20 @@ describe('DropdownMenu Components', () => {
       const separator = container.querySelector('[data-slot="dropdown-menu-separator"]')
       expect(separator).toBeInTheDocument()
     })
+
+    it('should accept custom className', () => {
+      const { container } = render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuSeparator className="custom-sep" />
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
+
+      const separator = container.querySelector('[data-slot="dropdown-menu-separator"]')
+      expect(separator).toBeInTheDocument()
+    })
   })
 
   describe('DropdownMenuShortcut', () => {
@@ -587,3 +601,4 @@ describe('DropdownMenu Components', () => {
     })
   })
 })
+
