@@ -68,12 +68,12 @@ jobs:
       # 6. SonarCloud Scan
       - name: SonarCloud Scan
         if: matrix.python-version == '3.13'
+        working-directory: ./ai
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          projectBaseDir: ai/
           args: >
             -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.coverage.exclusions=**/*_demo.py,**/test_*.py,src/main.py
