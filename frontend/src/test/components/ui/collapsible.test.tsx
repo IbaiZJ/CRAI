@@ -46,7 +46,7 @@ describe('Collapsible Components', () => {
 
       // Content should not be visible initially
       const content = screen.queryByText('Hidden Content')
-      expect(content).not.toBeVisible()
+      expect(content).not.toBeInTheDocument()
     })
 
     it('should start open when defaultOpen is true', () => {
@@ -82,7 +82,7 @@ describe('Collapsible Components', () => {
       )
 
       const content = screen.queryByText('Closed Content')
-      expect(content).not.toBeVisible()
+      expect(content).not.toBeInTheDocument()
     })
   })
 
@@ -173,7 +173,7 @@ describe('Collapsible Components', () => {
 
       await user.click(screen.getByText('Toggle 1'))
       expect(screen.getByText('Content 1')).toBeVisible()
-      expect(screen.queryByText('Content 2')).not.toBeVisible()
+      expect(screen.queryByText('Content 2')).not.toBeInTheDocument()
 
       await user.click(screen.getByText('Toggle 2'))
       expect(screen.getByText('Content 2')).toBeVisible()
@@ -273,7 +273,7 @@ describe('Collapsible Components', () => {
       expect(screen.getByText('Content')).toBeVisible()
       
       await user.click(trigger)
-      expect(screen.queryByText('Content')).not.toBeVisible()
+      expect(screen.queryByText('Content')).not.toBeInTheDocument()
       
       await user.click(trigger)
       expect(screen.getByText('Content')).toBeVisible()

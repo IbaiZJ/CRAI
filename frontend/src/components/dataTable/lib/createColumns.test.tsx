@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { createColumns, type ColumnConfig, type TableConfig } from './createColumns'
+import { createColumns, type TableConfig } from './createColumns'
 
 interface TestData {
   id: number
@@ -10,13 +10,6 @@ interface TestData {
 }
 
 describe('createColumns', () => {
-  const mockData: TestData = {
-    id: 1,
-    name: 'John Doe',
-    email: 'john@example.com',
-    status: 'active',
-  }
-
   describe('selection column', () => {
     it('should add selection column when enableSelection is true', () => {
       const config: TableConfig<TestData> = {

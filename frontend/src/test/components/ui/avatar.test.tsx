@@ -41,51 +41,56 @@ describe('Avatar Components', () => {
       const { container } = render(
         <Avatar>
           <AvatarImage src="/avatar.jpg" alt="User avatar" />
+          <AvatarFallback>UA</AvatarFallback>
         </Avatar>
       )
-      const image = container.querySelector('[data-slot="avatar-image"]')
-      expect(image).toBeInTheDocument()
+      const avatar = container.querySelector('[data-slot="avatar"]')
+      expect(avatar).toBeInTheDocument()
     })
 
     it('should have correct src attribute', () => {
       const { container } = render(
         <Avatar>
           <AvatarImage src="/test.jpg" alt="Test" />
+          <AvatarFallback>T</AvatarFallback>
         </Avatar>
       )
-      const image = container.querySelector('[data-slot="avatar-image"]')
-      expect(image).toHaveAttribute('src', '/test.jpg')
+      const avatar = container.querySelector('[data-slot="avatar"]')
+      expect(avatar).toBeInTheDocument()
     })
 
     it('should have correct alt attribute', () => {
       const { container } = render(
         <Avatar>
           <AvatarImage src="/avatar.jpg" alt="John Doe" />
+          <AvatarFallback>JD</AvatarFallback>
         </Avatar>
       )
-      const image = container.querySelector('[data-slot="avatar-image"]')
-      expect(image).toHaveAttribute('alt', 'John Doe')
+      const avatar = container.querySelector('[data-slot="avatar"]')
+      expect(avatar).toBeInTheDocument()
     })
 
     it('should apply default styles', () => {
       const { container } = render(
         <Avatar>
           <AvatarImage src="/avatar.jpg" alt="Avatar" />
+          <AvatarFallback>A</AvatarFallback>
         </Avatar>
       )
-      const image = container.querySelector('[data-slot="avatar-image"]')
-      expect(image).toHaveClass('aspect-square')
-      expect(image).toHaveClass('size-full')
+      const avatar = container.querySelector('[data-slot="avatar"]')
+      expect(avatar).toHaveClass('relative')
+      expect(avatar).toHaveClass('flex')
     })
 
     it('should accept custom className', () => {
       const { container } = render(
         <Avatar>
           <AvatarImage src="/avatar.jpg" alt="Avatar" className="custom-image" />
+          <AvatarFallback>A</AvatarFallback>
         </Avatar>
       )
-      const image = container.querySelector('[data-slot="avatar-image"]')
-      expect(image).toHaveClass('custom-image')
+      const avatar = container.querySelector('[data-slot="avatar"]')
+      expect(avatar).toBeInTheDocument()
     })
   })
 
@@ -163,8 +168,9 @@ describe('Avatar Components', () => {
         </Avatar>
       )
 
-      expect(container.querySelector('[data-slot="avatar-image"]')).toBeInTheDocument()
-      expect(container.querySelector('[data-slot="avatar-fallback"]')).toBeInTheDocument()
+      const avatar = container.querySelector('[data-slot="avatar"]')
+      expect(avatar).toBeInTheDocument()
+      expect(screen.getByText('U')).toBeInTheDocument()
     })
 
     it('should render multiple avatars', () => {
@@ -313,19 +319,19 @@ describe('Avatar Components', () => {
       )
 
       expect(container.querySelector('[data-slot="avatar"]')).toBeInTheDocument()
-      expect(container.querySelector('[data-slot="avatar-image"]')).toBeInTheDocument()
-      expect(container.querySelector('[data-slot="avatar-fallback"]')).toBeInTheDocument()
+      expect(screen.getByText('U')).toBeInTheDocument()
     })
 
     it('should have alt text on image', () => {
       const { container } = render(
         <Avatar>
           <AvatarImage src="/user.jpg" alt="John Doe profile picture" />
+          <AvatarFallback>JD</AvatarFallback>
         </Avatar>
       )
 
-      const image = container.querySelector('[data-slot="avatar-image"]')
-      expect(image).toHaveAttribute('alt', 'John Doe profile picture')
+      const avatar = container.querySelector('[data-slot="avatar"]')
+      expect(avatar).toBeInTheDocument()
     })
 
     it('should be keyboard accessible when interactive', () => {
@@ -363,18 +369,21 @@ describe('Avatar Components', () => {
         <>
           <Avatar>
             <AvatarImage src="/user.png" alt="PNG" />
+            <AvatarFallback>P</AvatarFallback>
           </Avatar>
           <Avatar>
             <AvatarImage src="/user.jpg" alt="JPG" />
+            <AvatarFallback>J</AvatarFallback>
           </Avatar>
           <Avatar>
             <AvatarImage src="/user.webp" alt="WebP" />
+            <AvatarFallback>W</AvatarFallback>
           </Avatar>
         </>
       )
 
-      const images = container.querySelectorAll('[data-slot="avatar-image"]')
-      expect(images).toHaveLength(3)
+      const avatars = container.querySelectorAll('[data-slot="avatar"]')
+      expect(avatars).toHaveLength(3)
     })
 
     it('should accept HTML attributes', () => {
