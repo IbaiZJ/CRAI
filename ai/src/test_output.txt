@@ -1,0 +1,25 @@
+Model path: models\ssd_vehicle_detector.keras
+Exists: True
+============================================================
+Testing with default threshold=0.25
+============================================================
+Anchors: 4880
+  MVI_20011_img00001_jpg.rf.21eb8e9f48c70c8b2186afa92378a398.jpg: 4 detections
+    conf=0.291 bbox=[0, 283, 195, 490]
+    conf=0.266 bbox=[193, 308, 384, 640]
+    conf=0.265 bbox=[64, 155, 274, 421]
+  MVI_20011_img00005_jpg.rf.d97da4c37520d99bca7a6cb0aed56873.jpg: 3 detections
+    conf=0.275 bbox=[212, 307, 391, 640]
+    conf=0.265 bbox=[14, 208, 256, 493]
+    conf=0.260 bbox=[1, 434, 210, 633]
+  MVI_20011_img00006_jpg.rf.6ffd568678b1c3d258f5657b9fd35b23.jpg: 2 detections
+    conf=0.284 bbox=[209, 324, 387, 640]
+    conf=0.271 bbox=[2, 187, 236, 507]
+  MVI_20011_img00019_jpg.rf.4105d8df0fc287df67ffd67042727f89.jpg: 1 detections
+    conf=0.267 bbox=[0, 419, 224, 640]
+  MVI_20011_img00028_jpg.rf.4cad1c5aa1e2ead22f3015b62e118252.jpg: 1 detections
+    conf=0.353 bbox=[63, 457, 356, 609]
+
+TOTAL: 11 detections in 5 images
+============================================================
+Test complete

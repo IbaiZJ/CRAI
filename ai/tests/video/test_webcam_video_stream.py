@@ -115,6 +115,14 @@ class TestWebcamVideoStream:
         mock_cap.read.return_value = (False, None)
         
         with patch('cv2.VideoCapture', return_value=mock_cap):
-            stream = WebcamVideoStream(src=0)
-            assert stream.grabbed is False
-            assert stream.frame is None
+            with pytest.raises(RuntimeError):
+                WebcamVideoStream(src=0)
+
+    def test_initialization_camera_not_opened(self):
+        """Test scenario where camera cannot be opened."""
+        mock_cap = Mock(spec=cv2.VideoCapture)
+        mock_cap.isOpened.return_value = False
+
+        with patch('cv2.VideoCapture', return_value=mock_cap):
+            with pytest.raises(RuntimeError):
+                WebcamVideoStream(src=0)
