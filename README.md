@@ -60,7 +60,7 @@ Ask to the administrator for all the environment variables.
 
 ## 📝 License
 
-This project is under the license specified in `LICENSE`
+This project is under the license specified in `LICENSE` 
 
 
 
