@@ -23,6 +23,16 @@ plate_detector:
   min_plate_height: 20 
   detect_in_vehicles_only: true 
 
+# Modelo SSD personalizado (entrenado con UA-DETRAC)
+# NOTA: El modelo actual tiene confianza máxima ~0.30, necesita re-entrenamiento
+ssd_detector:
+  model_path: "models/ssd_vehicle_detector.keras"
+  weights_path: "models/ssd_vehicle_detector.weights.h5"
+  confidence_threshold: 0.26
+  nms_threshold: 0.3
+  max_detections: 8
+  min_box_size: 0.02
+
 ocr:
   enabled: true
   engine: "easyocr"
@@ -30,12 +40,12 @@ ocr:
   use_gpu: false
   confidence_threshold: 0.3
   min_text_length: 4
-  ocr_frequency: 15
+  ocr_frequency: 3
   cache_ttl: 30.0
   
   preprocessing:
-    resize_height: 100
-    resize_width: 200
+    resize_height: 180
+    resize_width: 320
     apply_clahe: true
     denoise: true 
   

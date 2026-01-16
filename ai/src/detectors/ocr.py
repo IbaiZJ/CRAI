@@ -101,23 +101,9 @@ class PlateReader:
                 return self._cache[img_hash]
         
         try:
-            # Try multiple preprocessing and keep the best
-            results_all = []
-            
-            # Method 1: Standard preprocessing
-            processed1 = self._preprocess_plate(plate_image)
-            results1 = self.reader.readtext(processed1, detail=1, paragraph=False)
-            results_all.extend(results1)
-            
-            # Method 2: Original scaled image
-            processed2 = self._preprocess_simple(plate_image)
-            results2 = self.reader.readtext(processed2, detail=1, paragraph=False)
-            results_all.extend(results2)
-            
-            # Method 3: High contrast
-            processed3 = self._preprocess_high_contrast(plate_image)
-            results3 = self.reader.readtext(processed3, detail=1, paragraph=False)
-            results_all.extend(results3)
+            # OPTIMIZADO: Usar solo un método de preprocesamiento para mejor rendimiento
+            processed = self._preprocess_fast(plate_image)
+            results_all = self.reader.readtext(processed, detail=1, paragraph=False)
             
             if not results_all:
                 result = {
@@ -231,6 +217,29 @@ class PlateReader:
         
         resized = cv2.resize(gray, (new_width, target_height), interpolation=cv2.INTER_CUBIC)
         return resized
+    
+    def _preprocess_fast(self, plate_image):
+        """
+        Preprocesamiento rápido y optimizado para mejor rendimiento
+        Un solo método eficiente en lugar de múltiples
+        """
+        if len(plate_image.shape) == 3:
+            gray = cv2.cvtColor(plate_image, cv2.COLOR_BGR2GRAY)
+        else:
+            gray = plate_image.copy()
+        
+        # Escalar a tamaño óptimo para OCR
+        height, width = gray.shape
+        target_height = 64
+        scale = target_height / height
+        new_width = int(width * scale)
+        gray = cv2.resize(gray, (new_width, target_height), interpolation=cv2.INTER_LINEAR)
+        
+        # CLAHE rápido para mejorar contraste
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+        enhanced = clahe.apply(gray)
+        
+        return enhanced
     
     def _preprocess_high_contrast(self, plate_image):
         """Preprocessing with high contrast"""
