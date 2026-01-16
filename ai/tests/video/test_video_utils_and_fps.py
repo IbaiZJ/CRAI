@@ -70,8 +70,14 @@ def test_skeletonize_and_auto_canny_and_color_convert():
 
 def test_grab_contours_and_errors():
     cnt = np.array([[1, 2]])
-    assert VideoUtils.grab_contours((cnt,)) is cnt
+    # Length 2: should return first element
+    assert VideoUtils.grab_contours((cnt, None)) is cnt
+    # Length 3: should return second element
     assert VideoUtils.grab_contours((None, cnt, None)) is cnt
+    # Length 1: should raise error
+    with pytest.raises(ContourError):
+        VideoUtils.grab_contours((cnt,))
+    # Length 4+: should raise error
     with pytest.raises(ContourError):
         VideoUtils.grab_contours((cnt, None, None, None))
 
