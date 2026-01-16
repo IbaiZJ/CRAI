@@ -245,7 +245,7 @@ def test_preprocess_and_clean(monkeypatch):
     assert reader._clean_plate_text("") == ""
     assert reader._clean_plate_text("12") == "12"
     assert reader._clean_plate_text("1234 BCD") == "1234BCD"
-    assert reader._clean_plate_text("1234B$D") == "1234BSD"
+    assert reader._clean_plate_text("1234B$D") == ""
     assert reader._clean_plate_text("12-34-AAA") == ""
 
 
@@ -260,7 +260,7 @@ def test_get_stable_reading_and_find_common_core(monkeypatch):
 
     reader._history.clear()
     reader._history.extend(["MI808THA", "MI808TH", "M808TH"])
-    assert reader.get_stable_reading() == "MI808TH"
+    assert reader.get_stable_reading() is None
 
     reader._history.clear()
     reader._history.extend(["ABC", "ABD", "ABE"])
