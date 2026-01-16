@@ -58,7 +58,17 @@ jobs:
           name: ai-coverage
           fail_ci_if_error: false
 
-      # 6. Archive Coverage HTML Report
+      # 6. SonarCloud Scan
+      - name: SonarCloud Scan
+        if: matrix.python-version == '3.13'
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: ai/
+
+      # 7. Archive Coverage HTML Report
       - name: Archive Coverage HTML Report
         if: matrix.python-version == '3.13'
         uses: actions/upload-artifact@v4
