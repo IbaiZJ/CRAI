@@ -5,6 +5,7 @@ Custom model trained on UA-DETRAC dataset
 import cv2
 import numpy as np
 from utils.logger import get_logger
+from utils.config_loader import load_config, resolve_path
 
 # Suppress TensorFlow warnings
 import os
@@ -66,36 +67,50 @@ class SSDModel(keras.Model):
 class SSDVehicleDetector:
     """
     Vehicle detector using custom SSD MobileNetV2 model
-    Trained for car detection without license plate/OCR
+    Trained for vehicle detection on UA-DETRAC dataset
+    
+    Configuración: 1 CLASE (vehículo genérico)
+    El modelo detecta bus, car, truck, van como una sola clase "vehicle"
+    
+    REQUISITOS:
+    - Modelo entrenado con mínimo 50-100 epochs
+    - Archivo .keras en ai/src/models/ o ai/notebooks/models/
+    - Si confianzas ~0.5: ejecutar python scripts/diagnose_ssd.py
     """
     
-    # Model input size (from training)
+    # Model input size (MUST match training exactly - 640x640)
     IMG_HEIGHT = 640
     IMG_WIDTH = 640
     
     # Anchor configuration (must match training)
     FEATURE_MAP_SIZES = [
-        (80, 80),   # block_6_expand_relu
-        (40, 40),   # block_13_expand_relu
-        (20, 20)    # out_relu
+        (80, 80),   # block_6_expand_relu  - stride 8
+        (40, 40),   # block_13_expand_relu - stride 16
+        (20, 20)    # out_relu             - stride 32
     ]
     
+    # Scales optimizadas para vehículos en UA-DETRAC
+    # Basado en análisis estadístico del dataset:
+    # - Vehículos lejanos: 0.03-0.10 del frame
+    # - Vehículos medios: 0.10-0.25 del frame  
+    # - Vehículos cercanos: 0.20-0.45 del frame
     SCALES = [
-        (0.1, 0.3),   # Small objects
-        (0.3, 0.6),   # Medium objects
-        (0.6, 0.9)    # Large objects
+        (0.03, 0.12),   # Small vehicles (lejanos)
+        (0.10, 0.28),   # Medium vehicles
+        (0.22, 0.50)    # Large vehicles (cercanos)
     ]
     
-    ASPECT_RATIOS = [1.0, 2.0, 0.5, 1.5]
+    # Aspect ratios optimizados para vehículos
+    # Coches: ~1.5-2.0 (frontal) a ~2.5-3.5 (lateral)
+    # Camiones/buses: ~2.5-4.0
+    ASPECT_RATIOS = [1.0, 1.5, 2.0, 3.0]
     
-    # Match the training configuration from notebook
-    NUM_ANCHORS = 4  # 4 aspect ratios per location
-    NUM_CLASSES = 1  # Binary classification (car vs background)
+    # Configuración de detección
+    NUM_ANCHORS = 4   # 4 aspect ratios per location
+    NUM_CLASSES = 1   # 1 clase: "vehicle" (agrupa bus, car, truck, van)
     
-    # NOTE: The saved .keras model has incompatible weight shapes due to training issues.
-    # Box heads: 4 filters (expected 16 = 4 anchors * 4 coords)
-    # Class heads: 16 filters (expected 4 = 4 anchors * 1 class)
-    # The model will use ImageNet weights for backbone with untrained detection heads.
+    # Nombre de clase para output
+    CLASS_NAMES = ['vehicle']
     
     # Feature extraction layers from MobileNetV2
     FEATURE_LAYER_NAMES = [
@@ -104,7 +119,7 @@ class SSDVehicleDetector:
         'out_relu'
     ]
     
-    def __init__(self, model_path: str = None, weights_path: str = None, conf_threshold: float = 0.26):
+    def __init__(self, model_path: str = None, weights_path: str = None, conf_threshold: float = None):
         """
         Initialize the SSD vehicle detector
         
@@ -114,25 +129,36 @@ class SSDVehicleDetector:
             conf_threshold: Minimum confidence threshold for detections
         """
         self.logger = get_logger("SSDDetector")
-        self.conf_threshold = conf_threshold
-        self.nms_threshold = 0.3  # Lower NMS to be more aggressive at removing overlaps
+
+        config = load_config()
+        ssd_cfg = config.get("ssd_detector", {})
+
+        # Thresholds and limits from config (override only if argument provided)
+        self.conf_threshold = conf_threshold if conf_threshold is not None else float(ssd_cfg.get("confidence_threshold", 0.1))
+        self.nms_threshold = float(ssd_cfg.get("nms_threshold", 0.25))
+        self.max_detections = int(ssd_cfg.get("max_detections", 8))
+        self.min_box_size = float(ssd_cfg.get("min_box_size", 0.02))
         
         try:
             # Find the best model/weights file to load
             base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            cfg_model_path = resolve_path(ssd_cfg.get("model_path"), base_dir)
+            cfg_weights_path = resolve_path(ssd_cfg.get("weights_path"), base_dir)
             
             # Possible .keras model locations (full model - preferred)
             keras_paths = [
                 model_path,
-                os.path.join(base_dir, "models", "ssd_vehicle_detector.keras"),
-                os.path.join(os.path.dirname(base_dir), "notebooks", "models", "ssd_vehicle_detector.keras"),
+                cfg_model_path,
+                os.path.join(base_dir, "models", "ssd_mobilenet_car_detector.keras"),
+                os.path.join(os.path.dirname(base_dir), "notebooks", "models", "ssd_mobilenet_car_detector.keras"),
             ]
             
             # Possible .weights.h5 locations (only weights)
             weights_paths = [
                 weights_path,
-                os.path.join(base_dir, "models", "ssd_vehicle_detector.weights.h5"),
-                os.path.join(os.path.dirname(base_dir), "notebooks", "models", "ssd_vehicle_detector.weights.h5"),
+                cfg_weights_path,
+                os.path.join(base_dir, "models", "ssd_mobilenet_car_detector.weights.h5"),
+                os.path.join(os.path.dirname(base_dir), "notebooks", "models", "ssd_mobilenet_car_detector.weights.h5"),
             ]
             
             model_loaded = False
@@ -177,14 +203,23 @@ class SSDVehicleDetector:
                                 continue
             
             if not model_loaded:
-                self.logger.warning("=" * 60)
-                self.logger.warning("⚠️  NO SE PUDIERON CARGAR LOS PESOS ENTRENADOS")
-                self.logger.warning("   El modelo usará pesos aleatorios (ImageNet para backbone)")
-                self.logger.warning("   Para entrenar el modelo:")
-                self.logger.warning("   1. Ejecuta el notebook: ai/notebooks/crai.ipynb")
-                self.logger.warning("   2. Entrena el modelo completo")
-                self.logger.warning("   3. Ejecuta la celda 'GUARDAR MODELO COMPATIBLE'")
-                self.logger.warning("=" * 60)
+                self.logger.error("=" * 60)
+                self.logger.error("🚨 CRÍTICO: NO SE CARGARON LOS PESOS ENTRENADOS")
+                self.logger.error("   El modelo usará pesos ALEATORIOS - NO FUNCIONARÁ")
+                self.logger.error("   ")
+                self.logger.error("   ESTO CAUSA: Detecciones con confianza ~0.55")
+                self.logger.error("               Falsos positivos constantes")
+                self.logger.error("               Detecciones inestables")
+                self.logger.error("   ")
+                self.logger.error("   SOLUCIÓN:")
+                self.logger.error("   1. Ejecuta el notebook: ai/notebooks/crai.ipynb")
+                self.logger.error("   2. Entrena el modelo completo (mínimo 50 epochs)")
+                self.logger.error("   3. Ejecuta celda 'GUARDAR MODELO COMPATIBLE'")
+                self.logger.error("   4. Copia archivos a ai/src/models/")
+                self.logger.error("=" * 60)
+            else:
+                # DIAGNÓSTICO: Verificar que los pesos son válidos
+                self._verify_weights_loaded()
             
             
             # Generate anchors
@@ -200,6 +235,38 @@ class SSDVehicleDetector:
             traceback.print_exc()
             self.available = False
             raise
+    
+    def _verify_weights_loaded(self):
+        """
+        Verifica que los pesos cargados son válidos y no aleatorios.
+        Pesos aleatorios = modelo no entrenado = detecciones basura.
+        """
+        try:
+            # Buscar una capa de detección para verificar
+            detection_layers = [l for l in self.model.layers if 'detect' in l.name and 'conv' in l.name]
+            
+            if detection_layers:
+                weights = detection_layers[0].get_weights()
+                if weights:
+                    kernel = weights[0]
+                    mean_val = np.mean(np.abs(kernel))
+                    std_val = np.std(kernel)
+                    
+                    self.logger.info(f"📊 Verificación de pesos de detección:")
+                    self.logger.info(f"   Capa: {detection_layers[0].name}")
+                    self.logger.info(f"   Mean(|weights|): {mean_val:.6f}")
+                    self.logger.info(f"   Std(weights): {std_val:.6f}")
+                    
+                    # Heurística: pesos aleatorios de he_normal tienen std ~0.05-0.1
+                    # Pesos entrenados típicamente tienen std más alto o patrones distintos
+                    if mean_val < 0.01 and std_val < 0.05:
+                        self.logger.warning("⚠️  Los pesos parecen NO entrenados (muy pequeños)")
+                        self.logger.warning("   Esto puede causar detecciones con confianza ~0.5")
+            else:
+                self.logger.debug("No se encontraron capas de detección para verificar")
+                
+        except Exception as e:
+            self.logger.debug(f"No se pudo verificar pesos: {e}")
     
     def _load_weights_from_keras_file(self, keras_path):
         """
@@ -451,7 +518,7 @@ class SSDVehicleDetector:
         
         return tf.stack([decoded_cx, decoded_cy, decoded_w, decoded_h], axis=1)
     
-    def _non_maximum_suppression(self, boxes, scores, max_output_size=8):
+    def _non_maximum_suppression(self, boxes, scores, max_output_size=None):
         """
         Apply NMS to remove overlapping boxes.
         
@@ -463,6 +530,8 @@ class SSDVehicleDetector:
         Returns:
             selected_indices: Indices of kept boxes
         """
+        if max_output_size is None:
+            max_output_size = self.max_detections
         # Convert from [cx, cy, w, h] to [y1, x1, y2, x2] for tf.image.non_max_suppression
         x1 = boxes[:, 0] - boxes[:, 2] / 2
         y1 = boxes[:, 1] - boxes[:, 3] / 2
@@ -537,19 +606,15 @@ class SSDVehicleDetector:
         box_preds = tf.constant(box_preds, dtype=tf.float32)
         class_preds = tf.constant(class_preds, dtype=tf.float32)
         
-        # Get confidence scores
-        # For single class, squeeze to get 1D tensor
+        # Get confidence scores. The model head already uses sigmoid, so these
+        # values are probabilities in [0, 1]; avoid applying sigmoid twice.
         if len(class_preds.shape) > 1 and class_preds.shape[-1] == 1:
             confidence_scores = tf.squeeze(class_preds, axis=-1)
         elif len(class_preds.shape) > 1 and class_preds.shape[-1] > 1:
-            # Multi-class: take max probability across classes
+            # Multi-class: take max probability across classes (already prob.)
             confidence_scores = tf.reduce_max(class_preds, axis=-1)
         else:
             confidence_scores = class_preds
-        
-        # Convert to tensors
-        box_preds = tf.constant(box_preds, dtype=tf.float32)
-        class_preds = tf.constant(class_preds, dtype=tf.float32)
         
         # Debug: log raw prediction stats
         self.logger.debug(f"Raw predictions - boxes shape: {box_preds.shape}, classes shape: {class_preds.shape}")
@@ -579,18 +644,34 @@ class SSDVehicleDetector:
         # Limit final detections and log
         self.logger.debug(f"After NMS: {len(final_boxes)} detections")
         
+        # DIAGNÓSTICO: Detectar patrón de pesos no entrenados
+        # Si MUCHAS detecciones tienen confianza ~0.5-0.6, el modelo no aprendió
+        if len(final_scores) > 5:
+            mean_conf = np.mean(final_scores)
+            std_conf = np.std(final_scores)
+            if 0.45 < mean_conf < 0.65 and std_conf < 0.15:
+                self.logger.warning(f"⚠️  Patrón sospechoso: conf media={mean_conf:.2f}, std={std_conf:.2f}")
+                self.logger.warning("   Esto sugiere que el modelo NO está entrenado correctamente")
+        
         # Build detection list
         detections = []
         for i in range(len(final_boxes)):
             cx, cy, w, h = final_boxes[i]
             
             # Skip invalid boxes (too small or outside bounds)
-            # Min size 0.02 = 2% of image dimension
-            if w < 0.02 or h < 0.02 or cx < 0 or cy < 0 or cx > 1 or cy > 1:
+            min_norm = self.min_box_size
+            if w < min_norm or h < min_norm or cx < 0 or cy < 0 or cx > 1 or cy > 1:
                 continue
             
             # Skip unreasonably large boxes (likely false positives)
             if w > 0.9 or h > 0.9:
+                continue
+            
+            # NUEVO: Filtrar aspect ratios absurdos (no son vehículos)
+            aspect_ratio = w / (h + 1e-6)
+            if aspect_ratio < 0.3 or aspect_ratio > 5.0:
+                # Vehículos típicos tienen aspect ratio entre 0.5 y 4.0
+                self.logger.debug(f"Filtrado por aspect ratio: {aspect_ratio:.2f}")
                 continue
             
             # Convert from normalized [0,1] to pixel coordinates
@@ -605,14 +686,18 @@ class SSDVehicleDetector:
             x2 = max(0, min(x2, original_w))
             y2 = max(0, min(y2, original_h))
             
-            # Skip small detections (min 15px)
-            if (x2 - x1) < 15 or (y2 - y1) < 15:
+            # Skip small detections in pixels (scaled by config)
+            min_pixels = max(20, int(self.min_box_size * min(original_w, original_h)))
+            if (x2 - x1) < min_pixels or (y2 - y1) < min_pixels:
                 continue
+            
+            # Usar nombre de clase apropiado
+            class_name = self.CLASS_NAMES[0] if hasattr(self, 'CLASS_NAMES') else 'vehicle'
             
             detections.append({
                 'bbox': [x1, y1, x2, y2],
                 'confidence': float(final_scores[i]),
-                'class_name': 'car',
+                'class_name': class_name,
                 'class_id': 0
             })
         
