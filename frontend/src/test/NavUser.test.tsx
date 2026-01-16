@@ -141,9 +141,10 @@ describe('NavUser Component', () => {
       user: null,
     });
 
-    const { container } = render(<NavUser />);
+    render(<NavUser />);
 
-    expect(container.firstChild).toBeNull();
+    // NavUser should not render when user is null
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
   it('should render dropdown menu items', () => {

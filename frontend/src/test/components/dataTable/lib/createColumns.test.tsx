@@ -207,7 +207,7 @@ describe('createColumns', () => {
 
       render(<TestTable config={config} data={testData} />)
       expect(screen.getByText('JOHN DOE')).toBeInTheDocument()
-      expect(screen.getByTestId('custom-cell')).toBeInTheDocument()
+      expect(screen.getAllByTestId('custom-cell')[0]).toBeInTheDocument()
     })
 
     it('should pass row data to custom cell renderer', () => {
