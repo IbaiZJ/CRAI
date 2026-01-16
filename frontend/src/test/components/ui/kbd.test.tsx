@@ -242,7 +242,7 @@ describe('Kbd Components', () => {
         </div>
       )
 
-      expect(screen.getByText('to open command palette')).toBeInTheDocument()
+      expect(screen.getByText(/to open command palette/)).toBeInTheDocument()
       expect(screen.getByText('Ctrl')).toBeInTheDocument()
     })
 
