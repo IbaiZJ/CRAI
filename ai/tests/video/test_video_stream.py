@@ -12,6 +12,16 @@ from video.video_stream import VideoStream
 class TestVideoStream:
     """Tests for VideoStream class."""
     
+    @pytest.fixture(autouse=True)
+    def mock_video_capture(self):
+        """Mock cv2.VideoCapture to avoid real camera access."""
+        mock_cap = Mock()
+        mock_cap.isOpened.return_value = True
+        mock_cap.read.return_value = (True, "mock_frame")
+        mock_cap.release.return_value = None
+        with patch('video.video_stream.cv2.VideoCapture', return_value=mock_cap):
+            yield mock_cap
+
     @pytest.fixture
     def mock_webcam_stream(self):
         """Create a mock WebcamVideoStream."""

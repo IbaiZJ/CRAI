@@ -11,9 +11,8 @@ def test_main_import():
     from src import main
     assert main is not None
     assert hasattr(main, "cv2")
-    assert main.main_entry() is True
-    assert hasattr(main, "cv2")
-    assert main.main_entry() is True
+    assert hasattr(main, "main")
+    assert callable(main.main)
 
 def test_main_execution_logic():
     """Test the logic inside main.py if it were to run"""

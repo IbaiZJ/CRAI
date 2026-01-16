@@ -115,6 +115,5 @@ class TestWebcamVideoStream:
         mock_cap.read.return_value = (False, None)
         
         with patch('cv2.VideoCapture', return_value=mock_cap):
-            stream = WebcamVideoStream(src=0)
-            assert stream.grabbed is False
-            assert stream.frame is None
+            with pytest.raises(RuntimeError):
+                WebcamVideoStream(src=0)
