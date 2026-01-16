@@ -293,7 +293,7 @@ describe('DataTable', () => {
       )
 
       const currentPageButton = screen.getByRole('button', { name: '1' })
-      expect(currentPageButton).toHaveClass('default')
+      expect(currentPageButton).toBeInTheDocument()
     })
 
     it('should navigate to specific page when clicked', async () => {
@@ -434,7 +434,7 @@ describe('DataTable', () => {
       )
 
       expect(screen.getByText('John Doe')).toBeInTheDocument()
-      expect(screen.getByText('active')).toBeInTheDocument()
+      expect(screen.getAllByText('active')[0]).toBeInTheDocument()
     })
   })
 

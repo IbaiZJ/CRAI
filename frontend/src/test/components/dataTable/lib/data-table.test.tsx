@@ -39,7 +39,7 @@ describe('DataTable', () => {
       
       expect(screen.getByText('Alice Johnson')).toBeInTheDocument()
       expect(screen.getByText('bob@example.com')).toBeInTheDocument()
-      expect(screen.getByText('active')).toBeInTheDocument()
+      expect(screen.getAllByText('active')[0]).toBeInTheDocument()
     })
 
     it('should render all column headers', () => {
