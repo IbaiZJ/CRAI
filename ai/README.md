@@ -19,5 +19,4 @@
 - https://www.kaggle.com/datasets/prondeau/the-car-connection-picture-dataset?resource=download
 - https://www.kaggle.com/datasets/dtrnngc/ua-detrac-dataset
 - https://www.kaggle.com/datasets/eduardo4jesus/stanford-cars-dataset
-
 - https://github.com/Muhammad-Zeerak-Khan/Automatic-License-Plate-Recognition-using-YOLOv8/blob/main/license_plate_detector.pt
