@@ -26,6 +26,8 @@ jobs:
       # 1. Checkout to the repository
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required for SonarCloud to analyze history and coverage
 
       # 2. Set up Python
       - name: Set up Python ${{ matrix.python-version }}
@@ -72,6 +74,9 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           projectBaseDir: ai/
+          args: >
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.coverage.exclusions=**/*_demo.py,**/test_*.py,src/main.py
 
       # 7. Archive Coverage HTML Report
       - name: Archive Coverage HTML Report
