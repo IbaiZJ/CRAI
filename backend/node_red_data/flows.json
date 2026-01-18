@@ -8,14 +8,6 @@
         "env": []
     },
     {
-        "id": "54a5f4090ccc656e",
-        "type": "tab",
-        "label": "DETECTION API",
-        "disabled": false,
-        "info": "",
-        "env": []
-    },
-    {
         "id": "79143eea6c544edc",
         "type": "tab",
         "label": "CAMERA API",
@@ -27,6 +19,14 @@
         "id": "f8c26a4d4d10435f",
         "type": "tab",
         "label": "USERS API",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "54a5f4090ccc656e",
+        "type": "tab",
+        "label": "DETECTION API",
         "disabled": false,
         "info": "",
         "env": []
@@ -1550,6 +1550,1119 @@
         "wires": []
     },
     {
+        "id": "69467e37549dfa93",
+        "type": "link in",
+        "z": "79143eea6c544edc",
+        "name": "link in 6",
+        "links": [
+            "dab8b6de71939f7a"
+        ],
+        "x": 165,
+        "y": 120,
+        "wires": [
+            [
+                "9c7a616838530a21"
+            ]
+        ]
+    },
+    {
+        "id": "2b413649b22cc486",
+        "type": "link in",
+        "z": "79143eea6c544edc",
+        "name": "link in 7",
+        "links": [
+            "f7194d1f7d06ef41"
+        ],
+        "x": 165,
+        "y": 260,
+        "wires": [
+            [
+                "9743f5a103531ca4"
+            ]
+        ]
+    },
+    {
+        "id": "cfa19015a9bf580f",
+        "type": "link in",
+        "z": "79143eea6c544edc",
+        "name": "link in 8",
+        "links": [
+            "1c16542d2b7b3fec"
+        ],
+        "x": 165,
+        "y": 400,
+        "wires": [
+            [
+                "66ec3ebf7b5fc195"
+            ]
+        ]
+    },
+    {
+        "id": "df2097ae09145bbe",
+        "type": "link in",
+        "z": "79143eea6c544edc",
+        "name": "link in 9",
+        "links": [
+            "7e1190277ffbde70"
+        ],
+        "x": 165,
+        "y": 540,
+        "wires": [
+            [
+                "b9d39ebc84bcd3a4"
+            ]
+        ]
+    },
+    {
+        "id": "9743f5a103531ca4",
+        "type": "function",
+        "z": "79143eea6c544edc",
+        "name": "query",
+        "func": "const cameraId = msg.req.params.id || msg.req.query.id;\n\nif (!cameraId) {\n    msg.payload = { \n        success: false,\n        error: \"ID de cámara es obligatorio\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    SELECT * \n    FROM camera \n    WHERE id = ?\n`;\n\nmsg.params = [cameraId];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 260,
+        "wires": [
+            [
+                "48c81f139312f354"
+            ]
+        ]
+    },
+    {
+        "id": "e0dfc90d7c0bedd0",
+        "type": "subflow:subflow1",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "x": 720,
+        "y": 260,
+        "wires": [
+            [
+                "e0cd172ccb500f79"
+            ]
+        ]
+    },
+    {
+        "id": "e0cd172ccb500f79",
+        "type": "switch",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 950,
+        "y": 260,
+        "wires": [
+            [
+                "d9074c5397503046"
+            ],
+            [
+                "595cf62f71d17225"
+            ]
+        ]
+    },
+    {
+        "id": "595cf62f71d17225",
+        "type": "http response",
+        "z": "79143eea6c544edc",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1140,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "d9074c5397503046",
+        "type": "http response",
+        "z": "79143eea6c544edc",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1130,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "48c81f139312f354",
+        "type": "switch",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "property": "skipDB",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 470,
+        "y": 260,
+        "wires": [
+            [
+                "e0dfc90d7c0bedd0"
+            ],
+            [
+                "595cf62f71d17225"
+            ]
+        ]
+    },
+    {
+        "id": "9c7a616838530a21",
+        "type": "function",
+        "z": "79143eea6c544edc",
+        "name": "query",
+        "func": "msg.topic = `\n    SELECT *\n    FROM camera;\n`;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 120,
+        "wires": [
+            [
+                "915fd82c8c37c2f5"
+            ]
+        ]
+    },
+    {
+        "id": "915fd82c8c37c2f5",
+        "type": "subflow:subflow1",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "x": 500,
+        "y": 120,
+        "wires": [
+            [
+                "cd0549f750d8d1a6"
+            ]
+        ]
+    },
+    {
+        "id": "cd0549f750d8d1a6",
+        "type": "switch",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 730,
+        "y": 120,
+        "wires": [
+            [
+                "3fb4bd6b7ababeed"
+            ],
+            [
+                "a1fbe629e0d40695"
+            ]
+        ]
+    },
+    {
+        "id": "a1fbe629e0d40695",
+        "type": "http response",
+        "z": "79143eea6c544edc",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 920,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "3fb4bd6b7ababeed",
+        "type": "http response",
+        "z": "79143eea6c544edc",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 910,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "66ec3ebf7b5fc195",
+        "type": "function",
+        "z": "79143eea6c544edc",
+        "name": "query",
+        "func": "const cameraData = msg.payload;\n\nif (cameraData.locationX === undefined || cameraData.locationY === undefined) {\n    msg.payload = {\n        success: false,\n        error: \"locationX y locationY son obligatorios\"\n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    INSERT INTO camera (\n        locationX, \n        locationY\n    ) VALUES (?, ?)\n`;\n\nmsg.params = [\n    cameraData.locationX,\n    cameraData.locationY\n];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 400,
+        "wires": [
+            [
+                "d3320321eafb7ef0"
+            ]
+        ]
+    },
+    {
+        "id": "6cc972f6e6ef3a7f",
+        "type": "subflow:subflow1",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "x": 720,
+        "y": 400,
+        "wires": [
+            [
+                "b43b125b39e5daf0"
+            ]
+        ]
+    },
+    {
+        "id": "b43b125b39e5daf0",
+        "type": "switch",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 950,
+        "y": 400,
+        "wires": [
+            [
+                "c7f75ba3e7d2cad8"
+            ],
+            [
+                "d5f099ac6de3132e"
+            ]
+        ]
+    },
+    {
+        "id": "d5f099ac6de3132e",
+        "type": "http response",
+        "z": "79143eea6c544edc",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1140,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "c7f75ba3e7d2cad8",
+        "type": "http response",
+        "z": "79143eea6c544edc",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1130,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "d3320321eafb7ef0",
+        "type": "switch",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "property": "skipDB",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 470,
+        "y": 400,
+        "wires": [
+            [
+                "6cc972f6e6ef3a7f"
+            ],
+            [
+                "d5f099ac6de3132e"
+            ]
+        ]
+    },
+    {
+        "id": "b9d39ebc84bcd3a4",
+        "type": "function",
+        "z": "79143eea6c544edc",
+        "name": "query",
+        "func": "const cameraData = msg.payload;\nconst cameraId = msg.req.params.id || msg.req.query.id;\n\nif (!cameraId) {\n    msg.payload = { \n        success: false,\n        error: \"ID de cámara es obligatorio\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nlet fields = [];\nlet params = [];\n\nif (cameraData.locationX !== undefined) {\n    fields.push('locationX = ?');\n    params.push(cameraData.locationX);\n}\nif (cameraData.locationY !== undefined) {\n    fields.push('locationY = ?');\n    params.push(cameraData.locationY);\n}\n\nif (fields.length === 0) {\n    msg.payload = { \n        success: false,\n        error: \"No hay campos para actualizar\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    UPDATE camera \n    SET ${fields.join(', ')}\n    WHERE id = ?\n`;\n\nparams.push(cameraId);\nmsg.params = params;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 540,
+        "wires": [
+            [
+                "678bf909fd07b78f"
+            ]
+        ]
+    },
+    {
+        "id": "0fecdd6501ce0a50",
+        "type": "subflow:subflow1",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "x": 720,
+        "y": 540,
+        "wires": [
+            [
+                "c92d0256edc72bf1"
+            ]
+        ]
+    },
+    {
+        "id": "c92d0256edc72bf1",
+        "type": "switch",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 950,
+        "y": 540,
+        "wires": [
+            [
+                "305c46671da720cf"
+            ],
+            [
+                "e096933ceecf50d9"
+            ]
+        ]
+    },
+    {
+        "id": "e096933ceecf50d9",
+        "type": "http response",
+        "z": "79143eea6c544edc",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1140,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "305c46671da720cf",
+        "type": "http response",
+        "z": "79143eea6c544edc",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1130,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "678bf909fd07b78f",
+        "type": "switch",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "property": "skipDB",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 470,
+        "y": 540,
+        "wires": [
+            [
+                "0fecdd6501ce0a50"
+            ],
+            [
+                "e096933ceecf50d9"
+            ]
+        ]
+    },
+    {
+        "id": "2c83a153cf0c54e7",
+        "type": "link in",
+        "z": "f8c26a4d4d10435f",
+        "name": "link in 1",
+        "links": [
+            "3cf97939c1d3da7d"
+        ],
+        "x": 195,
+        "y": 100,
+        "wires": [
+            [
+                "43a5bddffcb9a077"
+            ]
+        ]
+    },
+    {
+        "id": "a9fe5d6bc617c32d",
+        "type": "link in",
+        "z": "f8c26a4d4d10435f",
+        "name": "link in 2",
+        "links": [
+            "43520e59f0c2418d"
+        ],
+        "x": 195,
+        "y": 240,
+        "wires": [
+            [
+                "c2166757387247a5"
+            ]
+        ]
+    },
+    {
+        "id": "171a20db82e1afc0",
+        "type": "link in",
+        "z": "f8c26a4d4d10435f",
+        "name": "link in 3",
+        "links": [
+            "65f0fa9e24a711f5"
+        ],
+        "x": 195,
+        "y": 380,
+        "wires": [
+            [
+                "bde9754e460e21b3"
+            ]
+        ]
+    },
+    {
+        "id": "f22eb1fab4818fe6",
+        "type": "link in",
+        "z": "f8c26a4d4d10435f",
+        "name": "link in 4",
+        "links": [
+            "1bd34d9ff0bd9b1d"
+        ],
+        "x": 195,
+        "y": 520,
+        "wires": [
+            [
+                "01b38e770ff9316f"
+            ]
+        ]
+    },
+    {
+        "id": "7380345780d93e87",
+        "type": "link in",
+        "z": "f8c26a4d4d10435f",
+        "name": "link in 5",
+        "links": [
+            "c3d224b3dbe00893"
+        ],
+        "x": 195,
+        "y": 660,
+        "wires": [
+            [
+                "5b28219205330464"
+            ]
+        ]
+    },
+    {
+        "id": "43a5bddffcb9a077",
+        "type": "function",
+        "z": "f8c26a4d4d10435f",
+        "name": "query",
+        "func": "msg.topic = `\n    SELECT *\n    FROM user;\n`;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 100,
+        "wires": [
+            [
+                "f912b62d792c394a"
+            ]
+        ]
+    },
+    {
+        "id": "f912b62d792c394a",
+        "type": "subflow:subflow1",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "x": 540,
+        "y": 100,
+        "wires": [
+            [
+                "f2c7ecf29065afc8"
+            ]
+        ]
+    },
+    {
+        "id": "f2c7ecf29065afc8",
+        "type": "switch",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 770,
+        "y": 100,
+        "wires": [
+            [
+                "0b299c3309a0fc2d"
+            ],
+            [
+                "49eeb9c6d4912d62"
+            ]
+        ]
+    },
+    {
+        "id": "49eeb9c6d4912d62",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 960,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "0b299c3309a0fc2d",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 950,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "c2166757387247a5",
+        "type": "function",
+        "z": "f8c26a4d4d10435f",
+        "name": "query | ?userId | ?carPlate",
+        "func": "const userId = (msg.req.query.userId || \"\").trim();\nconst email = (msg.req.query.email || \"\").trim();\nconst carPlate = (msg.req.query.carPlate || \"\").trim();\n\nlet query = `SELECT DISTINCT u.* FROM user u`;\nlet conditions = [];\nlet params = [];\n\nif (carPlate) {\n    query += ` INNER JOIN vehicles v ON u.email = v.userId`;\n    conditions.push(`v.plate = ?`);\n    params.push(carPlate);\n}\n\nif (userId) {\n    conditions.push(`u.id = ?`);\n    params.push(userId);\n}\n\nif (email) {\n    conditions.push(`u.email = ?`);\n    params.push(email);\n}\n\nif (conditions.length > 0) {\n    query += ` WHERE ` + conditions.join(' AND ');\n}\n\nmsg.topic = query;\nmsg.params = params;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 240,
+        "wires": [
+            [
+                "1765a3f615b36248"
+            ]
+        ]
+    },
+    {
+        "id": "1765a3f615b36248",
+        "type": "subflow:subflow1",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "x": 680,
+        "y": 240,
+        "wires": [
+            [
+                "e50a149b4d5e629d"
+            ]
+        ]
+    },
+    {
+        "id": "e50a149b4d5e629d",
+        "type": "switch",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 910,
+        "y": 240,
+        "wires": [
+            [
+                "9c40ca6fecbe2b67"
+            ],
+            [
+                "bbecbd1dfa34e297"
+            ]
+        ]
+    },
+    {
+        "id": "bbecbd1dfa34e297",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1100,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "9c40ca6fecbe2b67",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1090,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "bde9754e460e21b3",
+        "type": "function",
+        "z": "f8c26a4d4d10435f",
+        "name": "query",
+        "func": "const userData = msg.payload;\nmsg.skipDB = false;\n\nif (!userData.email) {\n    msg.payload = { \n        success: false,\n        error: \"Email is mandatory\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    msg.headers = {\n        \"Content-Type\": \"application/json\",\n        \"Access-Control-Allow-Origin\": \"*\",\n        \"Access-Control-Allow-Methods\": \"GET, POST, PUT, DELETE, OPTIONS\",\n        \"Access-Control-Allow-Headers\": \"Content-Type, Accept\"\n    };\n    return msg;\n}\n\nmsg.topic = `\n    INSERT INTO user (\n        email, name, surname, fullName, picture, \n        sub, email_verified, locale, iat, exp, userType\n    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\n`;\n\nmsg.params = [\n    userData.email,\n    userData.name || null,\n    userData.surname || null,\n    userData.fullName || null,\n    userData.picture || null,\n    userData.sub || null,\n    userData.email_verified || false,\n    userData.locale || null,\n    userData.iat || null,\n    userData.exp || null,\n    userData.userType || null\n];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 380,
+        "wires": [
+            [
+                "df2eb5a7cb79c138"
+            ]
+        ]
+    },
+    {
+        "id": "7add54ca51bac6bb",
+        "type": "subflow:subflow1",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "x": 760,
+        "y": 380,
+        "wires": [
+            [
+                "1eb2f98b9be1c9ba"
+            ]
+        ]
+    },
+    {
+        "id": "1eb2f98b9be1c9ba",
+        "type": "switch",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 990,
+        "y": 380,
+        "wires": [
+            [
+                "afc1bd319295aab6"
+            ],
+            [
+                "d77c913fb0fb2c2a"
+            ]
+        ]
+    },
+    {
+        "id": "d77c913fb0fb2c2a",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1180,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "afc1bd319295aab6",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept"
+        },
+        "x": 1170,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "df2eb5a7cb79c138",
+        "type": "switch",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "property": "skipDB",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "false"
+            },
+            {
+                "t": "true"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 510,
+        "y": 380,
+        "wires": [
+            [
+                "7add54ca51bac6bb"
+            ],
+            [
+                "d77c913fb0fb2c2a"
+            ]
+        ]
+    },
+    {
+        "id": "01b38e770ff9316f",
+        "type": "function",
+        "z": "f8c26a4d4d10435f",
+        "name": "query",
+        "func": "const userData = msg.payload;\nconst userId = msg.req.params.id || msg.req.query.id; // ID desde URL\n\nif (!userId) {\n    msg.payload = { \n        success: false,\n        error: \"ID de usuario es obligatorio\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nlet fields = [];\nlet params = [];\n\nif (userData.email !== undefined) {\n    fields.push('email = ?');\n    params.push(userData.email);\n}\nif (userData.name !== undefined) {\n    fields.push('name = ?');\n    params.push(userData.name);\n}\nif (userData.surname !== undefined) {\n    fields.push('surname = ?');\n    params.push(userData.surname);\n}\nif (userData.fullName !== undefined) {\n    fields.push('fullName = ?');\n    params.push(userData.fullName);\n}\nif (userData.picture !== undefined) {\n    fields.push('picture = ?');\n    params.push(userData.picture);\n}\nif (userData.sub !== undefined) {\n    fields.push('sub = ?');\n    params.push(userData.sub);\n}\nif (userData.email_verified !== undefined) {\n    fields.push('email_verified = ?');\n    params.push(userData.email_verified);\n}\nif (userData.locale !== undefined) {\n    fields.push('locale = ?');\n    params.push(userData.locale);\n}\nif (userData.iat !== undefined) {\n    fields.push('iat = ?');\n    params.push(userData.iat);\n}\nif (userData.exp !== undefined) {\n    fields.push('exp = ?');\n    params.push(userData.exp);\n}\nif (userData.userType !== undefined) {\n    fields.push('userType = ?');\n    params.push(userData.userType);\n}\n\nif (fields.length === 0) {\n    msg.payload = { \n        success: false,\n        error: \"No hay campos para actualizar\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    UPDATE user \n    SET ${fields.join(', ')}\n    WHERE id = ?\n`;\n\nparams.push(userId);\nmsg.params = params;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 520,
+        "wires": [
+            [
+                "cb152d078d8f14a9"
+            ]
+        ]
+    },
+    {
+        "id": "2de182a74d865037",
+        "type": "subflow:subflow1",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "x": 760,
+        "y": 520,
+        "wires": [
+            [
+                "e8a7006c3d0b088a"
+            ]
+        ]
+    },
+    {
+        "id": "e8a7006c3d0b088a",
+        "type": "switch",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 990,
+        "y": 520,
+        "wires": [
+            [
+                "e0122dfa58ca8387"
+            ],
+            [
+                "34b3fdc72d138444"
+            ]
+        ]
+    },
+    {
+        "id": "34b3fdc72d138444",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1180,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "e0122dfa58ca8387",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1170,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "cb152d078d8f14a9",
+        "type": "switch",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "property": "skipDB",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 510,
+        "y": 520,
+        "wires": [
+            [
+                "2de182a74d865037"
+            ],
+            [
+                "34b3fdc72d138444"
+            ]
+        ]
+    },
+    {
+        "id": "5b28219205330464",
+        "type": "function",
+        "z": "f8c26a4d4d10435f",
+        "name": "query",
+        "func": "const userId = msg.req.params.id || msg.req.query.id; // ID desde URL\n\nif (!userId) {\n    msg.payload = {\n        success: false,\n        error: \"ID de usuario es obligatorio\"\n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    DELETE FROM user \n    WHERE id = ?\n`;\n\nmsg.params = [userId];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 660,
+        "wires": [
+            [
+                "93b1c6b91b4c91dc"
+            ]
+        ]
+    },
+    {
+        "id": "d780f8c895824467",
+        "type": "subflow:subflow1",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "x": 760,
+        "y": 660,
+        "wires": [
+            [
+                "9963a640ed4b09b9"
+            ]
+        ]
+    },
+    {
+        "id": "9963a640ed4b09b9",
+        "type": "switch",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 990,
+        "y": 660,
+        "wires": [
+            [
+                "e38f021280238360"
+            ],
+            [
+                "a45e34ae90cd5e7f"
+            ]
+        ]
+    },
+    {
+        "id": "a45e34ae90cd5e7f",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1180,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "e38f021280238360",
+        "type": "http response",
+        "z": "f8c26a4d4d10435f",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1170,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "93b1c6b91b4c91dc",
+        "type": "switch",
+        "z": "f8c26a4d4d10435f",
+        "name": "",
+        "property": "skipDB",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 510,
+        "y": 660,
+        "wires": [
+            [
+                "d780f8c895824467"
+            ],
+            [
+                "a45e34ae90cd5e7f"
+            ]
+        ]
+    },
+    {
         "id": "16f9ae8245a9bb53",
         "type": "link in",
         "z": "54a5f4090ccc656e",
@@ -1762,7 +2875,7 @@
         "type": "switch",
         "z": "54a5f4090ccc656e",
         "name": "",
-        "property": "payload",
+        "property": "skipDB",
         "propertyType": "msg",
         "rules": [
             {
@@ -1783,1116 +2896,6 @@
             ],
             [
                 "7d52e8adbecb0b27"
-            ]
-        ]
-    },
-    {
-        "id": "69467e37549dfa93",
-        "type": "link in",
-        "z": "79143eea6c544edc",
-        "name": "link in 6",
-        "links": [
-            "dab8b6de71939f7a"
-        ],
-        "x": 165,
-        "y": 120,
-        "wires": [
-            [
-                "9c7a616838530a21"
-            ]
-        ]
-    },
-    {
-        "id": "2b413649b22cc486",
-        "type": "link in",
-        "z": "79143eea6c544edc",
-        "name": "link in 7",
-        "links": [
-            "f7194d1f7d06ef41"
-        ],
-        "x": 165,
-        "y": 260,
-        "wires": [
-            [
-                "9743f5a103531ca4"
-            ]
-        ]
-    },
-    {
-        "id": "cfa19015a9bf580f",
-        "type": "link in",
-        "z": "79143eea6c544edc",
-        "name": "link in 8",
-        "links": [
-            "1c16542d2b7b3fec"
-        ],
-        "x": 165,
-        "y": 400,
-        "wires": [
-            [
-                "66ec3ebf7b5fc195"
-            ]
-        ]
-    },
-    {
-        "id": "df2097ae09145bbe",
-        "type": "link in",
-        "z": "79143eea6c544edc",
-        "name": "link in 9",
-        "links": [
-            "7e1190277ffbde70"
-        ],
-        "x": 165,
-        "y": 540,
-        "wires": [
-            [
-                "b9d39ebc84bcd3a4"
-            ]
-        ]
-    },
-    {
-        "id": "9743f5a103531ca4",
-        "type": "function",
-        "z": "79143eea6c544edc",
-        "name": "query",
-        "func": "const cameraId = msg.req.params.id || msg.req.query.id;\n\nif (!cameraId) {\n    msg.payload = { \n        success: false,\n        error: \"ID de cámara es obligatorio\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    SELECT * \n    FROM camera \n    WHERE id = ?\n`;\n\nmsg.params = [cameraId];\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 290,
-        "y": 260,
-        "wires": [
-            [
-                "48c81f139312f354"
-            ]
-        ]
-    },
-    {
-        "id": "e0dfc90d7c0bedd0",
-        "type": "subflow:subflow1",
-        "z": "79143eea6c544edc",
-        "name": "",
-        "x": 720,
-        "y": 260,
-        "wires": [
-            [
-                "e0cd172ccb500f79"
-            ]
-        ]
-    },
-    {
-        "id": "e0cd172ccb500f79",
-        "type": "switch",
-        "z": "79143eea6c544edc",
-        "name": "",
-        "property": "payload.success",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "true"
-            },
-            {
-                "t": "false"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 950,
-        "y": 260,
-        "wires": [
-            [
-                "d9074c5397503046"
-            ],
-            [
-                "595cf62f71d17225"
-            ]
-        ]
-    },
-    {
-        "id": "595cf62f71d17225",
-        "type": "http response",
-        "z": "79143eea6c544edc",
-        "name": "400 error",
-        "statusCode": "400",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 1140,
-        "y": 300,
-        "wires": []
-    },
-    {
-        "id": "d9074c5397503046",
-        "type": "http response",
-        "z": "79143eea6c544edc",
-        "name": "200 ok",
-        "statusCode": "200",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 1130,
-        "y": 220,
-        "wires": []
-    },
-    {
-        "id": "48c81f139312f354",
-        "type": "switch",
-        "z": "79143eea6c544edc",
-        "name": "",
-        "property": "payload",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "true"
-            },
-            {
-                "t": "false"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 470,
-        "y": 260,
-        "wires": [
-            [
-                "e0dfc90d7c0bedd0"
-            ],
-            [
-                "595cf62f71d17225"
-            ]
-        ]
-    },
-    {
-        "id": "9c7a616838530a21",
-        "type": "function",
-        "z": "79143eea6c544edc",
-        "name": "query",
-        "func": "msg.topic = `\n    SELECT *\n    FROM camera;\n`;\n\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 290,
-        "y": 120,
-        "wires": [
-            [
-                "915fd82c8c37c2f5"
-            ]
-        ]
-    },
-    {
-        "id": "915fd82c8c37c2f5",
-        "type": "subflow:subflow1",
-        "z": "79143eea6c544edc",
-        "name": "",
-        "x": 500,
-        "y": 120,
-        "wires": [
-            [
-                "cd0549f750d8d1a6"
-            ]
-        ]
-    },
-    {
-        "id": "cd0549f750d8d1a6",
-        "type": "switch",
-        "z": "79143eea6c544edc",
-        "name": "",
-        "property": "payload.success",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "true"
-            },
-            {
-                "t": "false"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 730,
-        "y": 120,
-        "wires": [
-            [
-                "3fb4bd6b7ababeed"
-            ],
-            [
-                "a1fbe629e0d40695"
-            ]
-        ]
-    },
-    {
-        "id": "a1fbe629e0d40695",
-        "type": "http response",
-        "z": "79143eea6c544edc",
-        "name": "400 error",
-        "statusCode": "400",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 920,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "3fb4bd6b7ababeed",
-        "type": "http response",
-        "z": "79143eea6c544edc",
-        "name": "200 ok",
-        "statusCode": "200",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 910,
-        "y": 80,
-        "wires": []
-    },
-    {
-        "id": "66ec3ebf7b5fc195",
-        "type": "function",
-        "z": "79143eea6c544edc",
-        "name": "query",
-        "func": "const cameraData = msg.payload;\n\nif (cameraData.locationX === undefined || cameraData.locationY === undefined) {\n    msg.payload = {\n        success: false,\n        error: \"locationX y locationY son obligatorios\"\n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    INSERT INTO camera (\n        locationX, \n        locationY\n    ) VALUES (?, ?)\n`;\n\nmsg.params = [\n    cameraData.locationX,\n    cameraData.locationY\n];\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 290,
-        "y": 400,
-        "wires": [
-            [
-                "d3320321eafb7ef0"
-            ]
-        ]
-    },
-    {
-        "id": "6cc972f6e6ef3a7f",
-        "type": "subflow:subflow1",
-        "z": "79143eea6c544edc",
-        "name": "",
-        "x": 720,
-        "y": 400,
-        "wires": [
-            [
-                "b43b125b39e5daf0"
-            ]
-        ]
-    },
-    {
-        "id": "b43b125b39e5daf0",
-        "type": "switch",
-        "z": "79143eea6c544edc",
-        "name": "",
-        "property": "payload.success",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "true"
-            },
-            {
-                "t": "false"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 950,
-        "y": 400,
-        "wires": [
-            [
-                "c7f75ba3e7d2cad8"
-            ],
-            [
-                "d5f099ac6de3132e"
-            ]
-        ]
-    },
-    {
-        "id": "d5f099ac6de3132e",
-        "type": "http response",
-        "z": "79143eea6c544edc",
-        "name": "400 error",
-        "statusCode": "400",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 1140,
-        "y": 440,
-        "wires": []
-    },
-    {
-        "id": "c7f75ba3e7d2cad8",
-        "type": "http response",
-        "z": "79143eea6c544edc",
-        "name": "200 ok",
-        "statusCode": "200",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 1130,
-        "y": 360,
-        "wires": []
-    },
-    {
-        "id": "d3320321eafb7ef0",
-        "type": "switch",
-        "z": "79143eea6c544edc",
-        "name": "",
-        "property": "payload",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "true"
-            },
-            {
-                "t": "false"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 470,
-        "y": 400,
-        "wires": [
-            [
-                "6cc972f6e6ef3a7f"
-            ],
-            [
-                "d5f099ac6de3132e"
-            ]
-        ]
-    },
-    {
-        "id": "b9d39ebc84bcd3a4",
-        "type": "function",
-        "z": "79143eea6c544edc",
-        "name": "query",
-        "func": "const cameraData = msg.payload;\nconst cameraId = msg.req.params.id || msg.req.query.id;\n\nif (!cameraId) {\n    msg.payload = { \n        success: false,\n        error: \"ID de cámara es obligatorio\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nlet fields = [];\nlet params = [];\n\nif (cameraData.locationX !== undefined) {\n    fields.push('locationX = ?');\n    params.push(cameraData.locationX);\n}\nif (cameraData.locationY !== undefined) {\n    fields.push('locationY = ?');\n    params.push(cameraData.locationY);\n}\n\nif (fields.length === 0) {\n    msg.payload = { \n        success: false,\n        error: \"No hay campos para actualizar\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    UPDATE camera \n    SET ${fields.join(', ')}\n    WHERE id = ?\n`;\n\nparams.push(cameraId);\nmsg.params = params;\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 290,
-        "y": 540,
-        "wires": [
-            [
-                "678bf909fd07b78f"
-            ]
-        ]
-    },
-    {
-        "id": "0fecdd6501ce0a50",
-        "type": "subflow:subflow1",
-        "z": "79143eea6c544edc",
-        "name": "",
-        "x": 720,
-        "y": 540,
-        "wires": [
-            [
-                "c92d0256edc72bf1"
-            ]
-        ]
-    },
-    {
-        "id": "c92d0256edc72bf1",
-        "type": "switch",
-        "z": "79143eea6c544edc",
-        "name": "",
-        "property": "payload.success",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "true"
-            },
-            {
-                "t": "false"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 950,
-        "y": 540,
-        "wires": [
-            [
-                "305c46671da720cf"
-            ],
-            [
-                "e096933ceecf50d9"
-            ]
-        ]
-    },
-    {
-        "id": "e096933ceecf50d9",
-        "type": "http response",
-        "z": "79143eea6c544edc",
-        "name": "400 error",
-        "statusCode": "400",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 1140,
-        "y": 580,
-        "wires": []
-    },
-    {
-        "id": "305c46671da720cf",
-        "type": "http response",
-        "z": "79143eea6c544edc",
-        "name": "200 ok",
-        "statusCode": "200",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 1130,
-        "y": 500,
-        "wires": []
-    },
-    {
-        "id": "678bf909fd07b78f",
-        "type": "switch",
-        "z": "79143eea6c544edc",
-        "name": "",
-        "property": "payload",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "true"
-            },
-            {
-                "t": "false"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 470,
-        "y": 540,
-        "wires": [
-            [
-                "0fecdd6501ce0a50"
-            ],
-            [
-                "e096933ceecf50d9"
-            ]
-        ]
-    },
-    {
-        "id": "2c83a153cf0c54e7",
-        "type": "link in",
-        "z": "f8c26a4d4d10435f",
-        "name": "link in 1",
-        "links": [
-            "3cf97939c1d3da7d"
-        ],
-        "x": 195,
-        "y": 100,
-        "wires": [
-            [
-                "43a5bddffcb9a077"
-            ]
-        ]
-    },
-    {
-        "id": "a9fe5d6bc617c32d",
-        "type": "link in",
-        "z": "f8c26a4d4d10435f",
-        "name": "link in 2",
-        "links": [
-            "43520e59f0c2418d"
-        ],
-        "x": 195,
-        "y": 240,
-        "wires": [
-            [
-                "c2166757387247a5"
-            ]
-        ]
-    },
-    {
-        "id": "171a20db82e1afc0",
-        "type": "link in",
-        "z": "f8c26a4d4d10435f",
-        "name": "link in 3",
-        "links": [
-            "65f0fa9e24a711f5"
-        ],
-        "x": 195,
-        "y": 380,
-        "wires": [
-            [
-                "bde9754e460e21b3"
-            ]
-        ]
-    },
-    {
-        "id": "f22eb1fab4818fe6",
-        "type": "link in",
-        "z": "f8c26a4d4d10435f",
-        "name": "link in 4",
-        "links": [
-            "1bd34d9ff0bd9b1d"
-        ],
-        "x": 195,
-        "y": 520,
-        "wires": [
-            [
-                "01b38e770ff9316f"
-            ]
-        ]
-    },
-    {
-        "id": "7380345780d93e87",
-        "type": "link in",
-        "z": "f8c26a4d4d10435f",
-        "name": "link in 5",
-        "links": [
-            "c3d224b3dbe00893"
-        ],
-        "x": 195,
-        "y": 660,
-        "wires": [
-            [
-                "5b28219205330464"
-            ]
-        ]
-    },
-    {
-        "id": "43a5bddffcb9a077",
-        "type": "function",
-        "z": "f8c26a4d4d10435f",
-        "name": "query",
-        "func": "msg.topic = `\n    SELECT *\n    FROM user;\n`;\n\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 330,
-        "y": 100,
-        "wires": [
-            [
-                "f912b62d792c394a"
-            ]
-        ]
-    },
-    {
-        "id": "f912b62d792c394a",
-        "type": "subflow:subflow1",
-        "z": "f8c26a4d4d10435f",
-        "name": "",
-        "x": 540,
-        "y": 100,
-        "wires": [
-            [
-                "f2c7ecf29065afc8"
-            ]
-        ]
-    },
-    {
-        "id": "f2c7ecf29065afc8",
-        "type": "switch",
-        "z": "f8c26a4d4d10435f",
-        "name": "",
-        "property": "payload.success",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "true"
-            },
-            {
-                "t": "false"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 770,
-        "y": 100,
-        "wires": [
-            [
-                "0b299c3309a0fc2d"
-            ],
-            [
-                "49eeb9c6d4912d62"
-            ]
-        ]
-    },
-    {
-        "id": "49eeb9c6d4912d62",
-        "type": "http response",
-        "z": "f8c26a4d4d10435f",
-        "name": "400 error",
-        "statusCode": "400",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 960,
-        "y": 140,
-        "wires": []
-    },
-    {
-        "id": "0b299c3309a0fc2d",
-        "type": "http response",
-        "z": "f8c26a4d4d10435f",
-        "name": "200 ok",
-        "statusCode": "200",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 950,
-        "y": 60,
-        "wires": []
-    },
-    {
-        "id": "c2166757387247a5",
-        "type": "function",
-        "z": "f8c26a4d4d10435f",
-        "name": "query | ?userId | ?carPlate",
-        "func": "const userId = (msg.req.query.userId || \"\").trim();\nconst carPlate = (msg.req.query.carPlate || \"\").trim();\n\nlet query = `SELECT u.* FROM user u`;\nlet conditions = [];\nlet params = [];\n\nif (carPlate) {\n    query += ` INNER JOIN vehicles v ON u.email = v.userId`;\n    conditions.push(`v.plate = ?`);\n    params.push(carPlate);\n}\n\nif (userId) {\n    conditions.push(`u.id = ?`);\n    params.push(userId);\n}\n\nif (conditions.length > 0) {\n    query += ` WHERE ` + conditions.join(' AND ');\n}\n\nmsg.topic = query;\nmsg.params = params;\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 400,
-        "y": 240,
-        "wires": [
-            [
-                "1765a3f615b36248"
-            ]
-        ]
-    },
-    {
-        "id": "1765a3f615b36248",
-        "type": "subflow:subflow1",
-        "z": "f8c26a4d4d10435f",
-        "name": "",
-        "x": 680,
-        "y": 240,
-        "wires": [
-            [
-                "e50a149b4d5e629d"
-            ]
-        ]
-    },
-    {
-        "id": "e50a149b4d5e629d",
-        "type": "switch",
-        "z": "f8c26a4d4d10435f",
-        "name": "",
-        "property": "payload.success",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "true"
-            },
-            {
-                "t": "false"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 910,
-        "y": 240,
-        "wires": [
-            [
-                "9c40ca6fecbe2b67"
-            ],
-            [
-                "bbecbd1dfa34e297"
-            ]
-        ]
-    },
-    {
-        "id": "bbecbd1dfa34e297",
-        "type": "http response",
-        "z": "f8c26a4d4d10435f",
-        "name": "400 error",
-        "statusCode": "400",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 1100,
-        "y": 280,
-        "wires": []
-    },
-    {
-        "id": "9c40ca6fecbe2b67",
-        "type": "http response",
-        "z": "f8c26a4d4d10435f",
-        "name": "200 ok",
-        "statusCode": "200",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 1090,
-        "y": 200,
-        "wires": []
-    },
-    {
-        "id": "bde9754e460e21b3",
-        "type": "function",
-        "z": "f8c26a4d4d10435f",
-        "name": "query",
-        "func": "const userData = msg.payload;\n\nif (!userData.email || !userData.userType) {\n    msg.payload = { \n        success: false,\n        error: \"Email y userType son obligatorios\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    INSERT INTO user (\n        email, name, surname, fullName, picture, \n        sub, email_verified, locale, iat, exp, userType\n    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\n`;\n\nmsg.params = [\n    userData.email,\n    userData.name || null,\n    userData.surname || null,\n    userData.fullName || null,\n    userData.picture || null,\n    userData.sub || null,\n    userData.email_verified || false,\n    userData.locale || null,\n    userData.iat || null,\n    userData.exp || null,\n    userData.userType\n];\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 330,
-        "y": 380,
-        "wires": [
-            [
-                "df2eb5a7cb79c138"
-            ]
-        ]
-    },
-    {
-        "id": "7add54ca51bac6bb",
-        "type": "subflow:subflow1",
-        "z": "f8c26a4d4d10435f",
-        "name": "",
-        "x": 760,
-        "y": 380,
-        "wires": [
-            [
-                "1eb2f98b9be1c9ba"
-            ]
-        ]
-    },
-    {
-        "id": "1eb2f98b9be1c9ba",
-        "type": "switch",
-        "z": "f8c26a4d4d10435f",
-        "name": "",
-        "property": "payload.success",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "true"
-            },
-            {
-                "t": "false"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 990,
-        "y": 380,
-        "wires": [
-            [
-                "afc1bd319295aab6"
-            ],
-            [
-                "d77c913fb0fb2c2a"
-            ]
-        ]
-    },
-    {
-        "id": "d77c913fb0fb2c2a",
-        "type": "http response",
-        "z": "f8c26a4d4d10435f",
-        "name": "400 error",
-        "statusCode": "400",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 1180,
-        "y": 420,
-        "wires": []
-    },
-    {
-        "id": "afc1bd319295aab6",
-        "type": "http response",
-        "z": "f8c26a4d4d10435f",
-        "name": "200 ok",
-        "statusCode": "200",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 1170,
-        "y": 340,
-        "wires": []
-    },
-    {
-        "id": "df2eb5a7cb79c138",
-        "type": "switch",
-        "z": "f8c26a4d4d10435f",
-        "name": "",
-        "property": "payload",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "true"
-            },
-            {
-                "t": "false"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 510,
-        "y": 380,
-        "wires": [
-            [
-                "7add54ca51bac6bb"
-            ],
-            [
-                "d77c913fb0fb2c2a"
-            ]
-        ]
-    },
-    {
-        "id": "01b38e770ff9316f",
-        "type": "function",
-        "z": "f8c26a4d4d10435f",
-        "name": "query",
-        "func": "const userData = msg.payload;\nconst userId = msg.req.params.id || msg.req.query.id; // ID desde URL\n\nif (!userId) {\n    msg.payload = { \n        success: false,\n        error: \"ID de usuario es obligatorio\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nlet fields = [];\nlet params = [];\n\nif (userData.email !== undefined) {\n    fields.push('email = ?');\n    params.push(userData.email);\n}\nif (userData.name !== undefined) {\n    fields.push('name = ?');\n    params.push(userData.name);\n}\nif (userData.surname !== undefined) {\n    fields.push('surname = ?');\n    params.push(userData.surname);\n}\nif (userData.fullName !== undefined) {\n    fields.push('fullName = ?');\n    params.push(userData.fullName);\n}\nif (userData.picture !== undefined) {\n    fields.push('picture = ?');\n    params.push(userData.picture);\n}\nif (userData.sub !== undefined) {\n    fields.push('sub = ?');\n    params.push(userData.sub);\n}\nif (userData.email_verified !== undefined) {\n    fields.push('email_verified = ?');\n    params.push(userData.email_verified);\n}\nif (userData.locale !== undefined) {\n    fields.push('locale = ?');\n    params.push(userData.locale);\n}\nif (userData.iat !== undefined) {\n    fields.push('iat = ?');\n    params.push(userData.iat);\n}\nif (userData.exp !== undefined) {\n    fields.push('exp = ?');\n    params.push(userData.exp);\n}\nif (userData.userType !== undefined) {\n    fields.push('userType = ?');\n    params.push(userData.userType);\n}\n\nif (fields.length === 0) {\n    msg.payload = { \n        success: false,\n        error: \"No hay campos para actualizar\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    UPDATE user \n    SET ${fields.join(', ')}\n    WHERE id = ?\n`;\n\nparams.push(userId);\nmsg.params = params;\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 330,
-        "y": 520,
-        "wires": [
-            [
-                "cb152d078d8f14a9"
-            ]
-        ]
-    },
-    {
-        "id": "2de182a74d865037",
-        "type": "subflow:subflow1",
-        "z": "f8c26a4d4d10435f",
-        "name": "",
-        "x": 760,
-        "y": 520,
-        "wires": [
-            [
-                "e8a7006c3d0b088a"
-            ]
-        ]
-    },
-    {
-        "id": "e8a7006c3d0b088a",
-        "type": "switch",
-        "z": "f8c26a4d4d10435f",
-        "name": "",
-        "property": "payload.success",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "true"
-            },
-            {
-                "t": "false"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 990,
-        "y": 520,
-        "wires": [
-            [
-                "e0122dfa58ca8387"
-            ],
-            [
-                "34b3fdc72d138444"
-            ]
-        ]
-    },
-    {
-        "id": "34b3fdc72d138444",
-        "type": "http response",
-        "z": "f8c26a4d4d10435f",
-        "name": "400 error",
-        "statusCode": "400",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 1180,
-        "y": 560,
-        "wires": []
-    },
-    {
-        "id": "e0122dfa58ca8387",
-        "type": "http response",
-        "z": "f8c26a4d4d10435f",
-        "name": "200 ok",
-        "statusCode": "200",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 1170,
-        "y": 480,
-        "wires": []
-    },
-    {
-        "id": "cb152d078d8f14a9",
-        "type": "switch",
-        "z": "f8c26a4d4d10435f",
-        "name": "",
-        "property": "payload",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "true"
-            },
-            {
-                "t": "false"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 510,
-        "y": 520,
-        "wires": [
-            [
-                "2de182a74d865037"
-            ],
-            [
-                "34b3fdc72d138444"
-            ]
-        ]
-    },
-    {
-        "id": "5b28219205330464",
-        "type": "function",
-        "z": "f8c26a4d4d10435f",
-        "name": "query",
-        "func": "const userId = msg.req.params.id || msg.req.query.id; // ID desde URL\n\nif (!userId) {\n    msg.payload = {\n        success: false,\n        error: \"ID de usuario es obligatorio\"\n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    DELETE FROM user \n    WHERE id = ?\n`;\n\nmsg.params = [userId];\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 330,
-        "y": 660,
-        "wires": [
-            [
-                "93b1c6b91b4c91dc"
-            ]
-        ]
-    },
-    {
-        "id": "d780f8c895824467",
-        "type": "subflow:subflow1",
-        "z": "f8c26a4d4d10435f",
-        "name": "",
-        "x": 760,
-        "y": 660,
-        "wires": [
-            [
-                "9963a640ed4b09b9"
-            ]
-        ]
-    },
-    {
-        "id": "9963a640ed4b09b9",
-        "type": "switch",
-        "z": "f8c26a4d4d10435f",
-        "name": "",
-        "property": "payload.success",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "true"
-            },
-            {
-                "t": "false"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 990,
-        "y": 660,
-        "wires": [
-            [
-                "e38f021280238360"
-            ],
-            [
-                "a45e34ae90cd5e7f"
-            ]
-        ]
-    },
-    {
-        "id": "a45e34ae90cd5e7f",
-        "type": "http response",
-        "z": "f8c26a4d4d10435f",
-        "name": "400 error",
-        "statusCode": "400",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 1180,
-        "y": 700,
-        "wires": []
-    },
-    {
-        "id": "e38f021280238360",
-        "type": "http response",
-        "z": "f8c26a4d4d10435f",
-        "name": "200 ok",
-        "statusCode": "200",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 1170,
-        "y": 620,
-        "wires": []
-    },
-    {
-        "id": "93b1c6b91b4c91dc",
-        "type": "switch",
-        "z": "f8c26a4d4d10435f",
-        "name": "",
-        "property": "payload",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "true"
-            },
-            {
-                "t": "false"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 510,
-        "y": 660,
-        "wires": [
-            [
-                "d780f8c895824467"
-            ],
-            [
-                "a45e34ae90cd5e7f"
             ]
         ]
     },

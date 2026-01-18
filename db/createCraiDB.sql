@@ -4,18 +4,10 @@ use `crai`;
 
 
 CREATE TABLE user (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(100) NOT NULL UNIQUE,
+    username VARCHAR(50) PRIMARY KEY,
+    password VARCHAR(255),
     name VARCHAR(50),
-    surname VARCHAR(50),
-    fullName VARCHAR(100),
-    picture VARCHAR(255),
-    sub VARCHAR(100),
-    email_verified BOOLEAN,
-    locale VARCHAR(10),
-    iat BIGINT,
-    exp BIGINT,
-    userType INT NOT NULL
+    surname VARCHAR(50)
 );
 
 
@@ -50,7 +42,7 @@ CREATE TABLE detection (
 );
 
 
-ALTER TABLE vehicles ADD FOREIGN KEY (userId) REFERENCES user(email) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE vehicles ADD FOREIGN KEY (userId) REFERENCES user(username) ON DELETE SET NULL ON UPDATE CASCADE;
 ALTER TABLE stolenVehicle ADD FOREIGN KEY (plate) REFERENCES vehicles(plate) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE detection ADD FOREIGN KEY (vehicleId) REFERENCES vehicles(plate) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE detection ADD FOREIGN KEY (cameraId) REFERENCES camera(id) ON DELETE RESTRICT ON UPDATE CASCADE;
