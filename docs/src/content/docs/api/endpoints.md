@@ -1,105 +1,90 @@
 ---
-title: API Endpoints
-description: Detailed documentation of all API endpoints
+title: ebAPI Endpoints
+description: Environmental Badge API endpoints for Spanish vehicle classification
 ---
 
-Complete reference of all available API endpoints in CRAI.
+Complete reference of all endpoints in the ebAPI service (Environmental Badge API).
+
+**Base URL:** `http://localhost:6904`
 
 ## Endpoints List
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/` | API root information |
-| GET | `/api/health` | Health check |
-| GET | `/api/hello` | Test endpoint |
-| POST | `/api/recognize` | Recognize license plate |
+| GET | `/api` | Look up environmental badge |
+| GET | `/docs` | Swagger UI documentation |
+| GET | `/redoc` | ReDoc documentation |
 
-## Root Endpoint
+## Badge Lookup
 
-### GET /
+### GET /api
 
-Returns basic API information.
+Look up the environmental badge classification for a Spanish vehicle by its license plate.
 
-**Response 200:**
-```json
-{
-  "message": "CRAI API",
-  "version": "1.0.0",
-  "docs": "/docs"
-}
-```
+**Query Parameters:**
 
-## Health Endpoints
-
-### GET /api/health
-
-Check if the API is running and healthy.
-
-**Response 200:**
-```json
-{
-  "status": "healthy",
-  "version": "1.0.0"
-}
-```
-
-### GET /api/hello
-
-Simple test endpoint.
-
-**Response 200:**
-```json
-{
-  "message": "Hello World"
-}
-```
-
-## Recognition Endpoints
-
-### POST /api/recognize
-
-Recognize license plate from an uploaded image.
-
-**Parameters:**
-- `image` (file, required): Image file containing a license plate
-
-**Accepted formats:** JPG, JPEG, PNG, WEBP
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `carPlate` | string | Yes | Spanish license plate number |
 
 **Request:**
 ```http
-POST /api/recognize HTTP/1.1
-Content-Type: multipart/form-data
+GET /api?carPlate=1234ABC HTTP/1.1
+Host: localhost:6904
 ```
 
 **Response 200:**
 ```json
 {
-  "plate_number": "ABC-1234",
-  "confidence": 0.95,
-  "processing_time": 0.123,
-  "timestamp": "2024-01-01T12:00:00.000Z"
+  "carPlate": "1234ABC",
+  "badge": {
+    "vehicleType": "turism",
+    "badge": "B",
+    "STOL": ""
+  }
 }
 ```
+
+### Badge Types
+
+Spanish environmental badges:
+
+| Badge | Color | Description |
+|-------|-------|-------------|
+| `0` | Blue | Zero emissions (electric, hydrogen) |
+| `ECO` | Blue/Green | Hybrid, CNG, LPG |
+| `C` | Green | Gasoline from 2006, Diesel from 2014 |
+| `B` | Yellow | Gasoline from 2000, Diesel from 2006 |
+| None | - | Older vehicles |
+
+### Vehicle Types
+
+| Type | Description |
+|------|-------------|
+| `turism` | Passenger car |
+| `motocicleta` | Motorcycle |
+| `furgoneta` | Van |
+| `camion` | Truck |
 
 **Error Responses:**
-
-**400 Bad Request:**
-```json
-{
-  "detail": "File must be an image"
-}
-```
 
 **422 Unprocessable Entity:**
 ```json
 {
   "detail": [
     {
-      "loc": ["body", "image"],
+      "loc": ["query", "carPlate"],
       "msg": "field required",
       "type": "value_error.missing"
     }
   ]
+}
+```
+
+**404 Not Found:**
+```json
+{
+  "detail": "Vehicle not found in database"
 }
 ```
 
@@ -108,9 +93,13 @@ Content-Type: multipart/form-data
 ### Using cURL
 
 ```bash
-curl -X POST "http://localhost:6902/api/recognize" \
-  -H "Content-Type: multipart/form-data" \
-  -F "image=@/path/to/image.jpg"
+# Basic lookup
+curl "http://localhost:6904/api?carPlate=1234ABC"
+
+# Multiple lookups
+for plate in 1234ABC 5678DEF 9012GHI; do
+  curl "http://localhost:6904/api?carPlate=$plate"
+done
 ```
 
 ### Using Python
@@ -118,31 +107,82 @@ curl -X POST "http://localhost:6902/api/recognize" \
 ```python
 import requests
 
-url = "http://localhost:6902/api/recognize"
+# Single lookup
+response = requests.get(
+    "http://localhost:6904/api",
+    params={"carPlate": "1234ABC"}
+)
+data = response.json()
+print(f"Badge: {data['badge']['badge']}")
 
-with open("image.jpg", "rb") as f:
-    files = {"image": ("image.jpg", f, "image/jpeg")}
-    response = requests.post(url, files=files)
-    
-print(response.json())
+# Batch lookup
+plates = ["1234ABC", "5678DEF", "9012GHI"]
+for plate in plates:
+    response = requests.get(
+        "http://localhost:6904/api",
+        params={"carPlate": plate}
+    )
+    print(f"{plate}: {response.json()}")
 ```
 
-### Using JavaScript
+### Using JavaScript/Fetch
 
 ```javascript
-const formData = new FormData();
-formData.append('image', fileInput.files[0]);
-
-const response = await fetch('http://localhost:6902/api/recognize', {
-  method: 'POST',
-  body: formData
-});
-
+// Single lookup
+const response = await fetch('http://localhost:6904/api?carPlate=1234ABC');
 const data = await response.json();
-console.log(data);
+console.log(`Badge: ${data.badge.badge}`);
+
+// With async/await wrapper
+async function lookupBadge(plate) {
+  const response = await fetch(`http://localhost:6904/api?carPlate=${plate}`);
+  return response.json();
+}
+
+// Usage
+const result = await lookupBadge('1234ABC');
+console.log(result);
 ```
+
+### Using TypeScript
+
+```typescript
+interface BadgeInfo {
+  vehicleType: string;
+  badge: string;
+  STOL: string;
+}
+
+interface BadgeResponse {
+  carPlate: string;
+  badge: BadgeInfo;
+}
+
+async function lookupBadge(plate: string): Promise<BadgeResponse> {
+  const response = await fetch(`http://localhost:6904/api?carPlate=${plate}`);
+  return response.json();
+}
+```
+
+## Data Source
+
+The ebAPI uses a CSV database of known vehicles located at `ebAPI/data/badges.csv`.
+
+**CSV Format:**
+```csv
+plate,vehicleType,badge,STOL
+1234ABC,turism,B,
+5678DEF,turism,C,
+9012GHI,turism,ECO,
+```
+
+## Related APIs
+
+- [itvAPI Endpoints](/api/itvapi-endpoints/) - ITV date lookup
+- [OS Endpoints](/api/os-endpoints/) - Vehicle simulation
 
 ## Next Steps
 
-- View [API Models](/api/models/)
-- Learn about [Authentication](/api/authentication/)
+- View [Data Models](/api/models/)
+- Explore [itvAPI Endpoints](/api/itvapi-endpoints/)
+- Check [OS Endpoints](/api/os-endpoints/)
