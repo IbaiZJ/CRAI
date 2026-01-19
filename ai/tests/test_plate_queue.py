@@ -37,6 +37,31 @@ def test_send_plate_exception():
     assert pq._send_plate(plate) is False
 
 
+def test_send_plate_includes_optional_fields():
+    pq = PlateQueue(endpoint_url="http://example.com/api", timeout=1)
+
+    class CaptureClient:
+        def __init__(self):
+            self.last_payload = None
+
+        def post(self, url, json=None, timeout=None):
+            self.last_payload = json
+            return DummyResponse(status_code=200)
+
+    pq.api_client = CaptureClient()
+    plate = {
+        "plate": "1234BCD",
+        "confidence": 0.9,
+        "timestamp": "t",
+        "vehicle_type": "car",
+        "metadata": {"x": 1},
+    }
+
+    assert pq._send_plate(plate) is True
+    assert pq.api_client.last_payload["vehicle_type"] == "car"
+    assert pq.api_client.last_payload["metadata"] == {"x": 1}
+
+
 def test_worker_retry_and_fail(monkeypatch):
     pq = PlateQueue(endpoint_url="http://example.com/api", max_retries=2, retry_delay=0)
     pq.running = True
