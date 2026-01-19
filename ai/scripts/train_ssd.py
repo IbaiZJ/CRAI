@@ -583,7 +583,7 @@ def main():
     parser.add_argument('--epochs', type=int, default=100, help='Número de epochs (default: 100)')
     parser.add_argument('--batch-size', type=int, default=12, help='Batch size (default: 12)')
     parser.add_argument('--lr', type=float, default=1e-4, help='Learning rate (default: 1e-4)')
-    parser.add_argument('--dataset', type=str, default='notebooks/UA-DETRAC-DATASET-10K-2',
+    parser.add_argument('--dataset', type=str, default='dataset/UA-DETRAC-DATASET-10K-2',
                         help='Ruta al dataset UA-DETRAC (relativa o absoluta)')
     args = parser.parse_args()
     
