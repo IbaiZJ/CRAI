@@ -90,3 +90,4 @@ Traceback (most recent call last):
     ...<4 lines>...
     )
 ValueError: Input 0 with name 'input_image' of layer 'SSD_MobileNetV2_CarDetector' is incompatible with the layer: expected shape=(None, 640, 640, 3), found shape=(1, 180, 320, 3)
+[2026-01-19 08:03:31] [[31mERROR[0m] [logger.py:128] └─ Error in: System initialization (20.443s) - 

@@ -327,7 +327,7 @@ def main():
             # ========== MOSTRAR STATS Y MODO ACTUAL ==========
             if show_stats:
                 overlay = frame_display.copy()
-                cv2.rectangle(overlay, (10, 10), (400, 160), (0, 0, 0), -1)
+                cv2.rectangle(overlay, (10, 10), (250, 160), (0, 0, 0), -1)
                 cv2.addWeighted(overlay, 0.6, frame_display, 0.4, 0, frame_display)
                 
                 y_offset = 30

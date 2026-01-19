@@ -24,13 +24,16 @@ plate_detector:
   detect_in_vehicles_only: true 
 
 # Modelo SSD personalizado (entrenado con UA-DETRAC)
-# NOTA: El modelo actual tiene confianza máxima ~0.30, necesita re-entrenamiento
+# ⚠️  IMPORTANTE: El modelo necesita estar correctamente entrenado
+#     Si ves confianzas ~0.5-0.6, ejecuta diagnose_ssd.py
 ssd_detector:
   model_path: "models/ssd_vehicle_detector.keras"
   weights_path: "models/ssd_vehicle_detector.weights.h5"
-  confidence_threshold: 0.26
-  nms_threshold: 0.3
-  max_detections: 8
+  # Threshold ALTO para filtrar pesos no entrenados (confianzas ~0.5)
+  # Si el modelo está bien entrenado, bajar a 0.3-0.5
+  confidence_threshold: 0.35
+  nms_threshold: 0.4
+  max_detections: 200
   min_box_size: 0.02
 
 ocr:
@@ -40,7 +43,7 @@ ocr:
   use_gpu: false
   confidence_threshold: 0.3
   min_text_length: 4
-  ocr_frequency: 3
+  ocr_frequency: 10
   cache_ttl: 30.0
   
   preprocessing:
@@ -82,12 +85,12 @@ display:
 
 
 performance:
-  skip_frames: 0 
+  skip_frames: 1 
   max_fps: 30 
   resize_frame:
     enabled: false
     width: 640
-    height: 480
+    height: 360
 
 
 logging:
