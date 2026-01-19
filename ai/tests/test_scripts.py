@@ -1,6 +1,8 @@
 import io
 import numpy as np
 import tensorflow as tf
+import sys
+import types
 
 from scripts import diagnose_ssd as diag
 from scripts import train_ssd as train
@@ -34,7 +36,7 @@ def test_diagnose_check_dataset(monkeypatch):
         return io.StringIO(yaml_content)
 
     monkeypatch.setattr(diag.os.path, "exists", fake_exists)
-    monkeypatch.setattr(diag, "open", fake_open)
+    monkeypatch.setattr("builtins.open", fake_open)
 
     assert diag.check_dataset() is True
 
@@ -53,7 +55,7 @@ def test_diagnose_analyze_bbox_distribution(monkeypatch):
 
     monkeypatch.setattr(diag.os.path, "exists", fake_exists)
     monkeypatch.setattr(diag.glob, "glob", fake_glob)
-    monkeypatch.setattr(diag, "open", fake_open)
+    monkeypatch.setattr("builtins.open", fake_open)
 
     assert diag.analyze_bbox_distribution() is True
 
@@ -72,3 +74,75 @@ def test_train_load_yolo_label(tmp_path):
     boxes, classes = train.load_yolo_label(str(label_file))
     assert boxes.shape == (2, 4)
     assert np.all(classes == 0)
+
+
+def test_diagnose_check_dataset_missing(monkeypatch):
+    monkeypatch.setattr(diag.os.path, "exists", lambda path: False)
+    assert diag.check_dataset() is False
+
+
+def test_diagnose_analyze_bbox_distribution_missing(monkeypatch):
+    monkeypatch.setattr(diag.os.path, "exists", lambda path: False)
+    assert diag.analyze_bbox_distribution() is False
+
+
+def test_diagnose_model_loading_success(monkeypatch):
+    class FakeLayer:
+        name = "detect_conv"
+
+        def get_weights(self):
+            return [np.array([[0.02]]), np.array([0.0])]
+
+    class FakeDetector:
+        def __init__(self, conf_threshold=0.5):
+            self.available = True
+            self.anchors = [1, 2]
+            self.conf_threshold = conf_threshold
+            self.model = types.SimpleNamespace(layers=[FakeLayer()])
+
+    detectors_pkg = types.ModuleType("detectors")
+    ssd_mod = types.ModuleType("detectors.ssd_detector")
+    ssd_mod.SSDVehicleDetector = FakeDetector
+    monkeypatch.setitem(sys.modules, "detectors", detectors_pkg)
+    monkeypatch.setitem(sys.modules, "detectors.ssd_detector", ssd_mod)
+
+    assert diag.test_model_loading() is True
+
+
+def test_diagnose_model_loading_failure(monkeypatch):
+    class FailingDetector:
+        def __init__(self, conf_threshold=0.5):
+            raise RuntimeError("boom")
+
+    detectors_pkg = types.ModuleType("detectors")
+    ssd_mod = types.ModuleType("detectors.ssd_detector")
+    ssd_mod.SSDVehicleDetector = FailingDetector
+    monkeypatch.setitem(sys.modules, "detectors", detectors_pkg)
+    monkeypatch.setitem(sys.modules, "detectors.ssd_detector", ssd_mod)
+
+    assert diag.test_model_loading() is False
+
+
+def test_diagnose_inference_without_detections(monkeypatch):
+    class FakeDetector:
+        def __init__(self, conf_threshold=0.3):
+            self.available = True
+
+        def detect(self, frame):
+            return []
+
+    class FakeCV2(types.SimpleNamespace):
+        def imread(self, path):
+            return None
+
+    detectors_pkg = types.ModuleType("detectors")
+    ssd_mod = types.ModuleType("detectors.ssd_detector")
+    ssd_mod.SSDVehicleDetector = FakeDetector
+    monkeypatch.setitem(sys.modules, "detectors", detectors_pkg)
+    monkeypatch.setitem(sys.modules, "detectors.ssd_detector", ssd_mod)
+
+    fake_cv2 = FakeCV2()
+    monkeypatch.setitem(sys.modules, "cv2", fake_cv2)
+    monkeypatch.setattr(diag.glob, "glob", lambda pattern: [])
+
+    assert diag.test_inference() is True
