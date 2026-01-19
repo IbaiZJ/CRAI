@@ -6,7 +6,8 @@ import {
   ChartBar,
   Cctv,
   Sparkles,
-  Car
+  Car,
+  Scan
 } from "lucide-react"
 
 export const sidebarConfig = {
@@ -64,6 +65,12 @@ export const sidebarConfig = {
       title: "Cameras",
       url: "/cameras",
       icon: Cctv,
+      navType: "button",
+    },
+    {
+      title: "Detecciones",
+      url: "/detections",
+      icon: Scan,
       navType: "button",
     },
     {
