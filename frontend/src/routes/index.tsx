@@ -7,6 +7,7 @@ const UserDetail = lazy(() => import("@/pages/User"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const Statistics = lazy(() => import("@/pages/Statistics"));
 const Cameras = lazy(() => import("@/pages/Cameras"));
+const Detections = lazy(() => import("@/pages/Detections"));
 const Cars = lazy(() => import("@/pages/Cars"));
 const Simulations = lazy(() => import("@/pages/Simulations"));
 const SignUp = lazy(() => import("@/pages/SignUp"));
@@ -56,6 +57,11 @@ const appRoutes = [
   {
     path: "/cameras",
     component: Cameras,
+    protected: true,
+  },
+  {
+    path: "/detections",
+    component: Detections,
     protected: true,
   },
   {
