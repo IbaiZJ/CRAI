@@ -1,195 +1,389 @@
 import Layout, { type BreadcrumbItem } from "@/layouts/Layout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Car, FileText, Users, Calendar } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNotifications } from "@/hooks/useNotifications";
-import CountUp from "@/components/CountUp";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Plus, Pencil, Trash2, Loader2 } from "lucide-react";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-interface CarData {
+interface Vehicle {
   plate: string;
-  badge: string;
-  userId: number;
-  itv: string;
+  badge: string | null;
+  userId: string | null;
+  vehicleTypeId: number | null;
 }
 
 export default function Cars() {
-  const notifications = useNotifications();
-  const [cars, setCars] = useState<CarData[]>([]);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const notifications = useNotifications();
 
-  const breadcrumbs: BreadcrumbItem[] = [{ label: "Dashboard", to: "/dashboard" }, { label: "Cars" }];
+  const [formData, setFormData] = useState({
+    plate: "",
+    badge: "",
+    userId: "",
+    vehicleTypeId: "",
+  });
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     document.title = "CRAI - Cars";
+    loadVehicles();
   }, []);
 
-  useEffect(() => {
-    const fetchVehicles = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`${API_BASE_URL}/vehicles`);
-        if (response.ok) {
-          const data = await response.json();
-          setCars(data);
-        } else {
-          throw new Error("Failed to fetch vehicles");
-        }
-      } catch (error: any) {
-        notifications.error("Error fetching vehicles data: " + error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchVehicles();
-  }, [notifications]);
-
-  // Calcular estadísticas desde los datos del fetch
-  const uniqueUsers = new Set(cars.map((car) => car.userId)).size;
-  const uniqueBadges = new Set(cars.map((car) => car.badge)).size;
-  const expiredITV = cars.filter((car) => {
-    const itvDate = new Date(car.itv);
-    return itvDate < new Date();
-  }).length;
-
-  const stats = [
-    {
-      title: "Total Vehicles",
-      value: cars.length,
-      icon: Car,
-      color: "text-blue-500",
-    },
-    {
-      title: "Unique Users",
-      value: uniqueUsers,
-      icon: Users,
-      color: "text-green-500",
-    },
-    {
-      title: "Badge Types",
-      value: uniqueBadges,
-      icon: FileText,
-      color: "text-purple-500",
-    },
-    {
-      title: "Expired ITV",
-      value: expiredITV,
-      icon: Calendar,
-      color: "text-red-500",
-    },
+  const breadcrumbs: BreadcrumbItem[] = [
+    { label: "Dashboard", to: "/dashboard" },
+    { label: "Cars" },
   ];
 
-  const isITVExpired = (itv: string) => {
-    const itvDate = new Date(itv);
-    return itvDate < new Date();
+  const loadVehicles = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${API_BASE_URL}/vehicles`);
+      const result = await response.json();
+      
+      if (result.success && result.data) {
+        setVehicles(result.data);
+      } else if (Array.isArray(result)) {
+        setVehicles(result);
+      } else {
+        notifications.error("Failed to load vehicles");
+      }
+    } catch (error) {
+      console.error("Error loading vehicles:", error);
+      notifications.error("Error loading vehicles");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("es-ES", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.plate.trim()) {
+      newErrors.plate = "Plate is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      if (editingVehicle) {
+        // Update vehicle
+        const updateData: any = {};
+        
+        if (formData.badge) updateData.badge = formData.badge;
+        if (formData.userId) updateData.userId = formData.userId;
+        if (formData.vehicleTypeId) updateData.vehicleTypeId = parseInt(formData.vehicleTypeId);
+
+        const response = await fetch(`${API_BASE_URL}/vehicle?plate=${encodeURIComponent(editingVehicle.plate)}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updateData),
+        });
+
+        const result = await response.json();
+
+        if (result.success || response.ok) {
+          notifications.success("Vehicle updated successfully");
+          loadVehicles();
+          handleCloseDialog();
+        } else {
+          notifications.error(result.error || "Failed to update vehicle");
+        }
+      } else {
+        // Create new vehicle
+        const createData: any = {
+          plate: formData.plate,
+        };
+
+        if (formData.badge) createData.badge = formData.badge;
+        if (formData.userId) createData.userId = formData.userId;
+        if (formData.vehicleTypeId) createData.vehicleTypeId = parseInt(formData.vehicleTypeId);
+
+        const response = await fetch(`${API_BASE_URL}/vehicle`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(createData),
+        });
+
+        const result = await response.json();
+
+        if (result.success || response.ok) {
+          notifications.success("Vehicle created successfully");
+          loadVehicles();
+          handleCloseDialog();
+        } else {
+          notifications.error(result.error || "Failed to create vehicle");
+        }
+      }
+    } catch (error) {
+      console.error("Error saving vehicle:", error);
+      notifications.error("Error saving vehicle");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleEdit = (vehicle: Vehicle) => {
+    setEditingVehicle(vehicle);
+    setFormData({
+      plate: vehicle.plate,
+      badge: vehicle.badge || "",
+      userId: vehicle.userId || "",
+      vehicleTypeId: vehicle.vehicleTypeId?.toString() || "",
     });
+    setErrors({});
+    setIsDialogOpen(true);
+  };
+
+  const handleDelete = async (plate: string) => {
+    if (!confirm(`Are you sure you want to delete vehicle "${plate}"?`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/vehicle?plate=${encodeURIComponent(plate)}`, {
+        method: 'DELETE',
+      });
+
+      const result = await response.json();
+
+      if (result.success || response.ok) {
+        notifications.success("Vehicle deleted successfully");
+        loadVehicles();
+      } else {
+        notifications.error(result.error || "Failed to delete vehicle");
+      }
+    } catch (error) {
+      console.error("Error deleting vehicle:", error);
+      notifications.error("Error deleting vehicle");
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+    setEditingVehicle(null);
+    setFormData({
+      plate: "",
+      badge: "",
+      userId: "",
+      vehicleTypeId: "",
+    });
+    setErrors({});
+  };
+
+  const handleOpenNewDialog = () => {
+    setEditingVehicle(null);
+    setFormData({
+      plate: "",
+      badge: "",
+      userId: "",
+      vehicleTypeId: "",
+    });
+    setErrors({});
+    setIsDialogOpen(true);
   };
 
   return (
     <Layout breadcrumbs={breadcrumbs}>
-      <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Fleet Management</h1>
-          <p className="text-muted-foreground mt-2">Monitor and manage all vehicles in real-time</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {stats.map((stat) => {
-            const Icon = stat.icon;
-            return (
-              <Card key={stat.title}>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-                  <Icon className={`h-4 w-4 ${stat.color}`} />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {loading ? (
-                      "..."
-                    ) : (
-                      <CountUp to={stat.value} className="text-2xl font-bold" duration={1.5} />
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle>Vehicles Management</CardTitle>
+            <CardDescription>Manage fleet vehicles</CardDescription>
+          </div>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button onClick={handleOpenNewDialog}>
+                <Plus className="mr-2 h-4 w-4" />
+                Add Vehicle
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>{editingVehicle ? "Edit Vehicle" : "Create New Vehicle"}</DialogTitle>
+                <DialogDescription>
+                  {editingVehicle ? "Update vehicle information" : "Fill in the details to create a new vehicle"}
+                </DialogDescription>
+              </DialogHeader>
+              <form onSubmit={handleSubmit}>
+                <div className="space-y-4 py-4">
+                  <div className="space-y-2">
+                    <label htmlFor="plate" className="text-sm font-medium">
+                      Plate <span className="text-red-500">*</span>
+                    </label>
+                    <Input
+                      id="plate"
+                      name="plate"
+                      value={formData.plate}
+                      onChange={handleChange}
+                      disabled={!!editingVehicle || isSubmitting}
+                      className={errors.plate ? "border-red-500" : ""}
+                      placeholder="Enter plate number"
+                    />
+                    {errors.plate && (
+                      <p className="text-xs text-red-500">{errors.plate}</p>
                     )}
                   </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
 
-        {loading ? (
-          <div className="flex items-center justify-center p-12">
-            <div className="text-muted-foreground">Loading vehicles...</div>
-          </div>
-        ) : cars.length === 0 ? (
-          <div className="flex items-center justify-center p-12">
-            <div className="text-muted-foreground">No vehicles found</div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {cars.map((car, index) => (
-              <Card key={`${car.plate}-${index}`} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div className="space-y-1">
-                      <CardTitle className="text-base font-mono">{car.plate}</CardTitle>
-                      <p className="text-sm text-muted-foreground">Badge: {car.badge}</p>
-                    </div>
-                    {isITVExpired(car.itv) ? (
-                      <Badge variant="destructive">ITV Expired</Badge>
+                  <div className="space-y-2">
+                    <label htmlFor="badge" className="text-sm font-medium">
+                      Badge
+                    </label>
+                    <Input
+                      id="badge"
+                      name="badge"
+                      value={formData.badge}
+                      onChange={handleChange}
+                      disabled={isSubmitting}
+                      placeholder="Enter badge (optional)"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="userId" className="text-sm font-medium">
+                      User ID
+                    </label>
+                    <Input
+                      id="userId"
+                      name="userId"
+                      value={formData.userId}
+                      onChange={handleChange}
+                      disabled={isSubmitting}
+                      placeholder="Enter user ID (optional)"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="vehicleTypeId" className="text-sm font-medium">
+                      Vehicle Type ID
+                    </label>
+                    <Input
+                      id="vehicleTypeId"
+                      name="vehicleTypeId"
+                      type="number"
+                      value={formData.vehicleTypeId}
+                      onChange={handleChange}
+                      disabled={isSubmitting}
+                      placeholder="Enter vehicle type ID (optional)"
+                    />
+                  </div>
+                </div>
+
+                <DialogFooter>
+                  <Button type="button" variant="outline" onClick={handleCloseDialog} disabled={isSubmitting}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Saving...
+                      </>
                     ) : (
-                      <Badge className="bg-green-500 hover:bg-green-600">ITV Valid</Badge>
+                      editingVehicle ? "Update" : "Create"
                     )}
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground flex items-center gap-1">
-                        <Users className="h-3 w-3" />
-                        User ID:
-                      </span>
-                      <span className="font-medium">{car.userId}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />
-                        ITV:
-                      </span>
-                      <span
-                        className={`font-medium ${
-                          isITVExpired(car.itv) ? "text-red-600" : "text-green-600"
-                        }`}
-                      >
-                        {formatDate(car.itv)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground flex items-center gap-1">
-                        <FileText className="h-3 w-3" />
-                        Badge:
-                      </span>
-                      <span className="font-medium">{car.badge}</span>
-                    </div>
-                    <div className="mt-4 aspect-video bg-muted rounded-md flex items-center justify-center">
-                      <Car className="h-12 w-12 text-muted-foreground" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
-      </div>
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </CardHeader>
+        <CardContent>
+          {loading ? (
+            <div className="flex justify-center items-center py-8">
+              <Loader2 className="h-8 w-8 animate-spin" />
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Plate</TableHead>
+                  <TableHead>Badge</TableHead>
+                  <TableHead>User ID</TableHead>
+                  <TableHead>Vehicle Type ID</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {vehicles.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
+                      No vehicles found
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  vehicles.map((vehicle) => (
+                    <TableRow key={vehicle.plate}>
+                      <TableCell className="font-medium font-mono">{vehicle.plate}</TableCell>
+                      <TableCell>{vehicle.badge || "-"}</TableCell>
+                      <TableCell>{vehicle.userId || "-"}</TableCell>
+                      <TableCell>{vehicle.vehicleTypeId || "-"}</TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleEdit(vehicle)}
+                            title="Edit vehicle"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDelete(vehicle.plate)}
+                            title="Delete vehicle"
+                          >
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
     </Layout>
   );
 }
