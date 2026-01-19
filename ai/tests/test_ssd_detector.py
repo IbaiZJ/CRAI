@@ -235,6 +235,7 @@ def test_detect_paths(monkeypatch):
     det.available = True
     det.conf_threshold = 0.5
     det.nms_threshold = 0.3
+    det.min_box_size = 0.02
     det.logger = DummyLogger()
     det.anchors = tf.constant(
         [[0.5, 0.5, 0.2, 0.2], [0.1, 0.1, 0.05, 0.05], [0.5, 0.5, 0.95, 0.95]],
