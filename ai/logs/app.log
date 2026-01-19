@@ -19,3 +19,27 @@
 [2026-01-19 09:14:23] [[32mINFO[0m] [logger.py:120] 1. Download a pre-trained model
 [2026-01-19 09:14:23] [[32mINFO[0m] [logger.py:120] 2. Use vehicle region of interest (ROI) detection
 [2026-01-19 09:14:23] [[32mINFO[0m] [logger.py:120] 3. Train your own model with your data
+[2026-01-19 10:19:56] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\aorti\AppData\Local\Temp\pytest-of-aorti\pytest-1\test_load_existing_config0\config.yaml
+[2026-01-19 10:19:56] [[33mWARNING[0m] [logger.py:124] C:\Users\aorti\AppData\Local\Temp\pytest-of-aorti\pytest-1\test_load_missing_config_uses_0\missing.yaml not found, using default configuration
+[2026-01-19 10:19:56] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\config/config.yaml
+[2026-01-19 10:19:56] [[31mERROR[0m] [logger.py:128] Error loading configuration: bad
+[2026-01-19 10:19:56] [[32mINFO[0m] [logger.py:120] Using default configuration
+[2026-01-19 10:19:56] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\aorti\AppData\Local\Temp\pytest-of-aorti\pytest-1\test_get_set_and_properties0\config.yaml
+[2026-01-19 10:19:56] [[33mWARNING[0m] [logger.py:124] C:\Users\aorti\AppData\Local\Temp\pytest-of-aorti\pytest-1\test_save_and_reload0\config.yaml not found, using default configuration
+[2026-01-19 10:19:56] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\aorti\AppData\Local\Temp\pytest-of-aorti\pytest-1\test_save_and_reload0\config.yaml
+[2026-01-19 10:19:56] [[33mWARNING[0m] [logger.py:124] C:\Users\aorti\AppData\Local\Temp\pytest-of-aorti\pytest-1\test_save_failure0\config.yaml not found, using default configuration
+[2026-01-19 10:19:56] [[33mWARNING[0m] [logger.py:124] C:\Users\aorti\AppData\Local\Temp\pytest-of-aorti\pytest-1\test_print_config0\config.yaml not found, using default configuration
+[2026-01-19 10:19:56] [[32mINFO[0m] [logger.py:120] Loading YOLO model: dummy.pt
+[2026-01-19 10:19:56] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.1
+[2026-01-19 10:19:56] [[32mINFO[0m] [logger.py:120] Loading license plate model: dummy.pt
+[2026-01-19 10:19:56] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.1
+[2026-01-19 10:19:56] [[32mINFO[0m] [logger.py:120] Loading license plate model: dummy.pt
+[2026-01-19 10:19:56] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.1
+[2026-01-19 10:19:56] [[32mINFO[0m] [logger.py:120] Loading license plate model: dummy.pt
+[2026-01-19 10:19:56] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.1
+[2026-01-19 10:19:56] [[32mINFO[0m] [logger.py:120] Loading license plate model: missing.pt
+[2026-01-19 10:19:56] [[31mERROR[0m] [logger.py:128] Error loading model: no model
+[2026-01-19 10:19:56] [[32mINFO[0m] [logger.py:120] OPTIONS:
+[2026-01-19 10:19:56] [[32mINFO[0m] [logger.py:120] 1. Download a pre-trained model
+[2026-01-19 10:19:56] [[32mINFO[0m] [logger.py:120] 2. Use vehicle region of interest (ROI) detection
+[2026-01-19 10:19:56] [[32mINFO[0m] [logger.py:120] 3. Train your own model with your data
