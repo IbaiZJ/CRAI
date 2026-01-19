@@ -54,6 +54,9 @@ jobs:
             --cov-report=term-missing \
             --cov-fail-under=0 \
             -v
+          # Fix coverage paths to be relative for SonarCloud
+          sed -i 's|<source>.*</source>|<source>src</source>|g' coverage.xml
+          sed -i 's|filename=".*src/|filename="src/|g' coverage.xml
 
       # 5. Upload Coverage to Codecov (Optional)
       - name: Upload Coverage Reports
