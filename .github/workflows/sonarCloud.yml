@@ -29,19 +29,16 @@ jobs:
       - name: Run AI Tests with Coverage
         working-directory: ./ai
         run: |
-          pytest tests/ -v --cov=. --cov-config=.coveragerc --cov-report=xml:coverage.xml --cov-report=term-missing
+          pytest tests/ -v --cov=src --cov=scripts --cov-report=xml:coverage.xml --cov-report=term-missing
       - name: Debug AI Coverage
         working-directory: ./ai
         run: |
-          ls -la
-          pwd
-          head -n 10 coverage.xml
+          echo "=== Coverage XML content ==="
+          head -n 40 coverage.xml
       - name: SonarCloud Scan (ai)
         uses: SonarSource/sonarcloud-github-action@v2.3.0
         with:
           projectBaseDir: ai
-          args: >
-            -Dsonar.python.coverage.reportPaths=coverage.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
