@@ -31,9 +31,9 @@ ssd_detector:
   weights_path: "models/ssd_vehicle_detector.weights.h5"
   # Threshold ALTO para filtrar pesos no entrenados (confianzas ~0.5)
   # Si el modelo está bien entrenado, bajar a 0.3-0.5
-  confidence_threshold: 0.39
-  nms_threshold: 0.45
-  max_detections: 15
+  confidence_threshold: 0.35
+  nms_threshold: 0.4
+  max_detections: 200
   min_box_size: 0.02
 
 ocr:

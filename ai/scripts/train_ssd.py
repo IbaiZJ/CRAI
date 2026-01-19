@@ -120,8 +120,34 @@ def load_sample(image_path: str, label_path: str):
 
 def augment_image_and_boxes(image, boxes):
     """
-    Sin data augmentation - retorna imagen y boxes sin modificar
+    Data augmentation SIN transformaciones espaciales (no altera coordenadas de boxes):
+    - Brillo aleatorio
+    - Contraste aleatorio
+    - Saturación aleatorio
+    - Blur gaussiano
     """
+    image = tf.cast(image, tf.float32)
+    
+    # 1. Brillo aleatorio (±30%)
+    if tf.random.uniform([]) > 0.5:
+        delta = tf.random.uniform([], -0.3, 0.3)
+        image = tf.image.adjust_brightness(image, delta)
+    
+    # 2. Contraste aleatorio (0.7-1.3x)
+    if tf.random.uniform([]) > 0.5:
+        factor = tf.random.uniform([], 0.7, 1.3)
+        image = tf.image.adjust_contrast(image, factor)
+    
+    # 3. Saturación aleatorio (0.7-1.3x)
+    if tf.random.uniform([]) > 0.5:
+        factor = tf.random.uniform([], 0.7, 1.3)
+        image = tf.image.adjust_saturation(image, factor)
+    
+ 
+    
+    # Clipping de imagen
+    image = tf.clip_by_value(image, 0.0, 1.0)
+    
     return image, boxes
 
 
@@ -546,142 +572,6 @@ def draw_boxes_on_image(image, boxes, color=(0, 255, 0), thickness=2):
     return img
 
 
-def visualize_augmentation(samples, output_dir, num_examples=6):
-    """
-    Genera imágenes de demostración del data augmentation
-    Muestra imagen original vs augmentada con bounding boxes
-    """
-    print("\n" + "="*80)
-    print("🎨 GENERANDO DEMOSTRACIÓN DE DATA AUGMENTATION")
-    print("="*80)
-    
-    os.makedirs(output_dir, exist_ok=True)
-    
-    # Seleccionar muestras aleatorias
-    np.random.seed(42)
-    selected_samples = np.random.choice(len(samples), min(num_examples, len(samples)), replace=False)
-    
-    fig, axes = plt.subplots(num_examples, 2, figsize=(16, 4*num_examples))
-    if num_examples == 1:
-        axes = axes.reshape(1, -1)
-    
- 
-    demo_dir = os.path.join(base_dir, 'logs', 'augmentation_demos')
-    try:
-        visualize_augmentation(train_samples, demo_dir, num_examples=6)
-        create_augmentation_grid(train_samples, demo_dir, num_augmentations=6)
-    except Exception as e:
-        print(f"⚠️ Error generando visualizaciones: {e}")
-        print("Continuando con el entrenamiento...")
-    
-    # r idx, sample_idx in enumerate(selected_samples):
-        img_path, lbl_path = samples[sample_idx]
-        
-        # Cargar imagen y labels ORIGINALES
-        image_np = cv2.imread(img_path)
-        image_np = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
-        image_np = cv2.resize(image_np, (IMG_WIDTH, IMG_HEIGHT))
-        
-        boxes, classes = load_yolo_label(lbl_path)
-        
-        # Imagen original con boxes
-        img_original = draw_boxes_on_image(image_np, boxes, color=(0, 255, 0), thickness=3)
-        
-        # Aplicar augmentation
-        image_tf = tf.convert_to_tensor(image_np, dtype=tf.float32) / 255.0
-        boxes_tf = tf.convert_to_tensor(boxes, dtype=tf.float32)
-        
-        image_aug, boxes_aug = augment_image_and_boxes(image_tf, boxes_tf)
-        
-        # Convertir de vuelta a numpy
-        image_aug_np = (image_aug.numpy() * 255).astype(np.uint8)
-        boxes_aug_np = boxes_aug.numpy()
-        
-        # Imagen augmentada con boxes
-        img_augmented = draw_boxes_on_image(image_aug_np, boxes_aug_np, color=(255, 0, 0), thickness=3)
-        
-        # Mostrar en subplot
-        axes[idx, 0].imshow(img_original)
-        axes[idx, 0].set_title(f'Original (Green boxes)\n{len(boxes)} vehicles', fontsize=12, fontweight='bold')
-        axes[idx, 0].axis('off')
-        
-        axes[idx, 1].imshow(img_augmented)
-        axes[idx, 1].set_title(f'Augmented (Red boxes)\n{len(boxes_aug_np)} vehicles', fontsize=12, fontweight='bold')
-        axes[idx, 1].axis('off')
-        
-        print(f"  Sample {idx+1}/{num_examples}: {os.path.basename(img_path)} - "
-              f"{len(boxes)} boxes → {len(boxes_aug_np)} boxes after augmentation")
-    
-    plt.tight_layout()
-    output_path = os.path.join(output_dir, 'data_augmentation_demo.png')
-    plt.savefig(output_path, dpi=150, bbox_inches='tight')
-    plt.close()
-    
-    print(f"\n✅ Demostración guardada en: {output_path}")
-    print("="*80 + "\n")
-    
-    return output_path
-
-
-def create_augmentation_grid(samples, output_dir, num_augmentations=6):
-    """
-    Muestra una misma imagen con diferentes augmentations aplicadas
-    """
-    print("\n" + "="*80)
-    print("🔄 GENERANDO GRID DE AUGMENTACIONES MÚLTIPLES")
-    print("="*80)
-    
-    os.makedirs(output_dir, exist_ok=True)
-    
-    # Tomar una imagen aleatoria
-    np.random.seed(42)
-    img_path, lbl_path = samples[np.random.randint(len(samples))]
-    
-    # Cargar imagen y labels
-    image_np = cv2.imread(img_path)
-    image_np = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
-    image_np = cv2.resize(image_np, (IMG_WIDTH, IMG_HEIGHT))
-    
-    boxes, classes = load_yolo_label(lbl_path)
-    
-    # Grid: 1 original + N augmentadas
-    fig, axes = plt.subplots(2, (num_augmentations+1)//2, figsize=(20, 10))
-    axes = axes.flatten()
-    
-    # Original
-    img_original = draw_boxes_on_image(image_np, boxes, color=(0, 255, 0), thickness=2)
-    axes[0].imshow(img_original)
-    axes[0].set_title('ORIGINAL', fontsize=14, fontweight='bold', color='green')
-    axes[0].axis('off')
-    
-    # Múltiples augmentaciones
-    for i in range(1, num_augmentations):
-        image_tf = tf.convert_to_tensor(image_np, dtype=tf.float32) / 255.0
-        boxes_tf = tf.convert_to_tensor(boxes, dtype=tf.float32)
-        
-        image_aug, boxes_aug = augment_image_and_boxes(image_tf, boxes_tf)
-        
-        image_aug_np = (image_aug.numpy() * 255).astype(np.uint8)
-        boxes_aug_np = boxes_aug.numpy()
-        
-        img_augmented = draw_boxes_on_image(image_aug_np, boxes_aug_np, color=(255, 0, 0), thickness=2)
-        
-        axes[i].imshow(img_augmented)
-        axes[i].set_title(f'Augmentation {i}', fontsize=12, fontweight='bold')
-        axes[i].axis('off')
-    
-    plt.suptitle(f'Data Augmentation Variations\n{os.path.basename(img_path)}', 
-                 fontsize=16, fontweight='bold')
-    plt.tight_layout()
-    
-    output_path = os.path.join(output_dir, 'augmentation_grid.png')
-    plt.savefig(output_path, dpi=150, bbox_inches='tight')
-    plt.close()
-    
-    print(f"✅ Grid de augmentaciones guardado en: {output_path}")
-    print("="*80 + "\n")
-    
-    return output_path
 
 
 # =============================================================================
@@ -693,8 +583,8 @@ def main():
     parser.add_argument('--epochs', type=int, default=100, help='Número de epochs (default: 100)')
     parser.add_argument('--batch-size', type=int, default=12, help='Batch size (default: 12)')
     parser.add_argument('--lr', type=float, default=1e-4, help='Learning rate (default: 1e-4)')
-    parser.add_argument('--dataset', type=str, default='C:\\Users\\04aza\\UNI\\3 Urtea\\1.SEMESTREA\\PBL\\UA_DETRAC\\UA_DETRAC',
-                        help='Ruta absoluta al dataset UA_DETRAC')
+    parser.add_argument('--dataset', type=str, default='notebooks/UA-DETRAC-DATASET-10K-2',
+                        help='Ruta al dataset UA-DETRAC (relativa o absoluta)')
     args = parser.parse_args()
     
     print("=" * 80)
@@ -710,28 +600,77 @@ def main():
     # Rutas
     script_dir = os.path.dirname(os.path.abspath(__file__))
     base_dir = os.path.dirname(script_dir)
-    # Si el path del dataset es absoluto, usarlo directamente; si no, tratarlo como relativo
-    dataset_dir = args.dataset if os.path.isabs(args.dataset) else os.path.join(base_dir, args.dataset)
+    
+    # Si el path es absoluto, usarlo directamente; si no, tratarlo como relativo a base_dir
+    if os.path.isabs(args.dataset):
+        dataset_dir = args.dataset
+    else:
+        dataset_dir = os.path.join(base_dir, args.dataset)
+    
     models_dir = os.path.join(base_dir, 'src', 'models')
     os.makedirs(models_dir, exist_ok=True)
     
-    # Verificar dataset (estructura UA_DETRAC: images/train y labels/train)
-    train_images_dir = os.path.join(dataset_dir, 'images', 'train')
-    train_labels_dir = os.path.join(dataset_dir, 'labels', 'train')
-    val_images_dir = os.path.join(dataset_dir, 'images', 'val')
-    val_labels_dir = os.path.join(dataset_dir, 'labels', 'val')
+    print(f"\n📂 Dataset dir: {dataset_dir}")
     
-    if not os.path.exists(train_images_dir):
-        print(f"❌ Dataset no encontrado en: {dataset_dir}")
+    # Detectar estructura del dataset automáticamente
+    print("\n🔍 Detectando estructura del dataset...")
+    
+    # Estructura 1: UA_DETRAC (images/train, labels/train, images/val, labels/val)
+    structure_1_train_img = os.path.join(dataset_dir, 'images', 'train')
+    structure_1_train_lbl = os.path.join(dataset_dir, 'labels', 'train')
+    structure_1_val_img = os.path.join(dataset_dir, 'images', 'val')
+    structure_1_val_lbl = os.path.join(dataset_dir, 'labels', 'val')
+    
+    # Estructura 2: UA-DETRAC-DATASET-10K-2 (train/images, train/labels, valid/images, valid/labels)
+    structure_2_train_img = os.path.join(dataset_dir, 'train', 'images')
+    structure_2_train_lbl = os.path.join(dataset_dir, 'train', 'labels')
+    structure_2_val_img = os.path.join(dataset_dir, 'valid', 'images')
+    structure_2_val_lbl = os.path.join(dataset_dir, 'valid', 'labels')
+    
+    # Detectar cual estructura existe
+    if (os.path.exists(structure_1_train_img) and os.path.exists(structure_1_train_lbl)):
+        print("✓ Detectada estructura: images/train + labels/train")
+        train_images_dir = structure_1_train_img
+        train_labels_dir = structure_1_train_lbl
+        val_images_dir = structure_1_val_img
+        val_labels_dir = structure_1_val_lbl
+        
+    elif (os.path.exists(structure_2_train_img) and os.path.exists(structure_2_train_lbl)):
+        print("✓ Detectada estructura: train/images + train/labels")
+        train_images_dir = structure_2_train_img
+        train_labels_dir = structure_2_train_lbl
+        val_images_dir = structure_2_val_img
+        val_labels_dir = structure_2_val_lbl
+        
+    else:
+        print(f"❌ No se detectó estructura válida en: {dataset_dir}")
+        print("\nEstructuras soportadas:")
+        print("  1. images/train + labels/train + images/val + labels/val")
+        print("  2. train/images + train/labels + valid/images + valid/labels")
         return
+    
+    # Verificar que existan las carpetas
+    if not os.path.exists(train_images_dir):
+        print(f"❌ No encontrado: {train_images_dir}")
+        return
+    
+    print(f"\n📍 Rutas detectadas:")
+    print(f"   Train images: {train_images_dir}")
+    print(f"   Train labels: {train_labels_dir}")
+    print(f"   Val images:   {val_images_dir}")
+    print(f"   Val labels:   {val_labels_dir}")
     
     print("\n📂 Indexando dataset...")
     train_samples = index_dataset(train_images_dir, train_labels_dir)
-    val_samples = index_dataset(val_images_dir, val_labels_dir)
+    val_samples = index_dataset(val_images_dir, val_labels_dir) if os.path.exists(val_images_dir) else []
     
     if not train_samples:
         print("❌ No se encontraron samples de entrenamiento")
         return
+    
+    print(f"\n✅ Dataset indexado:")
+    print(f"   Train: {len(train_samples)} muestras")
+    print(f"   Val:   {len(val_samples)} muestras")
     
     # Crear datasets
     print("\n📦 Creando tf.data.Dataset...")
@@ -821,18 +760,80 @@ def main():
         ),
     ]
     
-    # Entrenar
+    # Entrenar - FASE 1: Backbone congelado (solo detection heads)
     print("\n" + "=" * 80)
-    print("🏃 INICIANDO ENTRENAMIENTO")
+    print("🏃 FASE 1: ENTRENAMIENTO INICIAL (Backbone congelado)")
     print("=" * 80)
     
-    history = ssd_model.fit(
+    # Calcular epochs para cada fase asegurando al menos 1 epoch en cada una
+    if args.epochs < 2:
+        phase1_epochs = 1
+        phase2_epochs = 0
+    else:
+        phase1_epochs = min(max(int(args.epochs * 0.7), 1), args.epochs - 1)
+        phase2_epochs = args.epochs - phase1_epochs
+
+    history_phase1 = ssd_model.fit(
         train_ds,
         validation_data=val_ds,
-        epochs=args.epochs,
+        epochs=phase1_epochs,
         callbacks=callbacks,
         verbose=1
     )
+
+    # =============================
+    # FASE 2: Fine-tuning (descongelar backbone)
+    print("\n" + "=" * 80)
+    print("🔥 FASE 2: FINE-TUNING (Backbone parcialmente decongelado)")
+    print("=" * 80)
+
+    # Descongelar solo las últimas capas del backbone
+    for layer in ssd_model.base_model.layers[:-20]:
+        layer.trainable = False
+
+    for layer in ssd_model.base_model.layers[-20:]:
+        layer.trainable = True
+
+    print("✓ Backbone parcialmente decongelado (últimas 20 capas)")
+
+    # Learning rate más bajo para fine-tuning
+    lr_finetuning = args.lr / 10
+    ssd_model.compile(
+        optimizer=tf.keras.optimizers.Adam(learning_rate=lr_finetuning)
+    )
+    print(f"✓ Learning rate ajustado a {lr_finetuning}")
+
+    history_phase2 = None
+    if phase2_epochs > 0:
+        history_phase2 = ssd_model.fit(
+            train_ds,
+            validation_data=val_ds,
+            epochs=phase1_epochs + phase2_epochs,
+            initial_epoch=phase1_epochs,
+            callbacks=callbacks,
+            verbose=1
+        )
+    
+    # Combinar historiales
+    if history_phase2 and 'loss' in history_phase2.history:
+        history = {
+            'loss': history_phase1.history['loss'] + history_phase2.history['loss'],
+            'val_loss': history_phase1.history['val_loss'] + history_phase2.history['val_loss'],
+            'phase1_epochs': phase1_epochs,
+            'phase2_epochs': phase2_epochs
+        }
+    else:
+        history = {
+            'loss': history_phase1.history['loss'],
+            'val_loss': history_phase1.history['val_loss'],
+            'phase1_epochs': phase1_epochs,
+            'phase2_epochs': 0
+        }
+    
+    print("\n📊 Resumen de entrenamiento:")
+    print(f"  Fase 1 (Backbone congelado): {phase1_epochs} epochs")
+    print(f"  Fase 2 (Fine-tuning): {phase2_epochs} epochs")
+    print(f"  Total: {args.epochs} epochs")
     
     # Guardar modelo final
     print("\n💾 Guardando modelo...")
@@ -844,7 +845,7 @@ def main():
         name='SSD_MobileNetV2_VehicleDetector'
     )
     functional_model.set_weights(ssd_model.base_model.get_weights())
-    
+   
     keras_path = os.path.join(models_dir, "ssd_vehicle_detector.keras")
     weights_path = os.path.join(models_dir, "ssd_vehicle_detector.weights.h5")
     
@@ -858,9 +859,10 @@ def main():
     print("\n" + "=" * 80)
     print("🎉 ENTRENAMIENTO COMPLETADO")
     print("=" * 80)
-    print(f"   Epochs completados: {len(history.history['loss'])}")
-    print(f"   Mejor val_loss: {min(history.history['val_loss']):.4f}")
-    print(f"   Loss final: {history.history['loss'][-1]:.4f}")
+
+    print(f"   Epochs completados: {len(history['loss'])}")
+    print(f"   Mejor val_loss: {min(history['val_loss']):.4f}")
+    print(f"   Loss final: {history['loss'][-1]:.4f}")
     print(f"\n   Modelo listo para usar con ssd_detector.py")
     print("=" * 80)
 
