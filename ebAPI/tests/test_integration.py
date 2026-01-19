@@ -37,7 +37,7 @@ class TestIntegration:
     
     def test_full_workflow_valid_plate(self, integration_client):
         """Test complete workflow with valid plate"""
-        response = integration_client.get("/api?car_plate=1234BBB")
+        response = integration_client.get("/api?carPlate=1234BBB")
         
         assert response.status_code == 200
         data = response.json()
@@ -49,7 +49,7 @@ class TestIntegration:
     
     def test_full_workflow_motorbike(self, integration_client):
         """Test complete workflow with motorbike"""
-        response = integration_client.get("/api?car_plate=5678XYZ")
+        response = integration_client.get("/api?carPlate=5678XYZ")
         
         assert response.status_code == 200
         data = response.json()
@@ -58,7 +58,7 @@ class TestIntegration:
     
     def test_full_workflow_eco_badge(self, integration_client):
         """Test complete workflow with ECO badge"""
-        response = integration_client.get("/api?car_plate=1111CCC")
+        response = integration_client.get("/api?carPlate=1111CCC")
         
         assert response.status_code == 200
         data = response.json()
@@ -66,7 +66,7 @@ class TestIntegration:
     
     def test_full_workflow_zero_emissions(self, integration_client):
         """Test complete workflow with 0 emissions badge"""
-        response = integration_client.get("/api?car_plate=0000BBB")
+        response = integration_client.get("/api?carPlate=0000BBB")
         
         assert response.status_code == 200
         data = response.json()
@@ -74,7 +74,7 @@ class TestIntegration:
     
     def test_full_workflow_case_insensitive(self, integration_client):
         """Test complete workflow with lowercase input"""
-        response = integration_client.get("/api?car_plate=1234bbb")
+        response = integration_client.get("/api?carPlate=1234bbb")
         
         assert response.status_code == 200
         data = response.json()
@@ -83,7 +83,7 @@ class TestIntegration:
     
     def test_full_workflow_with_spaces(self, integration_client):
         """Test complete workflow with spaces"""
-        response = integration_client.get("/api?car_plate=1234 BBB")
+        response = integration_client.get("/api?carPlate=1234 BBB")
         
         assert response.status_code == 200
         data = response.json()
@@ -91,7 +91,7 @@ class TestIntegration:
     
     def test_full_workflow_plate_not_found(self, integration_client):
         """Test complete workflow when plate not in database"""
-        response = integration_client.get("/api?car_plate=9999ZZZ")
+        response = integration_client.get("/api?carPlate=9999ZZZ")
         
         assert response.status_code == 200
         data = response.json()
@@ -100,7 +100,7 @@ class TestIntegration:
     
     def test_full_workflow_invalid_format(self, integration_client):
         """Test complete workflow with invalid plate format"""
-        response = integration_client.get("/api?car_plate=INVALID")
+        response = integration_client.get("/api?carPlate=INVALID")
         
         assert response.status_code == 200
         data = response.json()
@@ -111,7 +111,7 @@ class TestIntegration:
         plates = ["1234BBB", "5678XYZ", "0000BBB"]
         
         for plate in plates:
-            response = integration_client.get(f"/api?car_plate={plate}")
+            response = integration_client.get(f"/api?carPlate={plate}")
             assert response.status_code == 200
             data = response.json()
             assert data["carPlate"] == plate
@@ -119,12 +119,12 @@ class TestIntegration:
     
     def test_api_prefix_configured(self, integration_client):
         """Test that API prefix is correctly configured"""
-        response = integration_client.get("/api?car_plate=1234BBB")
+        response = integration_client.get("/api?carPlate=1234BBB")
         assert response.status_code == 200
     
     def test_response_structure(self, integration_client):
         """Test response has correct structure"""
-        response = integration_client.get("/api?car_plate=1234BBB")
+        response = integration_client.get("/api?carPlate=1234BBB")
         data = response.json()
         
         # Check top-level keys
@@ -157,26 +157,26 @@ class TestEdgeCases:
     
     def test_very_long_plate_string(self, integration_client):
         """Test with very long input"""
-        response = integration_client.get("/api?car_plate=" + "A" * 100)
+        response = integration_client.get("/api?carPlate=" + "A" * 100)
         assert response.status_code == 200
         data = response.json()
         assert "error" in data["badge"] or data["badge"] == "none"
     
     def test_special_characters(self, integration_client):
         """Test with special characters"""
-        response = integration_client.get("/api?car_plate=1234@#$")
+        response = integration_client.get("/api?carPlate=1234@#$")
         assert response.status_code == 200
         data = response.json()
         assert "error" in data["badge"] or data["badge"] == "none"
     
     def test_unicode_characters(self, integration_client):
         """Test with unicode characters"""
-        response = integration_client.get("/api?car_plate=1234ÁÉÍ")
+        response = integration_client.get("/api?carPlate=1234ÁÉÍ")
         assert response.status_code == 200
     
     def test_numeric_only(self, integration_client):
         """Test with only numbers"""
-        response = integration_client.get("/api?car_plate=1234567")
+        response = integration_client.get("/api?carPlate=1234567")
         assert response.status_code == 200
         data = response.json()
         assert "error" in data["badge"] or data["badge"] == "none"
