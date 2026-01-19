@@ -49,7 +49,7 @@ jobs:
         working-directory: ./ai
         run: |
           pytest tests/ \
-            --cov=src \
+            --cov=. \
             --cov-config=.coveragerc \
             --cov-report=xml:coverage.xml \
             --cov-report=term-missing \

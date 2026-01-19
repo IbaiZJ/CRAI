@@ -1,12 +1,16 @@
 [run]
-source = src
+source = .
 omit = 
-    src/app_ui.py
-    src/main.py
-    src/video/_*_demo.py
+    */app_ui.py
+    */main.py
+    */*_demo.py
     */tests/*
     */__pycache__/*
     */site-packages/*
+    */notebooks/*
+    */logs/*
+    */captures/*
+    */models/*
 
 [report]
 exclude_lines =
