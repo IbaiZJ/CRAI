@@ -1,5 +1,6 @@
 [run]
 source = src
+relative_files = True
 omit = 
     src/app_ui.py
     src/main.py

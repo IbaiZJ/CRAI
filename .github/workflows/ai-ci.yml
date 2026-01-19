@@ -55,6 +55,13 @@ jobs:
             --cov-report=term-missing \
             --cov-fail-under=0 \
             -v
+      - name: Debug AI Coverage
+        if: matrix.python-version == '3.13'
+        working-directory: ./ai
+        run: |
+          ls -la
+          pwd
+          head -n 10 coverage.xml
 
       # 5. Upload Coverage to Codecov (Optional)
       - name: Upload Coverage Reports
