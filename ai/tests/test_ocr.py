@@ -139,6 +139,21 @@ def test_get_image_hash(monkeypatch):
     assert reader._get_image_hash(np.zeros((8, 8, 3), dtype=np.uint8)) is not None
 
 
+def test_get_image_hash_color(monkeypatch):
+    _install_fake_easyocr(monkeypatch)
+    monkeypatch.setattr(ocr_module, "get_logger", Mock(return_value=DummyLogger()))
+    fake_cv2 = _make_fake_cv2()
+
+    def resize_color(img, size, interpolation=None):
+        return np.zeros((size[1], size[0], 3), dtype=np.uint8)
+
+    fake_cv2.resize = resize_color
+    monkeypatch.setattr(ocr_module, "cv2", fake_cv2)
+
+    reader = ocr_module.PlateReader()
+    assert reader._get_image_hash(np.zeros((10, 10, 3), dtype=np.uint8)) is not None
+
+
 def test_read_plate_cache_and_valid_result(monkeypatch):
     _install_fake_easyocr(monkeypatch)
     monkeypatch.setattr(ocr_module, "get_logger", Mock(return_value=DummyLogger()))
@@ -249,6 +264,15 @@ def test_preprocess_and_clean(monkeypatch):
     assert reader._clean_plate_text("12-34-AAA") == ""
 
 
+def test_clean_plate_text_safe_replacement(monkeypatch):
+    _install_fake_easyocr(monkeypatch)
+    monkeypatch.setattr(ocr_module, "get_logger", Mock(return_value=DummyLogger()))
+    monkeypatch.setattr(ocr_module.re, "sub", lambda pattern, repl, text: text)
+
+    reader = ocr_module.PlateReader()
+    assert reader._clean_plate_text("12$4BCD") == ""
+
+
 def test_get_stable_reading_and_find_common_core(monkeypatch):
     _install_fake_easyocr(monkeypatch)
     monkeypatch.setattr(ocr_module, "get_logger", Mock(return_value=DummyLogger()))
@@ -272,6 +296,18 @@ def test_get_stable_reading_and_find_common_core(monkeypatch):
 
     assert reader._find_common_core([]) is None
     assert reader._find_common_core(["A", "B", "C"]) is None
+
+
+def test_get_stable_reading_returns_common_core(monkeypatch):
+    _install_fake_easyocr(monkeypatch)
+    monkeypatch.setattr(ocr_module, "get_logger", Mock(return_value=DummyLogger()))
+
+    reader = ocr_module.PlateReader()
+    reader._history.extend(["ABCD1", "ABCD2"])
+    monkeypatch.setattr(reader, "_find_common_core", Mock(return_value="ABCD"))
+
+    assert reader.get_stable_reading() == "ABCD"
+    assert reader._last_stable == "ABCD"
 
 
 def test_reset_history(monkeypatch):

@@ -92,6 +92,16 @@ def test_set_auth_token_and_context_manager(monkeypatch):
     client.close.assert_called_once()
 
 
+def test_close_calls_session(monkeypatch):
+    response = DummyResponse()
+    session = _make_session(response)
+    monkeypatch.setattr(requests, "Session", lambda: session)
+
+    client = APIRequest()
+    client.close()
+    session.close.assert_called_once()
+
+
 def test_methods_raise(monkeypatch):
     exc = requests.exceptions.RequestException("fail")
     response = DummyResponse(raise_exc=exc)

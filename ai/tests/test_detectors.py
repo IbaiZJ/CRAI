@@ -108,6 +108,18 @@ def test_plate_detector_detect_in_vehicles(monkeypatch):
     assert len(results) == 1
 
 
+def test_plate_detector_detect_without_roi(monkeypatch):
+    boxes = [DummyBox(0, [2, 3, 6, 7], 0.6)]
+    model = DummyModel(DummyResults(boxes))
+    plate_module = _load_plate_module(monkeypatch, model)
+
+    det = plate_module.PlateDetector(model_path="dummy.pt", conf_threshold=0.1)
+    frame = np.zeros((10, 10, 3), dtype=np.uint8)
+    detections = det.detect(frame)
+
+    assert detections[0]["bbox"] == [2, 3, 6, 7]
+
+
 def test_plate_detector_draw_vehicles_with_plates(monkeypatch):
     plate_module = _load_plate_module(monkeypatch, DummyModel(DummyResults([])))
     _mock_cv2(monkeypatch, plate_module)

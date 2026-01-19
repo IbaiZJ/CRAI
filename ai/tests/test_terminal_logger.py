@@ -96,6 +96,23 @@ def test_log_function_call_success_and_error():
         assert False, "Expected ValueError"
 
 
+def test_log_function_call_default_logger(monkeypatch):
+    class DummyLogger:
+        def debug(self, *args, **kwargs):
+            pass
+
+        def error(self, *args, **kwargs):
+            pass
+
+    monkeypatch.setattr(logger_module, "get_logger", lambda: DummyLogger())
+
+    @log_function_call()
+    def add(a, b):
+        return a + b
+
+    assert add(1, 2) == 3
+
+
 def test_log_section_success_and_error():
     class DummyLogger:
         def info(self, *args, **kwargs):

@@ -22,6 +22,11 @@ def test_load_missing_config_uses_default(tmp_path):
     assert cfg.get("ocr.enabled") is True
 
 
+def test_relative_path_resolution():
+    cfg = Config("config/config.yaml")
+    assert cfg.get("camera.source") == 1
+
+
 def test_load_error_uses_default(monkeypatch, tmp_path):
     cfg_path = tmp_path / "broken.yaml"
     cfg_path.write_text(":::", encoding="utf-8")
