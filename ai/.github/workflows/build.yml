@@ -27,6 +27,12 @@ jobs:
         working-directory: ./ai
         run: |
           pytest tests/ -v --cov=src --cov-config=.coveragerc --cov-report=xml:coverage.xml --cov-report=term-missing
+      - name: Debug coverage
+        working-directory: ./ai
+        run: |
+          ls -la
+          pwd
+          head -n 10 coverage.xml
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
         with:
