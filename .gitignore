@@ -133,4 +133,4 @@ plates_itv.csv
 # Datasets
 /data/UA_DETRAC
 **/UA-DETRAC-DATASET-10K-2/
-**/captures/
+**ai/src/captures/
