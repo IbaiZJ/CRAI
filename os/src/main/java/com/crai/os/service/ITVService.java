@@ -8,8 +8,7 @@ import jakarta.annotation.PostConstruct;
 
 import org.springframework.stereotype.Service;
 import java.time.Duration;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
+import java.security.SecureRandom;
 import com.crai.os.config.SimulationConfig;
 
 @Service
@@ -17,7 +16,7 @@ public class ITVService {
 
     private final ITVRepository itvRepository;
     private final SimulationConfig config;
-    private final Random randomGenerator = new Random();
+    private final SecureRandom randomGenerator = new SecureRandom();
 
     public ITVService(ITVRepository itvRepository, SimulationConfig config) {
         this.itvRepository = itvRepository;
@@ -55,7 +54,7 @@ public class ITVService {
 
     private long randomDurationMillis(int maxDays) {
         long max = Duration.ofDays(maxDays).toMillis();
-        return ThreadLocalRandom.current().nextLong(1, max + 1);
+        return randomGenerator.nextLong(1, max + 1);
     }
 
     /**
@@ -72,7 +71,7 @@ public class ITVService {
             boolean expired = randomGenerator.nextBoolean();
 
             long oneYearMillis = Duration.ofDays(365).toMillis();
-            long delta = ThreadLocalRandom.current().nextLong(0, oneYearMillis + 1);
+            long delta = randomGenerator.nextLong(0, oneYearMillis + 1);
             long expiration = expired
                     ? now - delta
                     : now + delta;
