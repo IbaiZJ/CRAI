@@ -33,9 +33,10 @@ jobs:
         continue-on-error: true
       - name: Debug AI Coverage
         working-directory: ./ai
+        continue-on-error: true
         run: |
           echo "=== Coverage XML content ==="
-          head -n 40 coverage.xml
+          if [ -f coverage.xml ]; then head -n 40 coverage.xml; else echo "coverage.xml not found"; fi
       - name: SonarCloud Scan (ai)
         uses: SonarSource/sonarcloud-github-action@v2.3.0
         with:
