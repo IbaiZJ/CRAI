@@ -29,18 +29,24 @@ jobs:
       - name: Run AI Tests with Coverage
         working-directory: ./ai
         run: |
-          # Run only stable tests with coverage on src
-          pytest tests/test_config.py tests/test_terminal_logger.py tests/test_plate_queue.py tests/test_ocr.py tests/test_main.py tests/test_detectors.py tests/test_api_request.py tests/test_config_loader.py tests/test_conftest.py tests/video/ -v --cov=src --cov-report=xml:coverage.xml --cov-report=term-missing --cov-fail-under=0 || true
-          
-          # Ensure coverage.xml exists
-          ls -la coverage.xml || echo "coverage.xml not found"
+          # Run all tests except problematic ones, coverage only on src/
+          pytest tests/ -v \
+            --ignore=tests/test_scripts.py \
+            --ignore=tests/test_diagnose_extended.py \
+            --ignore=tests/test_ssd_load_script.py \
+            --ignore=tests/test_full_src_coverage.py \
+            --cov=src \
+            --cov-report=xml:coverage.xml \
+            --cov-report=term-missing \
+            --cov-fail-under=0 || true
       - name: Debug AI Coverage
         working-directory: ./ai
         continue-on-error: true
         run: |
           echo "=== Coverage file ==="
           ls -la coverage.xml || echo "No coverage.xml"
-          head -n 50 coverage.xml || echo "Cannot read"
+          echo "=== First 20 lines ==="
+          head -n 20 coverage.xml || echo "Cannot read"
       - name: SonarCloud Scan (ai)
         uses: SonarSource/sonarcloud-github-action@v2.3.0
         with:
