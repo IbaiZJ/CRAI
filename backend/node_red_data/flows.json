@@ -493,6 +493,22 @@
         "verboselogging": false
     },
     {
+        "id": "2b41db95e0469052",
+        "type": "websocket-client",
+        "path": "ws://crai.com:1880/ws",
+        "tls": "",
+        "wholemsg": "false",
+        "hb": "0",
+        "subprotocol": "",
+        "headers": []
+    },
+    {
+        "id": "dd011ebecd492d88",
+        "type": "websocket-listener",
+        "path": "/ws/upload",
+        "wholemsg": "true"
+    },
+    {
         "id": "sf_init_retry",
         "type": "function",
         "z": "subflow1",
@@ -1517,8 +1533,7 @@
         "name": "link out {put} /camera",
         "mode": "link",
         "links": [
-            "df2097ae09145bbe",
-            "5bf831bb39f6cad7"
+            "df2097ae09145bbe"
         ],
         "x": 275,
         "y": 620,
@@ -3199,7 +3214,7 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 2040,
+        "x": 2330,
         "y": 140,
         "wires": []
     },
@@ -3997,6 +4012,57 @@
         "info": "",
         "x": 370,
         "y": 60,
+        "wires": []
+    },
+    {
+        "id": "4d87b6500ee418eb",
+        "type": "websocket out",
+        "z": "202119be2ec9a18d",
+        "name": "Notify frontend to upload",
+        "server": "dd011ebecd492d88",
+        "client": "",
+        "x": 2390,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "b90d52b8d4e9407c",
+        "type": "switch",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "false"
+            },
+            {
+                "t": "true"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 2070,
+        "y": 240,
+        "wires": [
+            [
+                "0f4eaa7342bbde96"
+            ],
+            [
+                "0f4eaa7342bbde96",
+                "4d87b6500ee418eb"
+            ]
+        ]
+    },
+    {
+        "id": "c608fa6c39a2feee",
+        "type": "comment",
+        "z": "202119be2ec9a18d",
+        "name": "TODO: Implement WebSockets to \\n upload frontend",
+        "info": "",
+        "x": 2020,
+        "y": 300,
         "wires": []
     },
     {

@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "/vehicles",
+  "description": "Endpoints related to vehicle collection",
+  "get": {
+    "description": "List all vehicles",
+    "response": {
+      "type": "array",
+      "items": {
+        "$ref": "vehicle.json#/$defs/Vehicle"
+      }
+    }
+  }
+}
