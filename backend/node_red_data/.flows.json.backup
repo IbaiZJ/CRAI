@@ -317,12 +317,14 @@
             "dab8b6de71939f7a",
             "f7194d1f7d06ef41",
             "1c16542d2b7b3fec",
-            "7e1190277ffbde70"
+            "7e1190277ffbde70",
+            "ca9427ee7932f4bf",
+            "2d1cc29f1c0ad672"
         ],
         "x": 34,
         "y": 339,
         "w": 282,
-        "h": 322
+        "h": 402
     },
     {
         "id": "b14efd3c54dd8b03",
@@ -489,6 +491,22 @@
         "useselfsignedcertificate": false,
         "sslterminated": false,
         "verboselogging": false
+    },
+    {
+        "id": "2b41db95e0469052",
+        "type": "websocket-client",
+        "path": "ws://crai.com:1880/ws",
+        "tls": "",
+        "wholemsg": "false",
+        "hb": "0",
+        "subprotocol": "",
+        "headers": []
+    },
+    {
+        "id": "dd011ebecd492d88",
+        "type": "websocket-listener",
+        "path": "/ws/upload",
+        "wholemsg": "true"
     },
     {
         "id": "sf_init_retry",
@@ -1550,6 +1568,39 @@
         "wires": []
     },
     {
+        "id": "ca9427ee7932f4bf",
+        "type": "http in",
+        "z": "a5406ced814d1895",
+        "g": "17ef12e0aa788ed0",
+        "name": "{delete} /camera",
+        "url": "/camera",
+        "method": "delete",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 140,
+        "y": 700,
+        "wires": [
+            [
+                "2d1cc29f1c0ad672"
+            ]
+        ]
+    },
+    {
+        "id": "2d1cc29f1c0ad672",
+        "type": "link out",
+        "z": "a5406ced814d1895",
+        "g": "17ef12e0aa788ed0",
+        "name": "link out {delete} /camara",
+        "mode": "link",
+        "links": [
+            "d799abd4414e7574"
+        ],
+        "x": 275,
+        "y": 700,
+        "wires": []
+    },
+    {
         "id": "69467e37549dfa93",
         "type": "link in",
         "z": "79143eea6c544edc",
@@ -2049,6 +2100,139 @@
             ],
             [
                 "e096933ceecf50d9"
+            ]
+        ]
+    },
+    {
+        "id": "f8fd4fa62e8cb703",
+        "type": "function",
+        "z": "79143eea6c544edc",
+        "name": "query",
+        "func": "const cameraId = msg.req.params.id || msg.req.query.id;\nmsg.skipDB = false;\n\nif (!cameraId) {\n    msg.payload = { \n        success: false,\n        error: \"ID de cámara es obligatorio\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\n// Eliminar directamente (CASCADE borrará las detecciones automáticamente)\nmsg.topic = `DELETE FROM camera WHERE id = ?`;\nmsg.params = [cameraId];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 680,
+        "wires": [
+            [
+                "145051a3834374e0"
+            ]
+        ]
+    },
+    {
+        "id": "3b67aa941e5e09db",
+        "type": "subflow:subflow1",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "x": 720,
+        "y": 680,
+        "wires": [
+            [
+                "f4d1522e6dd9e397"
+            ]
+        ]
+    },
+    {
+        "id": "f4d1522e6dd9e397",
+        "type": "switch",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 950,
+        "y": 680,
+        "wires": [
+            [
+                "0342549d1da54456"
+            ],
+            [
+                "30f671040abedf32"
+            ]
+        ]
+    },
+    {
+        "id": "30f671040abedf32",
+        "type": "http response",
+        "z": "79143eea6c544edc",
+        "name": "400 error",
+        "statusCode": "400",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1140,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "0342549d1da54456",
+        "type": "http response",
+        "z": "79143eea6c544edc",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 1130,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "145051a3834374e0",
+        "type": "switch",
+        "z": "79143eea6c544edc",
+        "name": "",
+        "property": "skipDB",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "false"
+            },
+            {
+                "t": "true"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 470,
+        "y": 680,
+        "wires": [
+            [
+                "3b67aa941e5e09db"
+            ],
+            [
+                "30f671040abedf32"
+            ]
+        ]
+    },
+    {
+        "id": "d799abd4414e7574",
+        "type": "link in",
+        "z": "79143eea6c544edc",
+        "name": "link in 13",
+        "links": [
+            "2d1cc29f1c0ad672"
+        ],
+        "x": 165,
+        "y": 680,
+        "wires": [
+            [
+                "f8fd4fa62e8cb703"
             ]
         ]
     },
@@ -3030,7 +3214,7 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 2040,
+        "x": 2330,
         "y": 140,
         "wires": []
     },
@@ -3829,6 +4013,47 @@
         "x": 370,
         "y": 60,
         "wires": []
+    },
+    {
+        "id": "4d87b6500ee418eb",
+        "type": "websocket out",
+        "z": "202119be2ec9a18d",
+        "name": "Notify frontend to upload",
+        "server": "dd011ebecd492d88",
+        "client": "",
+        "x": 2390,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "b90d52b8d4e9407c",
+        "type": "switch",
+        "z": "202119be2ec9a18d",
+        "name": "",
+        "property": "payload.success",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "false"
+            },
+            {
+                "t": "true"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 2070,
+        "y": 200,
+        "wires": [
+            [
+                "0f4eaa7342bbde96"
+            ],
+            [
+                "0f4eaa7342bbde96",
+                "4d87b6500ee418eb"
+            ]
+        ]
     },
     {
         "id": "06a3442ad9baac60",

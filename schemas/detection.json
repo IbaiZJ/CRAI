@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "/detection",
+  "description": "Single detection operations",
+  "put": {
+    "description": "Update detection (partial)",
+    "request": {
+      "type": "object",
+      "properties": {
+        "vehicleId": { "type": "string" },
+        "cameraId": { "type": "integer" },
+        "detectionDate": { "type": "string", "format": "date-time" },
+        "itvStatus": { "type": "string", "enum": ["valid", "expired", "expiring_soon"] }
+      }
+    }
+  },
+  "delete": {
+    "description": "Delete detection by query (e.g., ?id=123)",
+    "request": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" }
+      },
+      "required": ["id"]
+    }
+  }
+}
