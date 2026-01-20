@@ -28,12 +28,13 @@ plate_detector:
 #     Si ves confianzas ~0.5-0.6, ejecuta diagnose_ssd.py
 ssd_detector:
   model_path: "models/ssd_vehicle_detector.keras"
-  weights_path: "models/ssd_vehicle_detector.weights.h5"
+  weights_path: "models/ssd_best.weights.h5"
   # Threshold ALTO para filtrar pesos no entrenados (confianzas ~0.5)
   # Si el modelo está bien entrenado, bajar a 0.3-0.5
-  confidence_threshold: 0.35
-  nms_threshold: 0.4
-  max_detections: 200
+  confidence_threshold: 0.34
+
+  nms_threshold: 0.2
+  max_detections: 15
   min_box_size: 0.02
 
 ocr:
