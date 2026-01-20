@@ -8,6 +8,7 @@ vi.mock("recharts", async () => {
     Bar: ({ children }: any) => <div>{children}</div>,
     CartesianGrid: () => <div />,
     XAxis: () => <div />,
+    YAxis: () => <div />,
     ResponsiveContainer: ({ children }: any) => <div>{children}</div>,
     Tooltip: ({ content }: any) => <div>{content}</div>,
     Legend: ({ content }: any) => <div>{content}</div>,

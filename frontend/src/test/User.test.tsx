@@ -131,6 +131,38 @@ describe('UserDetail Page', () => {
 
     expect(screen.getByText('User ID is missing')).toBeInTheDocument();
   });
+
+  it('should show error when user load throws', async () => {
+    const originalTitle = Object.getOwnPropertyDescriptor(document, 'title');
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    Object.defineProperty(document, 'title', {
+      configurable: true,
+      get: () => '',
+      set: (value: string) => {
+        if (value.startsWith('CRAI - User')) {
+          throw new Error('boom');
+        }
+      },
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/users/999']} >
+        <Routes>
+          <Route path="/users/:id" element={<UserDetail />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Failed to load user data')).toBeInTheDocument();
+    });
+
+    consoleSpy.mockRestore();
+    if (originalTitle) {
+      Object.defineProperty(document, 'title', originalTitle);
+    }
+  });
 });
 
 describe('UserDetail Page - Error states', () => {
@@ -172,5 +204,83 @@ describe('UserDetail Page - Error states', () => {
     const backButton = screen.getByRole('button', { name: /back to users/i });
     await user.click(backButton);
     expect(mockNavigate).toHaveBeenCalledWith('/users');
+  });
+});
+
+describe('UserDetail Page - Missing data fallbacks', () => {
+  it('should show default message when user is null without error', async () => {
+    const originalTitle = Object.getOwnPropertyDescriptor(document, 'title');
+    vi.resetModules();
+    vi.doMock('react', async () => {
+      const actual = await vi.importActual<typeof import('react')>('react');
+      return {
+        ...actual,
+        useState: vi.fn()
+          .mockImplementationOnce(() => [null, vi.fn()] as any)
+          .mockImplementationOnce(() => [false, vi.fn()] as any)
+          .mockImplementationOnce(() => [null, vi.fn()] as any),
+      };
+    });
+
+    const { default: UserDetailMocked } = await import('@/pages/User');
+
+    Object.defineProperty(document, 'title', {
+      configurable: true,
+      get: () => '',
+      set: () => {},
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/users/123']}>
+        <Routes>
+          <Route path="/users/:id" element={<UserDetailMocked />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText("The user you're looking for doesn't exist.")).toBeInTheDocument();
+    vi.doUnmock('react');
+    vi.resetModules();
+    if (originalTitle) {
+      Object.defineProperty(document, 'title', originalTitle);
+    }
+  });
+
+  it('should render N/A when user fields are missing', async () => {
+    const originalTitle = Object.getOwnPropertyDescriptor(document, 'title');
+    vi.resetModules();
+    vi.doMock('react', async () => {
+      const actual = await vi.importActual<typeof import('react')>('react');
+      return {
+        ...actual,
+        useState: vi.fn()
+          .mockImplementationOnce(() => [{ id: '123', name: '', email: '', role: '' }, vi.fn()] as any)
+          .mockImplementationOnce(() => [false, vi.fn()] as any)
+          .mockImplementationOnce(() => [null, vi.fn()] as any),
+      };
+    });
+
+    const { default: UserDetailMocked } = await import('@/pages/User');
+
+    Object.defineProperty(document, 'title', {
+      configurable: true,
+      get: () => '',
+      set: () => {},
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/users/123']}>
+        <Routes>
+          <Route path="/users/:id" element={<UserDetailMocked />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(screen.getAllByText('N/A')).toHaveLength(3);
+    vi.doUnmock('react');
+    vi.resetModules();
+    if (originalTitle) {
+      Object.defineProperty(document, 'title', originalTitle);
+    }
   });
 });

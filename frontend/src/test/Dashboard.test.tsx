@@ -46,14 +46,16 @@ vi.mock('@/layouts/Layout', () => ({
   ),
 }));
 
+let mockUser: { fullName?: string; name?: string; surname?: string; email?: string } | null = {
+  fullName: 'Test User',
+  name: 'Test',
+  surname: 'User',
+  email: 'test@example.com',
+};
+
 vi.mock('@/contexts/AuthContext', () => ({
   useAuth: () => ({
-    user: {
-      fullName: 'Test User',
-      name: 'Test',
-      surname: 'User',
-      email: 'test@example.com',
-    },
+    user: mockUser,
     isAuthenticated: true,
   }),
 }));
@@ -67,6 +69,12 @@ import Dashboard from '@/pages/Dashboard';
 describe('Dashboard Page', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockUser = {
+      fullName: 'Test User',
+      name: 'Test',
+      surname: 'User',
+      email: 'test@example.com',
+    };
   });
 
   it('should render the dashboard page', () => {
@@ -145,27 +153,45 @@ describe('Dashboard Page', () => {
 });
 
 describe('Dashboard with different user states', () => {
-  it('should fallback to name when fullName is not available', async () => {
-    vi.doMock('@/contexts/AuthContext', () => ({
-      useAuth: () => ({
-        user: {
-          name: 'OnlyName',
-          email: 'test@example.com',
-        },
-        isAuthenticated: true,
-      }),
-    }));
+  it('should fallback to name when fullName is not available', () => {
+    mockUser = {
+      name: 'OnlyName',
+      email: 'test@example.com',
+    };
 
-    // Re-import to get the new mock
-    const { default: DashboardWithName } = await import('@/pages/Dashboard');
-    
     render(
       <BrowserRouter>
-        <DashboardWithName />
+        <Dashboard />
       </BrowserRouter>
     );
 
-    // Should use available name
-    expect(screen.getByTestId('split-text')).toBeInTheDocument();
+    expect(screen.getByTestId('split-text')).toHaveTextContent('Hello, OnlyName!');
+  });
+
+  it('should fallback to surname when fullName and name are missing', () => {
+    mockUser = {
+      surname: 'SurnameOnly',
+      email: 'test@example.com',
+    };
+
+    render(
+      <BrowserRouter>
+        <Dashboard />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByTestId('split-text')).toHaveTextContent('Hello, SurnameOnly!');
+  });
+
+  it('should fallback to Guest when no user data is available', () => {
+    mockUser = null;
+
+    render(
+      <BrowserRouter>
+        <Dashboard />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByTestId('split-text')).toHaveTextContent('Hello, Guest!');
   });
 });

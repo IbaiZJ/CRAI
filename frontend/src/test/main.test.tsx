@@ -3,6 +3,8 @@ import { vi } from "vitest"
 const renderMock = vi.fn()
 const createRootMock = vi.fn(() => ({ render: renderMock }))
 
+vi.mock("../index.css", () => ({}))
+
 vi.mock("react-dom/client", () => ({
   createRoot: createRootMock,
 }))

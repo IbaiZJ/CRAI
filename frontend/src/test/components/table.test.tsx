@@ -32,15 +32,18 @@ describe("DataTableDemo", () => {
   it("renders table and supports copy action", async () => {
     const user = userEvent.setup()
     const writeText = vi.fn()
-    Object.assign(navigator, { clipboard: { writeText } })
+    Object.defineProperty(navigator, "clipboard", {
+      value: { writeText },
+      configurable: true,
+    })
 
     render(<DataTableDemo />)
 
     expect(screen.getByPlaceholderText("Filter emails...")).toBeInTheDocument()
     expect(screen.getByText("Columns")).toBeInTheDocument()
 
-    const copy = screen.getByRole("button", { name: "Copy payment ID" })
-    await user.click(copy)
+    const copyButtons = screen.getAllByRole("button", { name: "Copy payment ID" })
+    await user.click(copyButtons[0])
     expect(writeText).toHaveBeenCalled()
   })
 })

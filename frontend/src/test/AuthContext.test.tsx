@@ -3,6 +3,9 @@ import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 
+const validToken =
+  'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuYW1lIjoiVGVzdCBVc2VyIiwiZ2l2ZW5fbmFtZSI6IlRlc3QiLCJmYW1pbHlfbmFtZSI6IlVzZXIiLCJzdWIiOiIxMjM0NTYiLCJleHAiOjk5OTk5OTk5OTksImlhdCI6MTcwMDAwMDAwMH0.signature';
+
 // Helper component to test the hook
 function TestComponent() {
   const { user, isAuthenticated, logout, login, loading } = useAuth();
@@ -75,6 +78,30 @@ describe('AuthContext', () => {
 
     // Since the token is invalid, it will be cleared, so not-authenticated is expected
     expect(screen.getByTestId('not-authenticated')).toBeInTheDocument();
+  });
+
+  it('should initialize with stored user when token is valid', () => {
+    const storedUser = {
+      email: 'stored@example.com',
+      name: 'Stored',
+      surname: 'User',
+      fullName: 'Stored User',
+      sub: '999999',
+    };
+
+    localStorage.setItem('user', JSON.stringify(storedUser));
+    localStorage.setItem('token', validToken);
+
+    render(
+      <BrowserRouter>
+        <AuthProvider>
+          <TestComponent />
+        </AuthProvider>
+      </BrowserRouter>
+    );
+
+    expect(screen.getByTestId('user-name')).toHaveTextContent('Stored User');
+    expect(screen.getByTestId('user-email')).toHaveTextContent('stored@example.com');
   });
 
   it('should clear localStorage when token is expired', () => {

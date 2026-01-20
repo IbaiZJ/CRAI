@@ -8,12 +8,13 @@ const mockLogin = vi.fn();
 const mockSuccess = vi.fn();
 const mockError = vi.fn();
 const mockNavigate = vi.fn();
+let mockIsAuthenticated = false;
 
 // Mock useAuth
 vi.mock('@/contexts/AuthContext', () => ({
   useAuth: () => ({
     login: mockLogin,
-    isAuthenticated: false,
+    isAuthenticated: mockIsAuthenticated,
   }),
 }));
 
@@ -61,6 +62,7 @@ describe('Login Page - Handlers', () => {
     mockSuccess.mockClear();
     mockError.mockClear();
     mockNavigate.mockClear();
+    mockIsAuthenticated = false;
     document.title = '';
   });
 
@@ -148,6 +150,7 @@ describe('Login Page - Authenticated redirect', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockNavigate.mockClear();
+    mockIsAuthenticated = false;
   });
 
   it('should render login page when not authenticated', () => {
@@ -160,5 +163,17 @@ describe('Login Page - Authenticated redirect', () => {
 
     // The login page should render normally
     expect(screen.getByText('Log In')).toBeInTheDocument();
+  });
+
+  it('should redirect when authenticated', async () => {
+    mockIsAuthenticated = true;
+
+    render(
+      <BrowserRouter>
+        <Login />
+      </BrowserRouter>
+    );
+
+    expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
   });
 });

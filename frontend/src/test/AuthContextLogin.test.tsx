@@ -58,6 +58,51 @@ describe('AuthContext - Login function', () => {
     expect(localStorage.getItem('user')).toBeTruthy();
   });
 
+  it('should fall back to name parts when given_name and family_name are missing', async () => {
+    const fallbackToken =
+      'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwbGl0QGV4YW1wbGUuY29tIiwibmFtZSI6IlNwbGl0IE5hbWUiLCJzdWIiOiIxMjM0NTYiLCJleHAiOjk5OTk5OTk5OTksImlhdCI6MTcwMDAwMDAwMH0.signature';
+
+    const { AuthProvider, useAuth } = await import('@/contexts/AuthContext');
+
+    let loginFn: any = null;
+
+    const Inner = () => {
+      const { user, isAuthenticated, login } = useAuth();
+      loginFn = login;
+
+      return (
+        <div>
+          <div data-testid="authenticated">{isAuthenticated ? 'true' : 'false'}</div>
+          {user && (
+            <>
+              <div data-testid="user-name">{user.name}</div>
+              <div data-testid="user-surname">{user.surname}</div>
+            </>
+          )}
+        </div>
+      );
+    };
+
+    render(
+      <BrowserRouter>
+        <AuthProvider>
+          <Inner />
+        </AuthProvider>
+      </BrowserRouter>
+    );
+
+    if (loginFn) {
+      loginFn(fallbackToken);
+    }
+
+    await waitFor(() => {
+      expect(screen.getByTestId('authenticated')).toHaveTextContent('true');
+    });
+
+    expect(screen.getByTestId('user-name')).toHaveTextContent('Split');
+    expect(screen.getByTestId('user-surname')).toHaveTextContent('Name');
+  });
+
   it('should handle invalid token in login gracefully', async () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     

@@ -18,6 +18,15 @@ globalThis.fetch = vi.fn(() =>
   })
 ) as any;
 
+const mockNotifyError = vi.fn();
+vi.mock('@/hooks/useNotifications', () => ({
+  useNotifications: () => ({
+    success: vi.fn(),
+    error: mockNotifyError,
+    info: vi.fn(),
+  }),
+}));
+
 vi.mock('@/layouts/Layout', () => ({
   default: ({ children, breadcrumbs }: { children: React.ReactNode; breadcrumbs?: { label: string; to?: string }[] }) => (
     <div data-testid="layout">
@@ -179,6 +188,54 @@ describe('Cars Page', () => {
     await waitFor(() => {
       expect(screen.getByText('VEH-006')).toBeInTheDocument();
       expect(screen.getByText('MNO-2345')).toBeInTheDocument();
+    });
+  });
+
+  it('should show expired and valid ITV styles', async () => {
+    const vehicles = [
+      { plate: 'OLD-0001', badge: 'VEH-OLD', userId: 1, itv: '2000-01-01' },
+      { plate: 'NEW-0002', badge: 'VEH-NEW', userId: 2, itv: '2999-12-31' },
+    ];
+
+    (globalThis.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve(vehicles),
+    });
+
+    const { container } = render(
+      <BrowserRouter>
+        <Cars />
+      </BrowserRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('OLD-0001')).toBeInTheDocument();
+      expect(screen.getByText('NEW-0002')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText('ITV Expired')).toBeInTheDocument();
+    expect(screen.getByText('ITV Valid')).toBeInTheDocument();
+
+    expect(container.querySelectorAll('.text-red-600').length).toBeGreaterThan(0);
+    expect(container.querySelectorAll('.text-green-600').length).toBeGreaterThan(0);
+  });
+
+  it('should notify when fetch fails', async () => {
+    (globalThis.fetch as any).mockResolvedValueOnce({
+      ok: false,
+      json: () => Promise.resolve([]),
+    });
+
+    render(
+      <BrowserRouter>
+        <Cars />
+      </BrowserRouter>
+    );
+
+    await waitFor(() => {
+      expect(mockNotifyError).toHaveBeenCalledWith(
+        expect.stringContaining('Error fetching vehicles data: Failed to fetch vehicles')
+      );
     });
   });
 });

@@ -163,6 +163,24 @@ describe('Layout Component', () => {
     expect(screen.getByTestId('breadcrumb-page')).toHaveTextContent('Current Page');
   });
 
+  it('should default breadcrumb link to root when "to" is missing', () => {
+    const customBreadcrumbs = [
+      { label: 'Root' },
+      { label: 'Next' },
+    ];
+
+    render(
+      <BrowserRouter>
+        <Layout breadcrumbs={customBreadcrumbs}>
+          <div>Content</div>
+        </Layout>
+      </BrowserRouter>
+    );
+
+    const link = screen.getByRole('link', { name: 'Root' });
+    expect(link).toHaveAttribute('href', '/');
+  });
+
   it('should render separator between breadcrumbs', () => {
     const customBreadcrumbs = [
       { label: 'Dashboard', to: '/dashboard' },

@@ -16,7 +16,7 @@ if (typeof document !== 'undefined') {
   document.title = 'CRAI - Home';
 }
 
-const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => {
+export const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: nu
   );
 };
 
-const Button = ({ children, variant = 'primary', className = '', onClick }: { children: React.ReactNode, variant?: 'primary' | 'secondary' | 'outline', className?: string, onClick?: () => void }) => {
+export const Button = ({ children, variant = 'primary', className = '', onClick }: { children: React.ReactNode, variant?: 'primary' | 'secondary' | 'outline', className?: string, onClick?: () => void }) => {
   const baseStyle = "px-6 py-3 rounded-full font-semibold transition-all duration-300 flex items-center gap-2 group";
   const variants = {
     primary: "bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-200 hover:shadow-blue-300 transform hover:-translate-y-0.5",

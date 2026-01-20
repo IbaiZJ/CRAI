@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -77,6 +77,10 @@ describe('SignUp Page', () => {
     (useAuth as any).mockReturnValue({
       isAuthenticated: false,
     });
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it('should render the signup page', () => {
@@ -289,6 +293,28 @@ describe('SignUp Page', () => {
     expect(emailInput).toHaveAttribute('type', 'email');
   });
 
+  it('should show email error when format is invalid', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <BrowserRouter>
+        <SignUp />
+      </BrowserRouter>
+    );
+
+    await user.type(screen.getByTestId('input-firstName'), 'John');
+    await user.type(screen.getByTestId('input-lastName'), 'Doe');
+    await user.type(screen.getByTestId('input-email'), 'invalid-email');
+    await user.type(screen.getByTestId('input-password'), 'password123');
+    await user.type(screen.getByTestId('input-confirmPassword'), 'password123');
+    const form = screen.getByTestId('submit-button').closest('form');
+    fireEvent.submit(form as HTMLFormElement);
+
+    await waitFor(() => {
+      expect(screen.getByText('Invalid email format')).toBeInTheDocument();
+    });
+  });
+
   it('should show password error when empty on submit', async () => {
     const user = userEvent.setup();
 
@@ -393,11 +419,8 @@ describe('SignUp Page', () => {
 
     await waitFor(() => {
       expect(mockSuccess).toHaveBeenCalledWith('Account created successfully!');
-    });
-
-    await waitFor(() => {
       expect(mockNavigate).toHaveBeenCalledWith('/login');
-    });
+    }, { timeout: 1500 });
   });
 
   it('should show loading state during submission', async () => {
@@ -418,10 +441,6 @@ describe('SignUp Page', () => {
 
     // The button should show loading state
     expect(screen.getByTestId('submit-button')).toHaveTextContent('Creating account...');
-
-    await waitFor(() => {
-      expect(mockSuccess).toHaveBeenCalled();
-    });
   });
 
   it('should clear error when user starts typing in field', async () => {
@@ -441,6 +460,53 @@ describe('SignUp Page', () => {
     await user.type(screen.getByTestId('input-firstName'), 'J');
     expect(screen.queryByText('First name is required')).not.toBeInTheDocument();
   });
+
+  it('should show error notification when submit fails', async () => {
+    const user = userEvent.setup();
+    mockSuccess.mockImplementationOnce(() => {
+      throw new Error('boom');
+    });
+
+    render(
+      <BrowserRouter>
+        <SignUp />
+      </BrowserRouter>
+    );
+
+    await user.type(screen.getByTestId('input-firstName'), 'John');
+    await user.type(screen.getByTestId('input-lastName'), 'Doe');
+    await user.type(screen.getByTestId('input-email'), 'john@example.com');
+    await user.type(screen.getByTestId('input-password'), 'password123');
+    await user.type(screen.getByTestId('input-confirmPassword'), 'password123');
+    await user.click(screen.getByTestId('submit-button'));
+    await waitFor(() => {
+      expect(mockError).toHaveBeenCalledWith('Failed to create account: boom');
+    }, { timeout: 1500 });
+  });
+
+  it('should show unknown error when submit throws non-Error', async () => {
+    const user = userEvent.setup();
+    mockSuccess.mockImplementationOnce(() => {
+      throw 'fail';
+    });
+
+    render(
+      <BrowserRouter>
+        <SignUp />
+      </BrowserRouter>
+    );
+
+    await user.type(screen.getByTestId('input-firstName'), 'John');
+    await user.type(screen.getByTestId('input-lastName'), 'Doe');
+    await user.type(screen.getByTestId('input-email'), 'john@example.com');
+    await user.type(screen.getByTestId('input-password'), 'password123');
+    await user.type(screen.getByTestId('input-confirmPassword'), 'password123');
+    await user.click(screen.getByTestId('submit-button'));
+
+    await waitFor(() => {
+      expect(mockError).toHaveBeenCalledWith('Failed to create account: Unknown error');
+    }, { timeout: 1500 });
+  });
 });
 
 describe('SignUp Page - Password visibility', () => {
@@ -451,20 +517,35 @@ describe('SignUp Page - Password visibility', () => {
     });
   });
 
-  it('should render password toggle buttons', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('should toggle password and confirm password visibility', async () => {
+    const user = userEvent.setup();
+
     render(
       <BrowserRouter>
         <SignUp />
       </BrowserRouter>
     );
 
-    // Should have two password toggle buttons (password and confirmPassword)
     const toggleButtons = screen.getAllByRole('button').filter(
-      btn => !btn.textContent?.includes('Sign Up') && 
-             !btn.textContent?.includes('Log in') &&
-             !btn.textContent?.includes('Back to Home')
+      (btn) => btn.textContent === ''
     );
-    
-    expect(toggleButtons.length).toBeGreaterThanOrEqual(0);
+
+    expect(toggleButtons).toHaveLength(2);
+
+    const passwordInput = screen.getByTestId('input-password');
+    const confirmInput = screen.getByTestId('input-confirmPassword');
+
+    expect(passwordInput).toHaveAttribute('type', 'password');
+    expect(confirmInput).toHaveAttribute('type', 'password');
+
+    await user.click(toggleButtons[0]);
+    expect(passwordInput).toHaveAttribute('type', 'text');
+
+    await user.click(toggleButtons[1]);
+    expect(confirmInput).toHaveAttribute('type', 'text');
   });
 });

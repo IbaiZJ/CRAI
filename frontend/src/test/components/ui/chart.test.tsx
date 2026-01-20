@@ -75,8 +75,9 @@ describe("Chart components", () => {
       </ChartContainer>
     )
 
-    expect(screen.getByText("Desktop")).toBeInTheDocument()
-    expect(screen.getByText("1,200")).toBeInTheDocument()
+    expect(screen.getAllByText("Desktop").length).toBeGreaterThan(0)
+    const formatted = new Intl.NumberFormat().format(1200)
+    expect(screen.getByText(formatted)).toBeInTheDocument()
   })
 
   it("supports formatter and hides indicator", () => {

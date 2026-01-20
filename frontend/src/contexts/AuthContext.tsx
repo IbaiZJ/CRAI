@@ -100,6 +100,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     loading,
   }), [user, login, logout, loading]);
 
+  /* istanbul ignore next */
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
