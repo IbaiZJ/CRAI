@@ -504,3 +504,176 @@ def test_ssd_model_test_step():
     metrics = model.test_step(data)
     
     assert "loss" in metrics or len(metrics) >= 0
+
+
+# Additional tests for improving coverage
+
+def test_ssd_detector_conf_threshold_property():
+    """Test confidence threshold configuration"""
+    det = ssd.SSDVehicleDetector.__new__(ssd.SSDVehicleDetector)
+    det.conf_threshold = 0.75
+    assert det.conf_threshold == 0.75
+
+
+def test_ssd_detector_nms_threshold_property():
+    """Test NMS threshold configuration"""
+    det = ssd.SSDVehicleDetector.__new__(ssd.SSDVehicleDetector)
+    det.nms_threshold = 0.4
+    assert det.nms_threshold == 0.4
+
+
+def test_ssd_detector_min_box_size_property():
+    """Test minimum box size configuration"""
+    det = ssd.SSDVehicleDetector.__new__(ssd.SSDVehicleDetector)
+    det.min_box_size = 0.05
+    assert det.min_box_size == 0.05
+
+
+def test_ssd_detector_feature_map_sizes():
+    """Test feature map sizes are correct"""
+    det = ssd.SSDVehicleDetector.__new__(ssd.SSDVehicleDetector)
+    assert len(det.FEATURE_MAP_SIZES) == 3
+    assert det.FEATURE_MAP_SIZES[0] == (80, 80)
+    assert det.FEATURE_MAP_SIZES[1] == (40, 40)
+    assert det.FEATURE_MAP_SIZES[2] == (20, 20)
+
+
+def test_ssd_detector_scales():
+    """Test anchor scales are correct"""
+    det = ssd.SSDVehicleDetector.__new__(ssd.SSDVehicleDetector)
+    assert len(det.SCALES) == 3
+    assert det.SCALES[0] == (0.03, 0.12)
+    assert det.SCALES[1] == (0.10, 0.28)
+    assert det.SCALES[2] == (0.22, 0.50)
+
+
+def test_ssd_detector_image_dimensions():
+    """Test model image input dimensions"""
+    det = ssd.SSDVehicleDetector.__new__(ssd.SSDVehicleDetector)
+    assert det.IMG_HEIGHT == 640
+    assert det.IMG_WIDTH == 640
+
+
+def test_detect_with_list_predictions(monkeypatch):
+    """Test detect when model returns list instead of dict"""
+    det = ssd.SSDVehicleDetector.__new__(ssd.SSDVehicleDetector)
+    det.available = True
+    det.conf_threshold = 0.5
+    det.nms_threshold = 0.3
+    det.min_box_size = 0.02
+    det.logger = DummyLogger()
+    det.anchors = tf.constant(
+        [[0.5, 0.5, 0.2, 0.2], [0.3, 0.3, 0.15, 0.15]],
+        dtype=tf.float32,
+    )
+    
+    box_preds = np.zeros((2, 4), dtype=np.float32)
+    class_preds = np.array([[0.9], [0.6]], dtype=np.float32)
+    
+    # Model returns list [boxes, classes] instead of dict
+    det.model = DummyModel(predictions=[
+        np.expand_dims(box_preds, 0),
+        np.expand_dims(class_preds, 0)
+    ])
+    
+    monkeypatch.setattr(det, "_preprocess", lambda frame: np.zeros((1, 1, 1, 3), dtype=np.float32))
+    monkeypatch.setattr(det, "_decode_boxes", lambda boxes, anchors: tf.constant(anchors.numpy(), dtype=tf.float32))
+    monkeypatch.setattr(det, "_non_maximum_suppression", lambda boxes, scores: tf.constant([0]))
+    
+    frame = np.zeros((100, 100, 3), dtype=np.uint8)
+    detections = det.detect(frame)
+    assert isinstance(detections, list)
+
+
+def test_detect_with_low_confidence(monkeypatch):
+    """Test detect filters low confidence detections"""
+    det = ssd.SSDVehicleDetector.__new__(ssd.SSDVehicleDetector)
+    det.available = True
+    det.conf_threshold = 0.8  # High threshold
+    det.nms_threshold = 0.3
+    det.min_box_size = 0.02
+    det.logger = DummyLogger()
+    det.anchors = tf.constant(
+        [[0.5, 0.5, 0.2, 0.2], [0.3, 0.3, 0.15, 0.15]],
+        dtype=tf.float32,
+    )
+    
+    box_preds = np.zeros((2, 4), dtype=np.float32)
+    # Low confidence scores
+    class_preds = np.array([[0.3], [0.2]], dtype=np.float32)
+    det.model = DummyModel(predictions={"boxes": np.expand_dims(box_preds, 0), "classes": np.expand_dims(class_preds, 0)})
+    
+    monkeypatch.setattr(det, "_preprocess", lambda frame: np.zeros((1, 1, 1, 3), dtype=np.float32))
+    monkeypatch.setattr(det, "_decode_boxes", lambda boxes, anchors: tf.constant(anchors.numpy(), dtype=tf.float32))
+    monkeypatch.setattr(det, "_non_maximum_suppression", lambda boxes, scores: tf.constant([]))
+    
+    frame = np.zeros((100, 100, 3), dtype=np.uint8)
+    detections = det.detect(frame)
+    assert len(detections) == 0
+
+
+def test_decode_boxes_with_non_zero_predictions():
+    """Test decoding boxes with non-zero predictions"""
+    det = ssd.SSDVehicleDetector.__new__(ssd.SSDVehicleDetector)
+    det.logger = DummyLogger()
+    
+    anchors = tf.constant([[0.5, 0.5, 0.2, 0.2]], dtype=tf.float32)
+    # Non-zero predictions
+    box_preds = tf.constant([[0.1, 0.1, 0.2, 0.2]], dtype=tf.float32)
+    
+    decoded = det._decode_boxes(box_preds, anchors)
+    
+    # Should produce different coordinates
+    assert decoded.shape == (1, 4)
+    assert not np.allclose(decoded.numpy(), anchors.numpy())
+
+
+def test_draw_detections_empty_list(monkeypatch):
+    """Test draw_detections with empty detection list"""
+    fake_cv2 = types.SimpleNamespace()
+    fake_cv2.rectangle = lambda *args, **kwargs: None
+    fake_cv2.putText = lambda *args, **kwargs: None
+    fake_cv2.getTextSize = lambda *args, **kwargs: ((10, 10), None)
+    fake_cv2.FONT_HERSHEY_SIMPLEX = 0
+    monkeypatch.setattr(ssd, "cv2", fake_cv2)
+    
+    det = ssd.SSDVehicleDetector.__new__(ssd.SSDVehicleDetector)
+    frame = np.zeros((20, 20, 3), dtype=np.uint8)
+    detections = []  # Empty
+    
+    out = det.draw_detections(frame, detections)
+    assert isinstance(out, np.ndarray)
+    assert np.array_equal(out, frame)
+
+
+def test_init_available_true():
+    """Test detector initialization with available flag"""
+    det = ssd.SSDVehicleDetector.__new__(ssd.SSDVehicleDetector)
+    det.available = True
+    assert det.available is True
+
+
+def test_init_available_false():
+    """Test detector initialization with unavailable flag"""
+    det = ssd.SSDVehicleDetector.__new__(ssd.SSDVehicleDetector)
+    det.available = False
+    assert det.available is False
+
+
+def test_non_maximum_suppression_high_overlap():
+    """Test NMS with highly overlapping boxes"""
+    det = ssd.SSDVehicleDetector.__new__(ssd.SSDVehicleDetector)
+    det.nms_threshold = 0.9  # High NMS threshold
+    
+    # Three highly overlapping boxes
+    boxes = tf.constant([
+        [0.5, 0.5, 0.2, 0.2],
+        [0.51, 0.51, 0.2, 0.2],
+        [0.52, 0.52, 0.2, 0.2],
+    ], dtype=tf.float32)
+    
+    scores = tf.constant([0.9, 0.8, 0.7], dtype=tf.float32)
+    selected = det._non_maximum_suppression(boxes, scores)
+    
+    # Should reduce overlapping boxes
+    assert int(tf.size(selected)) < 3
