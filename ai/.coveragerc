@@ -13,6 +13,7 @@ omit =
     */models/*
     */conftest.py
     */test_ssd_load.py
+    */ssd_detector.py
 
 [report]
 fail_under = 0
