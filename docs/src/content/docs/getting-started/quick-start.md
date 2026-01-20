@@ -3,7 +3,7 @@ title: Quick Start
 description: Get up and running with CRAI in 5 minutes
 ---
 
-This guide will help you get CRAI up and running quickly and perform your first plate recognition.
+This guide will help you get CRAI up and running quickly and perform your first API requests.
 
 ## Prerequisites
 
@@ -17,39 +17,78 @@ Make sure you've completed the [Installation Guide](/getting-started/installatio
 # Start all services
 docker-compose up -d
 
-# Check logs
+# Check status
+docker-compose ps
+
+# View logs (optional)
 docker-compose logs -f
 ```
 
 ### Manual Start
 
-**Terminal 1 - Backend:**
+**Terminal 1 - Database:**
 ```bash
-cd ai
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-uvicorn api.main:app --reload --host 0.0.0.0 --port 6902
+docker-compose up -d mysql
 ```
 
-**Terminal 2 - Frontend:**
+**Terminal 2 - AI Service:**
+```bash
+cd ai
+source venv/bin/activate  # Windows: venv\Scripts\activate
+python src/main.py
+```
+
+**Terminal 3 - ebAPI:**
+```bash
+cd ebAPI
+source venv/bin/activate
+uvicorn main:app --host 0.0.0.0 --port 8000
+```
+
+**Terminal 4 - itvAPI:**
+```bash
+cd itvAPI
+source venv/bin/activate
+uvicorn main:app --host 0.0.0.0 --port 8001
+```
+
+**Terminal 5 - Frontend:**
 ```bash
 cd frontend
 npm run dev
 ```
 
-## Your First API Request
+## Your First API Requests
 
-Let's test the API with a simple request:
-
-### Using curl
+### Test Environmental Badge Lookup
 
 ```bash
-curl http://localhost:6902/api/hello
+curl "http://localhost:6904/api?carPlate=1234ABC"
 ```
 
 Response:
 ```json
 {
-  "message": "Hello World"
+  "carPlate": "1234ABC",
+  "badge": {
+    "vehicleType": "turism",
+    "badge": "B",
+    "STOL": ""
+  }
+}
+```
+
+### Test ITV Date Lookup
+
+```bash
+curl "http://localhost:6905/api?carPlate=1234ABC"
+```
+
+Response:
+```json
+{
+  "carPlate": "1234ABC",
+  "itv_date": "2025-06-15"
 }
 ```
 
@@ -58,46 +97,157 @@ Response:
 ```python
 import requests
 
-response = requests.get("http://localhost:6902/api/hello")
-print(response.json())
+# Environmental Badge
+badge_response = requests.get(
+    "http://localhost:6904/api",
+    params={"carPlate": "1234ABC"}
+)
+print("Badge:", badge_response.json())
+
+# ITV Date
+itv_response = requests.get(
+    "http://localhost:6905/api",
+    params={"carPlate": "1234ABC"}
+)
+print("ITV:", itv_response.json())
 ```
 
 ### Using JavaScript/Fetch
 
 ```javascript
-fetch('http://localhost:6902/api/hello')
+// Environmental Badge
+fetch('http://localhost:6904/api?carPlate=1234ABC')
   .then(response => response.json())
-  .then(data => console.log(data));
+  .then(data => console.log('Badge:', data));
+
+// ITV Date
+fetch('http://localhost:6905/api?carPlate=1234ABC')
+  .then(response => response.json())
+  .then(data => console.log('ITV:', data));
 ```
 
-## Explore the API
+## Explore the APIs
 
 CRAI provides interactive API documentation powered by Swagger UI:
 
-1. Open http://localhost:6902/docs in your browser
-2. You'll see all available endpoints
-3. Click "Try it out" on any endpoint to test it directly
+| Service | Swagger UI | ReDoc |
+|---------|------------|-------|
+| ebAPI | http://localhost:6904/docs | http://localhost:6904/redoc |
+| itvAPI | http://localhost:6905/docs | http://localhost:6905/redoc |
 
-### Alternative: ReDoc
+## Access the Frontend
 
-For a different documentation style, visit http://localhost:6902/redoc
+1. Open http://localhost:6901 in your browser
+2. You'll see the CRAI landing page
+3. Click "Login" to authenticate with Google OAuth
+4. Access the dashboard and other features
 
-## Using the Frontend
+### Frontend Pages
 
-1. Open http://localhost:6901 in your browser (or http://localhost:5173 if running without Docker)
-2. You'll see the CRAI interface
-3. Navigate through the available features
+| Page | URL | Description |
+|------|-----|-------------|
+| Home | / | Landing page |
+| Login | /login | Google OAuth login |
+| Dashboard | /dashboard | Main dashboard |
+| Statistics | /statistics | Data analytics |
+| Cameras | /cameras | Camera management |
+| Cars | /cars | Vehicle tracking |
+| Simulations | /simulations | Simulation control |
+
+## Access Node-RED
+
+1. Open http://localhost:6903 in your browser
+2. You'll see the Node-RED flow editor
+3. Import flows from `backend/node_red_data/flows.json`
+4. Deploy your custom workflows
 
 ## Project Structure Overview
 
 ```
 CRAI/
-├── ai/                     # Backend application
-│   ├── api/
-│   │   ├── main.py        # FastAPI application entry point
-│   │   ├── routers/       # API endpoints
-│   │   ├── core/          # Configuration
-│   │   ├── models/        # Data models
+├── ai/                      # AI ANPR Service (Python)
+│   ├── src/
+│   │   ├── main.py          # Entry point
+│   │   ├── detectors/       # Detection models
+│   │   ├── video/           # Video processing
+│   │   ├── config/          # Configuration
+│   │   └── api/             # API queue
+│   └── tests/
+├── ebAPI/                   # Environmental Badge API (FastAPI)
+│   ├── main.py
+│   ├── routers/
+│   ├── service/
+│   └── data/
+├── itvAPI/                  # ITV Date API (FastAPI)
+│   ├── main.py
+│   ├── routers/
+│   └── service/
+├── os/                      # Simulation Service (Spring Boot)
+│   └── src/main/java/
+├── frontend/                # React Dashboard
+│   └── src/
+│       ├── pages/
+│       ├── components/
+│       └── routes/
+├── backend/                 # Node-RED flows
+│   └── node_red_data/
+├── db/                      # Database scripts
+├── docs/                    # Documentation (Astro)
+└── docker-compose.yml
+```
+
+## Common Tasks
+
+### View Container Logs
+
+```bash
+# All services
+docker-compose logs -f
+
+# Specific service
+docker-compose logs -f ai
+docker-compose logs -f ebapi
+docker-compose logs -f frontend
+```
+
+### Restart Services
+
+```bash
+# Restart all
+docker-compose restart
+
+# Restart specific service
+docker-compose restart ai
+```
+
+### Connect to Database
+
+```bash
+# Using Docker
+docker-compose exec mysql mysql -u root -proot crai
+
+# List tables
+SHOW TABLES;
+```
+
+### Run Tests
+
+```bash
+# AI Service tests
+cd ai
+pytest -v
+
+# Frontend tests
+cd frontend
+npm run test
+```
+
+## Next Steps
+
+- Configure services in [Configuration](/getting-started/configuration/)
+- Learn about [Architecture](/architecture/overview/)
+- Explore [API Documentation](/api/overview/)
+- Set up [CI/CD Pipeline](/testing/ci-cd/)
 │   │   └── services/      # Business logic
 │   ├── tests/             # Backend tests
 │   └── requirements.txt   # Python dependencies

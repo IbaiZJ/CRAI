@@ -3,7 +3,7 @@ title: Architecture Overview
 description: High-level overview of CRAI's architecture and design principles
 ---
 
-CRAI follows a modern microservices architecture with 5 independent services orchestrated via Docker Compose, providing scalability, maintainability, and clear separation of concerns.
+CRAI follows a modern microservices architecture with 8 independent services orchestrated via Docker Compose, providing scalability, maintainability, and clear separation of concerns.
 
 ## System Architecture
 
@@ -15,46 +15,42 @@ CRAI follows a modern microservices architecture with 5 independent services orc
                              ▼
 ┌──────────────────────────────────────────────────────────────────┐
 │          Frontend Service (React + Vite) - Port 6901             │
-│  ┌──────────────┐  ┌───────────┐  ┌──────────┐  ┌───────────┐  │
-│  │  Components  │  │   Pages   │  │  State   │  │  Firebase │  │
-│  │     (UI)     │  │ (Routes)  │  │  Mgmt    │  │   Auth    │  │
-│  └──────────────┘  └───────────┘  └──────────┘  └───────────┘  │
+│  ┌──────────────┐  ┌───────────┐  ┌──────────┐  ┌───────────┐   │
+│  │  Components  │  │   Pages   │  │  State   │  │  Google   │   │
+│  │     (UI)     │  │ (Routes)  │  │  Mgmt    │  │   OAuth   │   │
+│  └──────────────┘  └───────────┘  └──────────┘  └───────────┘   │
 └────────────────┬──────────────────────────┬──────────────────────┘
-                 │                          │
-                 │ REST API                 │ REST API
+                 │ REST API                 │
                  ▼                          ▼
-┌─────────────────────────────┐  ┌──────────────────────────────┐
-│   AI Service (Port 6902)    │  │  ebAPI Service (Port 6904)   │
-│   FastAPI + Python 3.11+    │  │  FastAPI + Python 3.11-slim  │
-│                             │  │                              │
-│  ┌─────────┐  ┌──────────┐ │  │  ┌─────────┐  ┌──────────┐  │
-│  │ Routers │  │ Services │ │  │  │ Routers │  │ Services │  │
-│  └─────────┘  └──────────┘ │  │  └─────────┘  └──────────┘  │
-│  ┌─────────┐  ┌──────────┐ │  │  ┌─────────┐  ┌──────────┐  │
-│  │ OpenCV  │  │   ANPR   │ │  │  │ Dataset │  │  Badge   │  │
-│  │ Vision  │  │  Model   │ │  │  │  Utils  │  │  Lookup  │  │
-│  └─────────┘  └──────────┘ │  │  └─────────┘  └──────────┘  │
-│                             │  │                              │
-│  • License plate detection  │  │  • Spanish plate validation  │
-│  • Character recognition    │  │  • Environmental badge       │
-│  • Image preprocessing      │  │  • 4M+ plate database        │
-└─────────────┬───────────────┘  └──────────────┬───────────────┘
-              │                                  │
-              └──────────────┬───────────────────┘
-                             │
-                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    Node-RED (Port 6903)                         │
+│         Workflow Automation & API Orchestration                 │
+└───────┬──────────────┬───────────────┬───────────────┬──────────┘
+        │              │               │               │
+        ▼              ▼               ▼               ▼
+┌───────────────┐┌───────────────┐┌───────────────┐┌───────────────┐
+│ AI Service    ││ ebAPI Service ││ itvAPI Service││ OS Service    │
+│ (Port 6902)   ││ (Port 6904)   ││ (Port 6905)   ││ (Port 6906)   │
+│ Python 3.11+  ││ FastAPI       ││ FastAPI       ││ Spring Boot   │
+│ YOLOv8+OCR    ││ Python        ││ Python        ││ Java 17       │
+│               ││               ││               ││               │
+│ • Vehicle     ││ • Badge       ││ • ITV Date    ││ • Simulation  │
+│   Detection   ││   Lookup      ││   Lookup      ││ • Cameras     │
+│ • Plate OCR   ││ • 4M+ plates  ││ • Validation  ││ • Police Ctrl │
+│ • Real-time   ││ • Format      ││               ││ • Vehicles    │
+│   Video       ││   Validation  ││               ││               │
+└───────────────┘└───────────────┘└───────────────┘└───────┬───────┘
+                                                           │
+                         ┌─────────────────────────────────┘
+                         ▼
               ┌──────────────────────────────────┐
-              │  Node-RED Service (Port 6903)    │
-              │  nodered/node-red:latest         │
+              │      MySQL Database              │
+              │      (Port 6900)                 │
               │                                  │
-              │  ┌────────────┐  ┌────────────┐ │
-              │  │  Workflow  │  │   Flow     │ │
-              │  │ Automation │  │ Persistence│ │
-              │  └────────────┘  └────────────┘ │
-              │                                  │
-              │  • Data orchestration            │
-              │  • API integration               │
-              │  • Persistent flows (bind mount) │
+              │  • crai database                 │
+              │  • User data                     │
+              │  • Vehicle records               │
+              │  • Simulation data               │
               └──────────────────────────────────┘
 
 ┌──────────────────────────────────────────────────────────────────┐
@@ -65,72 +61,128 @@ CRAI follows a modern microservices architecture with 5 independent services orc
 
 ## Services Overview
 
-### 1. Frontend Service (Port 6901)
+### 1. MySQL Database (Port 6900)
+**Technology:** MySQL 8
+
+Persistent data storage:
+- Core database for the CRAI platform
+- User management data
+- Vehicle and simulation records
+- Configurable with Google Cloud SQL for production
+- Automatic initialization with `createCraiDB.sql`
+
+### 2. Frontend Service (Port 6901)
 **Technology:** React 19 + TypeScript 5.9 + Vite 7 + TailwindCSS 4
 
 The user-facing web application providing:
-- Modern, responsive UI with TailwindCSS
-- Firebase authentication integration
+- Modern, responsive UI with TailwindCSS and Radix UI components
+- Google OAuth authentication integration
 - Client-side routing with React Router 7
-- Real-time communication with backend APIs
-- Comprehensive Vitest testing suite (6 passing tests)
+- Dashboard with statistics and data visualization (Recharts)
+- User management interface
+- Camera and vehicle tracking views
+- Simulation control panel
+- Comprehensive Vitest testing suite
 
-**Key Features:**
-- Login/Signup with Firebase Auth
-- License plate upload and recognition
-- Environmental badge lookup interface
-- Real-time results display
+**Key Pages:**
+- Home (landing page)
+- Login/Signup with Google OAuth
+- Dashboard with real-time data
+- Users management
+- Statistics and charts
+- Cameras monitoring
+- Cars/Vehicles tracking
+- Simulations control
 
-### 2. AI Service (Port 6902)
-**Technology:** FastAPI + Python 3.11+ + OpenCV + pytesseract
+### 3. AI Service (Port 6902)
+**Technology:** Python 3.11+ + YOLOv8 + EasyOCR + TensorFlow/Keras
 
 The ANPR (Automatic Number Plate Recognition) engine:
-- Image preprocessing and enhancement
-- License plate detection using OpenCV
-- Character recognition with OCR
-- RESTful API with automatic Swagger documentation
-- 100% test coverage with pytest (17 passing tests)
+- Real-time video stream processing with OpenCV
+- YOLOv8 vehicle detection (cars, trucks, buses, motorcycles)
+- Custom license plate detector model
+- EasyOCR for character recognition
+- Optional custom SSD vehicle detector (TensorFlow/Keras)
+- Threaded plate queue with retry logic for API integration
+- Configurable via YAML configuration file
 
-**Key Endpoints:**
-- `POST /api/recognize` - Analyze image and recognize plate
-- `GET /api/health` - Health check endpoint
-- `GET /docs` - Interactive API documentation
+**Key Components:**
+- `VehicleDetector`: YOLOv8-based vehicle detection
+- `PlateDetector`: Custom YOLO model for license plates
+- `PlateReader`: EasyOCR-based text recognition
+- `PlateQueue`: Thread-safe queue for API communication
+- `VideoStream`: Camera/video input handling
 
-### 3. ebAPI Service (Port 6904)
+**Configuration:** `config/config.yaml`
+- Camera settings (source, resolution, FPS)
+- Model paths and confidence thresholds
+- OCR settings and preprocessing
+- API endpoint configuration
+- Display and performance options
+
+### 4. Node-RED Backend (Port 6903)
+**Technology:** Node-RED (Node.js visual workflow engine)
+
+Workflow automation and orchestration:
+- Visual flow-based programming interface
+- API integration and data transformation
+- Real-time event processing
+- Persistent flows via bind mount to `backend/node_red_data/`
+- Receives detected plates from AI service
+
+**Key Features:**
+- Connect all microservices
+- Automated data pipelines
+- Custom workflow logic
+- Integration with external services
+
+### 5. ebAPI Service (Port 6904)
 **Technology:** FastAPI + Python 3.11-slim + pandas + py7zr
 
 The Environmental Badge lookup microservice:
 - Spanish license plate format validation (NNNNLLL)
-- Badge classification lookup (C, ECO, B, 0, n)
-- Dataset auto-extraction from 40MB .7z archive
+- Badge classification lookup (0, ECO, C, B, n)
+- Dataset auto-extraction from compressed .7z archive
 - 4M+ Spanish vehicle records
 
-**Key Features:**
-- Validates Spanish plate format (4 digits + 3 consonants)
-- Returns badge type and vehicle classification
-- Automatic dataset management and optimization
-- Badge code parsing (e.g., 16TB → {vehicleType: "turism", badge: "B"})
-
-**Key Endpoints:**
+**Key Endpoint:**
 - `GET /api?carPlate=1234ABC` - Get environmental badge for plate
-- Dataset utilities: `optimize_dataset.py`, `generate_complete_dataset.py`
 
-### 4. Node-RED Service (Port 6903)
-**Technology:** Node-RED (Node.js visual workflow engine)
+**Badge Classifications:**
+- **0**: Zero emissions (electric, hydrogen)
+- **ECO**: Efficient hybrid vehicles
+- **C**: Euro 4/5/6 standards
+- **B**: Euro 3/4 standards
+- **n**: No badge (high emissions)
 
-Workflow automation and orchestration:
-- Visual flow-based programming
-- API integration and data transformation
-- Real-time event processing
-- Persistent flows via bind mount to `backend/node_red_data/`
+### 6. itvAPI Service (Port 6905)
+**Technology:** FastAPI + Python 3.11-slim + pandas + py7zr
 
-**Key Features:**
-- Connect AI and ebAPI services
-- Automated data pipelines
-- Custom workflow logic
-- Real-time notifications
+The ITV (Inspección Técnica de Vehículos) date lookup service:
+- Spanish license plate validation
+- ITV inspection date retrieval
+- Dataset auto-extraction on startup
 
-### 5. Documentation Service (Port 6910)
+**Key Endpoint:**
+- `GET /api?carPlate=1234ABC` - Get ITV date for plate
+
+### 7. OS Service (Port 6906)
+**Technology:** Spring Boot 3.2 + Java 17
+
+Vehicle simulation and management service:
+- Traffic simulation engine
+- Camera management
+- Police control operations
+- Vehicle tracking
+
+**Key Controllers:**
+- `CameraController`: Camera CRUD operations
+- `VehicleController`: Vehicle management
+- `SimulationController`: Simulation control
+- `PoliceController`: Police control operations
+- `ControlController`: System controls
+
+### 8. Documentation Service (Port 6910)
 **Technology:** Astro 5 + Starlight 0.36
 
 Comprehensive project documentation:
@@ -146,7 +198,13 @@ Comprehensive project documentation:
 - Each service has a single responsibility and independent lifecycle
 - Services communicate via REST APIs over HTTP
 - Independent scaling and deployment per service
-- Technology diversity (Python, Node.js, JavaScript/TypeScript)
+- Technology diversity (Python, Java, Node.js, JavaScript/TypeScript)
+
+### 2. **Containerization**
+- All services containerized with Docker
+- Docker Compose for orchestration
+- Consistent development and production environments
+- Easy deployment and scaling
 
 ### 2. **Separation of Concerns**
 - **Frontend**: User interface and experience

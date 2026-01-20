@@ -1,27 +1,27 @@
 ---
 title: API Overview
-description: Overview of the CRAI REST API
+description: Overview of the CRAI REST APIs
 ---
 
-CRAI provides two independent RESTful APIs built with FastAPI: the **AI Service** for automatic number plate recognition (ANPR) and the **ebAPI Service** for Spanish environmental badge lookup.
+CRAI provides multiple RESTful APIs built with FastAPI (Python) and Spring Boot (Java): the **AI Service** for real-time ANPR processing, the **ebAPI Service** for Spanish environmental badge lookup, the **itvAPI Service** for ITV date lookup, and the **OS Service** for vehicle simulation.
 
 ## Services Overview
 
-### AI Service - ANPR
+### AI Service - Real-time ANPR
 
-**Purpose:** Automatic Number Plate Recognition from images
+**Purpose:** Real-time Automatic Number Plate Recognition from video streams
 
 **Base URL:**
 ```
 Development: http://localhost:6902
-Production: https://ai.your-domain.com
 ```
 
 **Key Features:**
-- Image-based plate recognition
-- OpenCV preprocessing
-- OCR character recognition
-- Confidence scoring
+- Real-time video processing
+- YOLOv8 vehicle detection
+- Custom license plate detection
+- EasyOCR character recognition
+- Threaded plate queue with retry logic
 
 ### ebAPI Service - Environmental Badge Lookup
 
@@ -30,112 +30,81 @@ Production: https://ai.your-domain.com
 **Base URL:**
 ```
 Development: http://localhost:6904
-Production: https://ebapi.your-domain.com
 ```
 
 **Key Features:**
 - Spanish plate validation (NNNNLLL format)
 - 4M+ vehicle badge database
 - Badge classification (0, ECO, C, B, n)
-- Fast CSV-based lookup
+- Fast pandas-based lookup
+
+### itvAPI Service - ITV Date Lookup
+
+**Purpose:** Spanish vehicle technical inspection date lookup
+
+**Base URL:**
+```
+Development: http://localhost:6905
+```
+
+**Key Features:**
+- Spanish plate validation
+- ITV expiration date retrieval
+- Dataset auto-extraction
+
+### OS Service - Vehicle Simulation
+
+**Purpose:** Traffic simulation, camera, and police control management
+
+**Base URL:**
+```
+Development: http://localhost:6906
+```
+
+**Key Features:**
+- Vehicle simulation
+- Camera CRUD operations
+- Police control management
+- Scheduled tasks
+
+### Node-RED - Workflow Automation
+
+**Purpose:** Workflow orchestration and API integration
+
+**Base URL:**
+```
+Development: http://localhost:6903
+```
+
+**Key Features:**
+- Visual flow editor
+- Receives plates from AI service
+- Orchestrates service communication
+- Custom automation workflows
 
 ## API Endpoints Summary
 
-### AI Service Endpoints (Port 6902)
+### AI Service (Port 6902)
 
-#### GET /
-Root endpoint with API information
+The AI service processes live video streams. Detected plates are sent to Node-RED via the plate queue.
 
-**Response:**
-```json
-{
-  "message": "CRAI API",
-  "version": "1.0.0",
-  "docs": "/docs"
-}
-```
+**Configuration endpoint:**
+- Plate data sent to: `POST http://localhost:6903/ai/carPlate`
 
-#### GET /api/health
-Health check endpoint
+### ebAPI Service (Port 6904)
 
-**Response:**
-```json
-{
-  "status": "healthy",
-  "version": "1.0.0"
-}
-```
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api?carPlate={plate}` | Get environmental badge |
+| GET | `/docs` | Interactive Swagger UI |
+| GET | `/redoc` | ReDoc documentation |
 
-#### GET /api/hello
-Simple test endpoint
-
-**Response:**
-```json
-{
-  "message": "Hello World"
-}
-```
-
-#### POST /api/recognize
-Recognize license plate from uploaded image
-
-**Request:**
-```http
-POST /api/recognize
-Content-Type: multipart/form-data
-
-image: <file>
+**Request Example:**
+```bash
+curl "http://localhost:6904/api?carPlate=1234ABC"
 ```
 
 **Response:**
-```json
-{
-  "plate_number": "ABC-1234",
-  "confidence": 0.95,
-  "processing_time": 0.123,
-  "timestamp": "2024-01-01T12:00:00"
-}
-```
-
-**Error Responses:**
-
-```json
-// 400 Bad Request - Invalid file type
-{
-  "detail": "File must be an image"
-}
-
-// 422 Unprocessable Entity - Validation error
-{
-  "detail": [
-    {
-      "loc": ["body", "image"],
-      "msg": "field required",
-      "type": "value_error.missing"
-    }
-  ]
-}
-
-// 500 Internal Server Error
-{
-  "detail": "Internal server error"
-}
-```
-
-### ebAPI Service Endpoints (Port 6904)
-
-#### GET /api
-Look up environmental badge for Spanish license plate
-
-**Query Parameters:**
-- `carPlate` (required): Spanish license plate in NNNNLLL format
-
-**Request:**
-```http
-GET /api?carPlate=1234ABC
-```
-
-**Success Response:**
 ```json
 {
   "carPlate": "1234ABC",
@@ -147,54 +116,118 @@ GET /api?carPlate=1234ABC
 }
 ```
 
-**Badge Classifications:**
-- `0`: Zero emissions (electric, hydrogen)
-- `ECO`: Efficient hybrid vehicles
-- `C`: Euro 4/5/6 standards
-- `B`: Euro 3/4 standards
-- `n`: No badge (high emissions)
+### itvAPI Service (Port 6905)
 
-**Not Found Response:**
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api?carPlate={plate}` | Get ITV date |
+| GET | `/docs` | Interactive Swagger UI |
+| GET | `/redoc` | ReDoc documentation |
+
+**Request Example:**
+```bash
+curl "http://localhost:6905/api?carPlate=1234ABC"
+```
+
+**Response:**
 ```json
 {
   "carPlate": "1234ABC",
-  "badge": null
+  "itv_date": "2025-06-15"
 }
 ```
 
-**Invalid Plate Response:**
-```json
-{
-  "carPlate": null,
-  "badge": null
-}
-```
+### OS Service (Port 6906)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET/POST | `/cameras` | Camera operations |
+| GET/POST | `/vehicles` | Vehicle operations |
+| GET/POST | `/simulations` | Simulation control |
+| GET/POST | `/police` | Police control |
+| GET/POST | `/control` | System controls |
+
+### Node-RED (Port 6903)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/ai/carPlate` | Receive detected plates |
+| GET | `/` | Node-RED editor |
 
 ## Interactive Documentation
 
-Both services provide automatic interactive API documentation via Swagger UI and ReDoc.
-
-### AI Service Documentation
-
-- **Swagger UI**: http://localhost:6902/docs
-- **ReDoc**: http://localhost:6902/redoc
-- **OpenAPI JSON**: http://localhost:6902/openapi.json
+All FastAPI services provide automatic interactive API documentation.
 
 ### ebAPI Service Documentation
-
 - **Swagger UI**: http://localhost:6904/docs
 - **ReDoc**: http://localhost:6904/redoc
 - **OpenAPI JSON**: http://localhost:6904/openapi.json
 
+### itvAPI Service Documentation
+- **Swagger UI**: http://localhost:6905/docs
+- **ReDoc**: http://localhost:6905/redoc
+- **OpenAPI JSON**: http://localhost:6905/openapi.json
+
 ## Authentication
 
-Currently, both APIs do not require authentication. All endpoints are publicly accessible.
+### Current Status
+- **ebAPI & itvAPI**: No authentication required (public endpoints)
+- **OS Service**: No authentication required
+- **Frontend**: Google OAuth authentication
+- **Node-RED**: Optional authentication (configurable)
 
-**Future Plans:**
-- API Key authentication
-- JWT tokens
-- OAuth2 integration
-- Service-to-service authentication
+### Frontend Authentication
+The frontend uses Google OAuth via `@react-oauth/google`:
+- JWT token-based authentication
+- Protected routes for dashboard pages
+- Token stored in local storage
+
+## Badge Classifications
+
+Spanish environmental badge system:
+
+| Badge | Name | Description | Color |
+|-------|------|-------------|-------|
+| **0** | Cero emisiones | Zero emissions (electric, hydrogen) | Blue |
+| **ECO** | ECO | Efficient hybrid vehicles | Blue-Green |
+| **C** | C | Euro 4/5/6 standards | Green |
+| **B** | B | Euro 3/4 standards | Yellow |
+| **n** | Sin distintivo | No badge (high emissions) | None |
+
+## Spanish License Plate Format
+
+### Validation Rules
+Spanish plates follow the **NNNNLLL** format:
+- 4 digits (0-9)
+- 3 consonants (excluding vowels A, E, I, O, U)
+
+**Valid consonants:** B, C, D, F, G, H, J, K, L, M, N, P, Q, R, S, T, V, W, X, Y, Z
+
+### Examples
+| Plate | Valid | Reason |
+|-------|-------|--------|
+| `1234ABC` | ✅ | Correct format |
+| `0000BBB` | ✅ | Correct format |
+| `1234AEI` | ❌ | Contains vowels |
+| `123ABC` | ❌ | Only 3 digits |
+
+## Error Handling
+
+### Standard Error Response
+```json
+{
+  "detail": "Error message describing the issue"
+}
+```
+
+### Common HTTP Status Codes
+| Code | Description |
+|------|-------------|
+| 200 | Success |
+| 400 | Bad Request |
+| 404 | Not Found |
+| 422 | Validation Error |
+| 500 | Internal Server Error |
 
 ## Rate Limiting
 
