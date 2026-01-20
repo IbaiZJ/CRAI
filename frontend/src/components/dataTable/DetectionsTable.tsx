@@ -55,12 +55,6 @@ const getStatusBadge = (status: Detection['itvStatus']) => {
 const detectionsColumns = createColumns<Detection>({
   columns: [
     {
-      accessorKey: "id",
-      header: "ID",
-      enableSorting: true,
-      cell: (value: number) => <div className="font-medium">#{value}</div>,
-    },
-    {
       accessorKey: "detectionDate",
       header: "Detection Date",
       enableSorting: true,

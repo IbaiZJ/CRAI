@@ -6,6 +6,9 @@ const Users = lazy(() => import("@/pages/Users"));
 const UserDetail = lazy(() => import("@/pages/User"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const Statistics = lazy(() => import("@/pages/Statistics"));
+const StatisticsCars = lazy(() => import("@/pages/StatisticsCars"));
+const StatisticsUsers = lazy(() => import("@/pages/StatisticsUsers"));
+const StatisticsCameras = lazy(() => import("@/pages/StatisticsCameras"));
 const Cameras = lazy(() => import("@/pages/Cameras"));
 const Detections = lazy(() => import("@/pages/Detections"));
 const Cars = lazy(() => import("@/pages/Cars"));
@@ -52,6 +55,21 @@ const appRoutes = [
     path: "/statistics",
     component: Statistics,
     protected: true, 
+  },
+  {
+    path: "/statistics/cars",
+    component: StatisticsCars,
+    protected: true,
+  },
+  {
+    path: "/statistics/users",
+    component: StatisticsUsers,
+    protected: true,
+  },
+  {
+    path: "/statistics/cameras",
+    component: StatisticsCameras,
+    protected: true,
   },
   {
     path: "/cameras",

@@ -304,9 +304,9 @@ export default function Cars() {
                       Owner
                     </label>
                     <Select
-                      value={formData.userId}
+                      value={formData.userId || "none"}
                       onValueChange={(value) => {
-                        setFormData(prev => ({ ...prev, userId: value }));
+                        setFormData(prev => ({ ...prev, userId: value === "none" ? "" : value }));
                       }}
                       disabled={isSubmitting}
                     >

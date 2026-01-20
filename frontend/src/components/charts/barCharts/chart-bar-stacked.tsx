@@ -1,3 +1,4 @@
+import * as React from "react"
 import { TrendingUp } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 
@@ -20,7 +21,16 @@ import {
 
 export const description = "A stacked bar chart with a legend"
 
-const chartData = [
+interface ChartBarStackedProps {
+  data?: Array<{ [key: string]: any }>;
+  title?: string;
+  description?: string;
+  dataKeys?: { key: string; label: string; color: string }[];
+  categoryKey?: string;
+  showFooter?: boolean;
+}
+
+const defaultChartData = [
   { month: "January", desktop: 186, mobile: 80 },
   { month: "February", desktop: 305, mobile: 200 },
   { month: "March", desktop: 237, mobile: 120 },
@@ -29,7 +39,7 @@ const chartData = [
   { month: "June", desktop: 214, mobile: 140 },
 ]
 
-const chartConfig = {
+const defaultChartConfig = {
   desktop: {
     label: "Desktop",
     color: "var(--chart-1)",
@@ -40,19 +50,36 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function ChartBarStacked() {
+export function ChartBarStacked({ 
+  data,
+  title = "Bar Chart - Stacked + Legend",
+  description = "January - June 2024",
+  dataKeys = [{ key: 'desktop', label: 'Desktop', color: 'var(--chart-1)' }, { key: 'mobile', label: 'Mobile', color: 'var(--chart-2)' }],
+  categoryKey = "month",
+  showFooter = true
+}: ChartBarStackedProps = {}) {
+  const chartData = data || defaultChartData;
+  
+  const chartConfig = React.useMemo(() => {
+    const config: ChartConfig = {};
+    dataKeys.forEach(dk => {
+      config[dk.key] = { label: dk.label, color: dk.color };
+    });
+    return config;
+  }, [dataKeys]);
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Bar Chart - Stacked + Legend</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey={categoryKey}
               tickLine={false}
               tickMargin={10}
               axisLine={false}
@@ -60,29 +87,28 @@ export function ChartBarStacked() {
             />
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
             <ChartLegend content={<ChartLegendContent />} />
-            <Bar
-              dataKey="desktop"
-              stackId="a"
-              fill="var(--color-desktop)"
-              radius={[0, 0, 4, 4]}
-            />
-            <Bar
-              dataKey="mobile"
-              stackId="a"
-              fill="var(--color-mobile)"
-              radius={[4, 4, 0, 0]}
-            />
+            {dataKeys.map((dk, idx) => (
+              <Bar
+                key={dk.key}
+                dataKey={dk.key}
+                stackId="a"
+                fill={dk.color}
+                radius={idx === 0 ? [0, 0, 4, 4] : idx === dataKeys.length - 1 ? [4, 4, 0, 0] : [0, 0, 0, 0]}
+              />
+            ))}
           </BarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 leading-none font-medium">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="text-muted-foreground leading-none">
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter>
+      {showFooter && (
+        <CardFooter className="flex-col items-start gap-2 text-sm">
+          <div className="flex gap-2 leading-none font-medium">
+            Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          </div>
+          <div className="text-muted-foreground leading-none">
+            Showing total visitors for the last 6 months
+          </div>
+        </CardFooter>
+      )}
     </Card>
   )
 }
