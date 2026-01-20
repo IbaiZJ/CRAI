@@ -50,7 +50,7 @@ export default function Cameras() {
   }, []);
 
   useEffect(() => {
-    if (!loading) {
+    if (!loading && cameras.length >= 0) {
       // Small timeout to allow layout to settle
       const timer = setTimeout(() => {
         initializeMap();
@@ -65,6 +65,7 @@ export default function Cameras() {
         mapRef.current = null;
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
   const initializeMap = () => {
@@ -89,19 +90,15 @@ export default function Cameras() {
     });
 
     mapRef.current = map;
-    
-    // If we already have cameras, update markers now
-    if (cameras.length > 0) {
-      updateMapMarkers();
-    }
   };
 
   useEffect(() => {
     // Only update markers if map exists. 
     // If map is not yet created, initializeMap will handle the initial marker update.
-    if (mapRef.current && cameras.length > 0) {
+    if (mapRef.current) {
       updateMapMarkers();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cameras]);
 
   const breadcrumbs: BreadcrumbItem[] = [
@@ -112,12 +109,16 @@ export default function Cameras() {
   const updateMapMarkers = () => {
     if (!mapRef.current) return;
 
+    console.log('Updating map markers with cameras:', cameras);
+    console.log('Number of cameras:', cameras.length);
+
     // Clear existing markers
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current.clear();
 
     // Add markers for each camera
     cameras.forEach(camera => {
+      console.log('Adding marker for camera:', camera);
       const marker = L.marker([camera.locationX, camera.locationY])
         .addTo(mapRef.current!);
       
@@ -155,6 +156,7 @@ export default function Cameras() {
     if (cameras.length > 0) {
       const bounds = L.latLngBounds(cameras.map(c => [c.locationX, c.locationY]));
       mapRef.current.fitBounds(bounds, { padding: [50, 50] });
+      console.log('Map bounds fitted for', cameras.length, 'cameras');
     }
   };
 
@@ -164,16 +166,26 @@ export default function Cameras() {
       const response = await fetch(`${API_BASE_URL}/cameras`);
       const result = await response.json();
       
+      console.log('API Response:', result);
+      console.log('Is Array:', Array.isArray(result));
+      console.log('Has success property:', result.success);
+      console.log('Has data property:', result.data);
+      
       if (result.success && result.data) {
+        console.log('Setting cameras from result.data:', result.data);
         setCameras(result.data);
       } else if (Array.isArray(result)) {
+        console.log('Setting cameras from array:', result);
         setCameras(result);
       } else {
+        console.log('Failed to load cameras, result:', result);
         notifications.error("Failed to load cameras");
+        setCameras([]); // Set empty array to avoid undefined
       }
     } catch (error) {
       console.error("Error loading cameras:", error);
       notifications.error("Error loading cameras");
+      setCameras([]); // Set empty array on error
     } finally {
       setLoading(false);
     }

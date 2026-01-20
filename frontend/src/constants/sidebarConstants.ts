@@ -5,7 +5,6 @@ import {
   Siren,
   ChartBar,
   Cctv,
-  Sparkles,
   Car,
   Scan
 } from "lucide-react"
@@ -46,7 +45,6 @@ export const sidebarConfig = {
         { title: "Cars", url: "/statistics/cars" },
         { title: "Users", url: "/statistics/users" },
         { title: "Cameras", url: "/statistics/cameras" },
-        { title: "Simulations", url: "/statistics/simulations" },
       ],
     },
     {
@@ -71,12 +69,6 @@ export const sidebarConfig = {
       title: "Detecciones",
       url: "/detections",
       icon: Scan,
-      navType: "button",
-    },
-    {
-      title: "Simulations",
-      url: "/simulations",
-      icon: Sparkles,
       navType: "button",
     },
   ],

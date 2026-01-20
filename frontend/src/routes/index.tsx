@@ -9,7 +9,6 @@ const Statistics = lazy(() => import("@/pages/Statistics"));
 const Cameras = lazy(() => import("@/pages/Cameras"));
 const Detections = lazy(() => import("@/pages/Detections"));
 const Cars = lazy(() => import("@/pages/Cars"));
-const Simulations = lazy(() => import("@/pages/Simulations"));
 const SignUp = lazy(() => import("@/pages/SignUp"));
 import { createRoutes } from "./routeUtils";
 
@@ -67,11 +66,6 @@ const appRoutes = [
   {
     path: "/cars",
     component: Cars,
-    protected: true,
-  },
-  {
-    path: "/simulations",
-    component: Simulations,
     protected: true,
   }
 ];
