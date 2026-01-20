@@ -91,3 +91,15 @@ Traceback (most recent call last):
     )
 ValueError: Input 0 with name 'input_image' of layer 'SSD_MobileNetV2_CarDetector' is incompatible with the layer: expected shape=(None, 640, 640, 3), found shape=(1, 180, 320, 3)
 [2026-01-19 08:03:31] [[31mERROR[0m] [logger.py:128] └─ Error in: System initialization (20.443s) - 
+[2026-01-20 08:33:15] [[31mERROR[0m] [logger.py:128] └─ Error in: Detection summary (0.001s) - 'Logger' object has no attribute 'warning'
+[2026-01-20 08:33:15] [[31mERROR[0m] [logger.py:136] 
+Error: 'Logger' object has no attribute 'warning'
+Traceback (most recent call last):
+  File "C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\main.py", line 431, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\04aza\UNI\3 Urtea\1.SEMESTREA\PBL\CRAI\ai\src\main.py", line 393, in main
+    logger.warning("No plates with valid text detected")
+    ^^^^^^^^^^^^^^
+AttributeError: 'Logger' object has no attribute 'warning'
+[2026-01-20 08:55:54] [[31mERROR[0m] [logger.py:128] └─ Error in: System cleanup (0.838s) - 

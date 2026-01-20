@@ -649,9 +649,6 @@ class SSDVehicleDetector:
         if len(final_scores) > 5:
             mean_conf = np.mean(final_scores)
             std_conf = np.std(final_scores)
-            if 0.45 < mean_conf < 0.65 and std_conf < 0.15:
-                self.logger.warning(f"⚠️  Patrón sospechoso: conf media={mean_conf:.2f}, std={std_conf:.2f}")
-                self.logger.warning("   Esto sugiere que el modelo NO está entrenado correctamente")
         
         # Build detection list
         detections = []
