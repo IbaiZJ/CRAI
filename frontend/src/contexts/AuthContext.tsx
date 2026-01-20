@@ -1,112 +1,130 @@
 import React, { createContext, useContext, useState } from 'react';
-import { jwtDecode } from 'jwt-decode';
-import { SpinnerCustom } from "@/components/Spinner";
+import { authApi, type RegisterRequest } from '@/lib/api';
+import { getCookie, setCookie, deleteCookie } from '@/lib/cookies';
 
 interface User {
-  email: string;
+  username: string;
   name: string;
   surname?: string;
   fullName: string;
-  picture?: string;
   sub: string;
-  email_verified?: boolean;
-  locale?: string;
-  iat?: number; // Emission time
-  exp?: number; // Expiration time
+  iat?: number;
+  exp?: number;
 }
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-  login: (credential: string) => void;
+  login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  register: (data: RegisterRequest) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
-  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// JSON Web Token decoded structure
 interface DecodedToken {
-  email: string;
+  username: string;
   name: string;
-  given_name?: string;
-  family_name?: string;
-  picture?: string;
-  sub: string;
-  email_verified?: boolean;
-  locale?: string;
+  surname: string;
   exp: number;
   iat: number;
 }
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
-    const storedUser = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
+    // Try to get from cookies first, then localStorage
+    const cookieUser = getCookie('user');
+    const cookieToken = getCookie('token');
+    
+    const storedUser = cookieUser || localStorage.getItem('user');
+    const token = cookieToken || localStorage.getItem('token');
     
     if (storedUser && token) {
       try {
-        const decoded = jwtDecode<DecodedToken>(token);
-        if (decoded.exp * 1000 > Date.now()) {
-          return JSON.parse(storedUser);
-        } else {
-          localStorage.removeItem('user');
-          localStorage.removeItem('token');
-        }
+        // Simply parse the stored user data without validating JWT
+        // since we're using a simple base64 token, not a real JWT
+        return JSON.parse(storedUser);
       } catch (error) {
-        console.error('Error decoding token:', error);
+        console.error('Error parsing user data:', error);
         localStorage.removeItem('user');
         localStorage.removeItem('token');
+        deleteCookie('user');
+        deleteCookie('token');
       }
     }
     return null;
   });
-  const loading = false;
 
-  const login = (credential: string) => {
+  const login = async (username: string, password: string): Promise<{ success: boolean; error?: string }> => {
     try {
-      const decoded = jwtDecode<DecodedToken>(credential);
-      const userData: User = {
-        email: decoded.email,
-        name: decoded.given_name || decoded.name.split(' ')[0],
-        surname: decoded.family_name || decoded.name.split(' ').slice(1).join(' '),
-        fullName: decoded.name,
-        picture: decoded.picture,
-        sub: decoded.sub,
-        email_verified: decoded.email_verified,
-        locale: decoded.locale,
-        iat: decoded.iat,
-        exp: decoded.exp,
-      };
-      setUser(userData);
-      localStorage.setItem('user', JSON.stringify(userData));
-      localStorage.setItem('token', credential);
+      console.log('Attempting login for:', username);
+      
+      const response = await authApi.login({ username, password });
+      
+      console.log('Login response:', response);
+      
+      if (response.success && response.token && response.user) {
+        const userData: User = {
+          username: response.user.username,
+          name: response.user.name,
+          surname: response.user.surname,
+          fullName: `${response.user.name} ${response.user.surname}`.trim(),
+          sub: response.user.username,
+        };
+        
+        setUser(userData);
+        
+        // Save to both localStorage and cookies for persistence
+        const userJSON = JSON.stringify(userData);
+        localStorage.setItem('user', userJSON);
+        localStorage.setItem('token', response.token);
+        
+        // Cookies will persist for 7 days
+        setCookie('user', userJSON, 7);
+        setCookie('token', response.token, 7);
+        
+        return { success: true };
+      }
+      
+      return { success: false, error: response.error || 'Login failed' };
     } catch (error) {
       console.error('Error logging in:', error);
+      return { success: false, error: 'Connection error. Please try again.' };
+    }
+  };
+
+  const register = async (data: RegisterRequest): Promise<{ success: boolean; error?: string }> => {
+    try {
+      const response = await authApi.register(data);
+      
+      if (response.success) {
+        return { success: true };
+      }
+      
+      return { success: false, error: response.error || 'Registration failed' };
+    } catch (error) {
+      console.error('Error registering:', error);
+      return { success: false, error: 'Connection error. Please try again.' };
     }
   };
 
   const logout = () => {
     setUser(null);
+    
+    // Clear both localStorage and cookies
     localStorage.removeItem('user');
     localStorage.removeItem('token');
+    deleteCookie('user');
+    deleteCookie('token');
   };
 
   const contextValue = React.useMemo(() => ({
     user,
     isAuthenticated: !!user,
     login,
+    register,
     logout,
-    loading,
-  }), [user, login, logout, loading]);
-
-  if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <SpinnerCustom />
-      </div>
-    );
-  }
+  }), [user]);
 
   return (
     <AuthContext.Provider value={contextValue}>

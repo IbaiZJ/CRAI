@@ -1,136 +1,208 @@
 ---
 title: Backend Architecture
-description: Deep dive into CRAI's FastAPI backend architecture
+description: Deep dive into CRAI's backend services architecture
 ---
 
-The CRAI backend consists of two independent FastAPI microservices: the **AI Service** for automatic number plate recognition (ANPR) and the **ebAPI Service** for Spanish environmental badge lookup.
+The CRAI backend consists of four independent microservices: the **AI Service** for automatic number plate recognition, the **ebAPI Service** for environmental badge lookup, the **itvAPI Service** for ITV date lookup, and the **OS Service** for vehicle simulation.
 
 ## Architecture Overview
 
 ```
-┌──────────────────────────────────────────────────────────────────┐
-│                        Backend Services                          │
-├────────────────────────────┬─────────────────────────────────────┤
-│    AI Service (6902)       │       ebAPI Service (6904)          │
-│    ANPR Processing         │       Badge Lookup                   │
-├────────────────────────────┼─────────────────────────────────────┤
-│  FastAPI Application       │      FastAPI Application            │
-│  ┌─────────────────────┐  │  ┌──────────────────────────────┐   │
-│  │  /api/recognize     │  │  │  /api?carPlate=X             │   │
-│  │  /api/health        │  │  │  /docs                        │   │
-│  │  /docs              │  │  └──────────────────────────────┘   │
-│  └─────────────────────┘  │                                      │
-│                            │  ┌──────────────────────────────┐   │
-│  ┌─────────────────────┐  │  │  Service Layer               │   │
-│  │  Recognition        │  │  │  • validate_plate()          │   │
-│  │  Service            │  │  │  • get_badge_by_plate()      │   │
-│  │  • OpenCV           │  │  │  • convert_badge_code()      │   │
-│  │  • pytesseract      │  │  └──────────────────────────────┘   │
-│  └─────────────────────┘  │                                      │
-│                            │  ┌──────────────────────────────┐   │
-│  Python 3.11+              │  │  Utilities                   │   │
-│  opencv-python             │  │  • get_badge_from_plates     │   │
-│  scikit-image              │  │  • optimize_dataset.py       │   │
-│  imutils                   │  │  • generate_dataset.py       │   │
-│                            │  └──────────────────────────────┘   │
-│                            │                                      │
-│                            │  Python 3.11-slim                    │
-│                            │  pandas, py7zr, termcolor            │
-└────────────────────────────┴─────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                             Backend Services                                  │
+├────────────────┬────────────────┬────────────────┬───────────────────────────┤
+│  AI Service    │  ebAPI Service │ itvAPI Service │     OS Service            │
+│  (6902)        │  (6904)        │ (6905)         │     (6906)                │
+│  Real-time     │  Badge Lookup  │ ITV Lookup     │     Simulation            │
+│  ANPR          │                │                │                           │
+├────────────────┼────────────────┼────────────────┼───────────────────────────┤
+│ Python 3.11+   │ FastAPI        │ FastAPI        │ Spring Boot 3.2           │
+│ YOLOv8         │ Python 3.11    │ Python 3.11    │ Java 17                   │
+│ EasyOCR        │ pandas         │ pandas         │ Maven                     │
+│ TensorFlow     │ py7zr          │ py7zr          │ Jackson                   │
+│ OpenCV         │                │                │                           │
+│                │                │                │                           │
+│ src/           │ routers/       │ routers/       │ controller/               │
+│ ├─ detectors/  │ service/       │ service/       │ service/                  │
+│ ├─ video/      │ util/          │ util/          │ repository/               │
+│ ├─ api/        │ conf/          │ conf/          │ model/                    │
+│ ├─ config/     │ data/          │ data/          │ config/                   │
+│ └─ utils/      │                │                │                           │
+└────────────────┴────────────────┴────────────────┴───────────────────────────┘
+                                       │
+                                       ▼
+                      ┌────────────────────────────────┐
+                      │     MySQL Database (6900)      │
+                      │     ├─ crai database           │
+                      │     ├─ users, vehicles         │
+                      │     └─ simulations, cameras    │
+                      └────────────────────────────────┘
 ```
 
-## Project Structure
+## AI Service - Real-time ANPR
 
-### AI Service Structure
+### Purpose
+The AI service provides real-time Automatic Number Plate Recognition (ANPR) by processing live video streams. It detects vehicles, locates license plates, and reads plate text using OCR.
+
+### Project Structure
 ```
 ai/
-├── api/
-│   ├── __init__.py
-│   ├── main.py                  # Application entry point
-│   ├── core/
-│   │   ├── __init__.py
-│   │   └── config.py           # Settings and configuration
-│   ├── routers/
-│   │   ├── __init__.py
-│   │   └── router.py           # API endpoints
-│   ├── models/
-│   │   ├── __init__.py
-│   │   └── schemas.py          # Pydantic models
-│   ├── services/
-│   │   ├── __init__.py
-│   │   └── recognition.py      # Business logic
-│   └── interface/
-│       └── # Interface definitions
-├── data/
-│   ├── models/                 # AI models
-│   └── raw/                    # Sample images
+├── src/
+│   ├── main.py                    # Application entry point
+│   ├── api/
+│   │   ├── plate_queue.py         # Thread-safe API queue
+│   │   └── request.py             # HTTP request handler
+│   ├── config/
+│   │   ├── config.py              # YAML configuration loader
+│   │   └── config.yaml            # Configuration settings
+│   ├── detectors/
+│   │   ├── vehicle_detector.py    # YOLOv8 vehicle detection
+│   │   ├── plate_detector.py      # Custom plate detection
+│   │   ├── ssd_detector.py        # Custom SSD detector
+│   │   └── ocr.py                 # EasyOCR plate reader
+│   ├── video/
+│   │   ├── video_stream.py        # Camera/video input
+│   │   └── fps.py                 # FPS counter
+│   ├── utils/
+│   │   ├── logger.py              # Custom logging
+│   │   └── terminal.py            # Terminal utilities
+│   └── models/                    # AI model files
 ├── tests/
-│   ├── __init__.py
-│   ├── conftest.py             # Test configuration
-│   └── api/
-│       ├── test_main.py
-│       └── test_router.py
+│   ├── test_config.py
+│   ├── test_detectors.py
+│   ├── test_main.py
+│   ├── test_ocr.py
+│   ├── test_plate_queue.py
+│   └── test_terminal_logger.py
 ├── requirements.txt
 ├── pytest.ini
 └── Dockerfile
 ```
 
-### ebAPI Service Structure
+### Key Components
+
+#### Vehicle Detector (YOLOv8)
+```python
+class VehicleDetector:
+    """Detect vehicles using YOLOv8"""
+    def __init__(self, model_path, conf_threshold=0.5):
+        self.model = YOLO(model_path)
+        self.conf_threshold = conf_threshold
+        self.classes = ['car', 'truck', 'bus', 'motorcycle']
 ```
-ebAPI/
-├── __init__.py
-├── main.py                      # FastAPI app + auto-extraction
-├── conf/
-│   ├── __init__.py
-│   └── config.py               # Pydantic settings
-├── routers/
-│   ├── __init__.py
-│   └── router.py               # GET /api endpoint
-├── service/
-│   ├── __init__.py
-│   └── service.py              # EnvironmentalBadgeService
-├── util/
-│   ├── __init__.py
-│   ├── get_badge_from_plates.py    # CSV lookup
-│   ├── optimize_dataset.py         # Dataset cleaning
-│   ├── generate_complete_dataset.py # Generate missing plates
-│   └── util.py                      # Helper functions
-├── data/
-│   ├── environmentalBadge.7z        # Compressed dataset (40MB)
-│   └── environmentalBadge.txt       # Extracted dataset (592MB)
-├── requirements.txt
-├── Dockerfile
-└── README.md
+
+#### Plate Detector
+```python
+class PlateDetector:
+    """Custom YOLO model for license plate detection"""
+    def __init__(self, model_path, conf_threshold=0.4):
+        self.model = YOLO(model_path)
+        self.conf_threshold = conf_threshold
 ```
+
+#### OCR Reader (EasyOCR)
+```python
+class PlateReader:
+    """EasyOCR-based license plate text recognition"""
+    def __init__(self, languages=['en'], gpu=False):
+        self.reader = easyocr.Reader(languages, gpu=gpu)
+```
+
+#### Plate Queue
+```python
+class PlateQueue:
+    """Thread-safe queue for sending plates to API"""
+    def __init__(self, endpoint_url, max_retries=3, retry_delay=2.0):
+        self.queue = queue.Queue()
+        self.endpoint_url = endpoint_url
+    
+    def add_plate(self, plate_text, confidence, vehicle_type=None):
+        """Add detected plate to queue"""
+```
+
+### Configuration (config.yaml)
+```yaml
+camera:
+  source: 1
+  auto_find: true
+  resolution:
+    width: 1280
+    height: 720
+
+vehicle_detector:
+  model_path: "models/yolov8n.pt"
+  confidence_threshold: 0.5
+
+plate_detector:
+  model_path: "models/license_plate_detector.pt"
+  confidence_threshold: 0.3
+
+ocr:
+  enabled: true
+  engine: "easyocr"
+  languages: ["en"]
+  use_gpu: false
+  confidence_threshold: 0.3
+
+api:
+  endpoint_base_url: "http://localhost:6903"
+  car_plate_endpoint: "/ai/carPlate"
+  timeout: 10
+  max_retries: 3
+```
+
+### Dependencies
+```
+fastapi
+uvicorn[standard]
+numpy==2.2.6
+pandas==2.3.3
+opencv-python==4.12.0.88
+tensorflow==2.20.0
+ultralytics
+easyocr
+PyYAML
+pytest
+pytest-cov
+```
+
+---
 
 ## ebAPI Service - Environmental Badge Lookup
 
 ### Purpose
-The ebAPI microservice provides Spanish vehicle environmental badge classification lookup for over 4 million license plates. It validates plate format, looks up badge data from a comprehensive dataset, and returns structured classification information.
+The ebAPI microservice provides Spanish vehicle environmental badge classification lookup for over 4 million license plates.
 
-### Key Features
-- **Spanish Plate Validation**: Validates format NNNNLLL (4 digits + 3 consonants, excluding A,E,I,O,U)
-- **Comprehensive Dataset**: 4M+ Spanish vehicle records with environmental classifications
-- **Auto-Extraction**: Automatically extracts 40MB compressed .7z file to 592MB text file on startup
-- **Fast Lookup**: Uses pandas for efficient CSV/pipe-delimited file processing
-- **Badge Parsing**: Converts raw badge codes (e.g., "16TB") to structured format
-
-### Badge Classification System
-
-Spanish environmental badges:
-- **0 (Cero emisiones)**: Zero emissions - electric and hydrogen vehicles
-- **ECO**: Efficient hybrid and alternative fuel vehicles
-- **C**: Vehicles meeting Euro 4/5/6 standards
-- **B**: Older vehicles meeting Euro 3/4 standards
-- **n** (SIN DISTINTIVO): No badge - high-emission vehicles
+### Project Structure
+```
+ebAPI/
+├── __init__.py
+├── main.py                        # FastAPI app + auto-extraction
+├── conf/
+│   ├── __init__.py
+│   └── config.py                  # Pydantic settings
+├── routers/
+│   ├── __init__.py
+│   └── router.py                  # GET /api endpoint
+├── service/
+│   ├── __init__.py
+│   └── service.py                 # EnvironmentalBadgeService
+├── util/
+│   ├── __init__.py
+│   ├── get_badge_from_plates.py   # CSV lookup
+│   └── util.py                    # Helper functions
+├── data/
+│   ├── environmentalBadge.7z      # Compressed dataset
+│   └── environmentalBadge.txt     # Extracted dataset
+├── tests/
+├── requirements.txt
+└── Dockerfile
+```
 
 ### API Endpoint
 
 **GET /api?carPlate={plate}**
 
-Validates and looks up environmental badge for Spanish license plate.
-
-**Request:**
 ```bash
 curl "http://localhost:6904/api?carPlate=1234ABC"
 ```
@@ -147,7 +219,179 @@ curl "http://localhost:6904/api?carPlate=1234ABC"
 }
 ```
 
-**Validation Rules:**
+### Badge Classifications
+| Badge | Name | Description |
+|-------|------|-------------|
+| 0 | Zero emissions | Electric, hydrogen vehicles |
+| ECO | ECO | Hybrid and alternative fuel |
+| C | C | Euro 4/5/6 standards |
+| B | B | Euro 3/4 standards |
+| n | Sin distintivo | No badge (high emissions) |
+
+---
+
+## itvAPI Service - ITV Date Lookup
+
+### Purpose
+The itvAPI microservice provides Spanish vehicle ITV (technical inspection) date lookup.
+
+### Project Structure
+```
+itvAPI/
+├── __init__.py
+├── main.py                        # FastAPI app
+├── conf/
+│   └── config.py                  # Settings
+├── routers/
+│   └── router.py                  # GET /api endpoint
+├── service/
+│   └── service.py                 # ITV lookup service
+├── util/
+│   └── util.py                    # Helpers
+├── data/
+│   └── itv_dates.7z               # Dataset
+├── tests/
+├── requirements.txt
+└── Dockerfile
+```
+
+### API Endpoint
+
+**GET /api?carPlate={plate}**
+
+```bash
+curl "http://localhost:6905/api?carPlate=1234ABC"
+```
+
+**Response:**
+```json
+{
+  "carPlate": "1234ABC",
+  "itv_date": "2025-06-15"
+}
+```
+
+---
+
+## OS Service - Vehicle Simulation (Spring Boot)
+
+### Purpose
+The OS service provides vehicle traffic simulation, camera management, and police control operations using Spring Boot and Java 17.
+
+### Project Structure
+```
+os/
+├── src/main/java/com/crai/os/
+│   ├── OsApplication.java         # Spring Boot entry
+│   ├── controller/
+│   │   ├── CameraController.java
+│   │   ├── VehicleController.java
+│   │   ├── SimulationController.java
+│   │   ├── PoliceController.java
+│   │   └── ControlController.java
+│   ├── service/
+│   ├── repository/
+│   ├── model/
+│   ├── config/
+│   ├── exception/
+│   └── utils/
+├── src/main/resources/
+├── src/test/
+├── pom.xml
+└── Dockerfile
+```
+
+### Key Controllers
+
+#### Camera Controller
+Manages camera CRUD operations for monitoring.
+
+#### Vehicle Controller
+Handles vehicle registration and tracking.
+
+#### Simulation Controller
+Controls traffic simulation scenarios.
+
+#### Police Controller
+Manages police control checkpoints.
+
+### Dependencies (pom.xml)
+```xml
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.2.5</version>
+</parent>
+
+<properties>
+    <java.version>17</java.version>
+</properties>
+
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.dataformat</groupId>
+        <artifactId>jackson-dataformat-xml</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.json</groupId>
+        <artifactId>json</artifactId>
+    </dependency>
+</dependencies>
+```
+
+---
+
+## Node-RED Backend - Workflow Automation
+
+### Purpose
+Node-RED provides visual workflow automation connecting all microservices.
+
+### Configuration
+```yaml
+node-red:
+  image: nodered/node-red:latest
+  container_name: backend
+  ports:
+    - "6903:1880"
+  volumes:
+    - ./backend/node_red_data:/data
+  environment:
+    - TZ=Europe/Madrid
+```
+
+### Flow Persistence
+Flows are stored in `backend/node_red_data/`:
+- `flows.json` - Flow definitions
+- `flows_cred.json` - Credentials
+- `settings.js` - Node-RED settings
+
+---
+
+## Database - MySQL
+
+### Configuration
+```yaml
+mysql:
+  image: mysql:8
+  container_name: mysql
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_DATABASE: crai
+    MYSQL_USER: crai_user
+    MYSQL_PASSWORD: crai_pass
+  ports:
+    - "6900:3306"
+  volumes:
+    - mysql_data:/var/lib/mysql
+    - ./db/createCraiDB.sql:/docker-entrypoint-initdb.d/01_createCraiDB.sql:ro
+```
+
+### Initialization
+The database is initialized with `db/createCraiDB.sql` on first start.
 - Must be exactly 7 characters
 - Format: 4 digits followed by 3 consonants
 - Consonants: B,C,D,F,G,H,J,K,L,M,N,P,Q,R,S,T,V,W,X,Y,Z

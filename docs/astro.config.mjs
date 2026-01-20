@@ -29,18 +29,19 @@ export default defineConfig({
 					label: 'Architecture',
 					items: [
 						{ label: 'Overview', slug: 'architecture/overview' },
-						{ label: 'Backend (FastAPI)', slug: 'architecture/backend' },
+						{ label: 'Backend Services', slug: 'architecture/backend' },
 						{ label: 'Frontend (React)', slug: 'architecture/frontend' },
 						{ label: 'Docker Setup', slug: 'architecture/docker' },
 					],
 				},
 				{
-					label: 'Backend API',
+					label: 'API Reference',
 					items: [
 						{ label: 'API Overview', slug: 'api/overview' },
-						{ label: 'Endpoints', slug: 'api/endpoints' },
-						{ label: 'Models', slug: 'api/models' },
-						{ label: 'Authentication', slug: 'api/authentication' },
+						{ label: 'ebAPI Endpoints', slug: 'api/endpoints' },
+						{ label: 'itvAPI Endpoints', slug: 'api/itvapi-endpoints' },
+						{ label: 'OS Endpoints', slug: 'api/os-endpoints' },
+						{ label: 'Data Models', slug: 'api/models' },
 					],
 				},
 				{

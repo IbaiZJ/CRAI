@@ -147,7 +147,7 @@ const Hero = () => (
               <Button className='cursor-pointer' onClick={() => (globalThis.location.href = '/dashboard')}>
                 Get Started <ChevronRight className="w-4 h-4" />
               </Button>
-              <Button className='cursor-pointer' variant="secondary">
+              <Button className='cursor-pointer' variant="secondary" onClick={() => (globalThis.location.href = import.meta.env.VITE_DOCS || 'http://localhost:6910')}>
                 View Documentation
               </Button>
             </div>

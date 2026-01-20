@@ -1,42 +1,36 @@
 ---
 title: Configuration
-description: Configure CRAI for your specific needs
+description: Configure CRAI services for your specific needs
 ---
 
-Learn how to configure CRAI's backend and frontend components.
+Learn how to configure all CRAI services including database, AI, APIs, and frontend.
+
+## Service Ports Overview
+
+| Service | Port | Description |
+|---------|------|-------------|
+| MySQL | 6900 | Database server |
+| Frontend | 6901 | React dashboard |
+| AI Service | 6902 | ANPR video processing |
+| Node-RED | 6903 | Workflow automation |
+| ebAPI | 6904 | Environmental badge API |
+| itvAPI | 6905 | ITV date API |
+| OS | 6906 | Vehicle simulation |
+| Docs | 6910 | Documentation |
 
 ## Environment Variables
 
-CRAI uses environment variables for configuration. Create `.env` files in the appropriate directories.
+### Database Configuration
 
-### Backend Configuration
+MySQL environment in `docker-compose.yml`:
 
-Create `ai/.env`:
-
-```bash
-# API Configuration
-API_TITLE="CRAI ANPR API"
-API_VERSION="1.0.0"
-API_PREFIX="/api"
-API_TAGS=["ANPR"]
-
-# Server Configuration
-HOST="0.0.0.0"
-PORT=6902
-RELOAD=true
-
-# CORS Configuration
-CORS_ORIGINS=["http://localhost:5173", "http://localhost:3000"]
-
-# Database (if using)
-# DATABASE_URL="postgresql://user:password@localhost:5432/crai"
-
-# AI Model Configuration
-# MODEL_PATH="./data/models/plate_detector.h5"
-# CONFIDENCE_THRESHOLD=0.8
-
-# Logging
-LOG_LEVEL="INFO"
+```yaml
+mysql:
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_DATABASE: crai
+    MYSQL_USER: crai
+    MYSQL_PASSWORD: crai
 ```
 
 ### Frontend Configuration
@@ -44,59 +38,129 @@ LOG_LEVEL="INFO"
 Create `frontend/.env`:
 
 ```bash
-# API URL
-VITE_API_URL=http://localhost:6902
+# Google OAuth Client ID
+VITE_GOOGLE_CLIENT_ID=your-google-client-id
+
+# API URLs
+VITE_API_URL=http://localhost:6904
+VITE_ITV_API_URL=http://localhost:6905
+VITE_OS_API_URL=http://localhost:6906
 
 # Application Configuration
-VITE_APP_TITLE="CRAI - License Plate Recognition"
-VITE_APP_VERSION="1.0.0"
-
-# Feature Flags
-VITE_ENABLE_ANALYTICS=false
-VITE_ENABLE_DEBUG=true
+VITE_APP_TITLE="CRAI - Vehicle Recognition System"
+VITE_APP_VERSION="2.0.0"
 ```
 
-## Python Configuration
+### AI Service Configuration
 
-### Settings Class
-
-The backend uses Pydantic Settings for type-safe configuration.
-
-**File:** `ai/api/core/config.py`
+The AI service uses `ai/src/config/config.py`:
 
 ```python
-from pydantic_settings import BaseSettings
+# Video Processing
+VIDEO_DEVICE = 0  # Camera device ID or video file path
+FRAME_SKIP = 2    # Process every Nth frame
 
-class Settings(BaseSettings):
-    API_TITLE: str = "CRAI ANPR API"
-    API_VERSION: str = "1.0.0"
-    API_PREFIX: str = "/api"
-    API_TAGS: list = ["ANPR"]
-    
-    HOST: str = "0.0.0.0"
-    PORT: int = 6902
-    
-    CORS_ORIGINS: list = [
-        "http://localhost:5173",
-        "http://localhost:3000"
-    ]
-    
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+# Detection Models
+YOLO_MODEL = "yolov8n.pt"
+YOLO_CONFIDENCE = 0.5
+PLATE_CONFIDENCE = 0.8
 
-settings = Settings()
+# API Endpoints
+EB_API_URL = "http://ebapi:8000/api"
+ITV_API_URL = "http://itvapi:8001/api"
+DB_API_URL = "http://nodered:1880/api/db"
+
+# Processing
+MAX_QUEUE_SIZE = 100
+OCR_LANG = ["es", "en"]
 ```
 
-### Using Settings
+### ebAPI Configuration
+
+The ebAPI uses `ebAPI/conf/settings.py`:
 
 ```python
-from api.core.config import settings
+# Server Configuration
+HOST = "0.0.0.0"
+PORT = 8000
 
-app = FastAPI(
-    title=settings.API_TITLE,
-    version=settings.API_VERSION,
-)
+# CORS Origins
+CORS_ORIGINS = [
+    "http://localhost:6901",
+    "http://localhost:5173",
+    "http://frontend:5173"
+]
+
+# Data Source
+DATA_FILE = "data/badges.csv"
+```
+
+### itvAPI Configuration
+
+The itvAPI uses `itvAPI/conf/settings.py`:
+
+```python
+# Server Configuration
+HOST = "0.0.0.0"
+PORT = 8001
+
+# CORS Origins
+CORS_ORIGINS = [
+    "http://localhost:6901",
+    "http://localhost:5173",
+    "http://frontend:5173"
+]
+
+# Data Source
+DATA_FILE = "data/itv_dates.csv"
+```
+
+### OS (Spring Boot) Configuration
+
+The OS service uses `os/src/main/resources/application.properties`:
+
+```properties
+# Server
+server.port=8080
+
+# Database
+spring.datasource.url=jdbc:mysql://mysql:3306/crai
+spring.datasource.username=root
+spring.datasource.password=root
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# JPA
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=false
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+
+# CORS
+app.cors.allowed-origins=http://localhost:6901,http://frontend:5173
+```
+
+### Node-RED Configuration
+
+Node-RED settings in `backend/node_red_data/settings.js`:
+
+```javascript
+module.exports = {
+    uiPort: process.env.PORT || 1880,
+    
+    // Flow file location
+    flowFile: 'flows.json',
+    
+    // Enable projects
+    editorTheme: {
+        projects: {
+            enabled: false
+        }
+    },
+    
+    // Function global context
+    functionGlobalContext: {
+        // Add global variables here
+    }
+}
 ```
 
 ## Docker Configuration
@@ -106,45 +170,88 @@ app = FastAPI(
 **File:** `docker-compose.yml`
 
 ```yaml
-version: '3.8'
-
 services:
-  backend:
-    build:
-      context: ./ai
-      dockerfile: Dockerfile
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    ports:
+      - "6900:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: crai
+    volumes:
+      - ./db/db_data:/var/lib/mysql
+      - ./db/createCraiDB.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "6901:5173"
+    depends_on:
+      - nodered
+    restart: unless-stopped
+
+  ai:
+    build: ./ai
+    container_name: ai
     ports:
       - "6902:6902"
-    environment:
-      - API_TITLE=CRAI ANPR API
-      - API_VERSION=1.0.0
-      - API_PREFIX=/api
-    volumes:
-      - ./ai:/app
-    restart: unless-stopped
-    
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "5173:5173"
-    environment:
-      - VITE_API_URL=http://localhost:6902
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    restart: unless-stopped
     depends_on:
-      - backend
+      - ebapi
+      - itvapi
+      - nodered
+    restart: unless-stopped
+
+  nodered:
+    image: nodered/node-red
+    container_name: nodered
+    ports:
+      - "6903:1880"
+    volumes:
+      - ./backend/node_red_data:/data
+    depends_on:
+      - mysql
+    restart: unless-stopped
+
+  ebapi:
+    build: ./ebAPI
+    container_name: ebapi
+    ports:
+      - "6904:8000"
+    restart: unless-stopped
+
+  itvapi:
+    build: ./itvAPI
+    container_name: itvapi
+    ports:
+      - "6905:8001"
+    restart: unless-stopped
+
+  os:
+    build: ./os
+    container_name: os
+    ports:
+      - "6906:8080"
+    depends_on:
+      - mysql
+    restart: unless-stopped
+
+  docs:
+    build: ./docs
+    container_name: docs
+    ports:
+      - "6910:4321"
+    restart: unless-stopped
 ```
 
-### Backend Dockerfile
+### AI Service Dockerfile
 
 **File:** `ai/Dockerfile`
 
 ```dockerfile
-FROM python:3.13-slim
+FROM python:3.11-slim
 
 WORKDIR /app
 
@@ -152,6 +259,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
     libglib2.0-0 \
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements
@@ -170,7 +278,45 @@ ENV PYTHONPATH=/app
 EXPOSE 6902
 
 # Run application
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "6902", "--reload"]
+CMD ["python", "src/main.py"]
+```
+
+### FastAPI Dockerfile (ebAPI/itvAPI)
+
+**File:** `ebAPI/Dockerfile`
+
+```dockerfile
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+EXPOSE 8000
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+```
+
+### Spring Boot Dockerfile
+
+**File:** `os/Dockerfile`
+
+```dockerfile
+FROM eclipse-temurin:17-jdk-alpine AS build
+
+WORKDIR /app
+COPY . .
+RUN ./mvnw clean package -DskipTests
+
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
 ```
 
 ### Frontend Dockerfile
@@ -182,57 +328,14 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
 
-# Copy application code
 COPY . .
 
-# Expose port
 EXPOSE 5173
 
-# Run development server
 CMD ["npm", "run", "dev", "--", "--host"]
-```
-
-## FastAPI Configuration
-
-### CORS Setup
-
-```python
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from api.core.config import settings
-
-app = FastAPI(
-    title=settings.API_TITLE,
-    version=settings.API_VERSION,
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-```
-
-### Logging Configuration
-
-```python
-import logging
-from api.core.config import settings
-
-logging.basicConfig(
-    level=settings.LOG_LEVEL,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-
-logger = logging.getLogger(__name__)
 ```
 
 ## Vite Configuration
@@ -243,9 +346,13 @@ logger = logging.getLogger(__name__)
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    tailwindcss()
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -254,12 +361,6 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:6902',
-        changeOrigin: true,
-      },
-    },
   },
 })
 ```
@@ -271,9 +372,9 @@ export default defineConfig({
 ```json
 {
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "ES2022",
     "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
     "moduleResolution": "bundler",
@@ -291,44 +392,59 @@ export default defineConfig({
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src"]
 }
 ```
 
-## TailwindCSS Configuration
+## TailwindCSS v4 Configuration
 
-**File:** `frontend/tailwind.config.js`
+With TailwindCSS v4, configuration is handled via CSS:
 
-```javascript
-/** @type {import('tailwindcss').Config} */
-export default {
-  darkMode: ['class'],
-  content: [
-    './index.html',
-    './src/**/*.{js,ts,jsx,tsx}',
-  ],
-  theme: {
-    extend: {
-      colors: {
-        primary: {
-          DEFAULT: '#3B82F6',
-          foreground: '#FFFFFF',
-        },
-        secondary: {
-          DEFAULT: '#6B7280',
-          foreground: '#FFFFFF',
-        },
-      },
-    },
-  },
-  plugins: [],
+**File:** `frontend/src/index.css`
+
+```css
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #3B82F6;
+  --color-primary-foreground: #FFFFFF;
+  --color-secondary: #6B7280;
+  --color-secondary-foreground: #FFFFFF;
 }
+```
+
+## Google OAuth Configuration
+
+### Getting Google Client ID
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select existing
+3. Enable Google+ API
+4. Go to Credentials → Create Credentials → OAuth Client ID
+5. Configure consent screen
+6. Add authorized JavaScript origins:
+   - `http://localhost:6901`
+   - `http://localhost:5173`
+7. Copy Client ID to `frontend/.env`
+
+### Frontend OAuth Setup
+
+```typescript
+// src/main.tsx
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <GoogleOAuthProvider clientId={clientId}>
+    <App />
+  </GoogleOAuthProvider>
+);
 ```
 
 ## Testing Configuration
 
-### pytest Configuration
+### pytest Configuration (Python)
 
 **File:** `ai/pytest.ini`
 
@@ -343,15 +459,32 @@ addopts =
     -v
     --strict-markers
     --tb=short
-    --cov=api
+    --cov=src
     --cov-report=term-missing
-    --cov-report=html
+    --cov-report=xml
 
 markers =
     slow: tests that take a long time
     integration: integration tests
     unit: unit tests
-    api: API tests
+```
+
+### Vitest Configuration (Frontend)
+
+**File:** `frontend/vite.config.ts`
+
+```typescript
+export default defineConfig({
+  // ... other config
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
+    coverage: {
+      reporter: ['text', 'json', 'html'],
+    },
+  },
+})
 ```
 
 ## Production Configuration
@@ -359,80 +492,112 @@ markers =
 ### Production Environment Variables
 
 ```bash
-# Backend Production
-API_TITLE="CRAI ANPR API"
-API_VERSION="1.0.0"
-API_PREFIX="/api"
-HOST="0.0.0.0"
-PORT=6902
-RELOAD=false
-LOG_LEVEL="WARNING"
-CORS_ORIGINS=["https://your-domain.com"]
-
 # Frontend Production
+VITE_GOOGLE_CLIENT_ID=your-production-client-id
 VITE_API_URL=https://api.your-domain.com
-VITE_ENABLE_ANALYTICS=true
-VITE_ENABLE_DEBUG=false
+VITE_ITV_API_URL=https://itv.your-domain.com
+VITE_OS_API_URL=https://os.your-domain.com
+
+# Database Production
+MYSQL_ROOT_PASSWORD=secure-password
+MYSQL_DATABASE=crai
+MYSQL_USER=crai
+MYSQL_PASSWORD=secure-password
+
+# Spring Boot Production
+SPRING_PROFILES_ACTIVE=prod
+SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/crai
 ```
 
 ### Production Docker Compose
 
 ```yaml
-version: '3.8'
-
 services:
-  backend:
-    image: crai-backend:latest
-    ports:
-      - "6902:6902"
-    environment:
-      - RELOAD=false
-      - LOG_LEVEL=WARNING
+  mysql:
+    image: mysql:8
     restart: always
-    
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - mysql_data:/var/lib/mysql
+
   frontend:
-    image: crai-frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    restart: always
     ports:
       - "80:80"
+
+  ai:
+    build: ./ai
     restart: always
-    depends_on:
-      - backend
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  ebapi:
+    build: ./ebAPI
+    restart: always
+
+  itvapi:
+    build: ./itvAPI
+    restart: always
+
+  os:
+    build: ./os
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+
+volumes:
+  mysql_data:
 ```
 
 ## Security Configuration
 
-### API Keys (if using)
+### CORS Setup (FastAPI)
 
 ```python
-from fastapi import Security, HTTPException
-from fastapi.security.api_key import APIKeyHeader
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-API_KEY_NAME = "X-API-Key"
-api_key_header = APIKeyHeader(name=API_KEY_NAME)
+app = FastAPI()
 
-async def get_api_key(api_key: str = Security(api_key_header)):
-    if api_key != settings.API_KEY:
-        raise HTTPException(status_code=403, detail="Invalid API Key")
-    return api_key
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:6901",
+        "http://localhost:5173",
+        "https://your-domain.com"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 ```
 
-### Rate Limiting
+### CORS Setup (Spring Boot)
 
-```python
-from slowapi import Limiter
-from slowapi.util import get_remote_address
-
-limiter = Limiter(key_func=get_remote_address)
-
-@app.get("/api/endpoint")
-@limiter.limit("5/minute")
-async def limited_endpoint():
-    return {"message": "Rate limited"}
+```java
+@Configuration
+public class CorsConfig implements WebMvcConfigurer {
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+            .allowedOrigins(
+                "http://localhost:6901",
+                "http://localhost:5173"
+            )
+            .allowedMethods("*")
+            .allowedHeaders("*");
+    }
+}
 ```
 
 ## Next Steps
 
 - Learn about the [Architecture](/architecture/overview/)
-- Explore [API Endpoints](/api/endpoints/)
+- Explore [API Endpoints](/api/overview/)
 - Set up [Testing](/testing/overview/)
 - Prepare for [Deployment](/deployment/production/)
