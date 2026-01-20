@@ -3,19 +3,11 @@ import { useEffect, useState } from "react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Pencil, Trash2, Loader2 } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
+import UsersTable, { type User } from "@/components/dataTable/UsersTable";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-interface User {
-  username: string;
-  password: string;
-  name: string;
-  surname: string;
-}
 
 export default function Users() {
   const [users, setUsers] = useState<User[]>([]);
@@ -228,11 +220,11 @@ export default function Users() {
 
   return (
     <Layout breadcrumbs={breadcrumbs}>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
+      <div className="space-y-6">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between space-y-4 md:space-y-0">
           <div>
-            <CardTitle>Users Management</CardTitle>
-            <CardDescription>Manage system users</CardDescription>
+            <h2 className="text-2xl font-bold tracking-tight">Users Management</h2>
+            <p className="text-muted-foreground">Manage system users and permissions</p>
           </div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
@@ -342,63 +334,22 @@ export default function Users() {
               </form>
             </DialogContent>
           </Dialog>
-        </CardHeader>
-        <CardContent>
+        </div>
+        <div>
           {loading ? (
-            <div className="flex justify-center items-center py-8">
-              <Loader2 className="h-8 w-8 animate-spin" />
+            <div className="flex justify-center items-center h-64">
+              <Loader2 className="h-8 w-8 animate-spin mr-2" />
+              <span>Loading users...</span>
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Username</TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Surname</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {users.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={4} className="text-center text-muted-foreground py-8">
-                      No users found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  users.map((user) => (
-                    <TableRow key={user.username}>
-                      <TableCell className="font-medium">{user.username}</TableCell>
-                      <TableCell>{user.name}</TableCell>
-                      <TableCell>{user.surname}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleEdit(user)}
-                            title="Edit user"
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleDelete(user.username)}
-                            title="Delete user"
-                          >
-                            <Trash2 className="h-4 w-4 text-destructive" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
+            <UsersTable 
+              data={users}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </Layout>
   );
 }

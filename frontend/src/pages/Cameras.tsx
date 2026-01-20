@@ -1,5 +1,5 @@
 import Layout, { type BreadcrumbItem } from "@/layouts/Layout";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -49,6 +49,81 @@ export default function Cameras() {
     loadCameras();
   }, []);
 
+  const updateMapMarkers = useCallback(() => {
+    if (!mapRef.current) {
+      console.log('Map not ready yet');
+      return;
+    }
+
+    console.log('Updating map markers with cameras:', cameras);
+    console.log('Number of cameras:', cameras.length);
+
+    // Clear existing markers
+    markersRef.current.forEach(marker => marker.remove());
+    markersRef.current.clear();
+
+    // Filter valid cameras with proper coordinates
+    const validCameras = cameras.filter(camera => {
+      const isValid = camera.locationX != null && 
+                     camera.locationY != null && 
+                     !isNaN(camera.locationX) && 
+                     !isNaN(camera.locationY);
+      if (!isValid) {
+        console.warn('Invalid camera coordinates:', camera);
+      }
+      return isValid;
+    });
+
+    console.log('Valid cameras:', validCameras.length);
+
+    // Add markers for each valid camera
+    validCameras.forEach(camera => {
+      console.log('Adding marker for camera:', camera);
+      try {
+        const marker = L.marker([camera.locationX, camera.locationY])
+          .addTo(mapRef.current!);
+        
+        // Add popup with camera info
+        const popupContent = `
+          <div class="p-2">
+            <p class="font-semibold mb-2">Camera #${camera.id}</p>
+            <p class="text-xs text-gray-600">Lat: ${camera.locationX}</p>
+            <p class="text-xs text-gray-600">Lng: ${camera.locationY}</p>
+            <div class="flex gap-2 mt-2">
+              <button id="edit-${camera.id}" class="text-xs px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Edit</button>
+              <button id="delete-${camera.id}" class="text-xs px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
+            </div>
+          </div>
+        `;
+        
+        marker.bindPopup(popupContent);
+        
+        // Add event listeners after popup opens
+        marker.on('popupopen', () => {
+          document.getElementById(`edit-${camera.id}`)?.addEventListener('click', () => {
+            handleEdit(camera);
+            marker.closePopup();
+          });
+          document.getElementById(`delete-${camera.id}`)?.addEventListener('click', () => {
+            handleDelete(camera.id);
+            marker.closePopup();
+          });
+        });
+
+        markersRef.current.set(camera.id, marker);
+      } catch (error) {
+        console.error('Error adding marker for camera:', camera, error);
+      }
+    });
+
+    // Fit bounds to show all markers
+    if (validCameras.length > 0) {
+      const bounds = L.latLngBounds(validCameras.map(c => [c.locationX, c.locationY]));
+      mapRef.current.fitBounds(bounds, { padding: [50, 50] });
+      console.log('Map bounds fitted for', validCameras.length, 'cameras');
+    }
+  }, [cameras]);
+
   useEffect(() => {
     if (!loading && cameras.length >= 0) {
       // Small timeout to allow layout to settle
@@ -71,6 +146,7 @@ export default function Cameras() {
   const initializeMap = () => {
     if (!containerRef.current || mapRef.current) return;
 
+    console.log('Initializing map...');
     const map = L.map(containerRef.current).setView([40.416775, -3.703790], 13);
     
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -90,75 +166,27 @@ export default function Cameras() {
     });
 
     mapRef.current = map;
+    console.log('Map initialized, triggering marker update with cameras:', cameras.length);
+    
+    // Update markers after map is ready
+    if (cameras.length > 0) {
+      setTimeout(() => updateMapMarkers(), 100);
+    }
   };
 
   useEffect(() => {
     // Only update markers if map exists. 
     // If map is not yet created, initializeMap will handle the initial marker update.
+    console.log('Cameras useEffect triggered. Map exists:', !!mapRef.current, 'Cameras count:', cameras.length);
     if (mapRef.current) {
       updateMapMarkers();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cameras]);
+  }, [cameras, updateMapMarkers]);
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: "Dashboard", to: "/dashboard" },
     { label: "Cameras" },
   ];
-
-  const updateMapMarkers = () => {
-    if (!mapRef.current) return;
-
-    console.log('Updating map markers with cameras:', cameras);
-    console.log('Number of cameras:', cameras.length);
-
-    // Clear existing markers
-    markersRef.current.forEach(marker => marker.remove());
-    markersRef.current.clear();
-
-    // Add markers for each camera
-    cameras.forEach(camera => {
-      console.log('Adding marker for camera:', camera);
-      const marker = L.marker([camera.locationX, camera.locationY])
-        .addTo(mapRef.current!);
-      
-      // Add popup with camera info
-      const popupContent = `
-        <div class="p-2">
-          <p class="font-semibold mb-2">Camera #${camera.id}</p>
-          <p class="text-xs text-gray-600">Lat: ${camera.locationX}</p>
-          <p class="text-xs text-gray-600">Lng: ${camera.locationY}</p>
-          <div class="flex gap-2 mt-2">
-            <button id="edit-${camera.id}" class="text-xs px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Edit</button>
-            <button id="delete-${camera.id}" class="text-xs px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
-          </div>
-        </div>
-      `;
-      
-      marker.bindPopup(popupContent);
-      
-      // Add event listeners after popup opens
-      marker.on('popupopen', () => {
-        document.getElementById(`edit-${camera.id}`)?.addEventListener('click', () => {
-          handleEdit(camera);
-          marker.closePopup();
-        });
-        document.getElementById(`delete-${camera.id}`)?.addEventListener('click', () => {
-          handleDelete(camera.id);
-          marker.closePopup();
-        });
-      });
-
-      markersRef.current.set(camera.id, marker);
-    });
-
-    // Fit bounds to show all markers
-    if (cameras.length > 0) {
-      const bounds = L.latLngBounds(cameras.map(c => [c.locationX, c.locationY]));
-      mapRef.current.fitBounds(bounds, { padding: [50, 50] });
-      console.log('Map bounds fitted for', cameras.length, 'cameras');
-    }
-  };
 
   const loadCameras = async () => {
     try {
@@ -360,27 +388,28 @@ export default function Cameras() {
 
   return (
     <Layout breadcrumbs={breadcrumbs}>
-      <Card className="h-[calc(100vh-12rem)]">
-        <CardHeader className="flex flex-row items-center justify-between pb-3">
-          <div>
-            <CardTitle>Cameras Map</CardTitle>
-            <CardDescription>
-              View all cameras on the map. Click markers to edit/delete.
-            </CardDescription>
+      <div className="relative h-[calc(100vh-8rem)] w-full">
+        {loading ? (
+          <div className="flex justify-center items-center h-full">
+            <Loader2 className="h-8 w-8 animate-spin" />
           </div>
-          <Dialog open={isDialogOpen} onOpenChange={(open) => {
-            setIsDialogOpen(open);
-            if (open) {
-              handleOpenNewDialog();
-            }
-          }}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="mr-2 h-4 w-4" />
-                Add Camera
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto z-[1000]">
+        ) : (
+          <div ref={containerRef} className="h-full w-full" />
+        )}
+        
+        <Dialog open={isDialogOpen} onOpenChange={(open) => {
+          setIsDialogOpen(open);
+          if (open) {
+            handleOpenNewDialog();
+          }
+        }}>
+          <DialogTrigger asChild>
+            <Button className="absolute top-4 right-4 z-[1000] shadow-lg">
+              <Plus className="mr-2 h-4 w-4" />
+              Add Camera
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto z-[1000]">
               <DialogHeader>
                 <DialogTitle>{editingCamera ? "Edit Camera" : "Create New Camera"}</DialogTitle>
                 <DialogDescription>
@@ -469,17 +498,7 @@ export default function Cameras() {
               </form>
             </DialogContent>
           </Dialog>
-        </CardHeader>
-        <CardContent className="h-[calc(100%-5rem)] p-0">
-          {loading ? (
-            <div className="flex justify-center items-center h-full">
-              <Loader2 className="h-8 w-8 animate-spin" />
-            </div>
-          ) : (
-            <div ref={containerRef} className="h-full w-full" />
-          )}
-        </CardContent>
-      </Card>
+      </div>
     </Layout>
   );
 }

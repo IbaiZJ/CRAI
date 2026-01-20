@@ -3,22 +3,22 @@ import { useEffect, useState } from "react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Pencil, Trash2, Loader2 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Plus, Loader2 } from "lucide-react";
+import CarsTable, { type Vehicle } from "@/components/dataTable/CarsTable";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-interface Vehicle {
-  plate: string;
-  badge: string | null;
-  userId: string | null;
-  vehicleTypeId: number | null;
+interface User {
+  username: string;
+  name: string;
+  surname: string;
 }
 
 export default function Cars() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null);
@@ -37,6 +37,7 @@ export default function Cars() {
   useEffect(() => {
     document.title = "CRAI - Cars";
     loadVehicles();
+    loadUsers();
   }, []);
 
   const breadcrumbs: BreadcrumbItem[] = [
@@ -63,6 +64,27 @@ export default function Cars() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const loadUsers = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/user`);
+      const result = await response.json();
+      
+      if (result.success && result.data) {
+        setUsers(result.data);
+      } else if (Array.isArray(result)) {
+        setUsers(result);
+      }
+    } catch (error) {
+      console.error("Error loading users:", error);
+    }
+  };
+
+  const getUserName = (userId: string | null) => {
+    if (!userId) return "-";
+    const user = users.find(u => u.username === userId);
+    return user ? `${user.name} ${user.surname}` : userId;
   };
 
   const validateForm = () => {
@@ -105,7 +127,7 @@ export default function Cars() {
         const updateData: any = {};
         
         if (formData.badge) updateData.badge = formData.badge;
-        if (formData.userId) updateData.userId = formData.userId;
+        if (formData.userId && formData.userId !== "none") updateData.userId = formData.userId;
         if (formData.vehicleTypeId) updateData.vehicleTypeId = parseInt(formData.vehicleTypeId);
 
         const response = await fetch(`${API_BASE_URL}/vehicle?plate=${encodeURIComponent(editingVehicle.plate)}`, {
@@ -132,7 +154,7 @@ export default function Cars() {
         };
 
         if (formData.badge) createData.badge = formData.badge;
-        if (formData.userId) createData.userId = formData.userId;
+        if (formData.userId && formData.userId !== "none") createData.userId = formData.userId;
         if (formData.vehicleTypeId) createData.vehicleTypeId = parseInt(formData.vehicleTypeId);
 
         const response = await fetch(`${API_BASE_URL}/vehicle`, {
@@ -223,11 +245,11 @@ export default function Cars() {
 
   return (
     <Layout breadcrumbs={breadcrumbs}>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
+      <div className="space-y-6">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between space-y-4 md:space-y-0">
           <div>
-            <CardTitle>Vehicles Management</CardTitle>
-            <CardDescription>Manage fleet vehicles</CardDescription>
+            <h2 className="text-2xl font-bold tracking-tight">Vehicles Management</h2>
+            <p className="text-muted-foreground">Manage fleet vehicles and owners</p>
           </div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
@@ -279,16 +301,27 @@ export default function Cars() {
 
                   <div className="space-y-2">
                     <label htmlFor="userId" className="text-sm font-medium">
-                      User ID
+                      Owner
                     </label>
-                    <Input
-                      id="userId"
-                      name="userId"
+                    <Select
                       value={formData.userId}
-                      onChange={handleChange}
+                      onValueChange={(value) => {
+                        setFormData(prev => ({ ...prev, userId: value }));
+                      }}
                       disabled={isSubmitting}
-                      placeholder="Enter user ID (optional)"
-                    />
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select owner (optional)" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">No owner</SelectItem>
+                        {users.map((user) => (
+                          <SelectItem key={user.username} value={user.username}>
+                            {user.name} {user.surname} ({user.username})
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div className="space-y-2">
@@ -325,65 +358,23 @@ export default function Cars() {
               </form>
             </DialogContent>
           </Dialog>
-        </CardHeader>
-        <CardContent>
+        </div>
+        <div>
           {loading ? (
-            <div className="flex justify-center items-center py-8">
-              <Loader2 className="h-8 w-8 animate-spin" />
+            <div className="flex justify-center items-center h-64">
+              <Loader2 className="h-8 w-8 animate-spin mr-2" />
+              <span>Loading vehicles...</span>
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Plate</TableHead>
-                  <TableHead>Badge</TableHead>
-                  <TableHead>User ID</TableHead>
-                  <TableHead>Vehicle Type ID</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {vehicles.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
-                      No vehicles found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  vehicles.map((vehicle) => (
-                    <TableRow key={vehicle.plate}>
-                      <TableCell className="font-medium font-mono">{vehicle.plate}</TableCell>
-                      <TableCell>{vehicle.badge || "-"}</TableCell>
-                      <TableCell>{vehicle.userId || "-"}</TableCell>
-                      <TableCell>{vehicle.vehicleTypeId || "-"}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleEdit(vehicle)}
-                            title="Edit vehicle"
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleDelete(vehicle.plate)}
-                            title="Delete vehicle"
-                          >
-                            <Trash2 className="h-4 w-4 text-destructive" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
+            <CarsTable 
+              data={vehicles} 
+              users={users}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </Layout>
   );
 }
