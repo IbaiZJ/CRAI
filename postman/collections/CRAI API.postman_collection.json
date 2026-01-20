@@ -1,0 +1,376 @@
+{
+  "info": {
+    "name": "CRAI API",
+    "description": "CRAI (Car Registration AI) API collection containing endpoints for vehicle detection, environmental badges, ITV dates, users, cameras, and alerts.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:6903",
+      "type": "string"
+    },
+    {
+      "key": "ebApiBaseUrl",
+      "value": "http://localhost:8001",
+      "type": "string"
+    },
+    {
+      "key": "itvApiBaseUrl",
+      "value": "http://localhost:8002",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Environmental Badge API",
+      "description": "Endpoints for retrieving environmental badge information by car plate",
+      "item": [
+        {
+          "name": "Get Badge by Car Plate",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ebApiBaseUrl}}/api?carPlate=1234ABC",
+              "host": ["{{ebApiBaseUrl}}"],
+              "path": ["api"],
+              "query": [
+                {
+                  "key": "carPlate",
+                  "value": "1234ABC",
+                  "description": "The car plate number to look up"
+                }
+              ]
+            },
+            "description": "Retrieves the environmental badge for a given car plate number (detect_plate function)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ITV API",
+      "description": "Endpoints for retrieving ITV (vehicle inspection) date information by car plate",
+      "item": [
+        {
+          "name": "Get ITV Date by Car Plate",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{itvApiBaseUrl}}/api?carPlate=1234ABC",
+              "host": ["{{itvApiBaseUrl}}"],
+              "path": ["api"],
+              "query": [
+                {
+                  "key": "carPlate",
+                  "value": "1234ABC",
+                  "description": "The car plate number to look up"
+                }
+              ]
+            },
+            "description": "Retrieves the ITV inspection date for a given car plate number (detect_plate function)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Vehicles",
+      "description": "Vehicle management endpoints",
+      "item": [
+        {
+          "name": "Get All Vehicles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehicles",
+              "host": ["{{baseUrl}}"],
+              "path": ["vehicles"]
+            },
+            "description": "Retrieves a list of all vehicles"
+          }
+        },
+        {
+          "name": "Get Vehicle",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehicle",
+              "host": ["{{baseUrl}}"],
+              "path": ["vehicle"]
+            },
+            "description": "Retrieves a specific vehicle"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "description": "User management endpoints",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"]
+            },
+            "description": "Retrieves a list of all users"
+          }
+        },
+        {
+          "name": "Get User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user",
+              "host": ["{{baseUrl}}"],
+              "path": ["user"]
+            },
+            "description": "Retrieves a specific user"
+          }
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"email\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user",
+              "host": ["{{baseUrl}}"],
+              "path": ["user"]
+            },
+            "description": "Creates a new user"
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"email\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user",
+              "host": ["{{baseUrl}}"],
+              "path": ["user"]
+            },
+            "description": "Updates an existing user"
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user",
+              "host": ["{{baseUrl}}"],
+              "path": ["user"]
+            },
+            "description": "Deletes a user"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cameras",
+      "description": "Camera management endpoints",
+      "item": [
+        {
+          "name": "Get All Cameras",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/cameras",
+              "host": ["{{baseUrl}}"],
+              "path": ["cameras"]
+            },
+            "description": "Retrieves a list of all cameras"
+          }
+        },
+        {
+          "name": "Get Camera",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/camera",
+              "host": ["{{baseUrl}}"],
+              "path": ["camera"]
+            },
+            "description": "Retrieves a specific camera"
+          }
+        },
+        {
+          "name": "Create Camera",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"location\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/camera",
+              "host": ["{{baseUrl}}"],
+              "path": ["camera"]
+            },
+            "description": "Creates a new camera"
+          }
+        },
+        {
+          "name": "Update Camera",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"location\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/camera",
+              "host": ["{{baseUrl}}"],
+              "path": ["camera"]
+            },
+            "description": "Updates an existing camera"
+          }
+        },
+        {
+          "name": "Delete Camera",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/camera",
+              "host": ["{{baseUrl}}"],
+              "path": ["camera"]
+            },
+            "description": "Deletes a camera"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Detections",
+      "description": "Detection records endpoints",
+      "item": [
+        {
+          "name": "Get All Detections",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/detections",
+              "host": ["{{baseUrl}}"],
+              "path": ["detections"]
+            },
+            "description": "Retrieves a list of all detections"
+          }
+        },
+        {
+          "name": "Get Detection",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/detection",
+              "host": ["{{baseUrl}}"],
+              "path": ["detection"]
+            },
+            "description": "Retrieves a specific detection"
+          }
+        }
+      ]
+    },
+    {
+      "name": "AI",
+      "description": "AI detection endpoints",
+      "item": [
+        {
+          "name": "Car Detected",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"carPlate\": \"\",\n  \"confidence\": 0.95,\n  \"vehicleType\": \"car\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/ai/carDetected",
+              "host": ["{{baseUrl}}"],
+              "path": ["ai", "carDetected"]
+            },
+            "description": "Receives car detection data from the AI system"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Alerts",
+      "description": "Alert management endpoints",
+      "item": [
+        {
+          "name": "Create Alert",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"\",\n  \"message\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/alerts",
+              "host": ["{{baseUrl}}"],
+              "path": ["alerts"]
+            },
+            "description": "Receives and creates a new alert"
+          }
+        }
+      ]
+    }
+  ]
+}

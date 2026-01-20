@@ -1618,7 +1618,7 @@
         "type": "function",
         "z": "79143eea6c544edc",
         "name": "query",
-        "func": "const cameraId = msg.req.params.id || msg.req.query.id;\n\nif (!cameraId) {\n    msg.payload = { \n        success: false,\n        error: \"ID de cámara es obligatorio\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    SELECT * \n    FROM camera \n    WHERE id = ?\n`;\n\nmsg.params = [cameraId];\n\nreturn msg;",
+        "func": "const cameraId = msg.req.params.id || msg.req.query.id;\nmsg.skipDB = false;\n\nif (!cameraId) {\n    msg.payload = { \n        success: false,\n        error: \"ID de cámara es obligatorio\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    SELECT * \n    FROM camera \n    WHERE id = ?\n`;\n\nmsg.params = [cameraId];\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1710,10 +1710,10 @@
         "propertyType": "msg",
         "rules": [
             {
-                "t": "true"
+                "t": "false"
             },
             {
-                "t": "false"
+                "t": "true"
             }
         ],
         "checkall": "true",
@@ -1823,7 +1823,7 @@
         "type": "function",
         "z": "79143eea6c544edc",
         "name": "query",
-        "func": "const cameraData = msg.payload;\n\nif (cameraData.locationX === undefined || cameraData.locationY === undefined) {\n    msg.payload = {\n        success: false,\n        error: \"locationX y locationY son obligatorios\"\n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    INSERT INTO camera (\n        locationX, \n        locationY\n    ) VALUES (?, ?)\n`;\n\nmsg.params = [\n    cameraData.locationX,\n    cameraData.locationY\n];\n\nreturn msg;",
+        "func": "const cameraData = msg.payload;\nmsg.skipDB = false;\n\nif (cameraData.locationX === undefined || cameraData.locationY === undefined) {\n    msg.payload = {\n        success: false,\n        error: \"locationX y locationY son obligatorios\"\n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    INSERT INTO camera (\n        locationX, \n        locationY\n    ) VALUES (?, ?)\n`;\n\nmsg.params = [\n    cameraData.locationX,\n    cameraData.locationY\n];\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1915,10 +1915,10 @@
         "propertyType": "msg",
         "rules": [
             {
-                "t": "true"
+                "t": "false"
             },
             {
-                "t": "false"
+                "t": "true"
             }
         ],
         "checkall": "true",
@@ -1940,7 +1940,7 @@
         "type": "function",
         "z": "79143eea6c544edc",
         "name": "query",
-        "func": "const cameraData = msg.payload;\nconst cameraId = msg.req.params.id || msg.req.query.id;\n\nif (!cameraId) {\n    msg.payload = { \n        success: false,\n        error: \"ID de cámara es obligatorio\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nlet fields = [];\nlet params = [];\n\nif (cameraData.locationX !== undefined) {\n    fields.push('locationX = ?');\n    params.push(cameraData.locationX);\n}\nif (cameraData.locationY !== undefined) {\n    fields.push('locationY = ?');\n    params.push(cameraData.locationY);\n}\n\nif (fields.length === 0) {\n    msg.payload = { \n        success: false,\n        error: \"No hay campos para actualizar\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    UPDATE camera \n    SET ${fields.join(', ')}\n    WHERE id = ?\n`;\n\nparams.push(cameraId);\nmsg.params = params;\n\nreturn msg;",
+        "func": "const cameraData = msg.payload;\nconst cameraId = msg.req.params.id || msg.req.query.id;\nmsg.skipDB = false;\n\nif (!cameraId) {\n    msg.payload = { \n        success: false,\n        error: \"ID de cámara es obligatorio\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nlet fields = [];\nlet params = [];\n\nif (cameraData.locationX !== undefined) {\n    fields.push('locationX = ?');\n    params.push(cameraData.locationX);\n}\nif (cameraData.locationY !== undefined) {\n    fields.push('locationY = ?');\n    params.push(cameraData.locationY);\n}\n\nif (fields.length === 0) {\n    msg.payload = { \n        success: false,\n        error: \"No hay campos para actualizar\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    UPDATE camera \n    SET ${fields.join(', ')}\n    WHERE id = ?\n`;\n\nparams.push(cameraId);\nmsg.params = params;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2032,10 +2032,10 @@
         "propertyType": "msg",
         "rules": [
             {
-                "t": "true"
+                "t": "false"
             },
             {
-                "t": "false"
+                "t": "true"
             }
         ],
         "checkall": "true",
@@ -2225,7 +2225,7 @@
         "type": "function",
         "z": "f8c26a4d4d10435f",
         "name": "query | ?userId | ?carPlate",
-        "func": "const userId = (msg.req.query.userId || \"\").trim();\nconst email = (msg.req.query.email || \"\").trim();\nconst carPlate = (msg.req.query.carPlate || \"\").trim();\n\nlet query = `SELECT DISTINCT u.* FROM user u`;\nlet conditions = [];\nlet params = [];\n\nif (carPlate) {\n    query += ` INNER JOIN vehicles v ON u.email = v.userId`;\n    conditions.push(`v.plate = ?`);\n    params.push(carPlate);\n}\n\nif (userId) {\n    conditions.push(`u.id = ?`);\n    params.push(userId);\n}\n\nif (email) {\n    conditions.push(`u.email = ?`);\n    params.push(email);\n}\n\nif (conditions.length > 0) {\n    query += ` WHERE ` + conditions.join(' AND ');\n}\n\nmsg.topic = query;\nmsg.params = params;\n\nreturn msg;",
+        "func": "const username = (msg.req.query.username || \"\").trim();\nconst name = (msg.req.query.name || \"\").trim();\nconst surname = (msg.req.query.surname || \"\").trim();\nconst carPlate = (msg.req.query.carPlate || \"\").trim();\n\nlet query = `SELECT DISTINCT u.* FROM user u`;\nlet conditions = [];\nlet params = [];\n\nif (carPlate) {\n    query += ` INNER JOIN vehicles v ON u.username = v.userId`;\n    conditions.push(`v.plate = ?`);\n    params.push(carPlate);\n}\n\nif (username) {\n    conditions.push(`u.username = ?`);\n    params.push(username);\n}\n\nif (name) {\n    conditions.push(`u.name = ?`);\n    params.push(name);\n}\n\nif (surname) {\n    conditions.push(`u.surname = ?`);\n    params.push(surname);\n}\n\nif (conditions.length > 0) {\n    query += ` WHERE ` + conditions.join(' AND ');\n}\n\nmsg.topic = query;\nmsg.params = params;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2313,7 +2313,7 @@
         "type": "function",
         "z": "f8c26a4d4d10435f",
         "name": "query",
-        "func": "const userData = msg.payload;\nmsg.skipDB = false;\n\nif (!userData.email) {\n    msg.payload = { \n        success: false,\n        error: \"Email is mandatory\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    msg.headers = {\n        \"Content-Type\": \"application/json\",\n        \"Access-Control-Allow-Origin\": \"*\",\n        \"Access-Control-Allow-Methods\": \"GET, POST, PUT, DELETE, OPTIONS\",\n        \"Access-Control-Allow-Headers\": \"Content-Type, Accept\"\n    };\n    return msg;\n}\n\nmsg.topic = `\n    INSERT INTO user (\n        email, name, surname, fullName, picture, \n        sub, email_verified, locale, iat, exp, userType\n    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\n`;\n\nmsg.params = [\n    userData.email,\n    userData.name || null,\n    userData.surname || null,\n    userData.fullName || null,\n    userData.picture || null,\n    userData.sub || null,\n    userData.email_verified || false,\n    userData.locale || null,\n    userData.iat || null,\n    userData.exp || null,\n    userData.userType || null\n];\n\nreturn msg;",
+        "func": "const userData = msg.payload;\nmsg.skipDB = false;\n\nif (!userData.username) {\n    msg.payload = { \n        success: false,\n        error: \"Username is mandatory\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    msg.headers = {\n        \"Content-Type\": \"application/json\",\n        \"Access-Control-Allow-Origin\": \"*\",\n        \"Access-Control-Allow-Methods\": \"GET, POST, PUT, DELETE, OPTIONS\",\n        \"Access-Control-Allow-Headers\": \"Content-Type, Accept\"\n    };\n    return msg;\n}\n\nmsg.topic = `\n    INSERT INTO user (\n        username, password, name, surname\n    ) VALUES (?, ?, ?, ?)\n`;\n\nmsg.params = [\n    userData.username,\n    userData.password || null,\n    userData.name || null,\n    userData.surname || null\n];\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2433,7 +2433,7 @@
         "type": "function",
         "z": "f8c26a4d4d10435f",
         "name": "query",
-        "func": "const userData = msg.payload;\nconst userId = msg.req.params.id || msg.req.query.id; // ID desde URL\n\nif (!userId) {\n    msg.payload = { \n        success: false,\n        error: \"ID de usuario es obligatorio\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nlet fields = [];\nlet params = [];\n\nif (userData.email !== undefined) {\n    fields.push('email = ?');\n    params.push(userData.email);\n}\nif (userData.name !== undefined) {\n    fields.push('name = ?');\n    params.push(userData.name);\n}\nif (userData.surname !== undefined) {\n    fields.push('surname = ?');\n    params.push(userData.surname);\n}\nif (userData.fullName !== undefined) {\n    fields.push('fullName = ?');\n    params.push(userData.fullName);\n}\nif (userData.picture !== undefined) {\n    fields.push('picture = ?');\n    params.push(userData.picture);\n}\nif (userData.sub !== undefined) {\n    fields.push('sub = ?');\n    params.push(userData.sub);\n}\nif (userData.email_verified !== undefined) {\n    fields.push('email_verified = ?');\n    params.push(userData.email_verified);\n}\nif (userData.locale !== undefined) {\n    fields.push('locale = ?');\n    params.push(userData.locale);\n}\nif (userData.iat !== undefined) {\n    fields.push('iat = ?');\n    params.push(userData.iat);\n}\nif (userData.exp !== undefined) {\n    fields.push('exp = ?');\n    params.push(userData.exp);\n}\nif (userData.userType !== undefined) {\n    fields.push('userType = ?');\n    params.push(userData.userType);\n}\n\nif (fields.length === 0) {\n    msg.payload = { \n        success: false,\n        error: \"No hay campos para actualizar\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    UPDATE user \n    SET ${fields.join(', ')}\n    WHERE id = ?\n`;\n\nparams.push(userId);\nmsg.params = params;\n\nreturn msg;",
+        "func": "const userData = msg.payload;\nconst username = msg.req.params.username || msg.req.query.username;\nmsg.skipDB = false;\n\nif (!username) {\n    msg.payload = { \n        success: false,\n        error: \"Username is mandatory\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nlet fields = [];\nlet params = [];\n\nif (userData.password !== undefined) {\n    fields.push('password = ?');\n    params.push(userData.password);\n}\nif (userData.name !== undefined) {\n    fields.push('name = ?');\n    params.push(userData.name);\n}\nif (userData.surname !== undefined) {\n    fields.push('surname = ?');\n    params.push(userData.surname);\n}\n\nif (fields.length === 0) {\n    msg.payload = { \n        success: false,\n        error: \"There are not data to update\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    UPDATE user \n    SET ${fields.join(', ')}\n    WHERE username = ?\n`;\n\nparams.push(username);\nmsg.params = params;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2525,10 +2525,10 @@
         "propertyType": "msg",
         "rules": [
             {
-                "t": "true"
+                "t": "false"
             },
             {
-                "t": "false"
+                "t": "true"
             }
         ],
         "checkall": "true",
@@ -2550,7 +2550,7 @@
         "type": "function",
         "z": "f8c26a4d4d10435f",
         "name": "query",
-        "func": "const userId = msg.req.params.id || msg.req.query.id; // ID desde URL\n\nif (!userId) {\n    msg.payload = {\n        success: false,\n        error: \"ID de usuario es obligatorio\"\n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    DELETE FROM user \n    WHERE id = ?\n`;\n\nmsg.params = [userId];\n\nreturn msg;",
+        "func": "const username = msg.req.params.username || msg.req.query.username;\nmsg.skipDB = false;\n\nif (!username) {\n    msg.payload = {\n        success: false,\n        error: \"Username is mandatory\"\n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    DELETE FROM user \n    WHERE username = ?\n`;\n\nmsg.params = [username];\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2642,10 +2642,10 @@
         "propertyType": "msg",
         "rules": [
             {
-                "t": "true"
+                "t": "false"
             },
             {
-                "t": "false"
+                "t": "true"
             }
         ],
         "checkall": "true",
@@ -2787,7 +2787,7 @@
         "type": "function",
         "z": "54a5f4090ccc656e",
         "name": "query",
-        "func": "const detectionId = msg.req.params.id || msg.req.query.id;\n\nif (!detectionId) {\n    msg.payload = { \n        success: false,\n        error: \"ID de detección es obligatorio\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    SELECT * \n    FROM detection \n    WHERE id = ?\n`;\n\nmsg.params = [detectionId];\n\nreturn msg;",
+        "func": "const detectionId = msg.req.params.id || msg.req.query.id;\nmsg.skipDB = false;\n\nif (!detectionId) {\n    msg.payload = { \n        success: false,\n        error: \"ID de detección es obligatorio\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    SELECT * \n    FROM detection \n    WHERE id = ?\n`;\n\nmsg.params = [detectionId];\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2879,10 +2879,10 @@
         "propertyType": "msg",
         "rules": [
             {
-                "t": "true"
+                "t": "false"
             },
             {
-                "t": "false"
+                "t": "true"
             }
         ],
         "checkall": "true",
