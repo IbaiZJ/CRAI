@@ -529,6 +529,7 @@ def test_train_main_absolute_path(monkeypatch, tmp_path):
     (train_lbl_dir / "test.txt").write_text("0 0.5 0.5 0.1 0.1")
     
     # Test with absolute path
+    import os
     abs_path = str(tmp_path)
     assert os.path.isabs(abs_path)
 
@@ -564,6 +565,7 @@ def test_train_parse_arguments():
 
 def test_train_model_checkpoint_paths(tmp_path):
     """Test model checkpoint directory creation"""
+    import os
     models_dir = tmp_path / "models"
     os.makedirs(models_dir, exist_ok=True)
     
