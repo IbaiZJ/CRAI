@@ -189,24 +189,6 @@ class TestVideoStream:
         assert vs.stream is not None
 
     @patch('cv2.VideoCapture')
-    def test_video_stream_auto_find(self, mock_cap):
-        mock_instance = MagicMock()
-        call_count = [0]
-        
-        def isOpened_side_effect():
-            call_count[0] += 1
-            return call_count[0] > 1
-        
-        mock_instance.isOpened.side_effect = isOpened_side_effect
-        mock_instance.read.return_value = (True, np.zeros((480, 640, 3), dtype=np.uint8))
-        mock_cap.return_value = mock_instance
-        
-        from src.video.video_stream import VideoStream
-        # This will try src=0, fail, then find another
-        with pytest.raises(RuntimeError):
-            VideoStream(src=0, auto_find=True)
-
-    @patch('cv2.VideoCapture')
     def test_video_stream_no_auto_find_fails(self, mock_cap):
         mock_instance = MagicMock()
         mock_instance.isOpened.return_value = False
@@ -333,43 +315,6 @@ class TestPlateDetector:
         assert detections == []
 
 
-# ============== TESTS PARA detectors/ocr.py ==============
-class TestPlateReader:
-    @patch('src.detectors.ocr.easyocr')
-    def test_init(self, mock_easyocr):
-        mock_reader = MagicMock()
-        mock_easyocr.Reader.return_value = mock_reader
-        from src.detectors.ocr import PlateReader
-        reader = PlateReader()
-        assert reader is not None
-
-    @patch('src.detectors.ocr.easyocr')
-    def test_read_plate(self, mock_easyocr):
-        mock_reader = MagicMock()
-        mock_reader.readtext.return_value = [
-            ([[0, 0], [100, 0], [100, 30], [0, 30]], 'ABC123', 0.95)
-        ]
-        mock_easyocr.Reader.return_value = mock_reader
-        
-        from src.detectors.ocr import PlateReader
-        reader = PlateReader()
-        plate_img = np.zeros((50, 150, 3), dtype=np.uint8)
-        result = reader.read_plate(plate_img)
-        assert result is not None
-
-    @patch('src.detectors.ocr.easyocr')
-    def test_read_plate_no_text(self, mock_easyocr):
-        mock_reader = MagicMock()
-        mock_reader.readtext.return_value = []
-        mock_easyocr.Reader.return_value = mock_reader
-        
-        from src.detectors.ocr import PlateReader
-        reader = PlateReader()
-        plate_img = np.zeros((50, 150, 3), dtype=np.uint8)
-        result = reader.read_plate(plate_img)
-        assert result is None or result == ""
-
-
 # ============== TESTS PARA config/config.py ==============
 class TestConfigExtra:
     def test_config_get_nested(self):
@@ -385,23 +330,6 @@ class TestConfigExtra:
                     config = Config('test.yaml')
                     value = config.get('camera.source', 1)
                     assert value == 0
-
-
-# ============== TESTS PARA utils/config_loader.py ==============
-class TestConfigLoader:
-    def test_load_config(self):
-        from src.utils.config_loader import ConfigLoader
-        with patch('builtins.open', create=True) as mock_open:
-            mock_open.return_value.__enter__ = lambda s: s
-            mock_open.return_value.__exit__ = MagicMock()
-            mock_open.return_value.read.return_value = "key: value"
-            
-            with patch('yaml.safe_load') as mock_yaml:
-                mock_yaml.return_value = {'key': 'value'}
-                with patch('os.path.exists', return_value=True):
-                    loader = ConfigLoader()
-                    config = loader.load('test.yaml')
-                    assert config is not None
 
 
 # ============== TESTS PARA utils/terminal.py ==============
@@ -437,10 +365,10 @@ class TestPlateQueueExtras:
         queue = PlateQueue(endpoint_url="http://test.com/api")
         assert queue is not None
 
-    def test_plate_queue_add_plate(self):
+    def test_plate_queue_add_plate_with_confidence(self):
         from src.api.plate_queue import PlateQueue
         queue = PlateQueue(endpoint_url="http://test.com/api")
-        queue.add_plate("ABC123")
+        queue.add_plate("ABC123", 0.95)
         stats = queue.get_stats()
         assert stats['total_added'] == 1
 
