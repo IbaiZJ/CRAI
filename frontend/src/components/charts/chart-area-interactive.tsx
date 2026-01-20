@@ -26,7 +26,14 @@ import {
 
 export const description = "An interactive area chart"
 
-const chartData = [
+interface ChartAreaInteractiveProps {
+  data?: Array<{ date: string; [key: string]: any }>;
+  title?: string;
+  description?: string;
+  dataKeys?: { key: string; label: string; color: string }[];
+}
+
+const defaultChartData = [
   { date: "2024-04-01", desktop: 222, mobile: 150 },
   { date: "2024-04-02", desktop: 97, mobile: 180 },
   { date: "2024-04-03", desktop: 167, mobile: 120 },
@@ -120,7 +127,7 @@ const chartData = [
   { date: "2024-06-30", desktop: 446, mobile: 400 },
 ]
 
-const chartConfig = {
+const defaultChartConfig = {
   visitors: {
     label: "Visitors",
   },
@@ -134,8 +141,24 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function ChartAreaInteractive() {
+export function ChartAreaInteractive({ 
+  data, 
+  title = "Area Chart - Interactive",
+  description: desc = "Showing total visitors for the last 3 months",
+  dataKeys = [{ key: 'desktop', label: 'Desktop', color: 'var(--chart-1)' }, { key: 'mobile', label: 'Mobile', color: 'var(--chart-2)' }]
+}: ChartAreaInteractiveProps = {}) {
   const [timeRange, setTimeRange] = React.useState("90d")
+  const chartData = data || defaultChartData;
+
+  const chartConfig = React.useMemo(() => {
+    const config: ChartConfig = {
+      visitors: { label: "Visitors" },
+    };
+    dataKeys.forEach(dk => {
+      config[dk.key] = { label: dk.label, color: dk.color };
+    });
+    return config;
+  }, [dataKeys]);
 
   const filteredData = chartData.filter((item) => {
     const date = new Date(item.date)
@@ -155,9 +178,9 @@ export function ChartAreaInteractive() {
     <Card className="pt-0">
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
         <div className="grid flex-1 gap-1">
-          <CardTitle>Area Chart - Interactive</CardTitle>
+          <CardTitle>{title}</CardTitle>
           <CardDescription>
-            Showing total visitors for the last 3 months
+            {desc}
           </CardDescription>
         </div>
         <Select value={timeRange} onValueChange={setTimeRange}>
@@ -187,30 +210,20 @@ export function ChartAreaInteractive() {
         >
           <AreaChart data={filteredData}>
             <defs>
-              <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-desktop)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-desktop)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-              <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-mobile)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-mobile)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
+              {dataKeys.map(dk => (
+                <linearGradient key={dk.key} id={`fill${dk.key}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor={dk.color}
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor={dk.color}
+                    stopOpacity={0.1}
+                  />
+                </linearGradient>
+              ))}
             </defs>
             <CartesianGrid vertical={false} />
             <XAxis
@@ -241,20 +254,16 @@ export function ChartAreaInteractive() {
                 />
               }
             />
-            <Area
-              dataKey="mobile"
-              type="natural"
-              fill="url(#fillMobile)"
-              stroke="var(--color-mobile)"
-              stackId="a"
-            />
-            <Area
-              dataKey="desktop"
-              type="natural"
-              fill="url(#fillDesktop)"
-              stroke="var(--color-desktop)"
-              stackId="a"
-            />
+            {dataKeys.map((dk, idx) => (
+              <Area
+                key={dk.key}
+                dataKey={dk.key}
+                type="natural"
+                fill={`url(#fill${dk.key})`}
+                stroke={dk.color}
+                stackId="a"
+              />
+            ))}
             <ChartLegend content={<ChartLegendContent />} />
           </AreaChart>
         </ChartContainer>

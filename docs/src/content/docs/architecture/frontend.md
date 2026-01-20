@@ -3,23 +3,23 @@ title: Frontend Architecture
 description: React and TypeScript frontend architecture
 ---
 
-The CRAI frontend is built with React 18, TypeScript, and TailwindCSS, providing a modern, type-safe user interface.
+The CRAI frontend is built with React 19, TypeScript 5.9, Vite 7, and TailwindCSS 4, providing a modern, type-safe dashboard interface with Google OAuth authentication.
 
 ## Architecture Overview
 
 ```
-┌────────────────────────────────────────────┐
-│         React Application (Vite)           │
-├────────────────────────────────────────────┤
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐ │
-│  │  Pages   │  │Components│  │   State  │ │
-│  │(Routes)  │  │   (UI)   │  │ (Hooks)  │ │
-│  └────┬─────┘  └────┬─────┘  └────┬─────┘ │
-│       │             │              │       │
-│  ┌────▼─────────────▼──────────────▼────┐  │
-│  │         Services & API Client        │  │
-│  └───────────────────────────────────────┘  │
-└────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────┐
+│              React Application (Vite 7)                        │
+├────────────────────────────────────────────────────────────────┤
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌───────────────┐  │
+│  │  Pages   │  │Components│  │ Contexts │  │   Services    │  │
+│  │(Routes)  │  │   (UI)   │  │ (State)  │  │   (API)       │  │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └───────┬───────┘  │
+│       │             │              │               │           │
+│  ┌────▼─────────────▼──────────────▼───────────────▼────────┐  │
+│  │              React Router 7 + Google OAuth               │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└────────────────────────────────────────────────────────────────┘
 ```
 
 ## Project Structure
@@ -27,35 +27,67 @@ The CRAI frontend is built with React 18, TypeScript, and TailwindCSS, providing
 ```
 frontend/
 ├── public/
-│   └── assets/                # Static assets
+│   └── assets/                  # Static assets
 ├── src/
-│   ├── main.tsx              # Application entry
-│   ├── App.tsx               # Root component
+│   ├── main.tsx                 # Application entry
+│   ├── App.tsx                  # Root component with routes
+│   ├── index.css                # Global styles
+│   ├── App.css                  # App-specific styles
+│   │
 │   ├── components/
-│   │   ├── ui/               # Base UI components
-│   │   │   └── button.tsx
-│   │   └── landing/          # Landing page components
-│   │       ├── Hero.tsx
-│   │       ├── Features.tsx
-│   │       └── CTA.tsx
+│   │   ├── ui/                  # Radix UI components
+│   │   │   ├── button.tsx
+│   │   │   ├── dialog.tsx
+│   │   │   ├── dropdown-menu.tsx
+│   │   │   ├── select.tsx
+│   │   │   ├── tooltip.tsx
+│   │   │   └── ...
+│   │   ├── charts/              # Recharts components
+│   │   ├── dataTable/           # Data table components
+│   │   ├── dialogs/             # Dialog components
+│   │   ├── AppSidebar.tsx       # Main sidebar
+│   │   ├── LoginForm.tsx        # Login form
+│   │   ├── SignupForm.tsx       # Signup form
+│   │   ├── NavMain.tsx          # Navigation
+│   │   ├── NavUser.tsx          # User navigation
+│   │   ├── ProtectedRoute.tsx   # Auth guard
+│   │   ├── Spinner.tsx          # Loading spinner
+│   │   └── ...
+│   │
 │   ├── pages/
-│   │   ├── LandingPage.tsx   # Landing page
-│   │   └── Dashboard.tsx     # Dashboard page
+│   │   ├── Home.tsx             # Landing page
+│   │   ├── Login.tsx            # Login page
+│   │   ├── SignUp.tsx           # Signup page
+│   │   ├── Dashboard.tsx        # Main dashboard
+│   │   ├── Users.tsx            # Users list
+│   │   ├── User.tsx             # User detail
+│   │   ├── Statistics.tsx       # Statistics view
+│   │   ├── Cameras.tsx          # Cameras management
+│   │   ├── Cars.tsx             # Vehicles tracking
+│   │   ├── Simulations.tsx      # Simulation control
+│   │   └── NotFound.tsx         # 404 page
+│   │
+│   ├── routes/
+│   │   ├── index.tsx            # Route definitions
+│   │   └── routeUtils.tsx       # Route utilities
+│   │
+│   ├── contexts/                # React contexts
+│   ├── hooks/                   # Custom hooks
+│   ├── services/                # API services
+│   ├── types/                   # TypeScript types
+│   ├── constants/               # App constants
+│   ├── layouts/                 # Layout components
 │   ├── lib/
-│   │   └── utils.ts          # Utility functions
-│   ├── hooks/
-│   │   └── useAPI.ts         # Custom hooks
-│   ├── services/
-│   │   └── api.ts            # API client
-│   ├── types/
-│   │   └── index.ts          # TypeScript types
-│   └── styles/
-│       ├── index.css         # Global styles
-│       └── tailwind.css      # Tailwind imports
+│   │   └── utils.ts             # Utility functions (cn)
+│   └── test/
+│       └── setup.ts             # Test configuration
+│
 ├── index.html
 ├── vite.config.ts
+├── tsconfig.json
 ├── tailwind.config.js
-└── tsconfig.json
+├── components.json              # shadcn/ui config
+└── package.json
 ```
 
 ## Core Components
@@ -65,15 +97,21 @@ frontend/
 **File:** `src/main.tsx`
 
 ```tsx
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
+import { GoogleOAuthProvider } from '@react-oauth/google'
+import App from './App.tsx'
 import './index.css'
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </GoogleOAuthProvider>
+  </StrictMode>,
 )
 ```
 
@@ -82,22 +120,316 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 **File:** `src/App.tsx`
 
 ```tsx
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import LandingPage from './pages/LandingPage'
-import Dashboard from './pages/Dashboard'
+import { useRoutes } from "react-router-dom";
+import { routes } from "@/routes";
 
 function App() {
-  return (
-    <Router>
-      <div className="min-h-screen bg-background">
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-      </div>
-    </Router>
-  )
+  return useRoutes(routes);
 }
+
+export default App;
+```
+
+### 3. Route Configuration
+
+**File:** `src/routes/index.tsx`
+
+```tsx
+import { lazy } from "react";
+const Home = lazy(() => import("@/pages/Home"));
+const Login = lazy(() => import("@/pages/Login"));
+const Dashboard = lazy(() => import("@/pages/Dashboard"));
+const Users = lazy(() => import("@/pages/Users"));
+const Statistics = lazy(() => import("@/pages/Statistics"));
+const Cameras = lazy(() => import("@/pages/Cameras"));
+const Cars = lazy(() => import("@/pages/Cars"));
+const Simulations = lazy(() => import("@/pages/Simulations"));
+
+const appRoutes = [
+  { path: "/", component: Home },
+  { path: "/login", component: Login },
+  { path: "/signup", component: SignUp },
+  { path: "/dashboard", component: Dashboard, protected: true },
+  { path: "/users", component: Users, protected: true },
+  { path: "/users/:id", component: UserDetail, protected: true },
+  { path: "/statistics", component: Statistics, protected: true },
+  { path: "/cameras", component: Cameras, protected: true },
+  { path: "/cars", component: Cars, protected: true },
+  { path: "/simulations", component: Simulations, protected: true },
+  { path: "*", component: NotFound },
+];
+
+export const routes = createRoutes(appRoutes);
+```
+
+## Authentication
+
+### Google OAuth Integration
+
+The frontend uses `@react-oauth/google` for authentication:
+
+```tsx
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
+
+function LoginPage() {
+  const handleSuccess = (response) => {
+    const decoded = jwtDecode(response.credential);
+    // Store token and user data
+    localStorage.setItem('token', response.credential);
+  };
+
+  return (
+    <GoogleLogin
+      onSuccess={handleSuccess}
+      onError={() => console.log('Login Failed')}
+    />
+  );
+}
+```
+
+### Protected Routes
+
+**File:** `src/components/ProtectedRoute.tsx`
+
+```tsx
+import { Navigate } from 'react-router-dom';
+
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
+
+export function ProtectedRoute({ children }: ProtectedRouteProps) {
+  const token = localStorage.getItem('token');
+  
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  return <>{children}</>;
+}
+```
+
+## UI Components
+
+### Component Library
+
+CRAI uses **shadcn/ui** components built on Radix UI primitives:
+
+- `Button` - Various button styles
+- `Dialog` - Modal dialogs
+- `DropdownMenu` - Dropdown menus
+- `Select` - Select inputs
+- `Tooltip` - Tooltips
+- `Avatar` - User avatars
+- `Checkbox` - Checkboxes
+- `Label` - Form labels
+- `Separator` - Visual separators
+
+### Utility Function
+
+**File:** `src/lib/utils.ts`
+
+```tsx
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+```
+
+### Button Component Example
+
+```tsx
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/utils"
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center rounded-md text-sm font-medium",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        destructive: "bg-destructive text-destructive-foreground",
+        outline: "border border-input bg-background hover:bg-accent",
+        secondary: "bg-secondary text-secondary-foreground",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-10 px-4 py-2",
+        sm: "h-9 rounded-md px-3",
+        lg: "h-11 rounded-md px-8",
+        icon: "h-10 w-10",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
+```
+
+## Data Visualization
+
+### Recharts Integration
+
+The frontend uses **Recharts** for data visualization:
+
+```tsx
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+
+function StatisticsChart({ data }) {
+  return (
+    <LineChart width={600} height={300} data={data}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="date" />
+      <YAxis />
+      <Tooltip />
+      <Line type="monotone" dataKey="vehicles" stroke="#8884d8" />
+    </LineChart>
+  );
+}
+```
+
+## Styling
+
+### TailwindCSS 4
+
+The project uses TailwindCSS 4 with the Vite plugin:
+
+**File:** `vite.config.ts`
+
+```typescript
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react-swc'
+import tailwindcss from '@tailwindcss/vite'
+
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: {
+      '@': '/src',
+    },
+  },
+})
+```
+
+### CSS Variables
+
+Theme customization via CSS variables:
+
+```css
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --primary: 222.2 47.4% 11.2%;
+  --secondary: 210 40% 96.1%;
+  --muted: 210 40% 96.1%;
+  --accent: 210 40% 96.1%;
+  --destructive: 0 84.2% 60.2%;
+}
+
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+}
+```
+
+## State Management
+
+### React Contexts
+
+State is managed through React contexts:
+
+```tsx
+// AuthContext example
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  
+  return (
+    <AuthContext.Provider value={{ user, setUser }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+```
+
+## Dependencies
+
+### Key Dependencies
+
+```json
+{
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.9.6",
+    "@react-oauth/google": "^0.12.2",
+    "jwt-decode": "^4.0.0",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-dropdown-menu": "^2.1.16",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss": "^4.1.17",
+    "recharts": "^2.15.4",
+    "lucide-react": "^0.554.0",
+    "gsap": "^3.13.0",
+    "motion": "^12.23.24"
+  }
+}
+```
+
+### Dev Dependencies
+
+```json
+{
+  "devDependencies": {
+    "typescript": "~5.9.3",
+    "vite": "^7.2.2",
+    "vitest": "^4.0.14",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@vitest/coverage-v8": "^4.0.14"
+  }
+}
+```
+
+## Testing
+
+### Vitest Configuration
+
+Tests use Vitest with React Testing Library:
+
+```typescript
+// vite.config.ts
+export default defineConfig({
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
+  },
+})
+```
+
+### Running Tests
+
+```bash
+npm run test           # Watch mode
+npm run test:ui        # UI mode
+npm run test:coverage  # Coverage report
+```
+
+## Next Steps
+
+- View [Components Guide](/frontend/components/)
+- Learn about [Routing](/frontend/routing/)
+- Explore [State Management](/frontend/state-management/)
 
 export default App
 ```

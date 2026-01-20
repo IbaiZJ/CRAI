@@ -44,7 +44,6 @@ vi.mock('firebase/auth', () => ({
   signOut: vi.fn(),
   onAuthStateChanged: vi.fn(),
   signInWithPopup: vi.fn(),
-  GoogleAuthProvider: vi.fn(() => ({})),
 }));
 
 vi.mock('firebase/firestore', () => ({
@@ -59,13 +58,6 @@ vi.mock('firebase/firestore', () => ({
 
 vi.mock('firebase/storage', () => ({
   getStorage: vi.fn(() => ({})),
-}));
-
-// Mock Google OAuth
-vi.mock('@react-oauth/google', () => ({
-  GoogleOAuthProvider: ({ children }: { children: React.ReactNode }) => children,
-  GoogleLogin: vi.fn(() => null),
-  useGoogleLogin: vi.fn(() => vi.fn()),
 }));
 
 // Mock IntersectionObserver for framer-motion

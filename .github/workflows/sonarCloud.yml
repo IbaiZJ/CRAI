@@ -29,21 +29,24 @@ jobs:
       - name: Run AI Tests with Coverage
         working-directory: ./ai
         run: |
-          pytest tests/ -v --cov=. --cov-report=xml:coverage.xml --cov-report=term-missing --cov-fail-under=0 || true
-      - name: Generate Empty Coverage if Missing
-        working-directory: ./ai
-        run: |
+          set +e
+          pytest tests/ -v --cov=src --cov-report=xml:coverage.xml --cov-report=term-missing --cov-fail-under=0 2>&1
+          TEST_EXIT=$?
+          echo "Pytest exit code: $TEST_EXIT"
           if [ ! -f coverage.xml ]; then
-            echo '<?xml version="1.0" ?><coverage version="5.5" timestamp="1" lines-valid="1" lines-covered="0" line-rate="0" branches-covered="0" branches-valid="0" branch-rate="0" complexity="0"><packages></packages></coverage>' > coverage.xml
-            echo "Created empty coverage.xml"
+            echo "WARNING: coverage.xml not generated, running coverage on src folder only"
+            python -m pytest tests/ --cov=src --cov-report=xml:coverage.xml --cov-report=term 2>&1 || true
           fi
+          exit 0
       - name: Debug AI Coverage
         working-directory: ./ai
         run: |
+          echo "=== Files in directory ==="
+          ls -la
           echo "=== Coverage file info ==="
-          ls -la coverage.xml
+          ls -la coverage.xml || echo "coverage.xml not found"
           echo "=== Coverage XML content (first 50 lines) ==="
-          head -n 50 coverage.xml
+          head -n 50 coverage.xml || echo "Cannot read coverage.xml"
       - name: SonarCloud Scan (ai)
         uses: SonarSource/sonarcloud-github-action@v2.3.0
         with:
