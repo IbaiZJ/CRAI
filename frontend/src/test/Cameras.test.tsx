@@ -34,6 +34,19 @@ describe('Cameras Page', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     document.title = '';
+    
+    // Mock fetch to return camera data
+    (global.fetch as any).mockResolvedValue({
+      ok: true,
+      json: async () => [
+        { id: 'CAM-001', name: 'Main Entrance', location: 'Lobby', status: 'online', quality: '4K', fps: 30 },
+        { id: 'CAM-002', name: 'Parking Lot', location: 'Exterior - North', status: 'online', quality: '1080p', fps: 60 },
+        { id: 'CAM-003', name: 'Server Room', location: 'Floor 2', status: 'maintenance', quality: '1080p', fps: 30 },
+        { id: 'CAM-004', name: 'Emergency Exit', location: 'Stairwell B', status: 'offline', quality: '720p', fps: 30 },
+        { id: 'CAM-005', name: 'Reception', location: 'Ground Floor', status: 'online', quality: '4K', fps: 60 },
+        { id: 'CAM-006', name: 'Conference Room A', location: 'Floor 3', status: 'online', quality: '1080p', fps: 30 },
+      ],
+    });
   });
 
   it('should render the cameras page', () => {
