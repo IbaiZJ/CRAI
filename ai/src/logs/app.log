@@ -13384,3 +13384,181 @@ Plate           Times    Confidence   Vehicle
 [2026-01-20 09:19:27] [[32mINFO[0m] [logger.py:120] Closing windows...
 [2026-01-20 09:19:27] [[32mINFO[0m] [logger.py:120] System closed successfully
 [2026-01-20 09:19:27] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.294s)
+[2026-01-21 09:01:31] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-21 09:01:31] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\config/config.yaml
+[2026-01-21 09:01:31] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\config/config.yaml
+[2026-01-21 09:01:31] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.013s)
+[2026-01-21 09:01:31] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-21 09:01:31] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-21 09:01:31] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-21 09:01:33] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-21 09:01:35] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-21 09:01:35] [[32mINFO[0m] [logger.py:120] 2. Initializing plate queue...
+[2026-01-21 09:01:35] [[32mINFO[0m] [logger.py:120] ✓ Plate queue initialized
+[2026-01-21 09:01:35] [[32mINFO[0m] [logger.py:120] ✓ Captures directory: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\captures
+[2026-01-21 09:01:35] [[32mINFO[0m] [logger.py:120] 3. Loading YOLO vehicle detector...
+[2026-01-21 09:01:35] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\models/yolov8n.pt
+[2026-01-21 09:01:35] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-21 09:01:35] [[32mINFO[0m] [logger.py:120] 4. Loading license plate detector...
+[2026-01-21 09:01:35] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-21 09:01:35] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-21 09:01:35] [[32mINFO[0m] [logger.py:120] 5. Initializing OCR...
+[2026-01-21 09:01:38] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-21 09:01:40] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-21 09:01:40] [[32mINFO[0m] [logger.py:120] 6. Loading SSD custom model...
+[2026-01-21 09:01:50] [[32mINFO[0m] [logger.py:120] Found SSD model: ssd_vehicle_detector.keras
+[2026-01-21 09:01:50] [[32mINFO[0m] [logger.py:120] Loading SSD from: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\models\ssd_vehicle_detector.keras
+[2026-01-21 09:01:50] [[32mINFO[0m] [logger.py:120] Loading complete model from: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\models\ssd_vehicle_detector.keras
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120] 📊 Verificación de pesos de detección:
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120]    Capa: detect_0_class_conv
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120]    Mean(|weights|): 0.016762
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120]    Std(weights): 0.022808
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.34
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120] Generated 33600 anchor boxes
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120] ✓ SSD custom model loaded successfully
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (20.656s)
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120] SSD available: True
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120] OCR frequency: every 10 frames
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120] Press 'M' to toggle between YOLO+OCR and SSD Custom modes
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-21 09:01:52] [[31mERROR[0m] [logger.py:128] 
+Unexpected error: OpenCV(4.10.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window.cpp:1301: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Cocoa support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvShowImage'
+Traceback (most recent call last):
+  File "C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\main.py", line 362, in main
+    cv2.imshow(window_name, frame_display)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\aorti\miniconda3\envs\ai25\Lib\site-packages\ultralytics\utils\patches.py", line 88, in imshow
+    _imshow(winname.encode("unicode_escape").decode(), mat)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cv2.error: OpenCV(4.10.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window.cpp:1301: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Cocoa support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvShowImage'
+
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-21 09:01:52] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120] Queue statistics: Sent=0, Failed=0, Pending=0
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.001s)
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-21 09:01:52] [[32mINFO[0m] [logger.py:120] Stopping plate queue...
+[2026-01-21 09:01:53] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-21 09:01:53] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-21 09:01:53] [[31mERROR[0m] [logger.py:128] └─ Error in: System cleanup (0.869s) - OpenCV(4.10.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window.cpp:1295: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Cocoa support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvDestroyAllWindows'
+
+[2026-01-21 09:01:53] [[31mERROR[0m] [logger.py:136] 
+Error: OpenCV(4.10.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window.cpp:1295: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Cocoa support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvDestroyAllWindows'
+Traceback (most recent call last):
+  File "C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\main.py", line 431, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\main.py", line 425, in main
+    cv2.destroyAllWindows()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+cv2.error: OpenCV(4.10.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window.cpp:1295: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Cocoa support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvDestroyAllWindows'
+
+[2026-01-21 09:03:45] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-21 09:03:45] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\config/config.yaml
+[2026-01-21 09:03:45] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\config/config.yaml
+[2026-01-21 09:03:45] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.010s)
+[2026-01-21 09:03:45] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-21 09:03:45] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-21 09:03:45] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-21 09:03:47] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-21 09:03:49] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-21 09:03:49] [[32mINFO[0m] [logger.py:120] 2. Initializing plate queue...
+[2026-01-21 09:03:49] [[32mINFO[0m] [logger.py:120] ✓ Plate queue initialized
+[2026-01-21 09:03:49] [[32mINFO[0m] [logger.py:120] ✓ Captures directory: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\captures
+[2026-01-21 09:03:49] [[32mINFO[0m] [logger.py:120] 3. Loading YOLO vehicle detector...
+[2026-01-21 09:03:49] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\models/yolov8n.pt
+[2026-01-21 09:03:49] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-21 09:03:49] [[32mINFO[0m] [logger.py:120] 4. Loading license plate detector...
+[2026-01-21 09:03:49] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-21 09:03:49] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-21 09:03:49] [[32mINFO[0m] [logger.py:120] 5. Initializing OCR...
+[2026-01-21 09:03:52] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-21 09:03:54] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-21 09:03:54] [[32mINFO[0m] [logger.py:120] 6. Loading SSD custom model...
+[2026-01-21 09:04:01] [[32mINFO[0m] [logger.py:120] Found SSD model: ssd_vehicle_detector.keras
+[2026-01-21 09:04:01] [[32mINFO[0m] [logger.py:120] Loading SSD from: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\models\ssd_vehicle_detector.keras
+[2026-01-21 09:04:01] [[32mINFO[0m] [logger.py:120] Loading complete model from: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\models\ssd_vehicle_detector.keras
+[2026-01-21 09:04:02] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-21 09:04:02] [[32mINFO[0m] [logger.py:120] 📊 Verificación de pesos de detección:
+[2026-01-21 09:04:02] [[32mINFO[0m] [logger.py:120]    Capa: detect_0_class_conv
+[2026-01-21 09:04:02] [[32mINFO[0m] [logger.py:120]    Mean(|weights|): 0.016762
+[2026-01-21 09:04:02] [[32mINFO[0m] [logger.py:120]    Std(weights): 0.022808
+[2026-01-21 09:04:03] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.34
+[2026-01-21 09:04:03] [[32mINFO[0m] [logger.py:120] Generated 33600 anchor boxes
+[2026-01-21 09:04:03] [[32mINFO[0m] [logger.py:120] ✓ SSD custom model loaded successfully
+[2026-01-21 09:04:03] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (17.171s)
+[2026-01-21 09:04:03] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-21 09:04:03] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-21 09:04:03] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-21 09:04:03] [[32mINFO[0m] [logger.py:120] Display enabled: True
+[2026-01-21 09:04:03] [[32mINFO[0m] [logger.py:120] SSD available: True
+[2026-01-21 09:04:03] [[32mINFO[0m] [logger.py:120] OCR frequency: every 10 frames
+[2026-01-21 09:04:03] [[32mINFO[0m] [logger.py:120] Press 'M' to toggle between YOLO+OCR and SSD Custom modes
+[2026-01-21 09:04:03] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-21 09:04:03] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-21 09:04:03] [[33mWARNING[0m] [logger.py:124] Display disabled (OpenCV GUI not available): OpenCV(4.10.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window.cpp:1301: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Cocoa support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvShowImage'
+
+[2026-01-21 09:06:12] [[32mINFO[0m] [logger.py:120] 
+[Ctrl+C] Keyboard interrupt received
+[2026-01-21 09:06:12] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Detection summary
+[2026-01-21 09:06:12] [[33mWARNING[0m] [logger.py:124] No plates with valid text detected
+[2026-01-21 09:06:12] [[32mINFO[0m] [logger.py:120] Queue statistics: Sent=0, Failed=0, Pending=0
+[2026-01-21 09:06:12] [[32mINFO[0m] [logger.py:120] └─ Completed: Detection summary (0.002s)
+[2026-01-21 09:06:12] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System cleanup
+[2026-01-21 09:06:12] [[32mINFO[0m] [logger.py:120] Stopping plate queue...
+[2026-01-21 09:06:12] [[32mINFO[0m] [logger.py:120] Stopping video stream...
+[2026-01-21 09:06:12] [[32mINFO[0m] [logger.py:120] Closing windows...
+[2026-01-21 09:06:12] [[33mWARNING[0m] [logger.py:124] OpenCV GUI not available: OpenCV(4.10.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window.cpp:1295: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Cocoa support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvDestroyAllWindows'
+
+[2026-01-21 09:06:12] [[32mINFO[0m] [logger.py:120] System closed successfully
+[2026-01-21 09:06:12] [[32mINFO[0m] [logger.py:120] └─ Completed: System cleanup (0.222s)
+[2026-01-21 09:06:28] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Loading configuration
+[2026-01-21 09:06:28] [[32mINFO[0m] [logger.py:120] Configuration loaded from: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\config/config.yaml
+[2026-01-21 09:06:28] [[32mINFO[0m] [logger.py:120] Loading from: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\config/config.yaml
+[2026-01-21 09:06:28] [[32mINFO[0m] [logger.py:120] └─ Completed: Loading configuration (0.010s)
+[2026-01-21 09:06:28] [[32mINFO[0m] [logger.py:120] ┌─ Starting: System initialization
+[2026-01-21 09:06:28] [[32mINFO[0m] [logger.py:120] 1. Starting camera...
+[2026-01-21 09:06:28] [[32mINFO[0m] [logger.py:120] Intentando inicializar webcam en source=1...
+[2026-01-21 09:06:29] [[32mINFO[0m] [logger.py:120] ✓ Camera 1 funciona correctamente
+[2026-01-21 09:06:31] [[32mINFO[0m] [logger.py:120] ✓ Camera started successfully
+[2026-01-21 09:06:31] [[32mINFO[0m] [logger.py:120] 2. Initializing plate queue...
+[2026-01-21 09:06:31] [[32mINFO[0m] [logger.py:120] ✓ Plate queue initialized
+[2026-01-21 09:06:31] [[32mINFO[0m] [logger.py:120] ✓ Captures directory: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\captures
+[2026-01-21 09:06:31] [[32mINFO[0m] [logger.py:120] 3. Loading YOLO vehicle detector...
+[2026-01-21 09:06:31] [[32mINFO[0m] [logger.py:120] Loading YOLO model: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\models/yolov8n.pt
+[2026-01-21 09:06:31] [[32mINFO[0m] [logger.py:120] Model loaded successfully with threshold=0.5
+[2026-01-21 09:06:31] [[32mINFO[0m] [logger.py:120] 4. Loading license plate detector...
+[2026-01-21 09:06:31] [[32mINFO[0m] [logger.py:120] Loading license plate model: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\models/license_plate_detector.pt
+[2026-01-21 09:06:31] [[32mINFO[0m] [logger.py:120] License plate model loaded successfully with threshold=0.3
+[2026-01-21 09:06:31] [[32mINFO[0m] [logger.py:120] 5. Initializing OCR...
+[2026-01-21 09:06:34] [[32mINFO[0m] [logger.py:120] Initializing EasyOCR with languages: ['en'], GPU: False
+[2026-01-21 09:06:36] [[32mINFO[0m] [logger.py:120] EasyOCR loaded successfully
+[2026-01-21 09:06:36] [[32mINFO[0m] [logger.py:120] 6. Loading SSD custom model...
+[2026-01-21 09:06:42] [[32mINFO[0m] [logger.py:120] Found SSD model: ssd_vehicle_detector.keras
+[2026-01-21 09:06:42] [[32mINFO[0m] [logger.py:120] Loading SSD from: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\models\ssd_vehicle_detector.keras
+[2026-01-21 09:06:42] [[32mINFO[0m] [logger.py:120] Loading complete model from: C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\models\ssd_vehicle_detector.keras
+[2026-01-21 09:06:43] [[32mINFO[0m] [logger.py:120] ✓ Complete model loaded successfully!
+[2026-01-21 09:06:43] [[32mINFO[0m] [logger.py:120] 📊 Verificación de pesos de detección:
+[2026-01-21 09:06:43] [[32mINFO[0m] [logger.py:120]    Capa: detect_0_class_conv
+[2026-01-21 09:06:43] [[32mINFO[0m] [logger.py:120]    Mean(|weights|): 0.016762
+[2026-01-21 09:06:43] [[32mINFO[0m] [logger.py:120]    Std(weights): 0.022808
+[2026-01-21 09:06:43] [[32mINFO[0m] [logger.py:120] ✓ SSD model ready with threshold=0.34
+[2026-01-21 09:06:43] [[32mINFO[0m] [logger.py:120] Generated 33600 anchor boxes
+[2026-01-21 09:06:43] [[32mINFO[0m] [logger.py:120] ✓ SSD custom model loaded successfully
+[2026-01-21 09:06:43] [[32mINFO[0m] [logger.py:120] └─ Completed: System initialization (15.584s)
+[2026-01-21 09:06:43] [[32mINFO[0m] [logger.py:120] ┌─ Starting: Parameter configuration
+[2026-01-21 09:06:43] [[32mINFO[0m] [logger.py:120] Window: CRAI - Car Registration AI
+[2026-01-21 09:06:43] [[32mINFO[0m] [logger.py:120] OCR available: True
+[2026-01-21 09:06:43] [[32mINFO[0m] [logger.py:120] Display enabled: True
+[2026-01-21 09:06:43] [[32mINFO[0m] [logger.py:120] SSD available: True
+[2026-01-21 09:06:43] [[32mINFO[0m] [logger.py:120] OCR frequency: every 10 frames
+[2026-01-21 09:06:43] [[32mINFO[0m] [logger.py:120] Press 'M' to toggle between YOLO+OCR and SSD Custom modes
+[2026-01-21 09:06:43] [[32mINFO[0m] [logger.py:120] └─ Completed: Parameter configuration (0.001s)
+[2026-01-21 09:06:43] [[32mINFO[0m] [logger.py:120] Starting main loop...
+[2026-01-21 09:06:43] [[33mWARNING[0m] [logger.py:124] Display disabled (OpenCV GUI not available): OpenCV(4.10.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window.cpp:1301: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Cocoa support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvShowImage'
+
