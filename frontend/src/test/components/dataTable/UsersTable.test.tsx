@@ -13,7 +13,7 @@ vi.mock('@/constants/userConstant', () => ({
       status: 'active',
       createdAt: '2024-01-01'
     }
-  ]
+  ] as any
 }));
 
 describe('UsersTable', () => {
