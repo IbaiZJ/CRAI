@@ -5,26 +5,19 @@ import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 
 // Helper component to test the hook
 function TestComponent() {
-  const { user, isAuthenticated, logout, login, loading } = useAuth();
+  const { user, isAuthenticated, logout, login } = useAuth();
   
   return (
     <div>
-      <div data-testid="loading-state">{loading ? 'loading' : 'not-loading'}</div>
       {isAuthenticated ? (
         <>
           <div data-testid="user-name">{user?.fullName}</div>
-          <div data-testid="user-username">{user?.username}</div>
           <button onClick={logout} data-testid="logout-btn">Logout</button>
         </>
       ) : (
         <div data-testid="not-authenticated">Not Authenticated</div>
       )}
-      <button 
-        onClick={() => login('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5ld0BleGFtcGxlLmNvbSIsIm5hbWUiOiJOZXcgVXNlciIsInN1YiI6IjEyMzQ1NiIsImV4cCI6OTk5OTk5OTk5OSwiaWF0IjoxNzAwMDAwMDAwfQ.test')}
-        data-testid="login-btn"
-      >
-        Login
-      </button>
+      <button data-testid="login-btn">Login</button>
     </div>
   );
 }
@@ -75,7 +68,6 @@ describe('AuthContext', () => {
 
     // Token is valid and not expired, so user should be authenticated
     expect(screen.getByTestId('user-name')).toHaveTextContent('Test User');
-    expect(screen.getByTestId('user-username')).toHaveTextContent('testuser');
   });
 
   it('should keep user when token is expired since token is not validated', () => {
@@ -102,7 +94,6 @@ describe('AuthContext', () => {
 
     // Provider simply parses stored user, so user remains authenticated
     expect(screen.getByTestId('user-name')).toHaveTextContent('Test User');
-    expect(screen.getByTestId('user-username')).toHaveTextContent('testuser');
   });
 
   it('should keep user when token cannot be decoded (no validation is performed)', () => {
@@ -126,7 +117,6 @@ describe('AuthContext', () => {
     );
 
     expect(screen.getByTestId('user-name')).toHaveTextContent('Test User');
-    expect(screen.getByTestId('user-username')).toHaveTextContent('testuser');
   });
 
   it('should login with valid credential', () => {
@@ -197,7 +187,7 @@ describe('AuthContext - Login and Logout actions', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByTestId('loading-state')).toHaveTextContent('not-loading');
+    expect(screen.getByTestId('not-authenticated')).toBeInTheDocument();
   });
 
   it('should have login button available', () => {

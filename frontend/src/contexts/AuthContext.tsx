@@ -2,18 +2,20 @@ import React, { createContext, useContext, useState } from 'react';
 import { authApi, type RegisterRequest } from '@/lib/api';
 import { getCookie, setCookie, deleteCookie } from '@/lib/cookies';
 
-interface User {
+interface AuthUser {
   username: string;
   name: string;
   surname?: string;
   fullName: string;
+  email?: string;
+  picture?: string;
   sub: string;
-  iat?: number;
-  exp?: number;
+  iat?: number; // Emission time
+  exp?: number; // Expiration time
 }
 
 interface AuthContextType {
-  user: User | null;
+  user: AuthUser | null;
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
   register: (data: RegisterRequest) => Promise<{ success: boolean; error?: string }>;
@@ -31,7 +33,7 @@ interface DecodedToken {
 }
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(() => {
+  const [user, setUser] = useState<AuthUser | null>(() => {
     // Try to get from cookies first, then localStorage
     const cookieUser = getCookie('user');
     const cookieToken = getCookie('token');
@@ -41,8 +43,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     if (storedUser && token) {
       try {
-        // Simply parse the stored user data without validating JWT
-        // since we're using a simple base64 token, not a real JWT
         return JSON.parse(storedUser);
       } catch (error) {
         console.error('Error parsing user data:', error);
@@ -64,11 +64,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.log('Login response:', response);
       
       if (response.success && response.token && response.user) {
-        const userData: User = {
+        const userData: AuthUser = {
           username: response.user.username,
           name: response.user.name,
           surname: response.user.surname,
           fullName: `${response.user.name} ${response.user.surname}`.trim(),
+          email: response.user.email,
+          picture: response.user.picture,
           sub: response.user.username,
         };
         
