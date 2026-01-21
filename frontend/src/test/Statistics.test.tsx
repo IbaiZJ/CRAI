@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
 vi.mock('@/layouts/Layout', () => ({
@@ -39,17 +39,19 @@ describe('Statistics Page', () => {
     );
 
     expect(screen.getByTestId('layout')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Statistics', level: 1 })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'General Statistics', level: 1 })).toBeInTheDocument();
   });
 
-  it('should set document title', () => {
+  it('should set document title', async () => {
     render(
       <BrowserRouter>
         <Statistics />
       </BrowserRouter>
     );
 
-    expect(document.title).toBe('CRAI - Statistics');
+    await waitFor(() => {
+      expect(document.title).toBe('CRAI - Statistics');
+    });
   });
 
   it('should display correct breadcrumbs', () => {
@@ -70,7 +72,7 @@ describe('Statistics Page', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText('Overview of your application metrics and performance')).toBeInTheDocument();
+    expect(screen.getByText('Complete overview of system metrics')).toBeInTheDocument();
   });
 
   it('should display Total Users stat card', () => {
@@ -81,32 +83,29 @@ describe('Statistics Page', () => {
     );
 
     expect(screen.getByText('Total Users')).toBeInTheDocument();
-    expect(screen.getByText('2,543')).toBeInTheDocument();
-    expect(screen.getByText('+12.5% from last month')).toBeInTheDocument();
+    expect(screen.getByText('...')).toBeInTheDocument();
   });
 
-  it('should display Total Revenue stat card', () => {
+  it('should display Total Detections stat card', () => {
     render(
       <BrowserRouter>
         <Statistics />
       </BrowserRouter>
     );
 
-    expect(screen.getByText('Total Revenue')).toBeInTheDocument();
-    expect(screen.getByText('$45,231')).toBeInTheDocument();
-    expect(screen.getByText('+8.2% from last month')).toBeInTheDocument();
+    expect(screen.getByText('Total Detections')).toBeInTheDocument();
+    expect(screen.getByText('All vehicle detections')).toBeInTheDocument();
   });
 
-  it('should display Active Sessions stat card', () => {
+  it('should display Total Vehicles stat card', () => {
     render(
       <BrowserRouter>
         <Statistics />
       </BrowserRouter>
     );
 
-    expect(screen.getByText('Active Sessions')).toBeInTheDocument();
-    expect(screen.getByText('1,234')).toBeInTheDocument();
-    expect(screen.getByText('+23.1% from last month')).toBeInTheDocument();
+    expect(screen.getByText('Total Vehicles')).toBeInTheDocument();
+    expect(screen.getByText('Registered vehicles')).toBeInTheDocument();
   });
 
   it('should display Growth stat card', () => {
