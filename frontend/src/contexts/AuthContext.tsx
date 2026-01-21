@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { SpinnerCustom } from "@/components/Spinner";
 
-interface User {
+interface AuthUser {
   email: string;
   name: string;
   surname?: string;
@@ -16,7 +16,7 @@ interface User {
 }
 
 interface AuthContextType {
-  user: User | null;
+  user: AuthUser | null;
   isAuthenticated: boolean;
   login: (credential: string) => void;
   logout: () => void;
@@ -40,7 +40,7 @@ interface DecodedToken {
 }
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(() => {
+  const [user, setUser] = useState<AuthUser | null>(() => {
     const storedUser = localStorage.getItem('user');
     const token = localStorage.getItem('token');
     
@@ -66,7 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = (credential: string) => {
     try {
       const decoded = jwtDecode<DecodedToken>(credential);
-      const userData: User = {
+      const userData: AuthUser = {
         email: decoded.email,
         name: decoded.given_name || decoded.name.split(' ')[0],
         surname: decoded.family_name || decoded.name.split(' ').slice(1).join(' '),
