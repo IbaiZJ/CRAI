@@ -29,13 +29,13 @@ jobs:
       - name: Run AI Tests with Coverage
         working-directory: ./ai
         run: |
-          # Run all tests except problematic ones, coverage only on src/
+          # Run all tests with coverage on src/ and scripts/
           pytest tests/ -v \
             --ignore=tests/test_scripts.py \
             --ignore=tests/test_diagnose_extended.py \
             --ignore=tests/test_ssd_load_script.py \
             --ignore=tests/test_full_src_coverage.py \
-            --cov=src \
+            --cov=src --cov=scripts \
             --cov-report=xml:coverage.xml \
             --cov-report=term-missing \
             --cov-fail-under=0 || true
@@ -43,12 +43,19 @@ jobs:
         working-directory: ./ai
         run: |
           # Fix the source path in coverage.xml to be relative
-          # Change absolute paths to relative paths matching sonar.sources=src
+          # First replace absolute paths with relative ones
           sed -i 's|<source>.*ai/src</source>|<source>src</source>|g' coverage.xml
-          # Also fix individual file paths: change "api/file.py" to "src/api/file.py"
-          sed -i 's|filename="|filename="src/|g' coverage.xml
+          sed -i 's|<source>.*ai/scripts</source>|<source>scripts</source>|g' coverage.xml
+          # Fix individual file paths for src/: change "api/file.py" to "src/api/file.py"
+          sed -i 's|filename="api/|filename="src/api/|g' coverage.xml
+          sed -i 's|filename="config/|filename="src/config/|g' coverage.xml
+          sed -i 's|filename="detectors/|filename="src/detectors/|g' coverage.xml
+          sed -i 's|filename="utils/|filename="src/utils/|g' coverage.xml
+          sed -i 's|filename="video/|filename="src/video/|g' coverage.xml
+          # Fix script files: change "train_ssd.py" to "scripts/train_ssd.py"
+          sed -i 's|filename="train_ssd.py"|filename="scripts/train_ssd.py"|g' coverage.xml
           echo "=== Fixed coverage.xml sources ==="
-          grep -E "<source>|filename=" coverage.xml | head -20
+          grep -E "<source>|filename=" coverage.xml | head -30
       - name: Debug AI Coverage
         working-directory: ./ai
         continue-on-error: true
