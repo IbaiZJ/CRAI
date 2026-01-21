@@ -61,7 +61,7 @@ describe('Cars Page', () => {
 
     expect(screen.getByTestId('layout')).toBeInTheDocument();
     await waitFor(() => {
-      expect(screen.getByText('Fleet Management')).toBeInTheDocument();
+      expect(screen.getByText('Vehicles Management')).toBeInTheDocument();
     });
   });
 
@@ -94,7 +94,7 @@ describe('Cars Page', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Monitor and manage all vehicles in real-time')).toBeInTheDocument();
+      expect(screen.getByText('Manage fleet vehicles and owners')).toBeInTheDocument();
       expect(screen.getByText('Total Vehicles')).toBeInTheDocument();
     });
   });

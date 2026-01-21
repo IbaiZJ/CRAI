@@ -28,10 +28,10 @@ describe('Login Component', () => {
       </BrowserRouter>
     );
     
-    expect(screen.getByRole('heading', { name: 'Log In' })).toBeInTheDocument();
+    expect(screen.getAllByText('Log In')[0]).toBeInTheDocument();
   });
 
-  it('renders google sign in description', () => {
+  it('renders username/password description', () => {
     render(
       <BrowserRouter>
         <AuthProvider>
@@ -40,10 +40,10 @@ describe('Login Component', () => {
       </BrowserRouter>
     );
     
-    expect(screen.getByText('Sign in with your Google account to continue')).toBeInTheDocument();
+    expect(screen.getByText('Sign in with your username and password')).toBeInTheDocument();
   });
 
-  it('renders google login component container', () => {
+  it('renders username and password inputs', () => {
     render(
       <BrowserRouter>
         <AuthProvider>
@@ -52,8 +52,8 @@ describe('Login Component', () => {
       </BrowserRouter>
     );
     
-    const container = screen.getByText('Log In').closest('div');
-    expect(container).toBeInTheDocument();
+    expect(screen.getByLabelText(/username/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
   });
 
   it('renders back to home link', () => {
@@ -89,9 +89,10 @@ describe('Login Component', () => {
       </BrowserRouter>
     );
     
-    expect(screen.getByRole('heading', { name: 'Log In' })).toBeInTheDocument();
-    expect(screen.getByText('Sign in with your Google account to continue')).toBeInTheDocument();
+    expect(screen.getAllByText('Log In')[0]).toBeInTheDocument();
+    expect(screen.getByText('Sign in with your username and password')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Back to Home' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Log In' })).toBeInTheDocument();
   });
 });
 
@@ -111,7 +112,8 @@ describe('Login Component - Authentication flow', () => {
       </BrowserRouter>
     );
 
-    const heading = screen.getByRole('heading', { name: 'Log In' });
+    // Check for main container structure
+    const heading = screen.getAllByText('Log In')[0];
     expect(heading).toBeInTheDocument();
     expect(heading.tagName).toBe('H1');
   });
@@ -138,7 +140,8 @@ describe('Login Component - Authentication flow', () => {
       </BrowserRouter>
     );
 
-    const description = screen.getByText('Sign in with your Google account to continue');
+    // The outer container should have centering classes
+    const description = screen.getByText('Sign in with your username and password');
     expect(description.closest('.text-center')).toBeInTheDocument();
   });
 });
