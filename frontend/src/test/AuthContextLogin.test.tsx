@@ -73,6 +73,9 @@ describe('AuthContext - Login function', () => {
   });
 
   it('should handle failed login gracefully', async () => {
+    // Explicit cleanup before this test
+    localStorage.clear();
+    loginMock.mockReset();
     loginMock.mockResolvedValue({ success: false, error: 'Invalid username or password' });
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     
