@@ -97,6 +97,9 @@ describe('AuthContext - Login function', () => {
       </BrowserRouter>
     );
 
+    // Verify initial state is false
+    expect(screen.getByTestId('authenticated')).toHaveTextContent('false');
+
     if (loginFn) {
       await loginFn('user', 'bad-password');
     }
