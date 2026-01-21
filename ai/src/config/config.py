@@ -53,6 +53,7 @@ class Config:
         return {
             'camera': {
                 'source': 1,
+                'cameraId': 137,
                 'use_threading': True
             },
             'vehicle_detector': {
@@ -76,6 +77,7 @@ class Config:
             },
             'display': {
                 'window_name': 'Recognition System',
+                'enabled': True,
                 'show_fps': True,
                 'show_stats': True
             },

@@ -1,5 +1,6 @@
 camera:
   source: 1
+  cameraId: 137
   auto_find: true
   resolution:
     width: 1280
@@ -63,6 +64,7 @@ api:
 
 display:
   window_name: "CRAI - Car Registration AI"
+  enabled: true
   show_fps: true
   show_stats: true
   
