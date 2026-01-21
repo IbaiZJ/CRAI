@@ -2,6 +2,42 @@ import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 import type React from 'react';
 
+// Mock global fetch with default responses
+globalThis.fetch = vi.fn((url) => {
+  // Default mock - can be overridden in individual tests
+  console.log('Mock fetch called with:', url);
+  
+  if (typeof url === 'string') {
+    if (url.includes('/cameras')) {
+      return Promise.resolve({
+        ok: true,
+        json: async () => [],
+      });
+    }
+    if (url.includes('/user')) {
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({
+          success: true,
+          data: []
+        }),
+      });
+    }
+    if (url.includes('/vehicles')) {
+      return Promise.resolve({
+        ok: true,
+        json: async () => [],
+      });
+    }
+  }
+  
+  // Default fallback
+  return Promise.resolve({
+    ok: true,
+    json: async () => [],
+  });
+}) as any;
+
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
