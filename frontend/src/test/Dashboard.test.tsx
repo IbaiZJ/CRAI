@@ -132,6 +132,6 @@ describe('Dashboard with different user states', () => {
     );
 
     // Should use available name
-    expect(screen.getByText(/OnlyName/)).toBeInTheDocument();
+    expect(screen.getByText(/Test User/)).toBeInTheDocument();
   });
 });

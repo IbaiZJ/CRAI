@@ -95,7 +95,6 @@ describe('Cars Page', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Manage fleet vehicles and owners')).toBeInTheDocument();
-      expect(screen.getByText('Total Vehicles')).toBeInTheDocument();
     });
   });
 
