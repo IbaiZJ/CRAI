@@ -19,6 +19,8 @@ export interface AuthResponse {
     username: string;
     name: string;
     surname: string;
+    email?: string;
+    picture?: string;
   };
   error?: string;
 }
@@ -71,7 +73,9 @@ export const authApi = {
             user: {
               username: user.username,
               name: user.name,
-              surname: user.surname
+              surname: user.surname,
+              email: user.email,
+              picture: user.picture
             }
           };
         }

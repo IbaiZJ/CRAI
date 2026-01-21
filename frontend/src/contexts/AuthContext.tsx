@@ -7,9 +7,11 @@ interface AuthUser {
   name: string;
   surname?: string;
   fullName: string;
+  email?: string;
+  picture?: string;
   sub: string;
-  iat?: number;
-  exp?: number;
+  iat?: number; // Emission time
+  exp?: number; // Expiration time
 }
 
 interface AuthContextType {
@@ -41,8 +43,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     if (storedUser && token) {
       try {
-        // Simply parse the stored user data without validating JWT
-        // since we're using a simple base64 token, not a real JWT
         return JSON.parse(storedUser);
       } catch (error) {
         console.error('Error parsing user data:', error);
@@ -69,6 +69,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           name: response.user.name,
           surname: response.user.surname,
           fullName: `${response.user.name} ${response.user.surname}`.trim(),
+          email: response.user.email,
+          picture: response.user.picture,
           sub: response.user.username,
         };
         
