@@ -39,6 +39,16 @@ jobs:
             --cov-report=xml:coverage.xml \
             --cov-report=term-missing \
             --cov-fail-under=0 || true
+      - name: Fix Coverage Paths for SonarCloud
+        working-directory: ./ai
+        run: |
+          # Fix the source path in coverage.xml to be relative
+          # Change absolute paths to relative paths matching sonar.sources=src
+          sed -i 's|<source>.*ai/src</source>|<source>src</source>|g' coverage.xml
+          # Also fix individual file paths: change "api/file.py" to "src/api/file.py"
+          sed -i 's|filename="|filename="src/|g' coverage.xml
+          echo "=== Fixed coverage.xml sources ==="
+          grep -E "<source>|filename=" coverage.xml | head -20
       - name: Debug AI Coverage
         working-directory: ./ai
         continue-on-error: true
