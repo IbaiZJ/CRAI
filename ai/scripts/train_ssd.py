@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-🚀 SSD TRAINING SCRIPT - ENGLISH COMMENTED VERSION
+SSD TRAINING SCRIPT
 ===================================================
 
 This script trains the SSD model with the correct configuration:
@@ -614,7 +614,7 @@ def main():
     # Main training routine for SSD model
     parser = argparse.ArgumentParser(description='Train SSD model')
     parser.add_argument('--epochs', type=int, default=100, help='Number of epochs (default: 100)')
-    parser.add_argument('--batch-size', type=int, default=12, help='Batch size (default: 12)')
+    parser.add_argument('--batch-size', type=int, default=16, help='Batch size (default: 16)')
     parser.add_argument('--lr', type=float, default=1e-4, help='Learning rate (default: 1e-4)')
     parser.add_argument('--dataset', type=str, default='dataset/UA-DETRAC-DATASET-10K-2',
                         help='Path to UA-DETRAC dataset (relative or absolute)')
