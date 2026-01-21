@@ -28,9 +28,11 @@ jobs:
           node-version: 20
 
       # 3. Instalar dependencias
-      - name: Install Dependencies
+      - name: Clean and Install Dependencies
         working-directory: ./frontend
-        run: npm install --legacy-peer-deps
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install --legacy-peer-deps
 
       # 4. Lint
       # - name: Run ESLint

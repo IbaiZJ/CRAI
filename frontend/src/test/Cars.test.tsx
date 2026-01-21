@@ -52,7 +52,7 @@ describe('Cars Page', () => {
     document.title = '';
   });
 
-  it('should render the cars page', () => {
+  it('should render the cars page', async () => {
     render(
       <BrowserRouter>
         <Cars />
@@ -60,7 +60,9 @@ describe('Cars Page', () => {
     );
 
     expect(screen.getByTestId('layout')).toBeInTheDocument();
-    expect(screen.getByText('Fleet Management')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Vehicles Management')).toBeInTheDocument();
+    });
   });
 
   it('should set document title', () => {
@@ -84,24 +86,17 @@ describe('Cars Page', () => {
     expect(screen.getByTestId('breadcrumb-1')).toHaveTextContent('Cars');
   });
 
-  it('should display page description', () => {
+  it('should display page description and stats after load', async () => {
     render(
       <BrowserRouter>
         <Cars />
       </BrowserRouter>
     );
 
-    expect(screen.getByText('Monitor and manage all vehicles in real-time')).toBeInTheDocument();
-  });
-
-  it('should fetch vehicle data on mount', async () => {
-    render(
-      <BrowserRouter>
-        <Cars />
-      </BrowserRouter>
-    );
-
-    expect(screen.getByText('Total Vehicles')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Manage fleet vehicles and owners')).toBeInTheDocument();
+      expect(screen.getByText('Total Vehicles')).toBeInTheDocument();
+    });
   });
 
   it('should display vehicle VEH-001', async () => {
