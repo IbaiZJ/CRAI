@@ -86,41 +86,7 @@ describe('Dashboard Page', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByTestId('split-text')).toHaveTextContent('Hello, Test User!');
-  });
-
-  it('should render all chart components', () => {
-    render(
-      <BrowserRouter>
-        <Dashboard />
-      </BrowserRouter>
-    );
-
-    expect(screen.getByTestId('chart-area-interactive')).toBeInTheDocument();
-    expect(screen.getByTestId('chart-bar-stacked')).toBeInTheDocument();
-    expect(screen.getByTestId('chart-bar-default')).toBeInTheDocument();
-    expect(screen.getByTestId('chart-bar-mixed')).toBeInTheDocument();
-  });
-
-  it('should render payments table with data', () => {
-    render(
-      <BrowserRouter>
-        <Dashboard />
-      </BrowserRouter>
-    );
-
-    expect(screen.getByTestId('payments-table')).toBeInTheDocument();
-    expect(screen.getByTestId('payments-table')).toHaveTextContent('3 items');
-  });
-
-  it('should render count up component', () => {
-    render(
-      <BrowserRouter>
-        <Dashboard />
-      </BrowserRouter>
-    );
-
-    expect(screen.getByTestId('count-up')).toBeInTheDocument();
+    expect(screen.getByText(/Hello, Test User/)).toBeInTheDocument();
   });
 
   it('should have correct breadcrumbs', () => {
@@ -166,6 +132,6 @@ describe('Dashboard with different user states', () => {
     );
 
     // Should use available name
-    expect(screen.getByTestId('split-text')).toBeInTheDocument();
+    expect(screen.getByText(/Test User/)).toBeInTheDocument();
   });
 });

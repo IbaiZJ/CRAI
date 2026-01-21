@@ -41,7 +41,7 @@ describe('Users Page', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Users Page');
+    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('Users Management');
   });
 
   it('should display page description', () => {
@@ -51,7 +51,7 @@ describe('Users Page', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText('This is the protected Users page.')).toBeInTheDocument();
+    expect(screen.getByText('Manage system users and permissions')).toBeInTheDocument();
   });
 
   it('should have correct breadcrumbs', () => {
@@ -72,6 +72,6 @@ describe('Users Page', () => {
       </BrowserRouter>
     );
 
-    expect(document.title).toBe('CRAI - Users');
+    expect(document.title).toBe('CRAI - Users Management');
   });
 });

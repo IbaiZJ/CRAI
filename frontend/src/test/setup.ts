@@ -2,6 +2,42 @@ import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 import type React from 'react';
 
+// Mock global fetch with default responses
+globalThis.fetch = vi.fn((url) => {
+  // Default mock - can be overridden in individual tests
+  console.log('Mock fetch called with:', url);
+  
+  if (typeof url === 'string') {
+    if (url.includes('/cameras')) {
+      return Promise.resolve({
+        ok: true,
+        json: async () => [],
+      });
+    }
+    if (url.includes('/user')) {
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({
+          success: true,
+          data: []
+        }),
+      });
+    }
+    if (url.includes('/vehicles')) {
+      return Promise.resolve({
+        ok: true,
+        json: async () => [],
+      });
+    }
+  }
+  
+  // Default fallback
+  return Promise.resolve({
+    ok: true,
+    json: async () => [],
+  });
+}) as any;
+
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -60,18 +96,30 @@ vi.mock('firebase/storage', () => ({
   getStorage: vi.fn(() => ({})),
 }));
 
-// Mock IntersectionObserver for framer-motion
-if (typeof globalThis !== 'undefined') {
-  globalThis.IntersectionObserver = class IntersectionObserver {
-    constructor() {}
-    disconnect() {}
-    observe() {}
-    takeRecords() {
-      return [];
+// Mock jwt-decode - will decode valid JWT structure
+vi.mock('jwt-decode', () => ({
+  jwtDecode: vi.fn((token: string) => {
+    // Simple base64 decode simulation
+    try {
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        throw new Error('Invalid token structure');
+      }
+      const payload = parts[1];
+      const decoded = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+      return decoded;
+    } catch (error) {
+      throw new Error('Invalid token');
     }
-    unobserve() {}
-  } as any;
-}
+  }),
+}));
+
+// Mock Google OAuth
+vi.mock('@react-oauth/google', () => ({
+  GoogleOAuthProvider: ({ children }: { children: React.ReactNode }) => children,
+  GoogleLogin: vi.fn(() => null),
+  useGoogleLogin: vi.fn(() => vi.fn()),
+}));
 
 // Mock IntersectionObserver for framer-motion
 if (typeof globalThis !== 'undefined') {
