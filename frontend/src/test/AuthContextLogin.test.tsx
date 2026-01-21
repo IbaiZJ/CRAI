@@ -2,6 +2,14 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import { authApi } from '@/lib/api';
+
+vi.mock('@/lib/api', () => ({
+  authApi: {
+    login: vi.fn(),
+    register: vi.fn(),
+  },
+}));
 
 describe('AuthContext - Login function', () => {
   beforeEach(() => {
@@ -13,10 +21,16 @@ describe('AuthContext - Login function', () => {
     localStorage.clear();
   });
 
-  it('should decode JWT and create user on login', async () => {
-    // Valid JWT with proper structure (header.payload.signature)
-    // payload: {"email":"test@example.com","name":"Test User","given_name":"Test","family_name":"User","sub":"123456","exp":9999999999,"iat":1700000000}
-    const validToken = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuYW1lIjoiVGVzdCBVc2VyIiwiZ2l2ZW5fbmFtZSI6IlRlc3QiLCJmYW1pbHlfbmFtZSI6IlVzZXIiLCJzdWIiOiIxMjM0NTYiLCJleHAiOjk5OTk5OTk5OTksImlhdCI6MTcwMDAwMDAwMH0.signature';
+  it('should create user on successful login', async () => {
+    (authApi.login as ReturnType<typeof vi.fn>).mockResolvedValue({
+      success: true,
+      token: 'token-123',
+      user: {
+        username: 'testuser',
+        name: 'Test',
+        surname: 'User',
+      },
+    });
 
     let loginFn: any = null;
 
@@ -27,7 +41,7 @@ describe('AuthContext - Login function', () => {
       return (
         <div>
           <div data-testid="authenticated">{isAuthenticated ? 'true' : 'false'}</div>
-          {user && <div data-testid="user-email">{user.email}</div>}
+          {user && <div data-testid="user-username">{user.username}</div>}
         </div>
       );
     };
@@ -42,22 +56,21 @@ describe('AuthContext - Login function', () => {
 
     expect(screen.getByTestId('authenticated')).toHaveTextContent('false');
 
-    // Call login - it's synchronous so it updates immediately
     if (loginFn) {
-      loginFn(validToken);
+      await loginFn('testuser', 'password');
     }
 
-    // Since login is synchronous, we can check immediately
     await waitFor(() => {
       expect(screen.getByTestId('authenticated')).toHaveTextContent('true');
     });
 
-    expect(screen.getByTestId('user-email')).toHaveTextContent('test@example.com');
-    expect(localStorage.getItem('token')).toBe(validToken);
+    expect(screen.getByTestId('user-username')).toHaveTextContent('testuser');
+    expect(localStorage.getItem('token')).toBe('token-123');
     expect(localStorage.getItem('user')).toBeTruthy();
   });
 
-  it('should handle invalid token in login gracefully', () => {
+  it('should handle failed login gracefully', async () => {
+    (authApi.login as ReturnType<typeof vi.fn>).mockResolvedValue({ success: false, error: 'Invalid username or password' });
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     
     let loginFn: any = null;
@@ -81,21 +94,24 @@ describe('AuthContext - Login function', () => {
       </BrowserRouter>
     );
 
-    // Call login with invalid token
     if (loginFn) {
-      loginFn('invalid-token');
+      await loginFn('user', 'bad-password');
     }
 
-    // Should still be not authenticated
     expect(screen.getByTestId('authenticated')).toHaveTextContent('false');
-    expect(consoleSpy).toHaveBeenCalled();
-
     consoleSpy.mockRestore();
   });
 
   it('should logout and clear localStorage', async () => {
-    // Start with a valid token
-    const validToken = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuYW1lIjoiVGVzdCBVc2VyIiwiZ2l2ZW5fbmFtZSI6IlRlc3QiLCJmYW1pbHlfbmFtZSI6IlVzZXIiLCJzdWIiOiIxMjM0NTYiLCJleHAiOjk5OTk5OTk5OTksImlhdCI6MTcwMDAwMDAwMH0.signature';
+    (authApi.login as ReturnType<typeof vi.fn>).mockResolvedValue({
+      success: true,
+      token: 'token-logout',
+      user: {
+        username: 'logout-user',
+        name: 'Logout',
+        surname: 'User',
+      },
+    });
 
     let loginFn: any = null;
     let logoutFn: any = null;
@@ -120,16 +136,14 @@ describe('AuthContext - Login function', () => {
       </BrowserRouter>
     );
 
-    // Login first
     if (loginFn) {
-      loginFn(validToken);
+      await loginFn('logout-user', 'password');
     }
 
     await waitFor(() => {
       expect(screen.getByTestId('authenticated')).toHaveTextContent('true');
     });
 
-    // Now logout
     if (logoutFn) {
       logoutFn();
     }
