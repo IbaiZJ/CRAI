@@ -59,8 +59,8 @@ describe('AuthContext', () => {
       fullName: 'Test User',
       sub: '123456',
     };
-    // Use a token that won't be decoded - just verify localStorage loading logic
-    const mockToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuYW1lIjoiVGVzdCBVc2VyIiwic3ViIjoiMTIzNDU2IiwiZXhwIjo5OTk5OTk5OTksImlhdCI6MTcwMDAwMDAwMH0.test';
+    // Use a token with exp in the future - this is VALID
+    const mockToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuYW1lIjoiVGVzdCBVc2VyIiwic3ViIjoiMTIzNDU2IiwiZXhwIjo5OTk5OTk5OTk5LCJpYXQiOjE3MDAwMDAwMDB9.test';
     
     localStorage.setItem('user', JSON.stringify(mockUser));
     localStorage.setItem('token', mockToken);
@@ -73,8 +73,9 @@ describe('AuthContext', () => {
       </BrowserRouter>
     );
 
-    // Since the token is invalid, it will be cleared, so not-authenticated is expected
-    expect(screen.getByTestId('not-authenticated')).toBeInTheDocument();
+    // Token is valid and not expired, so user should be authenticated
+    expect(screen.getByTestId('user-name')).toHaveTextContent('Test User');
+    expect(screen.getByTestId('user-email')).toHaveTextContent('test@example.com');
   });
 
   it('should clear localStorage when token is expired', () => {

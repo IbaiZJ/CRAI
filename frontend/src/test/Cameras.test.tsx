@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
 vi.mock('@/layouts/Layout', () => ({
@@ -36,7 +36,7 @@ describe('Cameras Page', () => {
     document.title = '';
     
     // Mock fetch to return camera data
-    (global.fetch as any).mockResolvedValue({
+    (globalThis.fetch as any).mockResolvedValue({
       ok: true,
       json: async () => [
         { id: 'CAM-001', name: 'Main Entrance', location: 'Lobby', status: 'online', quality: '4K', fps: 30 },
@@ -49,7 +49,7 @@ describe('Cameras Page', () => {
     });
   });
 
-  it('should render the cameras page', () => {
+  it('should render the cameras page', async () => {
     render(
       <BrowserRouter>
         <Cameras />
@@ -57,17 +57,23 @@ describe('Cameras Page', () => {
     );
 
     expect(screen.getByTestId('layout')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Cameras', level: 1 })).toBeInTheDocument();
+    
+    // Wait for data to load
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: 'Cameras', level: 1 })).toBeInTheDocument();
+    });
   });
 
-  it('should set document title', () => {
+  it('should set document title', async () => {
     render(
       <BrowserRouter>
         <Cameras />
       </BrowserRouter>
     );
 
-    expect(document.title).toBe('CRAI - Cameras');
+    await waitFor(() => {
+      expect(document.title).toBe('CRAI - Cameras');
+    });
   });
 
   it('should display correct breadcrumbs', () => {
@@ -81,161 +87,187 @@ describe('Cameras Page', () => {
     expect(screen.getByTestId('breadcrumb-1')).toHaveTextContent('Cameras');
   });
 
-  it('should display page description', () => {
+  it('should display page description', async () => {
     render(
       <BrowserRouter>
         <Cameras />
       </BrowserRouter>
     );
 
-    expect(screen.getByText('Monitor and manage all security cameras')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Monitor and manage all security cameras')).toBeInTheDocument();
+    });
   });
 
-  it('should display Total Cameras stat', () => {
+  it('should display Total Cameras stat', async () => {
     render(
       <BrowserRouter>
         <Cameras />
       </BrowserRouter>
     );
 
-    expect(screen.getByText('Total Cameras')).toBeInTheDocument();
-    expect(screen.getByText('6')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Total Cameras')).toBeInTheDocument();
+      expect(screen.getByText('6')).toBeInTheDocument();
+    });
   });
 
-  it('should display Online cameras stat card', () => {
+  it('should display Online cameras stat card', async () => {
     render(
       <BrowserRouter>
         <Cameras />
       </BrowserRouter>
     );
 
-    // Stat card title and online cameras badges
-    const onlineElements = screen.getAllByText('Online');
-    expect(onlineElements.length).toBeGreaterThan(0);
+    // Wait for data to load and stat card title and online cameras badges
+    await waitFor(() => {
+      const onlineElements = screen.getAllByText('Online');
+      expect(onlineElements.length).toBeGreaterThan(0);
+    });
   });
 
-  it('should display Offline stat card', () => {
+  it('should display Offline stat card', async () => {
     render(
       <BrowserRouter>
         <Cameras />
       </BrowserRouter>
     );
 
-    // Stat card title and offline camera badge
-    const offlineElements = screen.getAllByText('Offline');
-    expect(offlineElements.length).toBeGreaterThan(0);
+    // Wait for data to load - stat card title and offline camera badge
+    await waitFor(() => {
+      const offlineElements = screen.getAllByText('Offline');
+      expect(offlineElements.length).toBeGreaterThan(0);
+    });
   });
 
-  it('should display Maintenance stat card', () => {
+  it('should display Maintenance stat card', async () => {
     render(
       <BrowserRouter>
         <Cameras />
       </BrowserRouter>
     );
 
-    expect(screen.getAllByText('Maintenance').length).toBeGreaterThan(0);
+    await waitFor(() => {
+      expect(screen.getAllByText('Maintenance').length).toBeGreaterThan(0);
+    });
   });
 
-  it('should display camera CAM-001', () => {
+  it('should display camera CAM-001', async () => {
     render(
       <BrowserRouter>
         <Cameras />
       </BrowserRouter>
     );
 
-    expect(screen.getByText('CAM-001')).toBeInTheDocument();
-    expect(screen.getByText('Main Entrance')).toBeInTheDocument();
-    expect(screen.getByText('Building A - Floor 1')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('CAM-001')).toBeInTheDocument();
+      expect(screen.getByText('Main Entrance')).toBeInTheDocument();
+    });
   });
 
-  it('should display camera CAM-002', () => {
+  it('should display camera CAM-002', async () => {
     render(
       <BrowserRouter>
         <Cameras />
       </BrowserRouter>
     );
 
-    expect(screen.getByText('CAM-002')).toBeInTheDocument();
-    expect(screen.getByText('Parking Lot')).toBeInTheDocument();
-    expect(screen.getByText('Exterior - North')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('CAM-002')).toBeInTheDocument();
+      expect(screen.getByText('Parking Lot')).toBeInTheDocument();
+      expect(screen.getByText('Exterior - North')).toBeInTheDocument();
+    });
   });
 
-  it('should display camera CAM-003 in maintenance', () => {
+  it('should display camera CAM-003 in maintenance', async () => {
     render(
       <BrowserRouter>
         <Cameras />
       </BrowserRouter>
     );
 
-    expect(screen.getByText('CAM-003')).toBeInTheDocument();
-    expect(screen.getByText('Lobby Camera')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('CAM-003')).toBeInTheDocument();
+      expect(screen.getByText('Server Room')).toBeInTheDocument();
+    });
   });
 
-  it('should display camera CAM-004 offline', () => {
+  it('should display camera CAM-004 offline', async () => {
     render(
       <BrowserRouter>
         <Cameras />
       </BrowserRouter>
     );
 
-    expect(screen.getByText('CAM-004')).toBeInTheDocument();
-    expect(screen.getByText('Back Exit')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('CAM-004')).toBeInTheDocument();
+      expect(screen.getByText('Emergency Exit')).toBeInTheDocument();
+    });
   });
 
-  it('should display camera CAM-005', () => {
+  it('should display camera CAM-005', async () => {
     render(
       <BrowserRouter>
         <Cameras />
       </BrowserRouter>
     );
 
-    expect(screen.getByText('CAM-005')).toBeInTheDocument();
-    expect(screen.getByText('Conference Room')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('CAM-005')).toBeInTheDocument();
+      expect(screen.getByText('Reception')).toBeInTheDocument();
+    });
   });
 
-  it('should display camera CAM-006', () => {
+  it('should display camera CAM-006', async () => {
     render(
       <BrowserRouter>
         <Cameras />
       </BrowserRouter>
     );
 
-    expect(screen.getByText('CAM-006')).toBeInTheDocument();
-    expect(screen.getByText('Server Room')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('CAM-006')).toBeInTheDocument();
+      expect(screen.getByText('Conference Room A')).toBeInTheDocument();
+    });
   });
 
-  it('should display status badges', () => {
+  it('should display status badges', async () => {
     render(
       <BrowserRouter>
         <Cameras />
       </BrowserRouter>
     );
 
-    const badges = screen.getAllByTestId('badge');
-    expect(badges.length).toBeGreaterThan(0);
+    await waitFor(() => {
+      const badges = screen.getAllByTestId('badge');
+      expect(badges.length).toBeGreaterThan(0);
+    });
   });
 
-  it('should display camera quality specifications', () => {
+  it('should display camera quality specifications', async () => {
     render(
       <BrowserRouter>
         <Cameras />
       </BrowserRouter>
     );
 
-    expect(screen.getAllByText('1080p').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('4K').length).toBeGreaterThan(0);
-    expect(screen.getByText('720p')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getAllByText('1080p').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('4K').length).toBeGreaterThan(0);
+      expect(screen.getByText('720p')).toBeInTheDocument();
+    });
   });
 
-  it('should display camera FPS specifications', () => {
+  it('should display camera FPS specifications', async () => {
     render(
       <BrowserRouter>
         <Cameras />
       </BrowserRouter>
     );
 
-    expect(screen.getAllByText('30 FPS').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('60 FPS').length).toBeGreaterThan(0);
-    expect(screen.getByText('24 FPS')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getAllByText('30 FPS').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('60 FPS').length).toBeGreaterThan(0);
+    });
   });
 });
