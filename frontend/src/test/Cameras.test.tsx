@@ -2,6 +2,47 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
+// Mock Leaflet to avoid DOM-specific implementation
+const mockMap = {
+  setView: vi.fn().mockReturnThis(),
+  on: vi.fn(),
+  remove: vi.fn(),
+  fitBounds: vi.fn(),
+};
+
+const mockMarker = {
+  addTo: vi.fn().mockReturnThis(),
+  bindPopup: vi.fn().mockReturnThis(),
+  on: vi.fn(),
+  closePopup: vi.fn(),
+};
+
+vi.mock('leaflet', () => ({
+  __esModule: true,
+  default: {
+    map: vi.fn(() => mockMap),
+    tileLayer: vi.fn(() => ({ addTo: vi.fn() })),
+    marker: vi.fn(() => mockMarker),
+    latLngBounds: vi.fn(() => ({})),
+    Icon: {
+      Default: {
+        prototype: { _getIconUrl: vi.fn() },
+        mergeOptions: vi.fn(),
+      },
+    },
+  },
+  map: vi.fn(() => mockMap),
+  tileLayer: vi.fn(() => ({ addTo: vi.fn() })),
+  marker: vi.fn(() => mockMarker),
+  latLngBounds: vi.fn(() => ({})),
+  Icon: {
+    Default: {
+      prototype: { _getIconUrl: vi.fn() },
+      mergeOptions: vi.fn(),
+    },
+  },
+}));
+
 vi.mock('@/layouts/Layout', () => ({
   default: ({ children, breadcrumbs }: { children: React.ReactNode; breadcrumbs?: { label: string; to?: string }[] }) => (
     <div data-testid="layout">
@@ -15,18 +56,26 @@ vi.mock('@/layouts/Layout', () => ({
   ),
 }));
 
-vi.mock('@/components/ui/card', () => ({
-  Card: ({ children }: { children: React.ReactNode }) => <div data-testid="card">{children}</div>,
-  CardContent: ({ children }: { children: React.ReactNode }) => <div data-testid="card-content">{children}</div>,
-  CardHeader: ({ children }: { children: React.ReactNode }) => <div data-testid="card-header">{children}</div>,
-  CardTitle: ({ children }: { children: React.ReactNode }) => <h3 data-testid="card-title">{children}</h3>,
+// Minimal mocks for components used inside page
+vi.mock('@/components/ui/button', () => ({
+  Button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
 }));
 
-vi.mock('@/components/ui/badge', () => ({
-  Badge: ({ children, className, variant }: { children: React.ReactNode; className?: string; variant?: string }) => (
-    <span data-testid="badge" data-variant={variant} className={className}>{children}</span>
-  ),
+vi.mock('@/components/ui/input', () => ({
+  Input: (props: any) => <input {...props} />,
 }));
+
+vi.mock('@/components/ui/dialog', () => ({
+  Dialog: ({ children }: any) => <div>{children}</div>,
+  DialogContent: ({ children }: any) => <div>{children}</div>,
+  DialogDescription: ({ children }: any) => <p>{children}</p>,
+  DialogFooter: ({ children }: any) => <div>{children}</div>,
+  DialogHeader: ({ children }: any) => <div>{children}</div>,
+  DialogTitle: ({ children }: any) => <h2>{children}</h2>,
+  DialogTrigger: ({ children }: any) => <div>{children}</div>,
+}));
+
+vi.mock('@/components/MapPicker', () => ({ default: () => <div data-testid="map-picker" /> }));
 
 import Cameras from '@/pages/Cameras';
 
@@ -39,17 +88,13 @@ describe('Cameras Page', () => {
     (globalThis.fetch as any).mockResolvedValue({
       ok: true,
       json: async () => [
-        { id: 'CAM-001', name: 'Main Entrance', location: 'Lobby', status: 'online', quality: '4K', fps: 30 },
-        { id: 'CAM-002', name: 'Parking Lot', location: 'Exterior - North', status: 'online', quality: '1080p', fps: 60 },
-        { id: 'CAM-003', name: 'Server Room', location: 'Floor 2', status: 'maintenance', quality: '1080p', fps: 30 },
-        { id: 'CAM-004', name: 'Emergency Exit', location: 'Stairwell B', status: 'offline', quality: '720p', fps: 30 },
-        { id: 'CAM-005', name: 'Reception', location: 'Ground Floor', status: 'online', quality: '4K', fps: 60 },
-        { id: 'CAM-006', name: 'Conference Room A', location: 'Floor 3', status: 'online', quality: '1080p', fps: 30 },
+        { id: 1, locationX: 40.416775, locationY: -3.70379 },
+        { id: 2, locationX: 40.417775, locationY: -3.70479 },
       ],
     });
   });
 
-  it('should render the cameras page', async () => {
+  it('should render the cameras page with loader then map', async () => {
     render(
       <BrowserRouter>
         <Cameras />
@@ -57,10 +102,13 @@ describe('Cameras Page', () => {
     );
 
     expect(screen.getByTestId('layout')).toBeInTheDocument();
-    
-    // Wait for data to load
+    // Loader appears first
+    expect(document.querySelector('.animate-spin')).toBeTruthy();
+
+    // After fetch resolves, loader is removed and map initialization was attempted
     await waitFor(() => {
-      expect(screen.getByRole('heading', { name: 'Cameras', level: 1 })).toBeInTheDocument();
+      expect(document.querySelector('.animate-spin')).toBeFalsy();
+      expect(mockMap.setView).toHaveBeenCalled();
     });
   });
 
@@ -87,187 +135,13 @@ describe('Cameras Page', () => {
     expect(screen.getByTestId('breadcrumb-1')).toHaveTextContent('Cameras');
   });
 
-  it('should display page description', async () => {
+  it('should show Add Camera button', () => {
     render(
       <BrowserRouter>
         <Cameras />
       </BrowserRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText('Monitor and manage all security cameras')).toBeInTheDocument();
-    });
-  });
-
-  it('should display Total Cameras stat', async () => {
-    render(
-      <BrowserRouter>
-        <Cameras />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('Total Cameras')).toBeInTheDocument();
-      expect(screen.getByText('6')).toBeInTheDocument();
-    });
-  });
-
-  it('should display Online cameras stat card', async () => {
-    render(
-      <BrowserRouter>
-        <Cameras />
-      </BrowserRouter>
-    );
-
-    // Wait for data to load and stat card title and online cameras badges
-    await waitFor(() => {
-      const onlineElements = screen.getAllByText('Online');
-      expect(onlineElements.length).toBeGreaterThan(0);
-    });
-  });
-
-  it('should display Offline stat card', async () => {
-    render(
-      <BrowserRouter>
-        <Cameras />
-      </BrowserRouter>
-    );
-
-    // Wait for data to load - stat card title and offline camera badge
-    await waitFor(() => {
-      const offlineElements = screen.getAllByText('Offline');
-      expect(offlineElements.length).toBeGreaterThan(0);
-    });
-  });
-
-  it('should display Maintenance stat card', async () => {
-    render(
-      <BrowserRouter>
-        <Cameras />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getAllByText('Maintenance').length).toBeGreaterThan(0);
-    });
-  });
-
-  it('should display camera CAM-001', async () => {
-    render(
-      <BrowserRouter>
-        <Cameras />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('CAM-001')).toBeInTheDocument();
-      expect(screen.getByText('Main Entrance')).toBeInTheDocument();
-    });
-  });
-
-  it('should display camera CAM-002', async () => {
-    render(
-      <BrowserRouter>
-        <Cameras />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('CAM-002')).toBeInTheDocument();
-      expect(screen.getByText('Parking Lot')).toBeInTheDocument();
-      expect(screen.getByText('Exterior - North')).toBeInTheDocument();
-    });
-  });
-
-  it('should display camera CAM-003 in maintenance', async () => {
-    render(
-      <BrowserRouter>
-        <Cameras />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('CAM-003')).toBeInTheDocument();
-      expect(screen.getByText('Server Room')).toBeInTheDocument();
-    });
-  });
-
-  it('should display camera CAM-004 offline', async () => {
-    render(
-      <BrowserRouter>
-        <Cameras />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('CAM-004')).toBeInTheDocument();
-      expect(screen.getByText('Emergency Exit')).toBeInTheDocument();
-    });
-  });
-
-  it('should display camera CAM-005', async () => {
-    render(
-      <BrowserRouter>
-        <Cameras />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('CAM-005')).toBeInTheDocument();
-      expect(screen.getByText('Reception')).toBeInTheDocument();
-    });
-  });
-
-  it('should display camera CAM-006', async () => {
-    render(
-      <BrowserRouter>
-        <Cameras />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('CAM-006')).toBeInTheDocument();
-      expect(screen.getByText('Conference Room A')).toBeInTheDocument();
-    });
-  });
-
-  it('should display status badges', async () => {
-    render(
-      <BrowserRouter>
-        <Cameras />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      const badges = screen.getAllByTestId('badge');
-      expect(badges.length).toBeGreaterThan(0);
-    });
-  });
-
-  it('should display camera quality specifications', async () => {
-    render(
-      <BrowserRouter>
-        <Cameras />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getAllByText('1080p').length).toBeGreaterThan(0);
-      expect(screen.getAllByText('4K').length).toBeGreaterThan(0);
-      expect(screen.getByText('720p')).toBeInTheDocument();
-    });
-  });
-
-  it('should display camera FPS specifications', async () => {
-    render(
-      <BrowserRouter>
-        <Cameras />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getAllByText('30 FPS').length).toBeGreaterThan(0);
-      expect(screen.getAllByText('60 FPS').length).toBeGreaterThan(0);
-    });
+    expect(screen.getByText('Add Camera')).toBeInTheDocument();
   });
 });
