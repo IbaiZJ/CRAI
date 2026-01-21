@@ -47,7 +47,7 @@ describe('AuthContext', () => {
 
   it('should load user from localStorage on mount with valid token', () => {
     const mockUser = {
-      email: 'test@example.com',
+      username: 'testuser',
       name: 'Test',
       surname: 'User',
       fullName: 'Test User',
@@ -69,12 +69,12 @@ describe('AuthContext', () => {
 
     // Token is valid and not expired, so user should be authenticated
     expect(screen.getByTestId('user-name')).toHaveTextContent('Test User');
-    expect(screen.getByTestId('user-email')).toHaveTextContent('test@example.com');
+    expect(screen.getByTestId('user-username')).toHaveTextContent('testuser');
   });
 
   it('should keep user when token is expired since token is not validated', () => {
     const mockUser = {
-      email: 'test@example.com',
+      username: 'testuser',
       name: 'Test',
       surname: 'User',
       fullName: 'Test User',
@@ -96,12 +96,12 @@ describe('AuthContext', () => {
 
     // Provider simply parses stored user, so user remains authenticated
     expect(screen.getByTestId('user-name')).toHaveTextContent('Test User');
-    expect(screen.getByTestId('user-email')).toHaveTextContent('test@example.com');
+    expect(screen.getByTestId('user-username')).toHaveTextContent('testuser');
   });
 
   it('should keep user when token cannot be decoded (no validation is performed)', () => {
     const mockUser = {
-      email: 'test@example.com',
+      username: 'testuser',
       name: 'Test',
       surname: 'User',
       fullName: 'Test User',
@@ -120,7 +120,7 @@ describe('AuthContext', () => {
     );
 
     expect(screen.getByTestId('user-name')).toHaveTextContent('Test User');
-    expect(screen.getByTestId('user-email')).toHaveTextContent('test@example.com');
+    expect(screen.getByTestId('user-username')).toHaveTextContent('testuser');
   });
 
   it('should login with valid credential', () => {
@@ -191,8 +191,7 @@ describe('AuthContext - Login and Logout actions', () => {
       </BrowserRouter>
     );
 
-    // loading is not rendered, default unauthenticated state is shown
-    expect(screen.getByTestId('not-authenticated')).toBeInTheDocument();
+    expect(screen.getByTestId('loading-state')).toHaveTextContent('not-loading');
   });
 
   it('should have login button available', () => {
