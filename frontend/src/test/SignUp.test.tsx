@@ -119,7 +119,7 @@ describe('SignUp Page', () => {
 
     expect(screen.getByTestId('input-firstName')).toBeInTheDocument();
     expect(screen.getByTestId('input-lastName')).toBeInTheDocument();
-    expect(screen.getByTestId('input-email')).toBeInTheDocument();
+    expect(screen.getByTestId('input-username')).toBeInTheDocument();
     expect(screen.getByTestId('input-password')).toBeInTheDocument();
     expect(screen.getByTestId('input-confirmPassword')).toBeInTheDocument();
   });
@@ -194,10 +194,10 @@ describe('SignUp Page', () => {
       </BrowserRouter>
     );
 
-    const input = screen.getByTestId('input-email');
-    await user.type(input, 'john@example.com');
+    const input = screen.getByTestId('input-username');
+    await user.type(input, 'johndoe');
 
-    expect(input).toHaveValue('john@example.com');
+    expect(input).toHaveValue('johndoe');
   });
 
   it('should update password input value', async () => {
@@ -273,7 +273,7 @@ describe('SignUp Page', () => {
     await user.type(screen.getByTestId('input-lastName'), 'Doe');
     await user.click(screen.getByTestId('submit-button'));
 
-    expect(screen.getByText('Email is required')).toBeInTheDocument();
+    expect(screen.getByText('Username is required')).toBeInTheDocument();
   });
 
   it('should have email input for validation', () => {
@@ -283,10 +283,10 @@ describe('SignUp Page', () => {
       </BrowserRouter>
     );
 
-    // Email input is present and can be typed into
-    const emailInput = screen.getByTestId('input-email');
-    expect(emailInput).toBeInTheDocument();
-    expect(emailInput).toHaveAttribute('type', 'email');
+    // Username input is present and can be typed into
+    const usernameInput = screen.getByTestId('input-username');
+    expect(usernameInput).toBeInTheDocument();
+    expect(usernameInput).toHaveAttribute('type', 'text');
   });
 
   it('should show password error when empty on submit', async () => {
@@ -300,7 +300,7 @@ describe('SignUp Page', () => {
 
     await user.type(screen.getByTestId('input-firstName'), 'John');
     await user.type(screen.getByTestId('input-lastName'), 'Doe');
-    await user.type(screen.getByTestId('input-email'), 'john@example.com');
+    await user.type(screen.getByTestId('input-username'), 'johndoe');
     await user.click(screen.getByTestId('submit-button'));
 
     expect(screen.getByText('Password is required')).toBeInTheDocument();
@@ -317,7 +317,7 @@ describe('SignUp Page', () => {
 
     await user.type(screen.getByTestId('input-firstName'), 'John');
     await user.type(screen.getByTestId('input-lastName'), 'Doe');
-    await user.type(screen.getByTestId('input-email'), 'john@example.com');
+    await user.type(screen.getByTestId('input-username'), 'johndoe');
     await user.type(screen.getByTestId('input-password'), '12345');
     await user.click(screen.getByTestId('submit-button'));
 
@@ -335,7 +335,7 @@ describe('SignUp Page', () => {
 
     await user.type(screen.getByTestId('input-firstName'), 'John');
     await user.type(screen.getByTestId('input-lastName'), 'Doe');
-    await user.type(screen.getByTestId('input-email'), 'john@example.com');
+    await user.type(screen.getByTestId('input-username'), 'johndoe');
     await user.type(screen.getByTestId('input-password'), 'password123');
     await user.click(screen.getByTestId('submit-button'));
 
@@ -353,7 +353,7 @@ describe('SignUp Page', () => {
 
     await user.type(screen.getByTestId('input-firstName'), 'John');
     await user.type(screen.getByTestId('input-lastName'), 'Doe');
-    await user.type(screen.getByTestId('input-email'), 'john@example.com');
+    await user.type(screen.getByTestId('input-username'), 'johndoe');
     await user.type(screen.getByTestId('input-password'), 'password123');
     await user.type(screen.getByTestId('input-confirmPassword'), 'differentpassword');
     await user.click(screen.getByTestId('submit-button'));
@@ -386,7 +386,7 @@ describe('SignUp Page', () => {
 
     await user.type(screen.getByTestId('input-firstName'), 'John');
     await user.type(screen.getByTestId('input-lastName'), 'Doe');
-    await user.type(screen.getByTestId('input-email'), 'john@example.com');
+    await user.type(screen.getByTestId('input-username'), 'johndoe');
     await user.type(screen.getByTestId('input-password'), 'password123');
     await user.type(screen.getByTestId('input-confirmPassword'), 'password123');
     await user.click(screen.getByTestId('submit-button'));
@@ -411,7 +411,7 @@ describe('SignUp Page', () => {
 
     await user.type(screen.getByTestId('input-firstName'), 'John');
     await user.type(screen.getByTestId('input-lastName'), 'Doe');
-    await user.type(screen.getByTestId('input-email'), 'john@example.com');
+    await user.type(screen.getByTestId('input-username'), 'johndoe');
     await user.type(screen.getByTestId('input-password'), 'password123');
     await user.type(screen.getByTestId('input-confirmPassword'), 'password123');
     await user.click(screen.getByTestId('submit-button'));
