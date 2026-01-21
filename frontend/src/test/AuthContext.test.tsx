@@ -5,26 +5,20 @@ import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 
 // Helper component to test the hook
 function TestComponent() {
-  const { user, isAuthenticated, logout, login, loading } = useAuth();
+  const { user, isAuthenticated, logout, login } = useAuth();
   
   return (
     <div>
-      <div data-testid="loading-state">{loading ? 'loading' : 'not-loading'}</div>
       {isAuthenticated ? (
         <>
           <div data-testid="user-name">{user?.fullName}</div>
-          <div data-testid="user-username">{user?.username}</div>
+          <div data-testid="user-email">{user?.email}</div>
           <button onClick={logout} data-testid="logout-btn">Logout</button>
         </>
       ) : (
         <div data-testid="not-authenticated">Not Authenticated</div>
       )}
-      <button 
-        onClick={() => login('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5ld0BleGFtcGxlLmNvbSIsIm5hbWUiOiJOZXcgVXNlciIsInN1YiI6IjEyMzQ1NiIsImV4cCI6OTk5OTk5OTk5OSwiaWF0IjoxNzAwMDAwMDAwfQ.test')}
-        data-testid="login-btn"
-      >
-        Login
-      </button>
+      <button data-testid="login-btn">Login</button>
     </div>
   );
 }

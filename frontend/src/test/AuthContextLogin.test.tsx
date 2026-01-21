@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach, type Mock } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
@@ -11,7 +11,7 @@ vi.mock('@/lib/api', () => ({
   },
 }));
 
-const loginMock = authApi.login as unknown as vi.Mock;
+const loginMock = authApi.login as unknown as Mock;
 
 describe('AuthContext - Login function', () => {
   beforeEach(() => {
