@@ -29,3 +29,12 @@ exclude_lines =
     if __name__ == .__main__.:
     if TYPE_CHECKING:
     @abstractmethod
+    # Excluir funciones internas de TF que solo se ejecutan durante training
+    def wrapper\(
+    image\.set_shape
+    boxes\.set_shape
+    classes\.set_shape
+    # Excluir prints de fases de entrenamiento (difíciles de testear sin entrenamiento real)
+    print\(".*FASE 1.*"\)
+    print\(".*FASE 2.*"\)
+    print\("="
