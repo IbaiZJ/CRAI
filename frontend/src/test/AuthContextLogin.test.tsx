@@ -97,10 +97,11 @@ describe('AuthContext - Login function', () => {
       </BrowserRouter>
     );
 
-    await waitFor(async () => {
-      if (loginFn) {
-        await loginFn('user', 'bad-password');
-      }
+    if (loginFn) {
+      await loginFn('user', 'bad-password');
+    }
+
+    await waitFor(() => {
       expect(screen.getByTestId('authenticated')).toHaveTextContent('false');
     });
     consoleSpy.mockRestore();

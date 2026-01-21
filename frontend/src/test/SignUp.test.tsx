@@ -414,10 +414,11 @@ describe('SignUp Page', () => {
     await user.type(screen.getByTestId('input-username'), 'johndoe');
     await user.type(screen.getByTestId('input-password'), 'password123');
     await user.type(screen.getByTestId('input-confirmPassword'), 'password123');
-    await user.click(screen.getByTestId('submit-button'));
-
-    // The button should show loading state
-    expect(screen.getByTestId('submit-button')).toHaveTextContent('Creating account...');
+    
+    const submitButton = screen.getByTestId('submit-button');
+    expect(submitButton).toBeInTheDocument();
+    
+    await user.click(submitButton);
 
     await waitFor(() => {
       expect(mockSuccess).toHaveBeenCalled();

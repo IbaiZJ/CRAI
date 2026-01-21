@@ -18,7 +18,7 @@ export default function SignUp() {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    email: "",
+    username: "",
     password: "",
     confirmPassword: "",
   });
@@ -46,10 +46,8 @@ export default function SignUp() {
       newErrors.lastName = "Last name is required";
     }
 
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
+    if (!formData.username.trim()) {
+      newErrors.username = "Username is required";
     }
 
     if (!formData.password) {
@@ -152,18 +150,18 @@ export default function SignUp() {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-medium">Email</label>
+                <label htmlFor="username" className="text-sm font-medium">Username</label>
                 <Input
-                  id="email"
-                  type="email"
-                  name="email"
-                  placeholder="john@example.com"
-                  value={formData.email}
+                  id="username"
+                  type="text"
+                  name="username"
+                  placeholder="Enter your username"
+                  value={formData.username}
                   onChange={handleChange}
-                  className={errors.email ? "border-red-500" : ""}
+                  className={errors.username ? "border-red-500" : ""}
                 />
-                {errors.email && (
-                  <p className="text-xs text-red-500">{errors.email}</p>
+                {errors.username && (
+                  <p className="text-xs text-red-500">{errors.username}</p>
                 )}
               </div>
 
