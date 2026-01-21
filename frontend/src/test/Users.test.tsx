@@ -72,6 +72,6 @@ describe('Users Page', () => {
       </BrowserRouter>
     );
 
-    expect(document.title).toBe('CRAI - Users');
+    expect(document.title).toBe('CRAI - Users Management');
   });
 });
