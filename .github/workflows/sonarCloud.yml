@@ -20,12 +20,12 @@ jobs:
         with:
           python-version: "3.13"
           cache: "pip"
-          cache-dependency-path: ai/requirements.txt
+          cache-dependency-path: ai/src/requirements.txt
       - name: Install AI Dependencies
         working-directory: ./ai
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r src/requirements.txt
       - name: Run AI Tests with Coverage
         working-directory: ./ai
         run: |
