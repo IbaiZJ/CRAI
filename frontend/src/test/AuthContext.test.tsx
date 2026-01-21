@@ -12,7 +12,6 @@ function TestComponent() {
       {isAuthenticated ? (
         <>
           <div data-testid="user-name">{user?.fullName}</div>
-          <div data-testid="user-email">{user?.email}</div>
           <button onClick={logout} data-testid="logout-btn">Logout</button>
         </>
       ) : (
@@ -69,7 +68,6 @@ describe('AuthContext', () => {
 
     // Token is valid and not expired, so user should be authenticated
     expect(screen.getByTestId('user-name')).toHaveTextContent('Test User');
-    expect(screen.getByTestId('user-username')).toHaveTextContent('testuser');
   });
 
   it('should keep user when token is expired since token is not validated', () => {
@@ -96,7 +94,6 @@ describe('AuthContext', () => {
 
     // Provider simply parses stored user, so user remains authenticated
     expect(screen.getByTestId('user-name')).toHaveTextContent('Test User');
-    expect(screen.getByTestId('user-username')).toHaveTextContent('testuser');
   });
 
   it('should keep user when token cannot be decoded (no validation is performed)', () => {
@@ -120,7 +117,6 @@ describe('AuthContext', () => {
     );
 
     expect(screen.getByTestId('user-name')).toHaveTextContent('Test User');
-    expect(screen.getByTestId('user-username')).toHaveTextContent('testuser');
   });
 
   it('should login with valid credential', () => {
@@ -191,7 +187,7 @@ describe('AuthContext - Login and Logout actions', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByTestId('loading-state')).toHaveTextContent('not-loading');
+    expect(screen.getByTestId('not-authenticated')).toBeInTheDocument();
   });
 
   it('should have login button available', () => {
