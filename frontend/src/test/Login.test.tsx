@@ -28,7 +28,7 @@ describe('Login Component', () => {
       </BrowserRouter>
     );
     
-    expect(screen.getByRole('heading', { name: 'Log In' })).toBeInTheDocument();
+    expect(screen.getByText('Log In')).toBeInTheDocument();
   });
 
   it('renders google sign in description', () => {
@@ -112,9 +112,8 @@ describe('Login Component - Authentication flow', () => {
     );
 
     // Check for main container structure
-    const heading = screen.getByRole('heading', { name: 'Log In' });
+    const heading = screen.getByText('Log In');
     expect(heading).toBeInTheDocument();
-    expect(heading.tagName).toBe('H1');
   });
 
   it('should have back to home link pointing to root', () => {

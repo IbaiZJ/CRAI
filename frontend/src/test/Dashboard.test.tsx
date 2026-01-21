@@ -86,7 +86,7 @@ describe('Dashboard Page', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByTestId('split-text')).toHaveTextContent('Hello, Test User!');
+    expect(screen.getByText('Hello, Test User!')).toBeInTheDocument();
   });
 
   it('should render all chart components', () => {

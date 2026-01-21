@@ -11,10 +11,13 @@ vi.mock('@/lib/api', () => ({
   },
 }));
 
+const loginMock = authApi.login as unknown as vi.Mock;
+
 describe('AuthContext - Login function', () => {
   beforeEach(() => {
     localStorage.clear();
     vi.clearAllMocks();
+    loginMock.mockReset();
   });
 
   afterEach(() => {
@@ -22,7 +25,7 @@ describe('AuthContext - Login function', () => {
   });
 
   it('should create user on successful login', async () => {
-    (authApi.login as ReturnType<typeof vi.fn>).mockResolvedValue({
+    loginMock.mockResolvedValue({
       success: true,
       token: 'token-123',
       user: {
@@ -70,7 +73,7 @@ describe('AuthContext - Login function', () => {
   });
 
   it('should handle failed login gracefully', async () => {
-    (authApi.login as ReturnType<typeof vi.fn>).mockResolvedValue({ success: false, error: 'Invalid username or password' });
+    loginMock.mockResolvedValue({ success: false, error: 'Invalid username or password' });
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     
     let loginFn: any = null;
@@ -103,7 +106,7 @@ describe('AuthContext - Login function', () => {
   });
 
   it('should logout and clear localStorage', async () => {
-    (authApi.login as ReturnType<typeof vi.fn>).mockResolvedValue({
+    loginMock.mockResolvedValue({
       success: true,
       token: 'token-logout',
       user: {
