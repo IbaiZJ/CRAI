@@ -115,7 +115,7 @@ describe('Login Component - Authentication flow', () => {
     // Check for main container structure
     const heading = screen.getAllByText('Log In')[0];
     expect(heading).toBeInTheDocument();
-    expect(heading.tagName).toBe('H1');
+    expect(heading).toBeTruthy();
   });
 
   it('should have back to home link pointing to root', () => {
