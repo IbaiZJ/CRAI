@@ -50,6 +50,8 @@ __pycache__/
 .coverage
 .coverage.*
 htmlcov/
+coverage/
+**/coverage/**
 .tox/
 .nox/
 .hypothesis/
@@ -57,6 +59,8 @@ htmlcov/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+**/coverage.xml
+**/coverage_*.xml
 
 # ===========================
 # Node.js
@@ -129,4 +133,7 @@ plates_itv.csv
 # Datasets
 /data/UA_DETRAC
 **/UA-DETRAC-DATASET-10K-2/
-**ai/src/captures/
+**/captures/
+
+
+.postman/

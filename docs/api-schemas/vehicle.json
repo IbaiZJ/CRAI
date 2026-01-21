@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "vehicle.json",
+  "$defs": {
+    "Vehicle": {
+      "type": "object",
+      "properties": {
+        "plate": { "type": "string" },
+        "badge": { "type": ["string", "null"] },
+        "userId": { "type": ["string", "null"] },
+        "vehicleTypeId": { "type": ["integer", "null"] }
+      },
+      "required": ["plate"]
+    }
+  }
+}

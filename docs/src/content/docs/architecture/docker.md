@@ -3,51 +3,68 @@ title: Docker Setup
 description: Docker and Docker Compose configuration for CRAI
 ---
 
-CRAI is fully containerized using Docker Compose, orchestrating 5 microservices that work together to provide ANPR, badge lookup, automation, and documentation.
+CRAI is fully containerized using Docker Compose, orchestrating 8 services that work together to provide ANPR, badge lookup, ITV dates, vehicle simulation, automation, and documentation.
 
 ## Docker Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                  Docker Compose (app-network)                   │
-├──────────────┬──────────────┬─────────────┬──────────┬─────────┤
-│   Frontend   │  AI Service  │  Node-RED   │  ebAPI   │  Docs   │
-│   Container  │   Container  │  Container  │ Container│Container│
-│              │              │             │          │         │
-│   Node:20    │ Python:3.13  │ Node-RED    │Python:   │Node:20  │
-│   Alpine     │      +       │   Latest    │3.11-slim │Alpine   │
-│              │   OpenCV     │             │          │         │
-│   Vite Dev   │   FastAPI    │  Workflows  │ FastAPI  │ Astro   │
-│   Port 6901  │   Port 6902  │  Port 6903  │Port 6904 │Port 6910│
-└──────────────┴──────────────┴─────────────┴──────────┴─────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      Docker Compose (app-network)                           │
+├─────────┬──────────┬──────────┬─────────┬─────────┬─────────┬──────┬───────┤
+│  MySQL  │ Frontend │    AI    │Node-RED │  ebAPI  │ itvAPI  │  OS  │ Docs  │
+│         │          │          │         │         │         │      │       │
+│ MySQL:8 │ Node:20  │Python:3+ │Node-RED │Python:  │Python:  │Java  │Node:20│
+│         │ Alpine   │ YOLOv8   │ Latest  │3.11-slim│3.11-slim│ 17   │Alpine │
+│         │          │ OpenCV   │         │         │         │Spring│       │
+│         │  Vite    │ EasyOCR  │ Flows   │ FastAPI │ FastAPI │ Boot │ Astro │
+│  6900   │  6901    │  6902    │  6903   │  6904   │  6905   │ 6906 │ 6910  │
+└─────────┴──────────┴──────────┴─────────┴─────────┴─────────┴──────┴───────┘
 ```
 
-## Current docker-compose.yml
+## docker-compose.yml
 
 ```yaml
 services:
-  # Frontend service
+  # MySQL Database
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: crai
+      MYSQL_USER: crai_user
+      MYSQL_PASSWORD: crai_pass
+    ports:
+      - "6900:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db/createCraiDB.sql:/docker-entrypoint-initdb.d/01_createCraiDB.sql:ro
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # Frontend Service (React + Vite)
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: frontend_app
+    container_name: frontend
     ports:
       - "6901:5173"
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    depends_on:
-      - node-red
+    env_file:
+      - ./frontend/.env
     networks:
       - app-network
 
-  # AI service (ANPR)
+  # AI Service (ANPR with YOLOv8 + EasyOCR)
   ai:
     build:
       context: ./ai
       dockerfile: Dockerfile
-    container_name: ai_service
+    container_name: ai
     volumes:
       - ./ai:/app
     ports:
@@ -59,28 +76,26 @@ services:
       - app-network
     restart: unless-stopped
 
-  # Node-RED service (Automation)
+  # Node-RED (Workflow Automation)
   node-red:
     image: nodered/node-red:latest
-    container_name: node_red_service
+    container_name: backend
     ports:
       - "6903:1880"
     volumes:
       - ./backend/node_red_data:/data
     environment:
       - TZ=Europe/Madrid
-    depends_on:
-      - ebapi
     networks:
       - app-network
     restart: unless-stopped
 
-  # Environmental Badge API service
+  # ebAPI (Environmental Badge Lookup)
   ebapi:
     build:
       context: ./ebAPI
       dockerfile: Dockerfile
-    container_name: ebapi_service
+    container_name: ebAPI
     ports:
       - "6904:8000"
     volumes:
@@ -91,13 +106,284 @@ services:
       - app-network
     restart: unless-stopped
 
-  # Documentation service
+  # itvAPI (ITV Date Lookup)
+  itvapi:
+    build:
+      context: ./itvAPI
+      dockerfile: Dockerfile
+    container_name: itvAPI
+    ports:
+      - "6905:8000"
+    volumes:
+      - ./itvAPI:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # OS Service (Spring Boot Simulation)
+  os:
+    build:
+      context: ./os
+      dockerfile: Dockerfile
+    container_name: os
+    ports:
+      - "6906:8080"
+      - "9010:9010"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # Documentation (Astro Starlight)
   docs:
     build:
       context: ./docs
       dockerfile: Dockerfile
-    container_name: docs_service
+    container_name: docs
     ports:
+      - "6910:4321"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
+```
+
+## Service Ports Reference
+
+| Service | Container Port | Host Port | Description |
+|---------|---------------|-----------|-------------|
+| MySQL | 3306 | 6900 | Database |
+| Frontend | 5173 | 6901 | React dashboard |
+| AI | 8000 | 6902 | ANPR service |
+| Node-RED | 1880 | 6903 | Automation flows |
+| ebAPI | 8000 | 6904 | Environmental badge |
+| itvAPI | 8000 | 6905 | ITV dates |
+| OS | 8080 | 6906 | Simulation |
+| Docs | 4321 | 6910 | Documentation |
+
+## Dockerfiles
+
+### Frontend Dockerfile
+```dockerfile
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+EXPOSE 5173
+CMD ["npm", "run", "dev", "--", "--host"]
+```
+
+### AI Service Dockerfile
+```dockerfile
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies for OpenCV
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+EXPOSE 8000
+CMD ["python", "src/main.py"]
+```
+
+### ebAPI/itvAPI Dockerfile
+```dockerfile
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+EXPOSE 8000
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+```
+
+### OS Service Dockerfile
+```dockerfile
+FROM eclipse-temurin:17-jdk-alpine
+
+WORKDIR /app
+
+COPY target/*.jar app.jar
+
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+### Docs Dockerfile
+```dockerfile
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+EXPOSE 4321
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+```
+
+## Commands
+
+### Start All Services
+```bash
+# Start in detached mode
+docker-compose up -d
+
+# Start with build
+docker-compose up -d --build
+
+# View logs
+docker-compose logs -f
+
+# View specific service logs
+docker-compose logs -f ai
+```
+
+### Stop Services
+```bash
+# Stop all services
+docker-compose down
+
+# Stop and remove volumes
+docker-compose down -v
+```
+
+### Individual Service Commands
+```bash
+# Rebuild specific service
+docker-compose build ai
+
+# Restart specific service
+docker-compose restart ai
+
+# View running containers
+docker-compose ps
+
+# Execute command in container
+docker-compose exec ai bash
+docker-compose exec mysql mysql -u root -p
+```
+
+## Networking
+
+All services communicate through the `app-network` bridge network:
+
+- Services can reference each other by container name
+- Example: AI service sends plates to `http://backend:1880/ai/carPlate`
+- Frontend can call APIs via `http://localhost:6904` from browser
+
+### Service Communication Flow
+```
+Frontend (6901) ─────────► Node-RED (6903) ─────────► AI (6902)
+                                │                         │
+                                ├──────► ebAPI (6904)     │
+                                │                         │
+                                ├──────► itvAPI (6905)    │
+                                │                         │
+                                ├──────► OS (6906)        │
+                                │                         │
+                                └──────► MySQL (6900) ◄───┘
+```
+
+## Volume Mounts
+
+### Development Volumes
+For hot-reloading during development:
+```yaml
+volumes:
+  - ./frontend:/app          # Source code
+  - /app/node_modules        # Prevent overwrite
+```
+
+### Persistent Volumes
+For data persistence:
+```yaml
+volumes:
+  - mysql_data:/var/lib/mysql              # Database
+  - ./backend/node_red_data:/data          # Node-RED flows
+```
+
+## Environment Variables
+
+### Frontend
+```bash
+# frontend/.env
+VITE_API_URL=http://localhost:6903
+VITE_GOOGLE_CLIENT_ID=your-google-client-id
+```
+
+### AI Service
+```bash
+# Set in docker-compose.yml
+PYTHONUNBUFFERED=1
+ENV=local
+```
+
+### MySQL
+```bash
+MYSQL_ROOT_PASSWORD=root
+MYSQL_DATABASE=crai
+MYSQL_USER=crai_user
+MYSQL_PASSWORD=crai_pass
+```
+
+## Production Considerations
+
+### 1. Use Production Dockerfiles
+Create separate `Dockerfile.prod` files with:
+- Multi-stage builds
+- Production dependencies only
+- Optimized images
+
+### 2. Environment Variables
+- Use secrets management
+- Don't commit `.env` files
+- Use Docker secrets or Kubernetes secrets
+
+### 3. Health Checks
+```yaml
+healthcheck:
+  test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+  interval: 30s
+  timeout: 10s
+  retries: 3
+```
+
+### 4. Resource Limits
+```yaml
+deploy:
+  resources:
+    limits:
+      cpus: '0.5'
+      memory: 512M
+```
       - "6910:4321"
     networks:
       - app-network

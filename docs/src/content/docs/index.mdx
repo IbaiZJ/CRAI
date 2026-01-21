@@ -1,9 +1,9 @@
 ---
 title: CRAI - Car Registration AI System
-description: Complete documentation for the CRAI Automatic Number Plate Recognition and Environmental Badge system
+description: Complete documentation for the CRAI Automatic Number Plate Recognition and Vehicle Management Platform
 template: splash
 hero:
-  tagline: AI-powered license plate recognition and environmental badge lookup system built with FastAPI, React, Node-RED, and modern web technologies
+  tagline: AI-powered license plate recognition, vehicle management, and ITV inspection system built with FastAPI, Spring Boot, React, Node-RED, and modern web technologies
   image:
     file: ../../assets/houston.webp
   actions:
@@ -20,60 +20,78 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 
 ## What is CRAI?
 
-CRAI (Car Registration AI) is a comprehensive microservices platform that combines automatic number plate recognition (ANPR) with Spanish environmental badge lookup, automation workflows, and real-time data processing capabilities.
+CRAI (Car Registration AI) is a comprehensive microservices platform that combines automatic number plate recognition (ANPR) with Spanish environmental badge lookup, ITV inspection dates, vehicle simulation, automation workflows, and real-time data processing capabilities.
 
 <CardGrid stagger>
   <Card title="🤖 AI-Powered ANPR" icon="seti:python">
-    FastAPI-based REST API with Python for image processing and license plate recognition using OpenCV and computer vision.
+    Real-time video processing with YOLOv8 vehicle detection, custom plate detection, and EasyOCR for Spanish license plate recognition.
   </Card>
   <Card title="🏷️ Environmental Badge Lookup" icon="seti:python">
-    Dedicated FastAPI microservice for Spanish environmental badge validation and lookup from comprehensive dataset.
+    Dedicated FastAPI microservice for Spanish environmental badge validation and lookup from comprehensive 4M+ vehicle dataset.
+  </Card>
+  <Card title="📋 ITV Date Lookup" icon="seti:python">
+    FastAPI service for Spanish vehicle technical inspection (ITV) date retrieval and validation.
+  </Card>
+  <Card title="🚗 Vehicle Simulation" icon="seti:java">
+    Spring Boot service for vehicle traffic simulation, camera management, and police control operations.
   </Card>
   <Card title="🔄 Automation Engine" icon="seti:node">
-    Node-RED integration for workflow automation, data processing, and system orchestration.
+    Node-RED integration for workflow automation, data orchestration, and system coordination.
   </Card>
   <Card title="🎨 Modern Frontend" icon="seti:react">
-    React with TypeScript, Vite, and TailwindCSS for a responsive and beautiful user interface with Firebase authentication.
+    React 19 with TypeScript, Vite 7, TailwindCSS 4, and Google OAuth for a responsive dashboard interface.
   </Card>
   <Card title="🐳 Microservices Architecture" icon="seti:docker">
-    Fully containerized 5-service architecture ready for development and production deployments.
+    Fully containerized 8-service architecture with MySQL database, ready for development and production deployments.
   </Card>
   <Card title="🧪 Comprehensive Testing" icon="approve-check">
-    Complete test suite with pytest for backend and Vitest for frontend ensuring code quality.
+    Complete test suite with pytest for Python services, JUnit for Java, and Vitest for frontend with CI/CD integration.
   </Card>
 </CardGrid>
 
 ## Key Features
 
-- **Real-time ANPR**: Process images and video streams for license plate recognition
-- **Environmental Badge Lookup**: Spanish vehicle environmental classification (C, ECO, B, 0) with 4M+ plates
+- **Real-time ANPR**: Process live video streams with YOLOv8 vehicle detection and custom license plate detection
+- **Multi-Model Detection**: Support for YOLO + OCR and custom SSD detectors
+- **Environmental Badge Lookup**: Spanish vehicle environmental classification (0, ECO, C, B, n) with 4M+ plates
+- **ITV Date Validation**: Spanish vehicle technical inspection date retrieval
 - **Spanish Plate Validation**: Automatic format validation for Spanish license plates (NNNNLLL)
+- **Vehicle Simulation**: Traffic simulation with camera and police control management
 - **Workflow Automation**: Node-RED integration for custom automation scenarios
-- **Dataset Management**: Auto-extraction and optimization tools for environmental badge data
-- **RESTful APIs**: Well-documented API endpoints for easy integration
-- **Modern UI**: Intuitive interface with Firebase authentication
+- **Modern Dashboard**: User management, statistics, cameras, and vehicle tracking
+- **MySQL Integration**: Persistent data storage with Google Cloud SQL support
+- **RESTful APIs**: Well-documented API endpoints with Swagger UI
 - **Scalable**: Microservices architecture designed to handle multiple concurrent requests
-- **Well-tested**: Comprehensive automated testing with CI/CD pipelines
+- **Well-tested**: Comprehensive automated testing with GitHub Actions CI/CD and SonarCloud analysis
 
 ## System Architecture
 
-CRAI consists of 5 independent microservices:
+CRAI consists of 8 independent services:
 
-- **Frontend** (Port 6901): React + TypeScript + TailwindCSS interface
-- **AI Service** (Port 6902): Python FastAPI for ANPR processing
-- **Node-RED** (Port 6903): Workflow automation and orchestration
-- **ebAPI Service** (Port 6904): Python FastAPI for environmental badge lookup
-- **Documentation** (Port 6910): Astro Starlight documentation site
+| Service | Port | Technology | Description |
+|---------|------|------------|-------------|
+| **MySQL** | 6900 | MySQL 8 | Persistent database storage |
+| **Frontend** | 6901 | React + TypeScript + TailwindCSS | Web dashboard interface |
+| **AI Service** | 6902 | Python + YOLOv8 + EasyOCR | Real-time ANPR processing |
+| **Node-RED** | 6903 | Node-RED | Workflow automation |
+| **ebAPI** | 6904 | FastAPI + Python | Environmental badge lookup |
+| **itvAPI** | 6905 | FastAPI + Python | ITV date lookup |
+| **OS Service** | 6906 | Spring Boot + Java 17 | Vehicle simulation |
+| **Documentation** | 6910 | Astro Starlight | Project documentation |
 
 ## Technology Stack
 
 ### Backend Services
-- **FastAPI**: Modern, fast web framework for building APIs
-- **Python 3.11+**: Latest Python features and performance
-- **OpenCV**: Computer vision library for ANPR image processing
-- **pandas**: Data manipulation for environmental badge dataset
-- **py7zr**: Dataset extraction and compression handling
-- **pytest**: Backend testing framework with excellent coverage
+- **FastAPI**: Modern, fast Python web framework for building APIs
+- **Spring Boot 3.2**: Enterprise Java framework for OS service
+- **Python 3.11+**: AI processing, badge and ITV lookup services
+- **Java 17**: Vehicle simulation service
+- **YOLOv8**: Vehicle detection with Ultralytics
+- **EasyOCR**: License plate character recognition
+- **OpenCV**: Computer vision for image processing
+- **TensorFlow/Keras**: Custom SSD vehicle detector
+- **pandas**: Data manipulation for datasets
+- **pytest & JUnit**: Backend testing frameworks
 
 ### Frontend
 - **React 19**: Latest React with modern features and hooks
@@ -81,13 +99,17 @@ CRAI consists of 5 independent microservices:
 - **Vite 7**: Lightning-fast build tool and dev server
 - **TailwindCSS 4**: Utility-first CSS framework
 - **React Router 7**: Client-side routing
-- **Firebase**: Authentication and user management
+- **Google OAuth**: Authentication with @react-oauth/google
+- **Radix UI**: Accessible component primitives
+- **Recharts**: Data visualization
 - **Vitest 4**: Frontend testing framework with React Testing Library
 
-### Automation & Infrastructure
+### Database & Infrastructure
+- **MySQL 8**: Relational database with Cloud SQL support
 - **Node-RED**: Visual workflow automation
 - **Docker Compose**: Multi-container orchestration
 - **GitHub Actions**: Automated CI/CD pipelines
+- **SonarCloud**: Code quality analysis
 - **Astro 5 + Starlight**: Documentation generation
 
 ## Quick Links
@@ -97,7 +119,7 @@ CRAI consists of 5 independent microservices:
     [Get started](/getting-started/installation/) with CRAI in minutes
   </Card>
   <Card title="Architecture Overview" icon="seti:config">
-    [Learn about](/architecture/overview/) the 5-service microservices architecture
+    [Learn about](/architecture/overview/) the 8-service microservices architecture
   </Card>
   <Card title="API Reference" icon="open-book">
     [Explore the APIs](/api/overview/) for ANPR and environmental badge lookup

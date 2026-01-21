@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "/camera",
+  "description": "Single camera operations",
+  "post": {
+    "description": "Create camera",
+    "request": {
+      "type": "object",
+      "properties": {
+        "location": { "type": "string" },
+        "ip": { "type": "string" },
+        "model": { "type": "string" }
+      },
+      "required": ["location"]
+    }
+  },
+  "put": {
+    "description": "Update camera",
+    "request": { "$ref": "#/post/request" }
+  },
+  "delete": {
+    "description": "Delete camera by id",
+    "request": { "type": "object", "properties": { "id": { "type": "integer" } }, "required": ["id"] }
+  }
+}

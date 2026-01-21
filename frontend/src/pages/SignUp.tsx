@@ -5,20 +5,20 @@ import { useNotifications } from "@/hooks/useNotifications";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 export default function SignUp() {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, register } = useAuth();
   const notifications = useNotifications();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    email: "",
+    username: "",
     password: "",
     confirmPassword: "",
   });
@@ -46,10 +46,8 @@ export default function SignUp() {
       newErrors.lastName = "Last name is required";
     }
 
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
+    if (!formData.username.trim()) {
+      newErrors.username = "Username is required";
     }
 
     if (!formData.password) {
@@ -89,20 +87,27 @@ export default function SignUp() {
       return;
     }
 
-    setLoading(true);
+    setIsSubmitting(true);
 
     try {
-      // TODO: Enviar datos al servidor para crear la cuenta
-      // Por ahora simulamos el registro
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const result = await register({
+        username: formData.username,
+        password: formData.password,
+        name: formData.firstName,
+        surname: formData.lastName,
+      });
 
-      notifications.success("Account created successfully!");
-      navigate("/login");
+      if (result.success) {
+        notifications.success("Account created successfully! Please log in.");
+        navigate("/login");
+      } else {
+        notifications.error(result.error || "Failed to create account");
+      }
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown error";
       notifications.error(`Failed to create account: ${message}`);
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -152,18 +157,18 @@ export default function SignUp() {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-medium">Email</label>
+                <label htmlFor="username" className="text-sm font-medium">Username</label>
                 <Input
-                  id="email"
-                  type="email"
-                  name="email"
-                  placeholder="john@example.com"
-                  value={formData.email}
+                  id="username"
+                  type="text"
+                  name="username"
+                  placeholder="Enter your username"
+                  value={formData.username}
                   onChange={handleChange}
-                  className={errors.email ? "border-red-500" : ""}
+                  className={errors.username ? "border-red-500" : ""}
                 />
-                {errors.email && (
-                  <p className="text-xs text-red-500">{errors.email}</p>
+                {errors.username && (
+                  <p className="text-xs text-red-500">{errors.username}</p>
                 )}
               </div>
 
@@ -225,8 +230,15 @@ export default function SignUp() {
                 )}
               </div>
 
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Creating account..." : "Sign Up"}
+              <Button type="submit" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Creating account...
+                  </>
+                ) : (
+                  "Sign Up"
+                )}
               </Button>
             </form>
 

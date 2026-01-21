@@ -298,8 +298,6 @@ class PlateReader:
         kernel = np.ones((2, 2), np.uint8)
         thresh = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
         
-        return thresh
-        
         # Reduce noise
         denoised = cv2.fastNlMeansDenoising(thresh, None, 10, 7, 21)
         

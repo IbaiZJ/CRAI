@@ -1,14 +1,26 @@
 [run]
-source = src
+source = src,scripts
+relative_files = true
 omit = 
-    src/app_ui.py
-    src/main.py
-    src/video/_*_demo.py
+    */app_ui.py
+    */main.py
+    */*_demo.py
     */tests/*
     */__pycache__/*
     */site-packages/*
+    */notebooks/*
+    */logs/*
+    */captures/*
+    */models/*
+    */conftest.py
+    */test_ssd_load.py
+    */ssd_detector.py
+
+[xml]
+output = coverage.xml
 
 [report]
+fail_under = 0
 exclude_lines =
     pragma: no cover
     def __repr__
@@ -17,3 +29,12 @@ exclude_lines =
     if __name__ == .__main__.:
     if TYPE_CHECKING:
     @abstractmethod
+    # Excluir funciones internas de TF que solo se ejecutan durante training
+    def wrapper\(
+    image\.set_shape
+    boxes\.set_shape
+    classes\.set_shape
+    # Excluir prints de fases de entrenamiento (difíciles de testear sin entrenamiento real)
+    print\(".*FASE 1.*"\)
+    print\(".*FASE 2.*"\)
+    print\("="

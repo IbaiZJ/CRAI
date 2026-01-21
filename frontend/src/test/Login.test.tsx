@@ -31,7 +31,7 @@ describe('Login Component', () => {
     expect(screen.getByRole('heading', { name: 'Log In' })).toBeInTheDocument();
   });
 
-  it('renders google sign in description', () => {
+  it('renders sign in description', () => {
     render(
       <BrowserRouter>
         <AuthProvider>
@@ -40,10 +40,10 @@ describe('Login Component', () => {
       </BrowserRouter>
     );
     
-    expect(screen.getByText('Sign in with your Google account to continue')).toBeInTheDocument();
+    expect(screen.getByText('Sign in with your email and password')).toBeInTheDocument();
   });
 
-  it('renders google login component', () => {
+  it('renders email and password inputs', () => {
     render(
       <BrowserRouter>
         <AuthProvider>
@@ -52,8 +52,8 @@ describe('Login Component', () => {
       </BrowserRouter>
     );
     
-    const container = screen.getByText('Log In').closest('div');
-    expect(container).toBeInTheDocument();
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
   });
 
   it('renders back to home link', () => {
@@ -90,8 +90,9 @@ describe('Login Component', () => {
     );
     
     expect(screen.getByRole('heading', { name: 'Log In' })).toBeInTheDocument();
-    expect(screen.getByText('Sign in with your Google account to continue')).toBeInTheDocument();
+    expect(screen.getByText('Sign in with your email and password')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Back to Home' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Log In' })).toBeInTheDocument();
   });
 });
 
@@ -114,7 +115,7 @@ describe('Login Component - Authentication flow', () => {
     // Check for main container structure
     const heading = screen.getByRole('heading', { name: 'Log In' });
     expect(heading).toBeInTheDocument();
-    expect(heading.tagName).toBe('H1');
+    expect(heading.tagName).toBe('H2');
   });
 
   it('should have back to home link pointing to root', () => {
@@ -140,7 +141,20 @@ describe('Login Component - Authentication flow', () => {
     );
 
     // The outer container should have centering classes
-    const description = screen.getByText('Sign in with your Google account to continue');
+    const description = screen.getByText('Sign in with your email and password');
     expect(description.closest('.text-center')).toBeInTheDocument();
+  });
+
+  it('should have sign up link', () => {
+    render(
+      <BrowserRouter>
+        <AuthProvider>
+          <Login />
+        </AuthProvider>
+      </BrowserRouter>
+    );
+
+    const signUpLink = screen.getByRole('link', { name: 'Sign up' });
+    expect(signUpLink).toHaveAttribute('href', '/signup');
   });
 });
