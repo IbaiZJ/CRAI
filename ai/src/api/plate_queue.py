@@ -2,8 +2,7 @@ import threading
 import queue
 import time
 import logging
-from typing import Dict, Any, Optional
-from datetime import datetime
+from typing import Dict, Any
 from api.request import APIRequest
 
 
@@ -73,28 +72,20 @@ class PlateQueue:
             else:
                 self.logger.info("Worker thread stopped successfully")
     
-    def add_plate(self, plate_text: str, confidence: float, vehicle_type: Optional[str] = None, 
-                  metadata: Optional[Dict[str, Any]] = None):
+    def add_plate(self, plate_text: str, camera_id: int):
         """
         Add a detected plate to the queue for sending.
         
         Args:
             plate_text: The license plate text
-            confidence: OCR confidence score (0-1)
-            vehicle_type: Type of vehicle (car, truck, etc.)
-            metadata: Additional metadata to include
+            camera_id: Camera identifier to send with the plate
         """
         plate_data = {
             'plate': plate_text,
-            'confidence': confidence,
-            'vehicle_type': vehicle_type,
-            'timestamp': datetime.now().isoformat(),
+            'cameraId': camera_id,
             'retries': 0
         }   
-        
-        if metadata:
-            plate_data['metadata'] = metadata
-        
+
         self.queue.put(plate_data)
         self.logger.debug(f"Plate added to queue: {plate_text}")
     
@@ -162,15 +153,8 @@ class PlateQueue:
             # Prepare payload (remove internal fields)
             payload = {
                 'plate': plate_data['plate'],
-                'confidence': plate_data['confidence'],
-                'timestamp': plate_data['timestamp']
+                'cameraId': plate_data['cameraId']
             }
-            
-            if plate_data.get('vehicle_type'):
-                payload['vehicle_type'] = plate_data['vehicle_type']
-            
-            if plate_data.get('metadata'):
-                payload['metadata'] = plate_data['metadata']
             
             # Send POST request
             response = self.api_client.post(

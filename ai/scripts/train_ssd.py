@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
+
 """
-🚀 SCRIPT DE ENTRENAMIENTO SSD - VERSIÓN CORREGIDA
+🚀 SSD TRAINING SCRIPT - ENGLISH COMMENTED VERSION
 ===================================================
 
-Este script entrena el modelo SSD con la configuración CORRECTA:
-- 1 clase (vehículo genérico)
-- Mínimo 100 epochs
-- Scales y aspect ratios optimizados para UA-DETRAC
-- Guardado compatible con ssd_detector.py
+This script trains the SSD model with the correct configuration:
+- 1 class (generic vehicle)
+- Minimum 100 epochs
+- Scales and aspect ratios optimized for UA-DETRAC
+- Model saving compatible with ssd_detector.py
 
-Uso:
+Usage:
     cd ai
     python scripts/train_ssd.py
 
-    # O con parámetros personalizados:
+    # Or with custom parameters:
     python scripts/train_ssd.py --epochs 150 --batch-size 8
 """
 
@@ -27,11 +28,11 @@ import cv2
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
-# Compatibilidad con futuras versiones de NumPy
+# Compatibility with future versions of NumPy
 if not hasattr(np, "object"):
     np.object = np.object_
 
-# Configurar TensorFlow antes de importar
+# Configure TensorFlow before importing
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 import tensorflow as tf
@@ -40,19 +41,19 @@ from tensorflow.keras.layers import Conv2D, Reshape, Concatenate, Input, Activat
 from tensorflow.keras.models import Model
 
 # =============================================================================
-# CONFIGURACIÓN CRÍTICA - NO CAMBIAR SIN RAZÓN
+# CRITICAL CONFIGURATION - DO NOT CHANGE WITHOUT REASON
 # =============================================================================
 
-# Tamaño de imagen (DEBE coincidir con ssd_detector.py)
+# Image size (MUST match ssd_detector.py)
 IMG_HEIGHT = 640
 IMG_WIDTH = 640
 IMG_SIZE = (IMG_HEIGHT, IMG_WIDTH)
 
-# Clases: 1 = vehículo genérico (agrupa bus, car, truck, van)
+# Classes: 1 = generic vehicle (groups bus, car, truck, van)
 NUM_CLASSES = 1
 NUM_ANCHORS = 4
 
-# Anchors optimizados para UA-DETRAC
+# Anchors optimized for UA-DETRAC
 FEATURE_MAP_SIZES = [
     (80, 80),   # stride 8
     (40, 40),   # stride 16
@@ -67,7 +68,7 @@ SCALES = [
 
 ASPECT_RATIOS = [1.0, 1.5, 2.0, 3.0]
 
-# Capas de features
+# Feature layers
 FEATURE_LAYER_NAMES = [
     'block_6_expand_relu',
     'block_13_expand_relu',
@@ -75,11 +76,17 @@ FEATURE_LAYER_NAMES = [
 ]
 
 # =============================================================================
-# FUNCIONES DE DATASET
+# DATASET FUNCTIONS
 # =============================================================================
 
 def load_image(image_path: str) -> tf.Tensor:
-    """Carga y preprocesa una imagen"""
+    """
+    Loads and preprocesses an image from a given path.
+    - Reads the image file
+    - Decodes JPEG
+    - Resizes to model input size
+    - Normalizes to [0, 1]
+    """
     image = tf.io.read_file(image_path)
     image = tf.image.decode_jpeg(image, channels=3)
     image = tf.image.resize(image, IMG_SIZE)
@@ -88,7 +95,11 @@ def load_image(image_path: str) -> tf.Tensor:
 
 
 def load_yolo_label(label_path: str) -> tuple:
-    """Carga labels YOLO - ignora class_id, todo es 'vehicle' (clase 0)"""
+    """
+    Loads YOLO-format labels from a file.
+    - Ignores original class_id, all are set to class 0 (vehicle)
+    - Returns bounding boxes and class array
+    """
     boxes = []
     
     with open(label_path, "r") as f:
@@ -96,19 +107,21 @@ def load_yolo_label(label_path: str) -> tuple:
             parts = line.strip().split()
             if len(parts) < 5:
                 continue
-            # Ignoramos class_id original, todo es clase 0 (vehicle)
+            # Ignore original class_id, everything is class 0 (vehicle)
             x, y, w, h = map(float, parts[1:5])
             boxes.append([x, y, w, h])
     
     boxes = np.array(boxes, dtype=np.float32).reshape(-1, 4)
-    # Todas las clases son 0 (vehicle)
+    # All classes are 0 (vehicle)
     classes = np.zeros(len(boxes), dtype=np.int32)
     
     return boxes, classes
 
 
 def load_sample(image_path: str, label_path: str):
-    """Carga un par imagen-label"""
+    """
+    Loads an image-label pair and returns tensors for model input.
+    """
     image = load_image(image_path)
     boxes, classes = load_yolo_label(label_path)
     
@@ -120,43 +133,44 @@ def load_sample(image_path: str, label_path: str):
 
 def augment_image_and_boxes(image, boxes):
     """
-    Data augmentation SIN transformaciones espaciales (no altera coordenadas de boxes):
-    - Brillo aleatorio
-    - Contraste aleatorio
-    - Saturación aleatorio
-    - Blur gaussiano
+    Data augmentation WITHOUT spatial transforms (does not alter box coordinates):
+    - Random brightness
+    - Random contrast
+    - Random saturation
+    - Gaussian blur (if implemented)
     """
     image = tf.cast(image, tf.float32)
     
-    # 1. Brillo aleatorio (±30%)
+    # 1. Random brightness (±30%)
     if tf.random.uniform([]) > 0.5:
         delta = tf.random.uniform([], -0.3, 0.3)
         image = tf.image.adjust_brightness(image, delta)
     
-    # 2. Contraste aleatorio (0.7-1.3x)
+    # 2. Random contrast (0.7-1.3x)
     if tf.random.uniform([]) > 0.5:
         factor = tf.random.uniform([], 0.7, 1.3)
         image = tf.image.adjust_contrast(image, factor)
     
-    # 3. Saturación aleatorio (0.7-1.3x)
+    # 3. Random saturation (0.7-1.3x)
     if tf.random.uniform([]) > 0.5:
         factor = tf.random.uniform([], 0.7, 1.3)
         image = tf.image.adjust_saturation(image, factor)
-    
- 
-    
-    # Clipping de imagen
+
+    # Image clipping
     image = tf.clip_by_value(image, 0.0, 1.0)
     
     return image, boxes
 
 
 def index_dataset(images_dir: str, labels_dir: str) -> list:
-    """Indexa el dataset"""
+    """
+    Indexes the dataset by matching images and label files.
+    Returns a list of (image_path, label_path) tuples.
+    """
     samples = []
     image_paths = sorted(glob(os.path.join(images_dir, "*.jpg")))
     
-    print(f"Encontradas {len(image_paths)} imágenes en {images_dir}")
+    print(f"Found {len(image_paths)} images in {images_dir}")
     
     for img_path in image_paths:
         filename = os.path.splitext(os.path.basename(img_path))[0]
@@ -165,16 +179,18 @@ def index_dataset(images_dir: str, labels_dir: str) -> list:
         if os.path.exists(label_path):
             samples.append((img_path, label_path))
     
-    print(f"Samples indexados: {len(samples)}")
+    print(f"Indexed samples: {len(samples)}")
     return samples
 
 
 # =============================================================================
-# GENERACIÓN DE ANCHORS
+# ANCHORS GENERATION
 # =============================================================================
 
 def generate_anchors_for_feature_map(feature_map_size, scale_min, scale_max):
-    """Genera anchors para un feature map"""
+    """
+    Generates anchor boxes for a given feature map size and scale range.
+    """
     fh, fw = feature_map_size
     anchors = []
     scale = scale_min + (scale_max - scale_min) / 2
@@ -195,7 +211,9 @@ def generate_anchors_for_feature_map(feature_map_size, scale_min, scale_max):
 
 
 def generate_all_anchors():
-    """Genera todos los anchors"""
+    """
+    Generates all anchors for all feature maps and returns as a tensor.
+    """
     all_anchors = []
     
     for i, fm_size in enumerate(FEATURE_MAP_SIZES):
@@ -211,12 +229,14 @@ def generate_all_anchors():
 
 
 # =============================================================================
-# MODELO SSD
+# SSD MODEL
 # =============================================================================
 
 def create_detection_head(feature_map, num_anchors, num_classes, name_prefix):
-    """Crea cabezas de detección para un feature map"""
-    # Box regression: 4 valores por anchor
+    """
+    Creates detection heads (box regression and classification) for a feature map.
+    """
+    # Box regression: 4 values per anchor
     box_conv = Conv2D(
         filters=num_anchors * 4,
         kernel_size=(3, 3),
@@ -226,7 +246,7 @@ def create_detection_head(feature_map, num_anchors, num_classes, name_prefix):
     )(feature_map)
     box_output = Reshape((-1, 4), name=f'{name_prefix}_box_reshape')(box_conv)
     
-    # Classification: num_classes por anchor
+    # Classification: num_classes per anchor
     class_conv = Conv2D(
         filters=num_anchors * num_classes,
         kernel_size=(3, 3),
@@ -241,8 +261,11 @@ def create_detection_head(feature_map, num_anchors, num_classes, name_prefix):
 
 
 def build_ssd_model():
-    """Construye el modelo SSD completo"""
-    print("Construyendo modelo SSD MobileNetV2...")
+    """
+    Builds the full SSD model using MobileNetV2 as backbone.
+    Returns model, input tensor, box predictions, and class predictions.
+    """
+    print("Building SSD MobileNetV2 model...")
     
     # Input
     input_tensor = Input(shape=(IMG_HEIGHT, IMG_WIDTH, 3), name="input_image")
@@ -255,7 +278,7 @@ def build_ssd_model():
         alpha=1.0
     )
     backbone.trainable = False
-    print(f"✓ Backbone MobileNetV2 cargado (congelado)")
+    print(f"✓ MobileNetV2 backbone loaded (frozen)")
     
     # Feature maps
     feature_maps = []
@@ -286,7 +309,7 @@ def build_ssd_model():
         name='SSD_MobileNetV2_VehicleDetector'
     )
     
-    print(f"✓ Modelo construido: {model.count_params():,} parámetros")
+    print(f"✓ Model built: {model.count_params():,} parameters")
     print(f"  Output boxes: {box_predictions.shape}")
     print(f"  Output classes: {class_predictions.shape}")
     
@@ -298,7 +321,9 @@ def build_ssd_model():
 # =============================================================================
 
 class SSDBoxLoss(tf.keras.losses.Loss):
-    """Box Loss con anchor matching"""
+    """
+    Custom box loss with anchor matching for SSD.
+    """
     
     def __init__(self, anchors, name='ssd_box_loss'):
         super().__init__(name=name)
@@ -386,7 +411,9 @@ class SSDBoxLoss(tf.keras.losses.Loss):
 
 
 class SSDClassLoss(tf.keras.losses.Loss):
-    """Classification Loss con hard negative mining"""
+    """
+    Custom classification loss with hard negative mining for SSD.
+    """
     
     def __init__(self, anchors, neg_pos_ratio=3.0, name='ssd_class_loss'):
         super().__init__(name=name)
@@ -475,7 +502,10 @@ class SSDClassLoss(tf.keras.losses.Loss):
 # =============================================================================
 
 class SSDModel(tf.keras.Model):
-    """Wrapper para training con custom losses"""
+    """
+    Wrapper model for training with custom SSD losses.
+    Implements custom train_step and test_step.
+    """
     
     def __init__(self, base_model, box_loss_fn, class_loss_fn, **kwargs):
         super().__init__(**kwargs)
@@ -544,24 +574,26 @@ class SSDModel(tf.keras.Model):
 
 
 # =============================================================================
-# VISUALIZACIÓN DE DATA AUGMENTATION
+# DATA AUGMENTATION VISUALIZATION
 # =============================================================================
 
 def draw_boxes_on_image(image, boxes, color=(0, 255, 0), thickness=2):
-    """Dibuja bounding boxes en una imagen"""
+    """
+    Draws bounding boxes on an image (for visualization).
+    """
     img = image.copy()
     h, w = img.shape[:2]
     
     for box in boxes:
         x_center, y_center, width, height = box
         
-        # Convertir de YOLO a coordenadas pixel
+        # Convert from YOLO to pixel coordinates
         x1 = int((x_center - width/2) * w)
         y1 = int((y_center - height/2) * h)
         x2 = int((x_center + width/2) * w)
         y2 = int((y_center + height/2) * h)
         
-        # Clip a dimensiones de imagen
+        # Clip to image dimensions
         x1 = max(0, min(x1, w-1))
         y1 = max(0, min(y1, h-1))
         x2 = max(0, min(x2, w-1))
@@ -579,101 +611,103 @@ def draw_boxes_on_image(image, boxes, color=(0, 255, 0), thickness=2):
 # =============================================================================
 
 def main():
-    parser = argparse.ArgumentParser(description='Entrenar modelo SSD')
-    parser.add_argument('--epochs', type=int, default=100, help='Número de epochs (default: 100)')
+    # Main training routine for SSD model
+    parser = argparse.ArgumentParser(description='Train SSD model')
+    parser.add_argument('--epochs', type=int, default=100, help='Number of epochs (default: 100)')
     parser.add_argument('--batch-size', type=int, default=12, help='Batch size (default: 12)')
     parser.add_argument('--lr', type=float, default=1e-4, help='Learning rate (default: 1e-4)')
     parser.add_argument('--dataset', type=str, default='dataset/UA-DETRAC-DATASET-10K-2',
-                        help='Ruta al dataset UA-DETRAC (relativa o absoluta)')
+                        help='Path to UA-DETRAC dataset (relative or absolute)')
     args = parser.parse_args()
     
     print("=" * 80)
-    print("🚀 ENTRENAMIENTO SSD - DETECTOR DE VEHÍCULOS")
+    print("🚀 SSD TRAINING - VEHICLE DETECTOR")
     print("=" * 80)
     print(f"   Epochs: {args.epochs}")
     print(f"   Batch size: {args.batch_size}")
     print(f"   Learning rate: {args.lr}")
-    print(f"   NUM_CLASSES: {NUM_CLASSES} (vehículo genérico)")
+    print(f"   NUM_CLASSES: {NUM_CLASSES} (generic vehicle)")
     print(f"   Image size: {IMG_WIDTH}x{IMG_HEIGHT}")
     print("=" * 80)
     
-    # Rutas
+    # Paths
     script_dir = os.path.dirname(os.path.abspath(__file__))
     base_dir = os.path.dirname(script_dir)
-    
-    # Si el path es absoluto, usarlo directamente; si no, tratarlo como relativo a base_dir
+
+    # If path is absolute, use it; otherwise, treat as relative to base_dir
     if os.path.isabs(args.dataset):
         dataset_dir = args.dataset
     else:
         dataset_dir = os.path.join(base_dir, args.dataset)
-    
+
     models_dir = os.path.join(base_dir, 'src', 'models')
     os.makedirs(models_dir, exist_ok=True)
-    
+
     print(f"\n📂 Dataset dir: {dataset_dir}")
-    
-    # Detectar estructura del dataset automáticamente
-    print("\n🔍 Detectando estructura del dataset...")
-    
-    # Estructura 1: UA_DETRAC (images/train, labels/train, images/val, labels/val)
+
+
+    # Automatically detect dataset structure
+    print("\n🔍 Detecting dataset structure...")
+
+    # Structure 1: UA_DETRAC (images/train, labels/train, images/val, labels/val)
     structure_1_train_img = os.path.join(dataset_dir, 'images', 'train')
     structure_1_train_lbl = os.path.join(dataset_dir, 'labels', 'train')
     structure_1_val_img = os.path.join(dataset_dir, 'images', 'val')
     structure_1_val_lbl = os.path.join(dataset_dir, 'labels', 'val')
-    
-    # Estructura 2: UA-DETRAC-DATASET-10K-2 (train/images, train/labels, valid/images, valid/labels)
+
+    # Structure 2: UA-DETRAC-DATASET-10K-2 (train/images, train/labels, valid/images, valid/labels)
     structure_2_train_img = os.path.join(dataset_dir, 'train', 'images')
     structure_2_train_lbl = os.path.join(dataset_dir, 'train', 'labels')
     structure_2_val_img = os.path.join(dataset_dir, 'valid', 'images')
     structure_2_val_lbl = os.path.join(dataset_dir, 'valid', 'labels')
-    
-    # Detectar cual estructura existe
+
+    # Detect which structure exists
     if (os.path.exists(structure_1_train_img) and os.path.exists(structure_1_train_lbl)):
-        print("✓ Detectada estructura: images/train + labels/train")
+        print("✓ Detected structure: images/train + labels/train")
         train_images_dir = structure_1_train_img
         train_labels_dir = structure_1_train_lbl
         val_images_dir = structure_1_val_img
         val_labels_dir = structure_1_val_lbl
-        
+
     elif (os.path.exists(structure_2_train_img) and os.path.exists(structure_2_train_lbl)):
-        print("✓ Detectada estructura: train/images + train/labels")
+        print("✓ Detected structure: train/images + train/labels")
         train_images_dir = structure_2_train_img
         train_labels_dir = structure_2_train_lbl
         val_images_dir = structure_2_val_img
         val_labels_dir = structure_2_val_lbl
-        
+
     else:
-        print(f"❌ No se detectó estructura válida en: {dataset_dir}")
-        print("\nEstructuras soportadas:")
+        print(f"❌ No valid structure detected in: {dataset_dir}")
+        print("\nSupported structures:")
         print("  1. images/train + labels/train + images/val + labels/val")
         print("  2. train/images + train/labels + valid/images + valid/labels")
         return
-    
-    # Verificar que existan las carpetas
+
+    # Check that folders exist
     if not os.path.exists(train_images_dir):
-        print(f"❌ No encontrado: {train_images_dir}")
+        print(f"❌ Not found: {train_images_dir}")
         return
-    
-    print(f"\n📍 Rutas detectadas:")
+
+    print(f"\n📍 Detected paths:")
     print(f"   Train images: {train_images_dir}")
     print(f"   Train labels: {train_labels_dir}")
     print(f"   Val images:   {val_images_dir}")
     print(f"   Val labels:   {val_labels_dir}")
-    
-    print("\n📂 Indexando dataset...")
+
+    print("\n📂 Indexing dataset...")
     train_samples = index_dataset(train_images_dir, train_labels_dir)
     val_samples = index_dataset(val_images_dir, val_labels_dir) if os.path.exists(val_images_dir) else []
-    
+
     if not train_samples:
-        print("❌ No se encontraron samples de entrenamiento")
+        print("❌ No training samples found")
         return
-    
-    print(f"\n✅ Dataset indexado:")
-    print(f"   Train: {len(train_samples)} muestras")
-    print(f"   Val:   {len(val_samples)} muestras")
+
+    print(f"\n✅ Dataset indexed:")
+    print(f"   Train: {len(train_samples)} samples")
+    print(f"   Val:   {len(val_samples)} samples")
     
     # Crear datasets
-    print("\n📦 Creando tf.data.Dataset...")
+    print("\n📦 Creating tf.data.Dataset...")
     
     train_image_paths = [s[0] for s in train_samples]
     train_label_paths = [s[1] for s in train_samples]
@@ -725,28 +759,28 @@ def main():
         padding_values=(0.0, {"boxes": 0.0, "classes": -1})
     ).prefetch(tf.data.AUTOTUNE)
     
-    # Modelo
-    print("\n🧠 Construyendo modelo...")
+    # Model
+    print("\n🧠 Building model...")
     base_model, input_tensor, box_preds, class_preds = build_ssd_model()
-    
-    # Anchors y losses
-    print("\n⚓ Generando anchors...")
+
+    # Anchors and losses
+    print("\n⚓ Generating anchors...")
     anchors = generate_all_anchors()
-    
+
     box_loss_fn = SSDBoxLoss(anchors)
     class_loss_fn = SSDClassLoss(anchors, neg_pos_ratio=3.0)
-    
+
     # Wrapper
     ssd_model = SSDModel(base_model, box_loss_fn, class_loss_fn)
     ssd_model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=args.lr))
-    
-    # IMPORTANTE: Build del modelo antes de entrenar (requerido para guardar pesos)
-    print("\n🔧 Construyendo modelo...")
+
+    # IMPORTANT: Build the model before training (required to save weights)
+    print("\n🔧 Building model...")
     dummy_input = tf.zeros((1, IMG_HEIGHT, IMG_WIDTH, 3))
     _ = ssd_model(dummy_input, training=False)
-    print("✓ Modelo construido correctamente")
-    
-    # Callbacks - guardar solo pesos (el modelo wrapper no es serializable)
+    print("✓ Model built successfully")
+
+    # Callbacks - save only weights (the wrapper model is not serializable)
     callbacks = [
         tf.keras.callbacks.ModelCheckpoint(
             filepath=os.path.join(models_dir, "ssd_best.weights.h5"),
@@ -759,13 +793,13 @@ def main():
             monitor="val_loss", patience=15, restore_best_weights=True, verbose=1
         ),
     ]
-    
-    # Entrenar - FASE 1: Backbone congelado (solo detection heads)
+
+    # Train - PHASE 1: Frozen backbone (only detection heads)
     print("\n" + "=" * 80)
-    print("🏃 FASE 1: ENTRENAMIENTO INICIAL (Backbone congelado)")
+    print("🏃 PHASE 1: INITIAL TRAINING (Frozen backbone)")
     print("=" * 80)
-    
-    # Calcular epochs para cada fase asegurando al menos 1 epoch en cada una
+
+    # Calculate epochs for each phase ensuring at least 1 epoch in each
     if args.epochs < 2:
         phase1_epochs = 1
         phase2_epochs = 0
@@ -782,26 +816,26 @@ def main():
     )
 
     # =============================
-    # FASE 2: Fine-tuning (descongelar backbone)
+    # PHASE 2: Fine-tuning (unfreeze backbone)
     print("\n" + "=" * 80)
-    print("🔥 FASE 2: FINE-TUNING (Backbone parcialmente decongelado)")
+    print("🔥 PHASE 2: FINE-TUNING (Partially unfrozen backbone)")
     print("=" * 80)
 
-    # Descongelar solo las últimas capas del backbone
+    # Unfreeze only the last layers of the backbone
     for layer in ssd_model.base_model.layers[:-20]:
         layer.trainable = False
 
     for layer in ssd_model.base_model.layers[-20:]:
         layer.trainable = True
 
-    print("✓ Backbone parcialmente decongelado (últimas 20 capas)")
+    print("✓ Backbone partially unfrozen (last 20 layers)")
 
-    # Learning rate más bajo para fine-tuning
+    # Lower learning rate for fine-tuning
     lr_finetuning = args.lr / 10
     ssd_model.compile(
         optimizer=tf.keras.optimizers.Adam(learning_rate=lr_finetuning)
     )
-    print(f"✓ Learning rate ajustado a {lr_finetuning}")
+    print(f"✓ Learning rate set to {lr_finetuning}")
 
     history_phase2 = None
     if phase2_epochs > 0:
@@ -813,8 +847,8 @@ def main():
             callbacks=callbacks,
             verbose=1
         )
-    
-    # Combinar historiales
+
+    # Combine histories
     if history_phase2 and 'loss' in history_phase2.history:
         history = {
             'loss': history_phase1.history['loss'] + history_phase2.history['loss'],
@@ -829,41 +863,41 @@ def main():
             'phase1_epochs': phase1_epochs,
             'phase2_epochs': 0
         }
-    
-    print("\n📊 Resumen de entrenamiento:")
-    print(f"  Fase 1 (Backbone congelado): {phase1_epochs} epochs")
-    print(f"  Fase 2 (Fine-tuning): {phase2_epochs} epochs")
+
+    print("\n📊 Training summary:")
+    print(f"  Phase 1 (Frozen backbone): {phase1_epochs} epochs")
+    print(f"  Phase 2 (Fine-tuning): {phase2_epochs} epochs")
     print(f"  Total: {args.epochs} epochs")
-    
-    # Guardar modelo final
-    print("\n💾 Guardando modelo...")
-    
-    # Modelo funcional (compatible con ssd_detector.py)
+
+    # Save final model
+    print("\n💾 Saving model...")
+
+    # Functional model (compatible with ssd_detector.py)
     functional_model = Model(
         inputs=input_tensor,
         outputs={'boxes': box_preds, 'classes': class_preds},
         name='SSD_MobileNetV2_VehicleDetector'
     )
     functional_model.set_weights(ssd_model.base_model.get_weights())
-   
+
     keras_path = os.path.join(models_dir, "ssd_vehicle_detector.keras")
     weights_path = os.path.join(models_dir, "ssd_vehicle_detector.weights.h5")
-    
+
     functional_model.save(keras_path)
     functional_model.save_weights(weights_path)
-    
-    print(f"✅ Modelo guardado: {keras_path}")
-    print(f"✅ Pesos guardados: {weights_path}")
-    
-    # Resumen
+
+    print(f"✅ Model saved: {keras_path}")
+    print(f"✅ Weights saved: {weights_path}")
+
+    # Summary
     print("\n" + "=" * 80)
-    print("🎉 ENTRENAMIENTO COMPLETADO")
+    print("🎉 TRAINING COMPLETED")
     print("=" * 80)
 
-    print(f"   Epochs completados: {len(history['loss'])}")
-    print(f"   Mejor val_loss: {min(history['val_loss']):.4f}")
-    print(f"   Loss final: {history['loss'][-1]:.4f}")
-    print(f"\n   Modelo listo para usar con ssd_detector.py")
+    print(f"   Epochs completed: {len(history['loss'])}")
+    print(f"   Best val_loss: {min(history['val_loss']):.4f}")
+    print(f"   Final loss: {history['loss'][-1]:.4f}")
+    print(f"\n   Model ready to use with ssd_detector.py")
     print("=" * 80)
 
 

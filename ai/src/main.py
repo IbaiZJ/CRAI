@@ -35,6 +35,7 @@ def main():
     with LogSection(logger, "System initialization"):
         logger.info("1. Starting camera...")
         camera_source = config.get('camera.source', 1)
+        camera_id = config.get('camera.cameraId', 137)
         auto_find = config.get('camera.auto_find', True)
         resolution = (config.get('camera.resolution.width', 1280), config.get('camera.resolution.height', 720))
         vs = VideoStream(src=camera_source, resolution=resolution, auto_find=auto_find).start()
@@ -141,6 +142,7 @@ def main():
     
     with LogSection(logger, "Parameter configuration"):
         window_name = config.get('display.window_name', 'CRAI - Car Registration AI')
+        display_enabled = config.get('display.enabled', True)
         show_fps = config.get('display.show_fps', True)
         show_stats = config.get('display.show_stats', True)
         min_plate_width = config.get('plate_detector.min_plate_width', 30)
@@ -154,6 +156,7 @@ def main():
         
         logger.info(f"Window: {window_name}")
         logger.info(f"OCR available: {ocr_available}")
+        logger.info(f"Display enabled: {display_enabled}")
         logger.info(f"SSD available: {ssd_available}")
         logger.info(f"OCR frequency: every {ocr_frequency} frames")
         logger.info("Press 'M' to toggle between YOLO+OCR and SSD Custom modes")
@@ -172,6 +175,8 @@ def main():
     current_mode = MODE_YOLO_OCR
     color_ssd = (255, 165, 0)  # Orange para SSD
     
+    show_window = display_enabled
+
     try:
         while True:
             frame = vs.read()
@@ -291,8 +296,7 @@ def main():
                                                     # Send plate to queue for API posting
                                                     plate_queue.add_plate(
                                                         plate_text=text,
-                                                        confidence=conf,
-                                                        vehicle_type=vehicle['class_name']
+                                                        camera_id=camera_id
                                                     )
                                                     logger.info(f"New plate detected and queued: {text} (conf: {conf:.2f})")
                                                 else:
@@ -359,9 +363,15 @@ def main():
                 cv2.putText(frame_display, "Press 'M' to switch mode", (20, y_offset), 
                            cv2.FONT_HERSHEY_SIMPLEX, 0.4, (200, 200, 200), 1)
             
-            cv2.imshow(window_name, frame_display)
-            
-            key = cv2.waitKey(1) & 0xFF
+            key = None
+            if show_window:
+                try:
+                    cv2.imshow(window_name, frame_display)
+                    key = cv2.waitKey(1) & 0xFF
+                except cv2.error as e:
+                    logger.warning(f"Display disabled (OpenCV GUI not available): {e}")
+                    show_window = False
+                    key = None
             if key == ord('q'):
                 break
             elif key == ord('m') or key == ord('M'):
@@ -422,7 +432,10 @@ def main():
         logger.info("Stopping video stream...")
         vs.stop()
         logger.info("Closing windows...")
-        cv2.destroyAllWindows()
+        try:
+            cv2.destroyAllWindows()
+        except cv2.error as e:
+            logger.warning(f"OpenCV GUI not available: {e}")
         logger.info("System closed successfully")
 
 
