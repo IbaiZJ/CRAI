@@ -101,7 +101,9 @@ describe('AuthContext - Login function', () => {
       await loginFn('user', 'bad-password');
     }
 
-    expect(screen.getByTestId('authenticated')).toHaveTextContent('false');
+    await waitFor(() => {
+      expect(screen.getByTestId('authenticated')).toHaveTextContent('false');
+    });
     consoleSpy.mockRestore();
   });
 
