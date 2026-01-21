@@ -3465,8 +3465,8 @@
                 "c2a5bce0222e7784"
             ],
             [
-                "0302cd37a32dd079",
-                "741d887823023f42"
+                "741d887823023f42",
+                "0302cd37a32dd079"
             ]
         ]
     },
@@ -3475,7 +3475,7 @@
         "type": "function",
         "z": "202119be2ec9a18d",
         "name": "Build email",
-        "func": "const p = msg.payload;\nconst to = \"ibai.zorrilla@alumni.mondragon.edu\";\nmsg.to = to;\nmsg.topic = `🚗 ITV`;\n\nreturn msg;\n",
+        "func": "const p = msg.payload;\nconst to = \"ibai.ochoadeechaguen@alumni.mondragon.edu\";\nmsg.to = to;\nmsg.topic = `🚗 ITV`;\nmsg.payload = `\nHello,\n\nYour vehicle has been detected with a invalid itv\nPlate: ${p.carPlate}:\n\n• ITV status: deprecated\n• Date: ${new Date().toLocaleString()}\n\nThanks,\nCRAI Team`\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -3486,7 +3486,7 @@
         "y": 560,
         "wires": [
             [
-                "286dafe17e100276"
+                "64d356f3e0280344"
             ]
         ]
     },
@@ -3503,7 +3503,7 @@
         "tls": false,
         "name": "",
         "dname": "Send email",
-        "x": 1230,
+        "x": 1010,
         "y": 560,
         "wires": []
     },
@@ -3512,7 +3512,7 @@
         "type": "function",
         "z": "202119be2ec9a18d",
         "name": "Build email",
-        "func": "const p = msg.payload;\nconst to = \"alex.zabaleta@alumni.mondragon.edu\";\nmsg.to = to;\nmsg.topic = `🚗 ITV`;\n\nreturn msg;\n",
+        "func": "const p = msg.payload;\nconst to = \"ibai.ochoadeechaguen@alumni.mondragon.edu\";\nmsg.to = to;\nmsg.topic = \"ITV\";\nmsg.payload = \"Hello,\\n\\nYour vehicle itv will be deprecated in less than a month.\\nPlate: \" + p.carPlate + \"\\n\\n• ITV status: warning\\n• Date: \" + new Date().toLocaleString() + \"\\n\\nThanks,\\nCRAI Team\";\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -3523,7 +3523,7 @@
         "y": 760,
         "wires": [
             [
-                "4d37fda2831e2cea"
+                "78e2e9c04778396f"
             ]
         ]
     },
@@ -3540,47 +3540,9 @@
         "tls": false,
         "name": "",
         "dname": "Send email",
-        "x": 1230,
+        "x": 1010,
         "y": 760,
         "wires": []
-    },
-    {
-        "id": "4d37fda2831e2cea",
-        "type": "template",
-        "z": "202119be2ec9a18d",
-        "name": "HTML template",
-        "field": "payload",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "This is the payload: {{payload}} !",
-        "output": "str",
-        "x": 1020,
-        "y": 760,
-        "wires": [
-            [
-                "78e2e9c04778396f"
-            ]
-        ]
-    },
-    {
-        "id": "286dafe17e100276",
-        "type": "template",
-        "z": "202119be2ec9a18d",
-        "name": "HTML template",
-        "field": "payload",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"es\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Aviso Matrícula</title>\n</head>\n<body style=\"margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Arial Black', sans-serif; background-color: #003366;\">\n\n    <div style=\"background-color: white; padding: 40px 20px 80px 20px; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); text-align: center; width: 95%; max-width: 1100px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 20px;\">\n\n        <div style=\"margin-bottom: 50px; margin-top: 150px;\">\n            <img src=\"https://i.ibb.co/4ZwX1Jyx/Gemini-Generated-Image-b6wzqcb6wzqcb6wz-removebg-preview.png\" \n                 alt=\"Logo\" \n                 style=\"width: 350px; height: auto;\">\n        </div>\n\n        <h1 style=\"font-size: clamp(28px, 6vw, 55px); color: #000; margin: 0 0 30px 0; text-transform: uppercase; line-height: 1.1;\">\n            SE HA DETECTADO TU MATRÍCULA\n        </h1>\n\n        <div style=\"font-size: clamp(40px, 9vw, 90px); font-weight: bold; color: #000; margin-bottom: 25px; font-family: 'Courier New', Courier, monospace; letter-spacing: 6px; border: 4px solid #000; padding: 10px 40px; border-radius: 8px; background-color: #fcfcfc;\">\n            MATRICULA\n        </div>\n\n        <p style=\"font-size: clamp(18px, 4vw, 28px); color: #333; margin: 0; font-family: Arial, sans-serif; font-weight: normal;\">\n            tu coche tiene la ITV caducada\n        </p>\n\n    </div>\n\n</body>\n</html>",
-        "output": "str",
-        "x": 1020,
-        "y": 560,
-        "wires": [
-            [
-                "64d356f3e0280344"
-            ]
-        ]
     },
     {
         "id": "affc7a4aac0f3854",
@@ -4059,10 +4021,61 @@
         "id": "c608fa6c39a2feee",
         "type": "comment",
         "z": "202119be2ec9a18d",
+<<<<<<< HEAD
         "name": "TODO: Implement WebSockets to \\n upload frontend",
         "info": "",
         "x": 2020,
         "y": 300,
+=======
+        "name": "TODO: Implement WebSockets to  \\n update frontend without reloading \\n window",
+        "info": "",
+        "x": 2020,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "4d37fda2831e2cea",
+        "type": "template",
+        "z": "202119be2ec9a18d",
+        "name": "HTML template",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "This is the payload: {{payload}} !",
+        "output": "str",
+        "x": 1220,
+        "y": 760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f08a54e487906646",
+        "type": "template",
+        "z": "202119be2ec9a18d",
+        "name": "HTML template",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"es\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Aviso Matrícula</title>\n</head>\n<body style=\"margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Arial Black', sans-serif; background-color: #003366;\">\n\n    <div style=\"background-color: white; padding: 40px 20px 80px 20px; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); text-align: center; width: 95%; max-width: 1100px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 20px;\">\n\n        <div style=\"margin-bottom: 50px; margin-top: 150px;\">\n            <img src=\"https://i.ibb.co/4ZwX1Jyx/Gemini-Generated-Image-b6wzqcb6wzqcb6wz-removebg-preview.png\" \n                 alt=\"Logo\" \n                 style=\"width: 350px; height: auto;\">\n        </div>\n\n        <h1 style=\"font-size: clamp(28px, 6vw, 55px); color: #000; margin: 0 0 30px 0; text-transform: uppercase; line-height: 1.1;\">\n            SE HA DETECTADO TU MATRÍCULA\n        </h1>\n\n        <div style=\"font-size: clamp(40px, 9vw, 90px); font-weight: bold; color: #000; margin-bottom: 25px; font-family: 'Courier New', Courier, monospace; letter-spacing: 6px; border: 4px solid #000; padding: 10px 40px; border-radius: 8px; background-color: #fcfcfc;\">\n            MATRICULA\n        </div>\n\n        <p style=\"font-size: clamp(18px, 4vw, 28px); color: #333; margin: 0; font-family: Arial, sans-serif; font-weight: normal;\">\n            tu coche tiene la ITV caducada\n        </p>\n\n    </div>\n\n</body>\n</html>",
+        "output": "str",
+        "x": 1220,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "58010f59742c5809",
+        "type": "comment",
+        "z": "202119be2ec9a18d",
+        "name": "TODO: Add HTML to emails",
+        "info": "",
+        "x": 1260,
+        "y": 500,
+>>>>>>> dev
         "wires": []
     },
     {
