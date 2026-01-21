@@ -57,7 +57,7 @@ ocr:
 
 api:
   endpoint_base_url: "http://localhost:6903"
-  car_plate_endpoint: "/ai/carPlate"
+  car_plate_endpoint: "/ai/carDetected"
   timeout: 10
   max_retries: 3
   retry_delay: 2.0

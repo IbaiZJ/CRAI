@@ -4044,7 +4044,7 @@
         "repair": false,
         "outputs": 2,
         "x": 2070,
-        "y": 200,
+        "y": 240,
         "wires": [
             [
                 "0f4eaa7342bbde96"
@@ -4054,6 +4054,16 @@
                 "4d87b6500ee418eb"
             ]
         ]
+    },
+    {
+        "id": "c608fa6c39a2feee",
+        "type": "comment",
+        "z": "202119be2ec9a18d",
+        "name": "TODO: Implement WebSockets to \\n upload frontend",
+        "info": "",
+        "x": 2020,
+        "y": 300,
+        "wires": []
     },
     {
         "id": "06a3442ad9baac60",
