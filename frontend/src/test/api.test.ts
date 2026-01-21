@@ -104,21 +104,15 @@ describe('authApi', () => {
     });
 
     it('should handle timeout errors', async () => {
-      mockFetch.mockImplementationOnce(() => 
-        new Promise((resolve, reject) => {
-          setTimeout(() => reject(new DOMException('AbortError', 'AbortError')), 15000);
-        })
-      );
+      const abortError = new Error('AbortError');
+      abortError.name = 'AbortError';
+      
+      mockFetch.mockRejectedValueOnce(abortError);
 
-      const promise = authApi.login({
+      const result = await authApi.login({
         username: 'testuser',
         password: 'password123'
       });
-
-      // Fast-forward time to trigger timeout
-      vi.advanceTimersByTime(10000);
-
-      const result = await promise;
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('timeout');
