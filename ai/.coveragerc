@@ -1,5 +1,6 @@
 [run]
-source = .
+source = src
+relative_files = true
 omit = 
     */app_ui.py
     */main.py
@@ -14,6 +15,9 @@ omit =
     */conftest.py
     */test_ssd_load.py
     */ssd_detector.py
+
+[xml]
+output = coverage.xml
 
 [report]
 fail_under = 0
