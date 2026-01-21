@@ -114,8 +114,8 @@ export function NavUser() {
         onOpenChange={setIsAccountDialogOpen}
         user={{
           name: user.fullName,
-          email: user.email,
-          avatar: user.picture || "",
+          email: user.email ?? "",
+          avatar: user.picture ?? "",
         }}
         initials={initials}
         userId={user.sub}
