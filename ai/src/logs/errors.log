@@ -103,3 +103,27 @@ Traceback (most recent call last):
     ^^^^^^^^^^^^^^
 AttributeError: 'Logger' object has no attribute 'warning'
 [2026-01-20 08:55:54] [[31mERROR[0m] [logger.py:128] └─ Error in: System cleanup (0.838s) - 
+[2026-01-21 09:01:52] [[31mERROR[0m] [logger.py:128] 
+Unexpected error: OpenCV(4.10.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window.cpp:1301: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Cocoa support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvShowImage'
+Traceback (most recent call last):
+  File "C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\main.py", line 362, in main
+    cv2.imshow(window_name, frame_display)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\aorti\miniconda3\envs\ai25\Lib\site-packages\ultralytics\utils\patches.py", line 88, in imshow
+    _imshow(winname.encode("unicode_escape").decode(), mat)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cv2.error: OpenCV(4.10.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window.cpp:1301: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Cocoa support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvShowImage'
+
+[2026-01-21 09:01:53] [[31mERROR[0m] [logger.py:128] └─ Error in: System cleanup (0.869s) - OpenCV(4.10.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window.cpp:1295: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Cocoa support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvDestroyAllWindows'
+
+[2026-01-21 09:01:53] [[31mERROR[0m] [logger.py:136] 
+Error: OpenCV(4.10.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window.cpp:1295: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Cocoa support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvDestroyAllWindows'
+Traceback (most recent call last):
+  File "C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\main.py", line 431, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\aorti\OneDrive - Mondragon Unibertsitatea\UNIVERSIDAD\3 AÑO 2025-2026\1 SEMESTRE\PBL5\CRAI\ai\src\main.py", line 425, in main
+    cv2.destroyAllWindows()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+cv2.error: OpenCV(4.10.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window.cpp:1295: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Cocoa support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvDestroyAllWindows'
+
