@@ -1,30 +1,30 @@
 describe('Smoke test pages', () => {
-import { render } from '@testing-library/react';
+describe('Smoke test pages', () => {
+import { renderWithProviders } from './utils';
 import Cameras from '../pages/Cameras';
 import Cars from '../pages/Cars';
 import Dashboard from '../pages/Dashboard';
 import Statistics from '../pages/Statistics';
 import Users from '../pages/Users';
 import Login from '../pages/Login';
-import { withProviders } from './utils';
 
 describe('Smoke test pages', () => {
   it('renders Cameras', () => {
-    render(withProviders(<Cameras />));
+    renderWithProviders(<Cameras />);
   });
   it('renders Cars', () => {
-    render(withProviders(<Cars />));
+    renderWithProviders(<Cars />);
   });
   it('renders Dashboard', () => {
-    render(withProviders(<Dashboard />));
+    renderWithProviders(<Dashboard />);
   });
   it('renders Statistics', () => {
-    render(withProviders(<Statistics />));
+    renderWithProviders(<Statistics />);
   });
   it('renders Users', () => {
-    render(withProviders(<Users />));
+    renderWithProviders(<Users />);
   });
   it('renders Login', () => {
-    render(withProviders(<Login />));
+    renderWithProviders(<Login />);
   });
 });
