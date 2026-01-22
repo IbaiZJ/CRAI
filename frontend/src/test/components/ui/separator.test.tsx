@@ -19,8 +19,8 @@ describe('Separator Component', () => {
   it('is decorative by default', () => {
     render(<Separator data-testid="separator" />);
     const separator = screen.getByTestId('separator');
-    // Decorative separators don't have a role
-    expect(separator).not.toHaveAttribute('role');
+    // Decorative separators have role="none" to hide them from accessibility tree
+    expect(separator).toHaveAttribute('role', 'none');
   });
 
   it('can be non-decorative', () => {
