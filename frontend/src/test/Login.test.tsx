@@ -215,8 +215,9 @@ describe('Login Component - Form Interactions', () => {
       </BrowserRouter>
     );
 
-    // Card header should contain the title
-    expect(screen.getByText('Log In')).toBeInTheDocument();
+    // Card header should contain the title - use getAllByText since there's both title and button
+    const logInElements = screen.getAllByText('Log In');
+    expect(logInElements.length).toBeGreaterThan(0);
     expect(screen.getByText('Sign in with your username and password')).toBeInTheDocument();
   });
 

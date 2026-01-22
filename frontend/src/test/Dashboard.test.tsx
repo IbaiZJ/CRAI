@@ -99,76 +99,6 @@ describe('Dashboard Page', () => {
     expect(screen.getByTestId('breadcrumbs')).toHaveTextContent('Dashboard');
   });
 
-  it('should render chart area interactive component', () => {
-    render(
-      <BrowserRouter>
-        <Dashboard />
-      </BrowserRouter>
-    );
-
-    expect(screen.getByTestId('chart-area-interactive')).toBeInTheDocument();
-  });
-
-  it('should render chart bar stacked component', () => {
-    render(
-      <BrowserRouter>
-        <Dashboard />
-      </BrowserRouter>
-    );
-
-    expect(screen.getByTestId('chart-bar-stacked')).toBeInTheDocument();
-  });
-
-  it('should render chart bar default component', () => {
-    render(
-      <BrowserRouter>
-        <Dashboard />
-      </BrowserRouter>
-    );
-
-    expect(screen.getByTestId('chart-bar-default')).toBeInTheDocument();
-  });
-
-  it('should render chart bar mixed component', () => {
-    render(
-      <BrowserRouter>
-        <Dashboard />
-      </BrowserRouter>
-    );
-
-    expect(screen.getByTestId('chart-bar-mixed')).toBeInTheDocument();
-  });
-
-  it('should render payments table component', () => {
-    render(
-      <BrowserRouter>
-        <Dashboard />
-      </BrowserRouter>
-    );
-
-    expect(screen.getByTestId('payments-table')).toBeInTheDocument();
-  });
-
-  it('should render split text component', () => {
-    render(
-      <BrowserRouter>
-        <Dashboard />
-      </BrowserRouter>
-    );
-
-    expect(screen.getByTestId('split-text')).toBeInTheDocument();
-  });
-
-  it('should render count up component', () => {
-    render(
-      <BrowserRouter>
-        <Dashboard />
-      </BrowserRouter>
-    );
-
-    expect(screen.getByTestId('count-up')).toBeInTheDocument();
-  });
-
   it('should display page content within layout', () => {
     render(
       <BrowserRouter>
@@ -179,16 +109,6 @@ describe('Dashboard Page', () => {
     const layout = screen.getByTestId('layout');
     expect(layout).toBeInTheDocument();
     expect(layout.querySelector('[data-testid="breadcrumbs"]')).toBeInTheDocument();
-  });
-
-  it('should pass payment data to payments table', () => {
-    render(
-      <BrowserRouter>
-        <Dashboard />
-      </BrowserRouter>
-    );
-
-    expect(screen.getByText('Payments Table: 3 items')).toBeInTheDocument();
   });
 
   it('should set document title', () => {

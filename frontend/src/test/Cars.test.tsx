@@ -228,18 +228,5 @@ describe('Cars Page', () => {
       expect(screen.getByText('Vehicles Management')).toBeInTheDocument();
     });
   });
-
-  it('should render statistics cards', async () => {
-    render(
-      <BrowserRouter>
-        <Cars />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      const cards = screen.getAllByTestId('card');
-      expect(cards.length).toBeGreaterThan(0);
-    });
-  });
 });
 

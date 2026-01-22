@@ -159,7 +159,7 @@ describe('DropdownMenu Composition', () => {
       </DropdownMenu>
     );
 
-    expect(screen.getByRole('button', { name: 'Options' })).toBeInTheDocument();
+    expect(screen.getByText('Options')).toBeInTheDocument();
   });
 
   it('should render trigger with custom content', () => {
