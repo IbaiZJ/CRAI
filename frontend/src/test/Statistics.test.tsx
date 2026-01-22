@@ -158,4 +158,67 @@ describe('Statistics Page', () => {
     // 10 cards total on the Statistics page
     expect(cards.length).toBe(10);
   });
+
+  it('should display Expired ITV card', () => {
+    render(
+      <BrowserRouter>
+        <Statistics />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByText('Expired ITV')).toBeInTheDocument();
+  });
+
+  it('should display Expiring Soon ITV card', () => {
+    render(
+      <BrowserRouter>
+        <Statistics />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByText('Expiring Soon')).toBeInTheDocument();
+  });
+
+  it('should render within layout component', () => {
+    render(
+      <BrowserRouter>
+        <Statistics />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByTestId('layout')).toBeInTheDocument();
+  });
+
+  it('should display all card headers', () => {
+    render(
+      <BrowserRouter>
+        <Statistics />
+      </BrowserRouter>
+    );
+
+    const cardHeaders = screen.getAllByTestId('card-header');
+    expect(cardHeaders.length).toBeGreaterThan(0);
+  });
+
+  it('should display all card content', () => {
+    render(
+      <BrowserRouter>
+        <Statistics />
+      </BrowserRouter>
+    );
+
+    const cardContents = screen.getAllByTestId('card-content');
+    expect(cardContents.length).toBeGreaterThan(0);
+  });
+
+  it('should have General Statistics as main heading', () => {
+    render(
+      <BrowserRouter>
+        <Statistics />
+      </BrowserRouter>
+    );
+
+    const heading = screen.getByRole('heading', { level: 1 });
+    expect(heading).toHaveTextContent('General Statistics');
+  });
 });
