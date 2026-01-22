@@ -56,7 +56,7 @@ export const sidebarConfig = {
       navType: "button",
     },
     {
-      title: "Detecciones",
+      title: "Detections",
       url: "/detections",
       icon: Scan,
       navType: "button",
