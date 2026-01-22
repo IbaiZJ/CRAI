@@ -145,6 +145,9 @@ jobs:
       - name: Run Frontend Tests with Coverage
         working-directory: ./frontend
         run: npm run test:coverage -- --run
+      - name: Fix lcov.info paths for SonarCloud
+        working-directory: ./frontend
+        run: npm run postcoverage
       - name: Debug Coverage Report
         working-directory: ./frontend
         run: |
