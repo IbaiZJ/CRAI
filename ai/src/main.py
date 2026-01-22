@@ -109,8 +109,8 @@ def main():
             
             # Preferir ssd_vehicle_detector.keras (nuevo modelo funcional)
             model_candidates = [
-                (src_models_dir, 'ssd_vehicle_detector.keras'),
-                (notebook_models_dir, 'ssd_vehicle_detector.keras'),
+                (src_models_dir, 'ssd_vehicles_detector.keras'),
+                (notebook_models_dir, 'ssd_vehicles_detector.keras'),
             ]
             
             ssd_path = None
