@@ -1,12 +1,13 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { AuthProvider } from '../contexts/AuthContext';
-import { render } from '@testing-library/react';
 
-export function renderWithProviders(ui: React.ReactElement) {
-  return render(
+export function withProviders(children: React.ReactNode) {
+  return (
     <MemoryRouter>
-      <AuthProvider>{ui}</AuthProvider>
+      <AuthProvider>
+        {children}
+      </AuthProvider>
     </MemoryRouter>
   );
 }
