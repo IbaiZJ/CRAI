@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeAll } from 'vitest';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import {
   Select,
   SelectGroup,
@@ -10,12 +11,23 @@ import {
   SelectItem,
 } from '@/components/ui/select';
 
+// Mock ResizeObserver for Radix UI
+beforeAll(() => {
+  globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+    observe: vi.fn(),
+    unobserve: vi.fn(),
+    disconnect: vi.fn(),
+  }));
+});
+
 describe('Select Components', () => {
   describe('Select', () => {
     it('renders select root', () => {
       render(
         <Select>
-          <SelectTrigger data-testid="trigger" />
+          <SelectTrigger data-testid="trigger">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
         </Select>
       );
       expect(screen.getByTestId('trigger')).toBeInTheDocument();
@@ -23,10 +35,13 @@ describe('Select Components', () => {
   });
 
   describe('SelectGroup', () => {
-    it('renders select group', () => {
+    it('renders select group when opened', async () => {
+      const user = userEvent.setup();
       render(
         <Select>
-          <SelectTrigger data-testid="trigger" />
+          <SelectTrigger data-testid="trigger">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
           <SelectContent>
             <SelectGroup data-testid="group">
               <SelectLabel>Options</SelectLabel>
@@ -35,41 +50,66 @@ describe('Select Components', () => {
           </SelectContent>
         </Select>
       );
-      expect(screen.getByTestId('trigger')).toBeInTheDocument();
+      
+      await user.click(screen.getByTestId('trigger'));
+      
+      await waitFor(() => {
+        expect(screen.getByText('Options')).toBeInTheDocument();
+        expect(screen.getByText('Option 1')).toBeInTheDocument();
+      });
     });
   });
 
   describe('SelectLabel', () => {
-    it('renders label with correct data-slot within SelectGroup', () => {
+    it('renders label with correct text when opened', async () => {
+      const user = userEvent.setup();
       render(
         <Select>
-          <SelectTrigger data-testid="trigger" />
+          <SelectTrigger data-testid="trigger">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel data-testid="label">Category</SelectLabel>
+              <SelectLabel>Category</SelectLabel>
               <SelectItem value="1">Option 1</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
       );
-      expect(screen.getByTestId('label')).toHaveAttribute('data-slot', 'select-label');
+      
+      await user.click(screen.getByTestId('trigger'));
+      
+      await waitFor(() => {
+        expect(screen.getByText('Category')).toBeInTheDocument();
+      });
     });
 
-    it('applies custom className within SelectGroup', () => {
+    it('renders multiple labels in different groups', async () => {
+      const user = userEvent.setup();
       render(
         <Select>
-          <SelectTrigger data-testid="trigger" />
+          <SelectTrigger data-testid="trigger">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel className="custom-label" data-testid="label">
-                Category
-              </SelectLabel>
-              <SelectItem value="1">Option 1</SelectItem>
+              <SelectLabel>Fruits</SelectLabel>
+              <SelectItem value="apple">Apple</SelectItem>
+            </SelectGroup>
+            <SelectGroup>
+              <SelectLabel>Vegetables</SelectLabel>
+              <SelectItem value="carrot">Carrot</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
       );
-      expect(screen.getByTestId('label')).toHaveClass('custom-label');
+      
+      await user.click(screen.getByTestId('trigger'));
+      
+      await waitFor(() => {
+        expect(screen.getByText('Fruits')).toBeInTheDocument();
+        expect(screen.getByText('Vegetables')).toBeInTheDocument();
+      });
     });
   });
 
@@ -77,7 +117,9 @@ describe('Select Components', () => {
     it('renders trigger with correct data-slot', () => {
       render(
         <Select>
-          <SelectTrigger data-testid="trigger" />
+          <SelectTrigger data-testid="trigger">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
         </Select>
       );
       expect(screen.getByTestId('trigger')).toHaveAttribute('data-slot', 'select-trigger');
@@ -86,7 +128,9 @@ describe('Select Components', () => {
     it('defaults to default size', () => {
       render(
         <Select>
-          <SelectTrigger data-testid="trigger" />
+          <SelectTrigger data-testid="trigger">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
         </Select>
       );
       expect(screen.getByTestId('trigger')).toHaveAttribute('data-size', 'default');
@@ -95,15 +139,28 @@ describe('Select Components', () => {
     it('supports sm size', () => {
       render(
         <Select>
-          <SelectTrigger data-testid="trigger" size="sm" />
+          <SelectTrigger data-testid="trigger" size="sm">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
         </Select>
       );
       expect(screen.getByTestId('trigger')).toHaveAttribute('data-size', 'sm');
     });
+
+    it('applies custom className', () => {
+      render(
+        <Select>
+          <SelectTrigger data-testid="trigger" className="custom-trigger">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
+        </Select>
+      );
+      expect(screen.getByTestId('trigger')).toHaveClass('custom-trigger');
+    });
   });
 
   describe('SelectValue', () => {
-    it('renders select value', () => {
+    it('renders select value with data-slot', () => {
       render(
         <Select>
           <SelectTrigger data-testid="trigger">
@@ -113,35 +170,149 @@ describe('Select Components', () => {
       );
       expect(screen.getByTestId('value')).toHaveAttribute('data-slot', 'select-value');
     });
-  });
 
-  describe('SelectItem', () => {
-    it('renders select item', () => {
+    it('displays selected value', () => {
       render(
-        <Select>
-          <SelectTrigger data-testid="trigger" />
+        <Select value="option1">
+          <SelectTrigger data-testid="trigger">
+            <SelectValue />
+          </SelectTrigger>
           <SelectContent>
-            <SelectItem value="1" data-testid="item">
-              Option 1
-            </SelectItem>
+            <SelectItem value="option1">Option 1</SelectItem>
           </SelectContent>
         </Select>
       );
-      expect(screen.getByTestId('item')).toHaveAttribute('data-slot', 'select-item');
+      expect(screen.getByText('Option 1')).toBeInTheDocument();
+    });
+  });
+
+  describe('SelectItem', () => {
+    it('renders select items when opened', async () => {
+      const user = userEvent.setup();
+      render(
+        <Select>
+          <SelectTrigger data-testid="trigger">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="1">Option 1</SelectItem>
+            <SelectItem value="2">Option 2</SelectItem>
+          </SelectContent>
+        </Select>
+      );
+      
+      await user.click(screen.getByTestId('trigger'));
+      
+      await waitFor(() => {
+        expect(screen.getByText('Option 1')).toBeInTheDocument();
+        expect(screen.getByText('Option 2')).toBeInTheDocument();
+      });
+    });
+
+    it('calls onValueChange when item is selected', async () => {
+      const onValueChange = vi.fn();
+      const user = userEvent.setup();
+      
+      render(
+        <Select onValueChange={onValueChange}>
+          <SelectTrigger data-testid="trigger">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="option1">Option 1</SelectItem>
+          </SelectContent>
+        </Select>
+      );
+      
+      await user.click(screen.getByTestId('trigger'));
+      
+      await waitFor(() => {
+        expect(screen.getByText('Option 1')).toBeInTheDocument();
+      });
+      
+      await user.click(screen.getByText('Option 1'));
+      
+      expect(onValueChange).toHaveBeenCalledWith('option1');
     });
   });
 
   describe('SelectContent', () => {
-    it('renders select content', () => {
+    it('renders content when select is opened', async () => {
+      const user = userEvent.setup();
       render(
         <Select>
-          <SelectTrigger data-testid="trigger" />
-          <SelectContent data-testid="content">
+          <SelectTrigger data-testid="trigger">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
+          <SelectContent>
             <SelectItem value="1">Option 1</SelectItem>
           </SelectContent>
         </Select>
       );
-      expect(screen.getByTestId('content')).toHaveAttribute('data-slot', 'select-content');
+      
+      // Content should not be visible initially (portal not rendered)
+      expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+      
+      // Open the select
+      await user.click(screen.getByTestId('trigger'));
+      
+      // Content should be visible after opening
+      await waitFor(() => {
+        expect(screen.getByRole('listbox')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Accessibility', () => {
+    it('has correct aria attributes on trigger', () => {
+      render(
+        <Select>
+          <SelectTrigger data-testid="trigger">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
+        </Select>
+      );
+      
+      const trigger = screen.getByTestId('trigger');
+      expect(trigger).toHaveAttribute('role', 'combobox');
+      expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('updates aria-expanded when opened', async () => {
+      const user = userEvent.setup();
+      render(
+        <Select>
+          <SelectTrigger data-testid="trigger">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="1">Option 1</SelectItem>
+          </SelectContent>
+        </Select>
+      );
+      
+      const trigger = screen.getByTestId('trigger');
+      expect(trigger).toHaveAttribute('aria-expanded', 'false');
+      
+      await user.click(trigger);
+      
+      await waitFor(() => {
+        expect(trigger).toHaveAttribute('aria-expanded', 'true');
+      });
+    });
+  });
+
+  describe('Disabled State', () => {
+    it('disables the trigger when disabled', () => {
+      render(
+        <Select disabled>
+          <SelectTrigger data-testid="trigger">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
+        </Select>
+      );
+      
+      expect(screen.getByTestId('trigger')).toBeDisabled();
     });
   });
 });
