@@ -3095,7 +3095,8 @@
         "y": 140,
         "wires": [
             [
-                "a4ad4d30685e17b6"
+                "a4ad4d30685e17b6",
+                "594bd464260178da"
             ]
         ]
     },
@@ -3203,7 +3204,8 @@
         "y": 140,
         "wires": [
             [
-                "0f4eaa7342bbde96"
+                "0f4eaa7342bbde96",
+                "8db879eb108392c2"
             ]
         ]
     },
@@ -4072,6 +4074,40 @@
         "wires": []
     },
     {
+        "id": "8db879eb108392c2",
+        "type": "debug",
+        "z": "202119be2ec9a18d",
+        "name": "debug car detection payload",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2140,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "594bd464260178da",
+        "type": "debug",
+        "z": "202119be2ec9a18d",
+        "name": "Data from camera arrives",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 370,
+        "y": 200,
+        "wires": []
+    },
+    {
         "id": "06a3442ad9baac60",
         "type": "link in",
         "z": "e8ee884feb950c22",
@@ -4190,6 +4226,16 @@
                 "fc5f874a1bb5653d"
             ]
         ]
+    },
+    {
+        "id": "f1ba91b1cb19c593",
+        "type": "comment",
+        "z": "e8ee884feb950c22",
+        "name": "",
+        "info": "",
+        "x": 220,
+        "y": 60,
+        "wires": []
     },
     {
         "id": "425769f2630a88db",

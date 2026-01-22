@@ -26,8 +26,8 @@ plate_detector:
 
 
 ssd_detector:
-  model_path: "models/ssd_vehicle_detector.keras"
-  weights_path: "models/ssd_best.weights.h5"
+  model_path: "models/ssd_vehicles_detector.keras"
+  weights_path: "models/ssd_bests.weights.h5"
   confidence_threshold: 0.37
   nms_threshold: 0.2
   max_detections: 15

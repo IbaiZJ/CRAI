@@ -3095,7 +3095,8 @@
         "y": 140,
         "wires": [
             [
-                "a4ad4d30685e17b6"
+                "a4ad4d30685e17b6",
+                "594bd464260178da"
             ]
         ]
     },
@@ -3203,7 +3204,8 @@
         "y": 140,
         "wires": [
             [
-                "0f4eaa7342bbde96"
+                "0f4eaa7342bbde96",
+                "8db879eb108392c2"
             ]
         ]
     },
@@ -3512,7 +3514,7 @@
         "type": "function",
         "z": "202119be2ec9a18d",
         "name": "Build email",
-        "func": "const p = msg.payload;\nconst to = \"alex.zabaleta@alumni.mondragon.edu\";\nmsg.to = to;\nmsg.topic = `🚗 ITV`;\nmsg.payload = `\nHello,\n\nYour vehicle itv will be deprecated in less than a mounth.\nPlate: ${msg.carPlate}:\n\n• ITV status: warning\n• Date: ${new Date().toLocaleString()}\n\nThanks,\nCRAI Team`;\n\nreturn msg;",
+        "func": "const p = msg.payload;\nconst to = \"alex.zabaleta@alumni.mondragon.edu\";\nmsg.to = to;\nmsg.topic = `🚗 ITV`;\nmsg.payload = \n`\nHello,\n\nYour vehicle itv will be deprecated in less than a mounth.\nPlate: ${msg.carPlate}:\n\n• ITV status: warning\n• Date: ${new Date().toLocaleString()}\n\nThanks,\nCRAI Team`;\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -3604,7 +3606,8 @@
         "y": 420,
         "wires": [
             [
-                "306cfda9ca7bff25"
+                "306cfda9ca7bff25",
+                "be37d6392633a0ad"
             ]
         ]
     },
@@ -3866,7 +3869,8 @@
         "y": 360,
         "wires": [
             [
-                "7dcb447f1fa4567f"
+                "7dcb447f1fa4567f",
+                "897c0925fc1df861"
             ]
         ]
     },
@@ -3886,7 +3890,8 @@
         "y": 480,
         "wires": [
             [
-                "9c458169013d3ab3"
+                "9c458169013d3ab3",
+                "0e9373068027c9c0"
             ]
         ]
     },
@@ -4072,6 +4077,91 @@
         "wires": []
     },
     {
+        "id": "8db879eb108392c2",
+        "type": "debug",
+        "z": "202119be2ec9a18d",
+        "name": "debug car detection payload",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2140,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "897c0925fc1df861",
+        "type": "debug",
+        "z": "202119be2ec9a18d",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "topic",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "be37d6392633a0ad",
+        "type": "debug",
+        "z": "202119be2ec9a18d",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "topic",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "0e9373068027c9c0",
+        "type": "debug",
+        "z": "202119be2ec9a18d",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "topic",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 950,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "594bd464260178da",
+        "type": "debug",
+        "z": "202119be2ec9a18d",
+        "name": "Data from camera arrives",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 370,
+        "y": 200,
+        "wires": []
+    },
+    {
         "id": "06a3442ad9baac60",
         "type": "link in",
         "z": "e8ee884feb950c22",
@@ -4190,6 +4280,16 @@
                 "fc5f874a1bb5653d"
             ]
         ]
+    },
+    {
+        "id": "f1ba91b1cb19c593",
+        "type": "comment",
+        "z": "e8ee884feb950c22",
+        "name": "",
+        "info": "",
+        "x": 220,
+        "y": 60,
+        "wires": []
     },
     {
         "id": "425769f2630a88db",
