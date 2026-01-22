@@ -3606,8 +3606,7 @@
         "y": 420,
         "wires": [
             [
-                "306cfda9ca7bff25",
-                "be37d6392633a0ad"
+                "306cfda9ca7bff25"
             ]
         ]
     },
@@ -3869,8 +3868,7 @@
         "y": 360,
         "wires": [
             [
-                "7dcb447f1fa4567f",
-                "897c0925fc1df861"
+                "7dcb447f1fa4567f"
             ]
         ]
     },
@@ -3890,8 +3888,7 @@
         "y": 480,
         "wires": [
             [
-                "9c458169013d3ab3",
-                "0e9373068027c9c0"
+                "9c458169013d3ab3"
             ]
         ]
     },
@@ -4091,57 +4088,6 @@
         "statusType": "auto",
         "x": 2140,
         "y": 80,
-        "wires": []
-    },
-    {
-        "id": "897c0925fc1df861",
-        "type": "debug",
-        "z": "202119be2ec9a18d",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "topic",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 650,
-        "y": 280,
-        "wires": []
-    },
-    {
-        "id": "be37d6392633a0ad",
-        "type": "debug",
-        "z": "202119be2ec9a18d",
-        "name": "debug 3",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "topic",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 750,
-        "y": 320,
-        "wires": []
-    },
-    {
-        "id": "0e9373068027c9c0",
-        "type": "debug",
-        "z": "202119be2ec9a18d",
-        "name": "debug 4",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "topic",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 950,
-        "y": 320,
         "wires": []
     },
     {

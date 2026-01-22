@@ -1,3 +1,75 @@
+export type ApiResponse<T> = {
+  success: boolean;
+  data?: T;
+  error?: string;
+};
+
+// Basic interfaces derived from schemas/
+export interface User {
+  username: string;
+  password?: string;
+  name?: string;
+  surname?: string;
+}
+
+export interface Camera {
+  id: number;
+  location?: string;
+  ip?: string;
+  model?: string;
+  locationX?: number;
+  locationY?: number;
+}
+
+export interface Vehicle {
+  plate: string;
+  badge?: string | null;
+  userId?: string | null;
+  vehicleTypeId?: number | null;
+}
+
+export interface Detection {
+  plate: string;
+  detectionDate: string;
+  cameraId?: number;
+  itvStatus?: string;
+}
+
+// Generic typed fetch that accepts a runtime validator
+export async function fetchApi<T>(input: RequestInfo, init: RequestInit | undefined, validate: (v: any) => v is T): Promise<T> {
+  const res = await fetch(input, init);
+  const json = await res.json();
+
+  if (json && typeof json === 'object' && 'success' in json) {
+    const api = json as ApiResponse<any>;
+    if (!api.success) throw new Error(api.error || 'API returned unsuccessful response');
+    if (validate(api.data)) return api.data as T;
+    throw new Error('Invalid API response shape (data)');
+  }
+
+  if (validate(json)) return json as T;
+
+  throw new Error('Invalid API response shape');
+}
+
+// Simple runtime validators (can be extended)
+export function isUserArray(v: any): v is User[] {
+  return Array.isArray(v) && v.every((u) => u && typeof u.username === 'string');
+}
+
+export function isCameraArray(v: any): v is Camera[] {
+  return Array.isArray(v) && v.every((c) => c && typeof c.id === 'number');
+}
+
+export function isVehicleArray(v: any): v is Vehicle[] {
+  return Array.isArray(v) && v.every((c) => c && typeof c.plate === 'string');
+}
+
+export function isDetectionArray(v: any): v is Detection[] {
+  return Array.isArray(v) && v.every((d) => d && typeof d.plate === 'string' && typeof d.detectionDate === 'string');
+}
+
+export function isAny(_: any): _ is any { return true; }
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export interface LoginRequest {
