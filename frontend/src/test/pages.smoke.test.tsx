@@ -1,4 +1,3 @@
-describe('Smoke test pages', () => {
 import { render } from '@testing-library/react';
 import Cameras from '../pages/Cameras';
 import Cars from '../pages/Cars';
