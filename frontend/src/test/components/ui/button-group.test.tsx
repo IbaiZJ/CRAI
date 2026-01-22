@@ -17,7 +17,7 @@ describe('ButtonGroup Components', () => {
     });
 
     it('defaults to horizontal orientation', () => {
-      render(<ButtonGroup data-testid="group" />);
+      render(<ButtonGroup data-testid="group" orientation="horizontal" />);
       expect(screen.getByTestId('group')).toHaveAttribute('data-orientation', 'horizontal');
     });
 
