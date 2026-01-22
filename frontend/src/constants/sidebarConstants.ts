@@ -25,18 +25,18 @@ export const sidebarConfig = {
       isActive: true,
       navType: "button",
     },
-    // {
-    //   title: "Statistics",
-    //   url: "#",
-    //   icon: ChartBar,
-    //   navType: "collapsible",
-    //   items: [
-    //     { title: "General", url: "/statistics" },
-    //     { title: "Cars", url: "/statistics/cars" },
-    //     { title: "Users", url: "/statistics/users" },
-    //     { title: "Cameras", url: "/statistics/cameras" },
-    //   ],
-    // },
+    {
+      title: "Statistics",
+      url: "#",
+      icon: ChartBar,
+      navType: "collapsible",
+      items: [
+        { title: "General", url: "/statistics" },
+        { title: "Cars", url: "/statistics/cars" },
+        { title: "Users", url: "/statistics/users" },
+        { title: "Cameras", url: "/statistics/cameras" },
+      ],
+    },
     {
       title: "Cars",
       url: "/cars",

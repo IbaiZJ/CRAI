@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Plus, Loader2 } from "lucide-react";
 import UsersTable, { type User } from "@/components/dataTable/UsersTable";
-import { fetchApi, isUserArray, isAny } from "@/lib/api";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -40,8 +39,14 @@ export default function Users() {
   const loadUsers = async () => {
     try {
       setLoading(true);
-      const data = await fetchApi<User[]>(`${API_BASE_URL}/user`, undefined, isUserArray);
-      setUsers(data);
+      const response = await fetch(`${API_BASE_URL}/user`);
+      const result = await response.json();
+      
+      if (result.success && result.data) {
+        setUsers(result.data);
+      } else {
+        notifications.error("Failed to load users");
+      }
     } catch (error) {
       console.error("Error loading users:", error);
       notifications.error("Error loading users");
@@ -108,26 +113,42 @@ export default function Users() {
           updateData.password = formData.password;
         }
 
-        await fetchApi(`${API_BASE_URL}/user?username=${encodeURIComponent(editingUser.username)}`, {
+        const response = await fetch(`${API_BASE_URL}/user?username=${encodeURIComponent(editingUser.username)}`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+          },
           body: JSON.stringify(updateData),
-        }, isAny);
+        });
 
-        notifications.success("User updated successfully");
-        loadUsers();
-        handleCloseDialog();
+        const result = await response.json();
+
+        if (result.success || response.ok) {
+          notifications.success("User updated successfully");
+          loadUsers();
+          handleCloseDialog();
+        } else {
+          notifications.error(result.error || "Failed to update user");
+        }
       } else {
         // Create new user
-        await fetchApi(`${API_BASE_URL}/user`, {
+        const response = await fetch(`${API_BASE_URL}/user`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+          },
           body: JSON.stringify(formData),
-        }, isAny);
+        });
 
-        notifications.success("User created successfully");
-        loadUsers();
-        handleCloseDialog();
+        const result = await response.json();
+
+        if (result.success || response.ok) {
+          notifications.success("User created successfully");
+          loadUsers();
+          handleCloseDialog();
+        } else {
+          notifications.error(result.error || "Failed to create user");
+        }
       }
     } catch (error) {
       console.error("Error saving user:", error);
@@ -155,9 +176,18 @@ export default function Users() {
     }
 
     try {
-      await fetchApi(`${API_BASE_URL}/user?username=${encodeURIComponent(username)}`, { method: 'DELETE' }, isAny);
-      notifications.success("User deleted successfully");
-      loadUsers();
+      const response = await fetch(`${API_BASE_URL}/user?username=${encodeURIComponent(username)}`, {
+        method: 'DELETE',
+      });
+
+      const result = await response.json();
+
+      if (result.success || response.ok) {
+        notifications.success("User deleted successfully");
+        loadUsers();
+      } else {
+        notifications.error(result.error || "Failed to delete user");
+      }
     } catch (error) {
       console.error("Error deleting user:", error);
       notifications.error("Error deleting user");
