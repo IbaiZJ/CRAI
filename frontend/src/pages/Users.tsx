@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Plus, Loader2 } from "lucide-react";
 import UsersTable, { type User } from "@/components/dataTable/UsersTable";
 import { fetchApi, isUserArray, isAny } from "@/lib/api";
+import type { User as ApiUser } from "@/lib/api";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -40,8 +41,14 @@ export default function Users() {
   const loadUsers = async () => {
     try {
       setLoading(true);
-      const data = await fetchApi<User[]>(`${API_BASE_URL}/user`, undefined, isUserArray);
-      setUsers(data);
+      const apiData = await fetchApi<ApiUser[]>(`${API_BASE_URL}/user`, undefined, isUserArray);
+      const mapped = apiData.map((u) => ({
+        username: u.username,
+        password: u.password ?? "",
+        name: u.name ?? "",
+        surname: u.surname ?? "",
+      }));
+      setUsers(mapped);
     } catch (error) {
       console.error("Error loading users:", error);
       notifications.error("Error loading users");
