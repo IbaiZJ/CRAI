@@ -1874,7 +1874,7 @@
         "type": "function",
         "z": "79143eea6c544edc",
         "name": "query",
-        "func": "const cameraData = msg.payload;\nmsg.skipDB = false;\n\nif (cameraData.locationX === undefined || cameraData.locationY === undefined) {\n    msg.payload = {\n        success: false,\n        error: \"locationX y locationY son obligatorios\"\n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    INSERT INTO camera (\n        locationX, \n        locationY\n    ) VALUES (?, ?)\n`;\n\nmsg.params = [\n    cameraData.locationX,\n    cameraData.locationY\n];\n\nreturn msg;",
+        "func": "const cameraData = msg.payload;\nmsg.skipDB = false;\n\n// Validate that payload exists\nif (!msg.payload) {\n    msg.payload = {\n        success: false,\n        error: \"Payload is empty or does not exist\"\n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\n// Validate that locationX exists and is not empty\nif (cameraData.locationX === undefined || cameraData.locationX === null || cameraData.locationX === '') {\n    msg.payload = {\n        success: false,\n        error: \"locationX is required and cannot be empty\"\n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\n// Validate that locationY exists and is not empty\nif (cameraData.locationY === undefined || cameraData.locationY === null || cameraData.locationY === '') {\n    msg.payload = {\n        success: false,\n        error: \"locationY is required and cannot be empty\"\n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\n// Optional: Validate that locationX and locationY are numbers\nif (isNaN(cameraData.locationX) || isNaN(cameraData.locationY)) {\n    msg.payload = {\n        success: false,\n        error: \"locationX and locationY must be valid numbers\"\n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    return msg;\n}\n\nmsg.topic = `\n    INSERT INTO camera (\n        locationX, \n        locationY\n    ) VALUES (?, ?)\n`;\n\nmsg.params = [\n    cameraData.locationX,\n    cameraData.locationY\n];\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2497,7 +2497,7 @@
         "type": "function",
         "z": "f8c26a4d4d10435f",
         "name": "query",
-        "func": "const userData = msg.payload;\nmsg.skipDB = false;\n\nif (!userData.username) {\n    msg.payload = { \n        success: false,\n        error: \"Username is mandatory\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    msg.headers = {\n        \"Content-Type\": \"application/json\",\n        \"Access-Control-Allow-Origin\": \"*\",\n        \"Access-Control-Allow-Methods\": \"GET, POST, PUT, DELETE, OPTIONS\",\n        \"Access-Control-Allow-Headers\": \"Content-Type, Accept\"\n    };\n    return msg;\n}\n\nmsg.topic = `\n    INSERT INTO user (\n        username, password, name, surname\n    ) VALUES (?, ?, ?, ?)\n`;\n\nmsg.params = [\n    userData.username,\n    userData.password || null,\n    userData.name || null,\n    userData.surname || null\n];\n\nreturn msg;",
+        "func": "const userData = msg.payload;\nmsg.skipDB = false;\n\n// Validate that payload exists\nif (!msg.payload) {\n    msg.payload = { \n        success: false,\n        error: \"Payload is empty or does not exist\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    msg.headers = {\n        \"Content-Type\": \"application/json\",\n        \"Access-Control-Allow-Origin\": \"*\",\n        \"Access-Control-Allow-Methods\": \"GET, POST, PUT, DELETE, OPTIONS\",\n        \"Access-Control-Allow-Headers\": \"Content-Type, Accept\"\n    };\n    return msg;\n}\n\n// Validate that username exists and is not empty\nif (!userData.username || userData.username.trim() === '') {\n    msg.payload = { \n        success: false,\n        error: \"username is required and cannot be empty\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    msg.headers = {\n        \"Content-Type\": \"application/json\",\n        \"Access-Control-Allow-Origin\": \"*\",\n        \"Access-Control-Allow-Methods\": \"GET, POST, PUT, DELETE, OPTIONS\",\n        \"Access-Control-Allow-Headers\": \"Content-Type, Accept\"\n    };\n    return msg;\n}\n\n// Optional: Validate that password exists if it's required\n// Uncomment if password is mandatory\n/*\nif (!userData.password || userData.password.trim() === '') {\n    msg.payload = { \n        success: false,\n        error: \"password is required and cannot be empty\" \n    };\n    msg.statusCode = 400;\n    msg.skipDB = true;\n    msg.headers = {\n        \"Content-Type\": \"application/json\",\n        \"Access-Control-Allow-Origin\": \"*\",\n        \"Access-Control-Allow-Methods\": \"GET, POST, PUT, DELETE, OPTIONS\",\n        \"Access-Control-Allow-Headers\": \"Content-Type, Accept\"\n    };\n    return msg;\n}\n*/\n\n// If everything is valid, prepare the database query\nmsg.topic = `\n    INSERT INTO user (\n        username, password, name, surname\n    ) VALUES (?, ?, ?, ?)\n`;\n\nmsg.params = [\n    userData.username.trim(),\n    userData.password ? userData.password.trim() : null,\n    userData.name ? userData.name.trim() : null,\n    userData.surname ? userData.surname.trim() : null\n];\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -3095,7 +3095,8 @@
         "y": 140,
         "wires": [
             [
-                "a4ad4d30685e17b6"
+                "a4ad4d30685e17b6",
+                "594bd464260178da"
             ]
         ]
     },
@@ -3143,7 +3144,7 @@
         "type": "function",
         "z": "202119be2ec9a18d",
         "name": "set msg variables",
-        "func": "msg.carPlate = msg.payload.carPlate;\nmsg.cameraId = msg.payload.cameraId\n\nreturn msg;",
+        "func": "msg.carPlate = msg.payload.carPlate;\nmsg.cameraId = msg.payload.cameraId;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -3203,7 +3204,8 @@
         "y": 140,
         "wires": [
             [
-                "0f4eaa7342bbde96"
+                "0f4eaa7342bbde96",
+                "8db879eb108392c2"
             ]
         ]
     },
@@ -3465,8 +3467,8 @@
                 "c2a5bce0222e7784"
             ],
             [
-                "0302cd37a32dd079",
-                "741d887823023f42"
+                "741d887823023f42",
+                "0302cd37a32dd079"
             ]
         ]
     },
@@ -3475,7 +3477,7 @@
         "type": "function",
         "z": "202119be2ec9a18d",
         "name": "Build email",
-        "func": "const p = msg.payload;\nconst to = \"ibai.zorrilla@alumni.mondragon.edu\";\nmsg.to = to;\nmsg.topic = `🚗 ITV`;\n\nreturn msg;\n",
+        "func": "const p = msg.payload;\nconst to = \"alex.zabaleta@alumni.mondragon.edu\";\nmsg.to = to;\nmsg.topic = `🚗 ITV`;\nmsg.payload = `\nHello,\n\nYour vehicle has been detected with a invalid itv\nPlate: ${msg.carPlate}:\n\n• ITV status: deprecated\n• Date: ${new Date().toLocaleString()}\n\nThanks,\nCRAI Team`\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -3486,7 +3488,7 @@
         "y": 560,
         "wires": [
             [
-                "286dafe17e100276"
+                "64d356f3e0280344"
             ]
         ]
     },
@@ -3503,7 +3505,7 @@
         "tls": false,
         "name": "",
         "dname": "Send email",
-        "x": 1230,
+        "x": 1010,
         "y": 560,
         "wires": []
     },
@@ -3512,7 +3514,7 @@
         "type": "function",
         "z": "202119be2ec9a18d",
         "name": "Build email",
-        "func": "const p = msg.payload;\nconst to = \"alex.zabaleta@alumni.mondragon.edu\";\nmsg.to = to;\nmsg.topic = `🚗 ITV`;\n\nreturn msg;\n",
+        "func": "const p = msg.payload;\nconst to = \"alex.zabaleta@alumni.mondragon.edu\";\nmsg.to = to;\nmsg.topic = `🚗 ITV`;\nmsg.payload = \n`\nHello,\n\nYour vehicle itv will be deprecated in less than a mounth.\nPlate: ${msg.carPlate}:\n\n• ITV status: warning\n• Date: ${new Date().toLocaleString()}\n\nThanks,\nCRAI Team`;\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -3523,7 +3525,7 @@
         "y": 760,
         "wires": [
             [
-                "4d37fda2831e2cea"
+                "78e2e9c04778396f"
             ]
         ]
     },
@@ -3540,47 +3542,9 @@
         "tls": false,
         "name": "",
         "dname": "Send email",
-        "x": 1230,
+        "x": 1010,
         "y": 760,
         "wires": []
-    },
-    {
-        "id": "4d37fda2831e2cea",
-        "type": "template",
-        "z": "202119be2ec9a18d",
-        "name": "HTML template",
-        "field": "payload",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "This is the payload: {{payload}} !",
-        "output": "str",
-        "x": 1020,
-        "y": 760,
-        "wires": [
-            [
-                "78e2e9c04778396f"
-            ]
-        ]
-    },
-    {
-        "id": "286dafe17e100276",
-        "type": "template",
-        "z": "202119be2ec9a18d",
-        "name": "HTML template",
-        "field": "payload",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"es\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Aviso Matrícula</title>\n</head>\n<body style=\"margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Arial Black', sans-serif; background-color: #003366;\">\n\n    <div style=\"background-color: white; padding: 40px 20px 80px 20px; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); text-align: center; width: 95%; max-width: 1100px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 20px;\">\n\n        <div style=\"margin-bottom: 50px; margin-top: 150px;\">\n            <img src=\"https://i.ibb.co/4ZwX1Jyx/Gemini-Generated-Image-b6wzqcb6wzqcb6wz-removebg-preview.png\" \n                 alt=\"Logo\" \n                 style=\"width: 350px; height: auto;\">\n        </div>\n\n        <h1 style=\"font-size: clamp(28px, 6vw, 55px); color: #000; margin: 0 0 30px 0; text-transform: uppercase; line-height: 1.1;\">\n            SE HA DETECTADO TU MATRÍCULA\n        </h1>\n\n        <div style=\"font-size: clamp(40px, 9vw, 90px); font-weight: bold; color: #000; margin-bottom: 25px; font-family: 'Courier New', Courier, monospace; letter-spacing: 6px; border: 4px solid #000; padding: 10px 40px; border-radius: 8px; background-color: #fcfcfc;\">\n            MATRICULA\n        </div>\n\n        <p style=\"font-size: clamp(18px, 4vw, 28px); color: #333; margin: 0; font-family: Arial, sans-serif; font-weight: normal;\">\n            tu coche tiene la ITV caducada\n        </p>\n\n    </div>\n\n</body>\n</html>",
-        "output": "str",
-        "x": 1020,
-        "y": 560,
-        "wires": [
-            [
-                "64d356f3e0280344"
-            ]
-        ]
     },
     {
         "id": "affc7a4aac0f3854",
@@ -4044,7 +4008,7 @@
         "repair": false,
         "outputs": 2,
         "x": 2070,
-        "y": 240,
+        "y": 200,
         "wires": [
             [
                 "0f4eaa7342bbde96"
@@ -4059,10 +4023,88 @@
         "id": "c608fa6c39a2feee",
         "type": "comment",
         "z": "202119be2ec9a18d",
-        "name": "TODO: Implement WebSockets to \\n upload frontend",
+        "name": "TODO: Implement WebSockets to  \\n update frontend without reloading \\n window",
         "info": "",
         "x": 2020,
-        "y": 300,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "4d37fda2831e2cea",
+        "type": "template",
+        "z": "202119be2ec9a18d",
+        "name": "HTML template",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "This is the payload: {{payload}} !",
+        "output": "str",
+        "x": 1220,
+        "y": 760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f08a54e487906646",
+        "type": "template",
+        "z": "202119be2ec9a18d",
+        "name": "HTML template",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"es\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Aviso Matrícula</title>\n</head>\n<body style=\"margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Arial Black', sans-serif; background-color: #003366;\">\n\n    <div style=\"background-color: white; padding: 40px 20px 80px 20px; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); text-align: center; width: 95%; max-width: 1100px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 20px;\">\n\n        <div style=\"margin-bottom: 50px; margin-top: 150px;\">\n            <img src=\"https://i.ibb.co/4ZwX1Jyx/Gemini-Generated-Image-b6wzqcb6wzqcb6wz-removebg-preview.png\" \n                 alt=\"Logo\" \n                 style=\"width: 350px; height: auto;\">\n        </div>\n\n        <h1 style=\"font-size: clamp(28px, 6vw, 55px); color: #000; margin: 0 0 30px 0; text-transform: uppercase; line-height: 1.1;\">\n            SE HA DETECTADO TU MATRÍCULA\n        </h1>\n\n        <div style=\"font-size: clamp(40px, 9vw, 90px); font-weight: bold; color: #000; margin-bottom: 25px; font-family: 'Courier New', Courier, monospace; letter-spacing: 6px; border: 4px solid #000; padding: 10px 40px; border-radius: 8px; background-color: #fcfcfc;\">\n            MATRICULA\n        </div>\n\n        <p style=\"font-size: clamp(18px, 4vw, 28px); color: #333; margin: 0; font-family: Arial, sans-serif; font-weight: normal;\">\n            tu coche tiene la ITV caducada\n        </p>\n\n    </div>\n\n</body>\n</html>",
+        "output": "str",
+        "x": 1220,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "58010f59742c5809",
+        "type": "comment",
+        "z": "202119be2ec9a18d",
+        "name": "TODO: Add HTML to emails",
+        "info": "",
+        "x": 1260,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "8db879eb108392c2",
+        "type": "debug",
+        "z": "202119be2ec9a18d",
+        "name": "debug car detection payload",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2140,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "594bd464260178da",
+        "type": "debug",
+        "z": "202119be2ec9a18d",
+        "name": "Data from camera arrives",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 370,
+        "y": 200,
         "wires": []
     },
     {
@@ -4184,6 +4226,16 @@
                 "fc5f874a1bb5653d"
             ]
         ]
+    },
+    {
+        "id": "f1ba91b1cb19c593",
+        "type": "comment",
+        "z": "e8ee884feb950c22",
+        "name": "",
+        "info": "",
+        "x": 220,
+        "y": 60,
+        "wires": []
     },
     {
         "id": "425769f2630a88db",

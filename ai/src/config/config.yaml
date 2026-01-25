@@ -26,9 +26,9 @@ plate_detector:
 
 
 ssd_detector:
-  model_path: "models/ssd_vehicle_detector.keras"
-  weights_path: "models/ssd_best.weights.h5"
-  confidence_threshold: 0.34
+  model_path: "models/ssd_vehicles_detector.keras"
+  weights_path: "models/ssd_bests.weights.h5"
+  confidence_threshold: 0.37
   nms_threshold: 0.2
   max_detections: 15
   min_box_size: 0.02
@@ -44,8 +44,8 @@ ocr:
   cache_ttl: 30.0
   
   preprocessing:
-    resize_height: 180
-    resize_width: 320
+    resize_height: 640
+    resize_width: 640
     apply_clahe: true
     denoise: true 
   
@@ -57,7 +57,7 @@ ocr:
 
 api:
   endpoint_base_url: "http://localhost:6903"
-  car_plate_endpoint: "/ai/carPlate"
+  car_plate_endpoint: "/ai/carDetected"
   timeout: 10
   max_retries: 3
   retry_delay: 2.0
