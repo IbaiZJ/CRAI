@@ -81,7 +81,7 @@ class PlateQueue:
             camera_id: Camera identifier to send with the plate
         """
         plate_data = {
-            'plate': plate_text,
+            'carPlate': plate_text,
             'cameraId': camera_id,
             'retries': 0
         }   
@@ -117,8 +117,8 @@ class PlateQueue:
                             self.stats['retrying'] += 1
                         
                         self.logger.warning(
-                            f"Retrying plate {plate_data['plate']} "
-                            f"(attempt {plate_data['retries'] + 1}/{self.max_retries})"
+                            f"Retrying plate {plate_data['carPlate']} "
+                            f"(attempt {plate_data['retries']}/{self.max_retries})"
                         )
                         time.sleep(self.retry_delay)
                         self.queue.put(plate_data)
@@ -127,9 +127,8 @@ class PlateQueue:
                         # Max retries exceeded
                         with self.stats_lock:
                             self.stats['failed'] += 1
-                        
                         self.logger.error(
-                            f"Failed to send plate {plate_data['plate']} "
+                            f"Failed to send plate {plate_data['carPlate']} "
                             f"after {self.max_retries} attempts. Discarding."
                         )
                         self.queue.task_done()
@@ -152,7 +151,7 @@ class PlateQueue:
         try:
             # Prepare payload (remove internal fields)
             payload = {
-                'plate': plate_data['plate'],
+                'carPlate': plate_data['carPlate'],
                 'cameraId': plate_data['cameraId']
             }
             
@@ -165,19 +164,18 @@ class PlateQueue:
             
             if response.status_code >= 200 and response.status_code < 300:
                 self.logger.info(
-                    f"Plate {plate_data['plate']} sent successfully "
+                    f"Plate {plate_data['carPlate']} sent successfully "
                     f"(status: {response.status_code})"
                 )
                 return True
             else:
                 self.logger.warning(
-                    f"Failed to send plate {plate_data['plate']}: "
+                    f"Failed to send plate {plate_data['carPlate']}: "
                     f"HTTP {response.status_code} - {response.text[:100]}"
                 )
                 return False
-        
         except Exception as e:
-            self.logger.error(f"Error sending plate {plate_data['plate']}: {e}")
+            self.logger.error(f"Error sending plate {plate_data.get('carPlate', '<unknown>')}: {e}")
             return False
     
     def get_stats(self) -> Dict[str, int]:
