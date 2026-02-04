@@ -133,3 +133,12 @@ if (typeof globalThis !== 'undefined') {
     unobserve() {}
   } as any;
 }
+
+// Mock ResizeObserver for recharts
+if (typeof globalThis !== 'undefined') {
+  globalThis.ResizeObserver = class ResizeObserver {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  };
+}

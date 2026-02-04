@@ -493,22 +493,6 @@
         "verboselogging": false
     },
     {
-        "id": "2b41db95e0469052",
-        "type": "websocket-client",
-        "path": "ws://crai.com:1880/ws",
-        "tls": "",
-        "wholemsg": "false",
-        "hb": "0",
-        "subprotocol": "",
-        "headers": []
-    },
-    {
-        "id": "dd011ebecd492d88",
-        "type": "websocket-listener",
-        "path": "/ws/upload",
-        "wholemsg": "true"
-    },
-    {
         "id": "sf_init_retry",
         "type": "function",
         "z": "subflow1",
@@ -1272,7 +1256,8 @@
         "y": 60,
         "wires": [
             [
-                "fd5de55856fc7a3e"
+                "fd5de55856fc7a3e",
+                "354f30761092fb8c"
             ]
         ]
     },
@@ -1598,6 +1583,23 @@
         ],
         "x": 275,
         "y": 700,
+        "wires": []
+    },
+    {
+        "id": "354f30761092fb8c",
+        "type": "debug",
+        "z": "a5406ced814d1895",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 400,
+        "y": 120,
         "wires": []
     },
     {
@@ -3216,7 +3218,7 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 2330,
+        "x": 2040,
         "y": 140,
         "wires": []
     },
@@ -3979,6 +3981,8 @@
         "wires": []
     },
     {
+<<<<<<< HEAD
+=======
         "id": "4d87b6500ee418eb",
         "type": "websocket out",
         "z": "202119be2ec9a18d",
@@ -4074,6 +4078,9 @@
         "wires": []
     },
     {
+<<<<<<< HEAD
+>>>>>>> dev
+=======
         "id": "8db879eb108392c2",
         "type": "debug",
         "z": "202119be2ec9a18d",
@@ -4108,6 +4115,7 @@
         "wires": []
     },
     {
+>>>>>>> 4aa6600dd1896a9a45f81bf6608207c27785f029
         "id": "06a3442ad9baac60",
         "type": "link in",
         "z": "e8ee884feb950c22",
@@ -4556,7 +4564,7 @@
         "once": false,
         "onceDelay": "",
         "topic": "",
-        "payload": "0.3",
+        "payload": "0.9",
         "payloadType": "num",
         "x": 130,
         "y": 200,
@@ -4582,7 +4590,7 @@
         "once": false,
         "onceDelay": "",
         "topic": "",
-        "payload": "1",
+        "payload": "1000",
         "payloadType": "num",
         "x": 130,
         "y": 240,

@@ -11,6 +11,8 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage"
+    ,
+    "postcoverage": "node test-coverage-fix.cjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

@@ -145,6 +145,20 @@ jobs:
       - name: Run Frontend Tests with Coverage
         working-directory: ./frontend
         run: npm run test:coverage -- --run
+      - name: Fix lcov.info paths for SonarCloud
+        working-directory: ./frontend
+        run: npm run postcoverage
+      - name: Debug Coverage Report
+        working-directory: ./frontend
+        run: |
+          echo "=== Coverage file exists? ==="
+          ls -la coverage/
+          echo "=== First 30 lines of lcov.info ==="
+          head -n 30 coverage/lcov.info
+          echo "=== Coverage summary (grep for SF:) ==="
+          grep "^SF:" coverage/lcov.info | head -10
+          echo "=== Line coverage stats ==="
+          grep -E "^(LF|LH):" coverage/lcov.info | head -20
       - name: SonarCloud Scan (frontend)
         uses: SonarSource/sonarcloud-github-action@v2.3.0
         with:
